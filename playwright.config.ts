@@ -39,7 +39,7 @@ export default defineConfig({
   ],
   webServer: {
     // CI builds the app before E2E; serve that build instead of recompiling in dev mode.
-    command: process.env.CI ? 'pnpm start' : 'pnpm dev',
+    command: process.env.CI ? 'node .next/standalone/server.js' : 'pnpm dev',
     reuseExistingServer: !process.env.CI,
     url: 'http://localhost:3000',
     timeout: 120_000,

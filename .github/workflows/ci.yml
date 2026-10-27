@@ -57,5 +57,11 @@ jobs:
       - run: pnpm build
       - run: pnpm test
       - run: pnpm exec playwright install --with-deps chromium
+      - name: Prepare standalone assets for E2E
+        run: |
+          cp -r public .next/standalone/
+          cp -r .next/static .next/standalone/.next/
       - run: pnpm test:e2e
+        env:
+          DEBUG: pw:webserver
       - run: pnpm audit --prod --audit-level=high
