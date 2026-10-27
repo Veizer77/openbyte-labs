@@ -637,9 +637,9 @@ Gunakan format berikut dalam laporan akhir tiap sesi. Laporan dapat ditulis pada
 
 Semua kotak berikut sengaja belum dicentang. Baseline audit tidak berarti paket di dokumen ini sudah memenuhi kriteria eksekusi lengkapnya.
 
-- [ ] F0-01: workspace dan isolasi lingkungan.
-- [ ] F0-02: schema push mati dan konfigurasi aman.
-- [ ] F0-03: baseline test/CI/E2E pulih.
+- [x] F0-01: workspace dan isolasi lingkungan.
+- [x] F0-02: schema push mati dan konfigurasi aman.
+- [x] F0-03: baseline test/CI/E2E pulih.
 - [ ] F0-04: daftar PRD 12.3 terverifikasi.
 - [ ] F0-05: fondasi operasional teruji.
 - [ ] Gerbang Fase 0 disetujui berdasarkan bukti.
