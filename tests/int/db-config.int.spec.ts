@@ -132,14 +132,48 @@ describe('payload config regressions', () => {
     vi.restoreAllMocks()
   })
 
+  /**
+   * DATABASE_URI dan DATABASE_URI_DIRECT boleh identik di lingkungan lain
+   * (mis. CI memakai satu database service container untuk keduanya), sehingga
+   * seleksi pooled/direct tidak bisa diamati bila keduanya dipakai apa adanya.
+   * Tes yang menguji seleksi koneksi men-stub dua URI berbeda, lalu
+   * memulihkannya, supaya asersinya bermakna di mana pun tes dijalankan.
+   */
+  function stubDistinctDatabaseUris(): () => void {
+    const original = {
+      pooled: process.env.DATABASE_URI,
+      direct: process.env.DATABASE_URI_DIRECT,
+    }
+    process.env.DATABASE_URI = 'postgres://test-pooled@example-pooled.invalid:5432/openbyte_test'
+    process.env.DATABASE_URI_DIRECT =
+      'postgres://test-direct@example-direct.invalid:5432/openbyte_test'
+    return () => {
+      if (original.pooled === undefined) {
+        delete process.env.DATABASE_URI
+      } else {
+        process.env.DATABASE_URI = original.pooled
+      }
+      if (original.direct === undefined) {
+        delete process.env.DATABASE_URI_DIRECT
+      } else {
+        process.env.DATABASE_URI_DIRECT = original.direct
+      }
+    }
+  }
+
   it('disables schema push so custom SQL objects survive development', async () => {
     process.env.PAYLOAD_MIGRATE_DIRECT = '0'
+    const restoreUris = stubDistinctDatabaseUris()
     vi.resetModules()
-    const { databaseAdapterArgs } = await importPayloadConfig()
-    // Argumen inilah yang diteruskan ke postgresAdapter dan dijadikan
-    // sumber `push` adaptor pada paket terkunci (3.92.0).
-    expect(databaseAdapterArgs().push).toBe(false)
-    expect(databaseAdapterArgs().pool.connectionString).toBe(process.env.DATABASE_URI)
+    try {
+      const { databaseAdapterArgs } = await importPayloadConfig()
+      // Argumen inilah yang diteruskan ke postgresAdapter dan dijadikan
+      // sumber `push` adaptor pada paket terkunci (3.92.0).
+      expect(databaseAdapterArgs().push).toBe(false)
+      expect(databaseAdapterArgs().pool.connectionString).toBe(process.env.DATABASE_URI)
+    } finally {
+      restoreUris()
+    }
   }, 60000)
 
   it('keeps GraphQL disabled', async () => {
@@ -167,17 +201,28 @@ describe('payload config regressions', () => {
 
   it('migrates through the direct connection when PAYLOAD_MIGRATE_DIRECT=1', async () => {
     process.env.PAYLOAD_MIGRATE_DIRECT = '1'
+    const restoreUris = stubDistinctDatabaseUris()
     vi.resetModules()
-    const { databaseAdapterArgs } = await importPayloadConfig()
-    expect(databaseAdapterArgs().pool.connectionString).toBe(process.env.DATABASE_URI_DIRECT)
+    try {
+      const { databaseAdapterArgs } = await importPayloadConfig()
+      expect(databaseAdapterArgs().pool.connectionString).toBe(process.env.DATABASE_URI_DIRECT)
+      expect(databaseAdapterArgs().pool.connectionString).not.toBe(process.env.DATABASE_URI)
+    } finally {
+      restoreUris()
+    }
   }, 60000)
 
   it('runs on the pooled connection at runtime', async () => {
     process.env.PAYLOAD_MIGRATE_DIRECT = '0'
+    const restoreUris = stubDistinctDatabaseUris()
     vi.resetModules()
-    const { databaseAdapterArgs } = await importPayloadConfig()
-    const pooled = databaseAdapterArgs().pool.connectionString
-    expect(pooled).toBe(process.env.DATABASE_URI)
-    expect(pooled).not.toBe(process.env.DATABASE_URI_DIRECT)
+    try {
+      const { databaseAdapterArgs } = await importPayloadConfig()
+      const pooled = databaseAdapterArgs().pool.connectionString
+      expect(pooled).toBe(process.env.DATABASE_URI)
+      expect(pooled).not.toBe(process.env.DATABASE_URI_DIRECT)
+    } finally {
+      restoreUris()
+    }
   }, 60000)
 })
