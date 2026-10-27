@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { calculatorGroups } from '@/lib/public-content'
+import { getCalculatorConfig } from '@/server/content'
 
 export const metadata: Metadata = {
   title: 'Kalkulator Estimasi Biaya',
@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   },
 }
 
-export default function CalculatorPage() {
+export default async function CalculatorPage() {
+  const config = await getCalculatorConfig()
   return (
     <>
       <section className="calculator-intro wrap" aria-labelledby="calculator-title">
@@ -34,27 +35,27 @@ export default function CalculatorPage() {
       <section className="calculator-section section--subtle" aria-label="Pilihan kebutuhan proyek">
         <div className="wrap calculator-layout">
           <div className="calculator-options">
-            {calculatorGroups.map((group, groupIndex) => (
-              <fieldset className="calculator-group" key={group.title}>
+            {config.groups.map((group, groupIndex) => (
+              <fieldset className="calculator-group" key={group.id}>
                 <legend className="calculator-group__heading">
                   <span>{groupIndex + 1}</span>
                   <span>
                     <strong>{group.title}</strong>
                     <small>{group.description}</small>
                   </span>
-                  <span className={group.required ? 'required-chip' : 'optional-chip'}>
-                    {group.required ? 'Wajib' : 'Opsional'}
+                  <span className={group.isRequired ? 'required-chip' : 'optional-chip'}>
+                    {group.isRequired ? 'Wajib' : 'Opsional'}
                   </span>
                 </legend>
                 <div className="calculator-choice-grid">
                   {group.options.map((option, optionIndex) => (
-                    <label className="calculator-choice" key={option.label}>
+                    <label className="calculator-choice" key={option.id}>
                       <input
-                        type={group.type}
+                        disabled
+                        type={group.selectionType === 'multiple' ? 'checkbox' : 'radio'}
                         name={`group-${groupIndex}`}
-                        value={option.label}
-                        defaultChecked={groupIndex === 0 && optionIndex === 0}
-                        required={group.required && optionIndex === 0}
+                        value={option.id}
+                        defaultChecked={option.isDefault && optionIndex === 0}
                       />
                       <span
                         className="calculator-choice__icon material-symbols-outlined"
@@ -64,7 +65,7 @@ export default function CalculatorPage() {
                       </span>
                       <span className="calculator-choice__copy">
                         <strong>{option.label}</strong>
-                        <small>{option.detail}</small>
+                        <small>{option.description}</small>
                       </span>
                       <span className="calculator-choice__indicator" aria-hidden="true" />
                     </label>

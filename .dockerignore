@@ -1,0 +1,34 @@
+# Rahasia dan lingkungan lokal
+.env
+.env*.local
+
+# Git dan CI
+.git
+.github
+
+# Dependensi dan artefak build
+node_modules
+.next
+out
+build
+coverage
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Artefak tes
+test-results
+playwright-report
+blob-report
+
+# Backup dan data lokal
+*.sql
+*.sql.gz
+*.dump
+*.backup
+
+# Proto desain (tidak dipakai build; tetap ada di repositori)
+prototype
+
+# Berkas kerja sementara
+_tmp-*

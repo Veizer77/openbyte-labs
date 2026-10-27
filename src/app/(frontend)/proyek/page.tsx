@@ -1,5 +1,9 @@
 import type { Metadata } from 'next'
-import { ProjectGallery } from '@/components/public/project-gallery'
+import { ProjectsView } from '@/components/pages/projects-view'
+import { listProjectCategories, listPublishedProjects } from '@/server/content'
+
+/** Batas kesegaran PRD 60 detik (F3-04). */
+export const revalidate = 60
 
 export const metadata: Metadata = {
   title: 'Portofolio',
@@ -9,34 +13,12 @@ export const metadata: Metadata = {
     title: 'Portofolio OpenByte Labs',
     description: 'Pilihan proyek sistem informasi, aplikasi mobile, dan website.',
     type: 'website',
+    url: '/proyek',
   },
 }
 
-export default function ProjectsPage() {
-  return (
-    <>
-      <section className="page-hero wrap" aria-labelledby="projects-title">
-        <span className="section-kicker">Portofolio & studi kasus</span>
-        <h1 id="projects-title">Dibangun dari kebutuhan yang nyata.</h1>
-        <p>
-          Jelajahi sistem informasi, aplikasi, dan website yang dirancang untuk membantu pekerjaan
-          sehari-hari menjadi lebih terstruktur.
-        </p>
-        <div className="page-hero__meta">
-          <span>
-            <span className="material-symbols-outlined" aria-hidden="true">
-              folder_open
-            </span>{' '}
-            Pilihan proyek
-          </span>
-          <span>Studi kasus OpenByte Labs</span>
-        </div>
-      </section>
-      <section className="section section--subtle projects-page" aria-label="Daftar proyek">
-        <div className="wrap">
-          <ProjectGallery />
-        </div>
-      </section>
-    </>
-  )
+export default async function ProjectsPage() {
+  const [projects, filters] = await Promise.all([listPublishedProjects(), listProjectCategories()])
+
+  return <ProjectsView projects={projects} filters={filters} />
 }

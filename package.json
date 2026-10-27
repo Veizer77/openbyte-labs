@@ -21,6 +21,7 @@
     "migrate": "cross-env PAYLOAD_MIGRATE_DIRECT=1 pnpm payload migrate",
     "seed": "tsx scripts/seed.mjs",
     "owner:create": "tsx scripts/owner-create.mjs",
+    "owner:reset": "tsx scripts/owner-reset.mjs",
     "check:portability": "node scripts/check-portability.mjs",
     "check:access": "tsx scripts/check-access.mjs"
   },

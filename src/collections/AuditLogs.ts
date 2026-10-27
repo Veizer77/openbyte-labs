@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isOwner } from '@/access/roles'
+import { hasRole, isOwner } from '@/access/roles'
 
 export const AuditLogs: CollectionConfig = {
   slug: 'audit-logs',
@@ -7,6 +7,7 @@ export const AuditLogs: CollectionConfig = {
   admin: {
     useAsTitle: 'action',
     group: 'Sistem',
+    hidden: ({ user }) => !hasRole(user, 'owner'),
     defaultColumns: ['actorType', 'action', 'collection', 'createdAt'],
   },
   access: { read: isOwner, create: () => false, update: () => false, delete: () => false },

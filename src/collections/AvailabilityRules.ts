@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
-import { closedAccess } from '@/access/roles'
+import { closedAccess, hasRole } from '@/access/roles'
 import { preventAvailabilityOverlap } from '@/hooks/prevent-availability-overlap'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 
 const isClock = (value: unknown): value is string =>
   typeof value === 'string' && /^([01]\d|2[0-3]):[0-5]\d$/.test(value)
@@ -11,10 +12,15 @@ export const AvailabilityRules: CollectionConfig = {
   admin: {
     useAsTitle: 'startTime',
     group: 'Operasional Klien',
+    hidden: ({ user }) => !hasRole(user, 'owner'),
     defaultColumns: ['weekday', 'startTime', 'endTime', 'isActive'],
   },
   access: closedAccess,
-  hooks: { beforeChange: [preventAvailabilityOverlap] },
+  hooks: {
+    beforeChange: [preventAvailabilityOverlap],
+    afterChange: [auditCollectionChange('availability-rules')],
+    afterDelete: [auditCollectionDelete('availability-rules')],
+  },
   fields: [
     {
       name: 'weekday',

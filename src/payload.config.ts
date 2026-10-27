@@ -105,6 +105,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      beforeDashboard: ['@/components/admin/Dashboard#Dashboard'],
+    },
   },
   collections: [
     Users,
@@ -144,6 +147,33 @@ export default buildConfig({
   },
   i18n: {
     supportedLanguages: { id },
+    // Timpaan label plugin payload-totp (tidak menyertakan bahasa Indonesia —
+    // 12.3 butir 8): namespace totpPlugin diterjemahkan manual.
+    translations: {
+      id: {
+        totpPlugin: {
+          authApp: 'Aplikasi autentikator',
+          configured: 'Terdaftar',
+          errors: {
+            alreadySet: 'Anda sudah memiliki TOTP terdaftar.',
+          },
+          fieldDescription:
+            'Gunakan aplikasi autentikator atau ekstensi browser untuk mendapatkan kode dua faktor saat diminta.',
+          setup: {
+            addCodeManually: 'Masukkan kode secara manual',
+            button: 'Atur',
+            description:
+              'Anda memerlukan aplikasi dua faktor seperti <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_blank" rel="nofollow noopener noreferrer">Google Authenticator</a> untuk menyelesaikan proses ini. Setelah memasangnya, pindai kode QR di bawah menggunakan aplikasi Anda.',
+            enterCode: 'Masukkan kode autentikasi {digits} digit yang dibuat oleh aplikasi Anda:',
+            incorrectCode: 'Kode salah. Jika galat ini berlanjut, pindai ulang kode QR.',
+            title: 'Pengaturan Autentikasi Dua Faktor',
+          },
+          verify: {
+            title: 'Verifikasi',
+          },
+        },
+      },
+    },
   },
   plugins: [
     storagePlugin,

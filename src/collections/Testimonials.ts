@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { activeContentAccess, contentTotpWrapperBypass } from '@/access/roles'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 import { revalidateCollectionTag } from '@/hooks/revalidate-content'
 
 const revalidation = revalidateCollectionTag('testimonials')
@@ -14,7 +14,7 @@ export const Testimonials: CollectionConfig = {
   orderable: true,
   hooks: {
     afterChange: [auditCollectionChange('testimonials'), revalidation.afterChange],
-    afterDelete: [revalidation.afterDelete],
+    afterDelete: [auditCollectionDelete('testimonials'), revalidation.afterDelete],
   },
   fields: [
     { name: 'authorName', type: 'text', required: true },

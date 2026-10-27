@@ -1,0 +1,98 @@
+{
+  "paymentStatus": [
+    {
+      "id": "P1",
+      "description": "total 3.5M, paid 0 = unpaid",
+      "totalCost": 3500000,
+      "paidAmount": 0,
+      "expected": "unpaid"
+    },
+    {
+      "id": "P2",
+      "description": "total 3.5M, paid 1M = down_payment",
+      "totalCost": 3500000,
+      "paidAmount": 1000000,
+      "expected": "down_payment"
+    },
+    {
+      "id": "P3",
+      "description": "total 3.5M, paid 3.5M = paid_off",
+      "totalCost": 3500000,
+      "paidAmount": 3500000,
+      "expected": "paid_off"
+    },
+    {
+      "id": "P4",
+      "description": "total 3.5M, paid 3.6M = paid_off (overpaid)",
+      "totalCost": 3500000,
+      "paidAmount": 3600000,
+      "expected": "paid_off"
+    },
+    {
+      "id": "P5",
+      "description": "total 0, paid 0 = unpaid",
+      "totalCost": 0,
+      "paidAmount": 0,
+      "expected": "unpaid"
+    }
+  ],
+  "currentStep": [
+    {
+      "id": "ST1",
+      "description": "[done, done, in_progress, pending, pending, pending] = 3",
+      "steps": [
+        { "stepNumber": 1, "status": "done" },
+        { "stepNumber": 2, "status": "done" },
+        { "stepNumber": 3, "status": "in_progress" },
+        { "stepNumber": 4, "status": "pending" },
+        { "stepNumber": 5, "status": "pending" },
+        { "stepNumber": 6, "status": "pending" }
+      ],
+      "expected": 3
+    },
+    {
+      "id": "ST2",
+      "description": "[done, pending, done, done, done, done] = 2",
+      "steps": [
+        { "stepNumber": 1, "status": "done" },
+        { "stepNumber": 2, "status": "pending" },
+        { "stepNumber": 3, "status": "done" },
+        { "stepNumber": 4, "status": "done" },
+        { "stepNumber": 5, "status": "done" },
+        { "stepNumber": 6, "status": "done" }
+      ],
+      "expected": 2
+    },
+    {
+      "id": "ST3",
+      "description": "all done = 6",
+      "steps": [
+        { "stepNumber": 1, "status": "done" },
+        { "stepNumber": 2, "status": "done" },
+        { "stepNumber": 3, "status": "done" },
+        { "stepNumber": 4, "status": "done" },
+        { "stepNumber": 5, "status": "done" },
+        { "stepNumber": 6, "status": "done" }
+      ],
+      "expected": 6
+    }
+  ],
+  "referenceFormat": {
+    "alphabet": "ABCDEFGHJKLMNPQRSTUVWXYZ23456789",
+    "trackingCodeLength": 8,
+    "trackingCodePrefix": "PRJ-",
+    "pinLength": 6,
+    "referencePatterns": {
+      "inquiry": "INQ-YYMM-XXXX",
+      "quote": "QTE-YYMM-XXXX",
+      "booking": "BKG-YYMM-XXXX"
+    },
+    "examples": {
+      "trackingCode": "PRJ-ABCD2345",
+      "pin": "012345",
+      "inquiry": "INQ-2610-A3F9",
+      "quote": "QTE-2610-B7K2",
+      "booking": "BKG-2610-M8N4"
+    }
+  }
+}

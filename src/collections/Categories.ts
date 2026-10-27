@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { activeContentAccess, contentTotpWrapperBypass } from '@/access/roles'
 import { createSlug } from '@/hooks/create-slug'
 import { protectCategoryDelete } from '@/hooks/protect-category-delete'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 import { revalidateCollectionTag } from '@/hooks/revalidate-content'
 
 const revalidation = revalidateCollectionTag('categories')
@@ -21,7 +21,7 @@ export const Categories: CollectionConfig = {
     beforeValidate: [createSlug('name')],
     beforeDelete: [protectCategoryDelete],
     afterChange: [auditCollectionChange('categories'), revalidation.afterChange],
-    afterDelete: [revalidation.afterDelete],
+    afterDelete: [auditCollectionDelete('categories'), revalidation.afterDelete],
   },
   orderable: true,
   fields: [

@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { activeContentAccess, contentTotpWrapperBypass } from '@/access/roles'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 import { revalidateCollectionTag } from '@/hooks/revalidate-content'
 
 const revalidation = revalidateCollectionTag('packages')
@@ -14,7 +14,7 @@ export const ServiceAddons: CollectionConfig = {
   orderable: true,
   hooks: {
     afterChange: [auditCollectionChange('service-addons'), revalidation.afterChange],
-    afterDelete: [revalidation.afterDelete],
+    afterDelete: [auditCollectionDelete('service-addons'), revalidation.afterDelete],
   },
   fields: [
     { name: 'name', type: 'text', required: true },

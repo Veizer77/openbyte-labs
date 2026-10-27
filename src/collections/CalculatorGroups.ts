@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { contentTotpWrapperBypass, ownerEditorAccess } from '@/access/roles'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 import { revalidateCollectionTag } from '@/hooks/revalidate-content'
 
 const revalidation = revalidateCollectionTag('calculator')
@@ -18,7 +18,7 @@ export const CalculatorGroups: CollectionConfig = {
   orderable: true,
   hooks: {
     afterChange: [auditCollectionChange('calculator-groups'), revalidation.afterChange],
-    afterDelete: [revalidation.afterDelete],
+    afterDelete: [auditCollectionDelete('calculator-groups'), revalidation.afterDelete],
   },
   fields: [
     { name: 'title', type: 'text', required: true },

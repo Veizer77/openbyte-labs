@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
-import { closedAccess } from '@/access/roles'
+import { closedAccess, hasRole } from '@/access/roles'
 import { createReference } from '@/hooks/create-reference'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 
 export const Inquiries: CollectionConfig = {
   slug: 'inquiries',
@@ -9,12 +9,14 @@ export const Inquiries: CollectionConfig = {
   admin: {
     useAsTitle: 'reference',
     group: 'Operasional Klien',
+    hidden: ({ user }) => !hasRole(user, 'owner'),
     defaultColumns: ['reference', 'name', 'servicePackage', 'status', 'createdAt'],
   },
   access: closedAccess,
   hooks: {
     beforeValidate: [createReference('INQ')],
     afterChange: [auditCollectionChange('inquiries')],
+    afterDelete: [auditCollectionDelete('inquiries')],
   },
   fields: [
     { name: 'reference', type: 'text', unique: true, index: true, admin: { readOnly: true } },

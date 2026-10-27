@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { contentTotpWrapperBypass, isAdmin } from '@/access/roles'
 import { createSlug } from '@/hooks/create-slug'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 import { revalidateCollectionTag } from '@/hooks/revalidate-content'
 
 const revalidation = revalidateCollectionTag('projects')
@@ -20,7 +20,7 @@ export const Technologies: CollectionConfig = {
   hooks: {
     beforeValidate: [createSlug('name')],
     afterChange: [auditCollectionChange('technologies'), revalidation.afterChange],
-    afterDelete: [revalidation.afterDelete],
+    afterDelete: [auditCollectionDelete('technologies'), revalidation.afterDelete],
   },
   fields: [
     { name: 'name', type: 'text', required: true, unique: true },

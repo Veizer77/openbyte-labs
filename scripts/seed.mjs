@@ -27,9 +27,16 @@ async function createIfMissing(collection, field, value, data) {
     limit: 1,
     depth: 0,
     overrideAccess: true,
+    draft: true,
   })
   if (match.docs[0]) return match.docs[0]
-  return payload.create({ collection, data, depth: 0, overrideAccess: true })
+  return payload.create({
+    collection,
+    data,
+    depth: 0,
+    overrideAccess: true,
+    draft: data._status === 'draft',
+  })
 }
 
 function lexicalParagraph(text) {
@@ -292,6 +299,90 @@ try {
     })
   }
 
+  const pageSeed = [
+    {
+      slug: 'home',
+      title: 'Beranda',
+      _status: 'published',
+      layout: [
+        {
+          blockType: 'hero',
+          headline: 'Bangun sistem, aplikasi, dan website yang benar-benar dipakai.',
+          subheadline:
+            'OpenByte Labs membuat sistem informasi, aplikasi mobile Flutter, website bisnis, dan undangan digital untuk instansi, UMKM, dan komunitas.',
+          primaryCtaLabel: 'Hitung Estimasi Biaya',
+          primaryCtaTarget: '/kalkulator',
+          secondaryCtaLabel: 'Konsultasi',
+          secondaryCtaTarget: '/konsultasi',
+          trustMetrics: [
+            { value: '100%', label: 'Kepemilikan Kode' },
+            { value: '3+', label: 'Solusi Unggulan' },
+            { value: 'Garansi', label: 'Bebas Bug 30 Hari' },
+          ],
+        },
+        {
+          blockType: 'servicesGrid',
+          title: 'Layanan Kami',
+          description:
+            'Solusi teknologi terarah yang disesuaikan dengan skala dan kebutuhan Anda.',
+        },
+        {
+          blockType: 'portfolioShowcase',
+          title: 'Portofolio Terpilih',
+          featuredOnly: false,
+          limit: 6,
+        },
+        {
+          blockType: 'calculator',
+          title: 'Kalkulator Estimasi Biaya',
+          description:
+            'Simulasikan kebutuhan fitur dan dapatkan estimasi biaya transparan secara instan.',
+        },
+        {
+          blockType: 'pricing',
+          title: 'Paket Layanan',
+        },
+        {
+          blockType: 'faq',
+          title: 'Pertanyaan yang Sering Diajukan',
+        },
+        {
+          blockType: 'ctaBanner',
+          headline: 'Punya ide proyek atau butuh sistem informasi?',
+          body: 'Konsultasikan kebutuhan perangkat lunak Anda bersama OpenByte Labs secara gratis.',
+          ctaLabel: 'Jadwalkan Konsultasi',
+          ctaTarget: '/konsultasi',
+        },
+      ],
+    },
+    {
+      slug: 'tentang',
+      title: 'Tentang OpenByte Labs',
+      _status: 'draft',
+      layout: [
+        {
+          blockType: 'about',
+          title: 'Tentang OpenByte Labs',
+          body: lexicalParagraph('[ISI] Profil studio rekayasa perangkat lunak OpenByte Labs...'),
+        },
+      ],
+    },
+    {
+      slug: 'kebijakan-privasi',
+      title: 'Kebijakan Privasi',
+      _status: 'draft',
+      layout: [
+        {
+          blockType: 'richText',
+          content: lexicalParagraph('[ISI] Kebijakan privasi OpenByte Labs...'),
+        },
+      ],
+    },
+  ]
+  for (const page of pageSeed) {
+    await createIfMissing('pages', 'slug', page.slug, page)
+  }
+
   const groupSeed = [
     ['platform', 'Platform', 'Pilih platform aplikasi.', 'single', true],
     ['jenis-solusi', 'Jenis Solusi', 'Pilih jenis solusi yang dibutuhkan.', 'single', true],
@@ -370,7 +461,7 @@ try {
       group: 'jenis-solusi',
       label: 'Sistem Informasi Database',
       priceMin: 2_500_000,
-      priceMax: 3_500_000,
+      priceMax: 4_000_000,
       daysMin: 14,
       daysMax: 21,
     },
@@ -533,11 +624,16 @@ try {
     },
     whatsapp: {
       tplCalculator: 'Halo OpenByte Labs, saya {nama} tertarik membuat aplikasi dengan rincian berikut:\n{rincian}\nEstimasi Kalkulator: {estimasi_harga} ({estimasi_durasi})\nReferensi: {referensi}\nMohon info ketersediaan jadwal pengerjaan. Terima kasih!',
+      tplPackageOrder: 'Halo OpenByte Labs, saya {nama} tertarik memesan paket {platform}.\nReferensi: {referensi}\nMohon info ketersediaan jadwal pengerjaan. Terima kasih!',
       tplBookingConfirm: 'Halo {nama}, konsultasi Anda pada {tanggal} pukul {jam} WIB sudah dikonfirmasi.\nLink pertemuan: {meeting_url}\nReferensi: {referensi}',
       tplTrackingLink: 'Halo {nama}, proyek "{nama_proyek}" dapat dipantau di {link_tracking}\nKode Tracking: {kode_tracking}\nPIN akan saya kirim terpisah.',
       tplRevisionNotice: 'Halo {nama}, permintaan revisi "{judul_revisi}" sudah saya tinjau. Sisa kuota revisi: {sisa_kuota}.\nDetail lengkap ada di halaman tracking proyek Anda.',
     },
-    calculator: { minimumPrice: 500_000, showRange: true },
+    calculator: {
+      disclaimer: 'Estimasi ini bersifat indikatif berdasarkan spesifikasi awal. Biaya dan durasi final disepakati setelah pembahasan teknis detail.',
+      minimumPrice: 500_000,
+      showRange: true,
+    },
     booking: {
       slotDurationMinutes: 60,
       bufferMinutes: 0,
@@ -552,6 +648,9 @@ try {
       maxLoginAttempts: 5,
       lockMinutes: 15,
       sessionMinutes: 120,
+    },
+    legal: {
+      consentText: 'Dengan mengirimkan formulir ini, Anda menyetujui data kontak Anda digunakan untuk komunikasi terkait proyek sesuai Kebijakan Privasi OpenByte Labs.',
     },
   }
   const currentSettings = await payload.findGlobal({ slug: 'site-settings', overrideAccess: true })

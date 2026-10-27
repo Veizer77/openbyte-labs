@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
-import { closedAccess } from '@/access/roles'
+import { closedAccess, hasRole } from '@/access/roles'
 import { createReference } from '@/hooks/create-reference'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 
 export const ConsultationBookings: CollectionConfig = {
   slug: 'consultation-bookings',
@@ -9,12 +9,14 @@ export const ConsultationBookings: CollectionConfig = {
   admin: {
     useAsTitle: 'reference',
     group: 'Operasional Klien',
+    hidden: ({ user }) => !hasRole(user, 'owner'),
     defaultColumns: ['reference', 'name', 'slotStart', 'status'],
   },
   access: closedAccess,
   hooks: {
     beforeValidate: [createReference('BKG')],
     afterChange: [auditCollectionChange('consultation-bookings')],
+    afterDelete: [auditCollectionDelete('consultation-bookings')],
   },
   fields: [
     {

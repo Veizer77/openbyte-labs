@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { closedAccess } from '@/access/roles'
+import { closedAccess, hasRole } from '@/access/roles'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 
 const isDate = (value: unknown): value is string =>
   typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
@@ -12,9 +13,14 @@ export const BlockedDates: CollectionConfig = {
   admin: {
     useAsTitle: 'date',
     group: 'Operasional Klien',
+    hidden: ({ user }) => !hasRole(user, 'owner'),
     defaultColumns: ['date', 'startTime', 'endTime', 'reason'],
   },
   access: closedAccess,
+  hooks: {
+    afterChange: [auditCollectionChange('blocked-dates')],
+    afterDelete: [auditCollectionDelete('blocked-dates')],
+  },
   fields: [
     {
       name: 'date',

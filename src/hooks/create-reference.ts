@@ -5,7 +5,7 @@ const alphabet = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ'
 
 export function createReference(prefix: 'INQ' | 'QTE' | 'BKG'): CollectionBeforeValidateHook {
   return async ({ data, operation, req }) => {
-    if (operation !== 'create' || data?.reference) return data
+    if (operation !== 'create') return data
 
     const now = new Date()
     const dateParts = new Intl.DateTimeFormat('en', {

@@ -4,7 +4,7 @@ import { assertTestDatabaseTargetIsDisposable } from './db-target'
 
 export const testUser = {
   email: 'dev@payloadcms.com',
-  password: 'test',
+  password: 'TestOwner123456!',
 }
 
 /**

@@ -598,7 +598,7 @@ Kuota hanya berkurang saat revisi **diterima**, bukan saat diajukan. Jenis `bug`
 
 ## 5. Spesifikasi CMS Admin (Payload)
 
-Satu panel di `/admin` (bagian dari aplikasi Next.js yang sama). Login dengan 2FA wajib untuk role `owner` (plugin dengan opsi *force setup*; lihat verifikasi Fase 0). Menu dibagi tiga grup lewat `admin.group`: **Konten Website**, **Operasional Klien**, dan **Sistem**.
+Satu panel di `/admin` (bagian dari aplikasi Next.js yang sama). Login dengan 2FA wajib untuk **semua user admin** (`owner` dan `editor`) — plugin dengan opsi *force setup*; keputusan D-05 pemilik 27 Oktober 2026 (lihat verifikasi Fase 0). Menu dibagi tiga grup lewat `admin.group`: **Konten Website**, **Operasional Klien**, dan **Sistem**.
 
 ### 5.1 Dashboard
 Komponen admin kustom (Server Component, `beforeDashboard`):
@@ -911,7 +911,7 @@ Harga minimum kalkulator (Settings): **Rp 500.000**. Setelah 3-5 proyek pertama,
 - [ ] Sistem tidak mengirim email apa pun; notifikasi tampil di panel dan tombol WhatsApp membuka `wa.me` dengan pesan terisi.
 
 ### 9.4 Keamanan & Operasional
-- [ ] Login admin `owner` memerlukan 2FA; role `editor` tidak bisa membuka data klien maupun tab Settings `whatsapp`/`tracking`.
+- [ ] Login admin (`owner` dan `editor`) memerlukan 2FA sesuai keputusan D-05; role `editor` tidak bisa membuka data klien maupun tab Settings `whatsapp`/`tracking`.
 - [ ] **Uji matriks akses:** setiap koleksi punya fungsi akses eksplisit; anonim tidak bisa membaca/menulis koleksi klien, operasional, `private-files`, `audit-logs`, atau `rate-limits` lewat REST; GraphQL mati; `accessPinHash` tidak pernah muncul di respons API mana pun.
 - [ ] Konten rich text dan tautan berskema berbahaya (`javascript:`) tidak dieksekusi; HTML mentah (bila ada) disanitasi.
 - [ ] Header keamanan dan CSP aktif; `/tracking*` dan `/admin*` ber-`noindex`.
@@ -1042,6 +1042,18 @@ Setiap item punya nilai bawaan di Lampiran I, sehingga pembangunan tidak tertaha
 7. Batas optimasi gambar platform dan perlu tidaknya `unoptimized`/loader kustom.
 8. Cakupan terjemahan admin `id`; label yang belum diterjemahkan ditimpa lewat `i18n.translations`.
 9. Bagian template Payload yang aman dibuang (fitur contoh, plugin yang tidak dipakai).
+
+**Hasil verifikasi Fase 0 — 27 Oktober 2026** (sesi agent F0-04/F0-05; item yang masih menunggu kredensial pemilik belum dicantumkan):
+
+| Butir 12.3 | Hasil verifikasi |
+|---|---|
+| 1 (TOTP) | `payload-totp@3.0.6` sesuai kebutuhan D-05: strategi sesi TOTP menandai `user._strategy === 'totp'`; login sandi memakai strategi `local-jwt`. Fungsi akses di `src/access/roles.ts` kini menuntut `_strategy === 'totp'` untuk **semua** user admin (owner dan editor) — keputusan D-05 pemilik 27 Oktober 2026; sesi sandi tanpa 2FA ditolak, termasuk pada koleksi konten yang membypass wrapper plugin. Dikunci oleh 17 tes unit (`tests/int/roles-totp.int.spec.ts`) dan 2 suite E2E (`admin-totp.e2e.spec.ts`: setup wajib, verifikasi, reset oleh owner, lockout 5 kode salah; `admin-collections.e2e.spec.ts` menyertakan penolakan tulis tanpa 2FA). E2E belum dijalankan lokal (guard database disposable); tervalidasi di CI. |
+| 2 (Aksi massal) | Ada di Payload 3.92: publish/unpublish massal = `PATCH /api/{slug}?where=...` dengan `{_status}`; hapus massal = `PATCH` `{deletedAt}` (soft) / `DELETE` (permanen); pulih dari trash = `PATCH ?trash=true` `{deletedAt: null}`; urutan = `POST /api/reorder` (kunci fractional `_order`, koleksi `orderable: true` otomatis `defaultSort: '_order'`). Kontrak dipetakan dari dist Payload dan dikunci E2E `admin-collections.e2e.spec.ts` (urutan + assert UI list, trash/pulih, publish/unpublish massal, join orderable `calculator-groups → items` dengan kunci `_calculator-items_items_order` dalam scope grup). E2E belum dijalankan lokal; tervalidasi di CI. Temuan: aksi **Duplicate** menyalin nilai field apa adanya (hanya kunci `_order` dibuang oleh `beforeDuplicate`) — pada koleksi dengan field unik (mis. `categories.name`, `projects.slug`) duplikasi akan gagal validasi unik; tombol Duplicate jangan diandalkan sampai ada hook penanda unik (fallback disetujui pemilik bila dibutuhkan). |
+| 5 (Cache) | Pada `next@16.4.3` (dokumen terkunci `dist/docs`): `revalidateTag(tag, profile)` — form satu-argumen **deprecated**; rekomendasi `revalidateTag(tag, 'max')` untuk stale-while-revalidate, `updateTag(tag)` khusus Server Actions (read-your-own-writes). `src/hooks/revalidate-content.ts` sudah memakai form dua-argumen `revalidateTag(tag, 'max')` dengan try/catch untuk konteks di luar request. Halaman frontend statis belum memasang tag cache (`cacheTag`/`next.tags` belum dipakai di `src/app`) — invalidasi ujung-ke-ujung menjadi bagian Fase 1. |
+| 8 (Terjemahan id) | `@payloadcms/translations@3.92.0` menyertakan bahasa `id` lengkap (±588 kunci). `payload-totp@3.0.6` **tidak** menyertakan `id` (37 bahasa tanpa Indonesia) → seluruh 12 kunci namespace `totpPlugin:*` ditimpa berbahasa Indonesia di `payload.config.ts` (`i18n.translations.id.totpPlugin`), termasuk judul setup "Pengaturan Autentikasi Dua Faktor" yang dikunci oleh E2E D-05. |
+| 9 (Template sisa) | Tiga direktori sisa template dibuang: `src/app/my-route`, `src/app/(payload)/api/graphql`, `src/app/(payload)/api/graphql-playground` (semuanya kosong/tidak ter-track). `prototype/` dipertahankan sebagai aset desain. |
+
+Catatan pelengkap Fase 0 (sesi ini): endpoint kesehatan `/health` (200 + `no-store` + `{"status":"ok","database":"up"}`, 503 saat database mati) terpasang dan teruji unit; `X-Robots-Tag: noindex, nofollow` otomatis untuk semua deploy non-produksi (lokal/preview) lewat `next.config.ts`; workflow backup harian (PRD H.6) dengan job `restore-verify` menunggu secrets/vars Actions yang diisi pemilik.
 
 ---
 

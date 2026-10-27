@@ -1,61 +1,93 @@
 import Link from 'next/link'
-import type { ServicePackage } from '@/lib/public-content'
+import { formatDurasiHari, formatRupiah, formatTanggalWib } from '@/lib/format'
+import type { PackageDto } from '@/lib/content/types'
 
-const rupiah = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  maximumFractionDigits: 0,
-})
+const BILLING_LABEL: Record<PackageDto['billingType'], string> = {
+  one_time: 'per proyek',
+  subscription_yearly: 'per tahun',
+  custom: 'sesuai kesepakatan',
+}
 
-export function PackageCard({ servicePackage }: { servicePackage: ServicePackage }) {
+/**
+ * Kartu paket dari `service-packages` aktif (F3-03). Jumlah kartu bebas dan
+ * lencana "Populer" mengikuti data CMS, bukan posisi tengah grid.
+ */
+export function PackageCard({ servicePackage }: { servicePackage: PackageDto }) {
+  const duration = formatDurasiHari(servicePackage.estimatedDays)
+  const discountEnds = formatTanggalWib(servicePackage.discountEndsAt)
+
   return (
     <article className="package-card">
       <div className="package-card__top">
         <div>
-          <span className="section-kicker">{servicePackage.category}</span>
+          {servicePackage.categoryName ? (
+            <span className="section-kicker">{servicePackage.categoryName}</span>
+          ) : null}
           <h2>{servicePackage.name}</h2>
         </div>
+        {servicePackage.isPopular ? <span className="eyebrow-chip">Populer</span> : null}
       </div>
-      <p className="package-card__description">{servicePackage.description}</p>
+
       <div className="package-price">
-        <strong>{rupiah.format(servicePackage.price)}</strong>
-        <span>per proyek</span>
+        <strong>{formatRupiah(servicePackage.price)}</strong>
+        {servicePackage.originalPrice ? (
+          <s className="package-price__original">{formatRupiah(servicePackage.originalPrice)}</s>
+        ) : null}
+        <span>{BILLING_LABEL[servicePackage.billingType]}</span>
       </div>
-      <div className="package-stats">
-        <div>
-          <span className="material-symbols-outlined" aria-hidden="true">
-            calendar_month
-          </span>
-          <span>{servicePackage.durationDays} hari kerja</span>
-        </div>
-        <div>
-          <span className="material-symbols-outlined" aria-hidden="true">
-            edit_note
-          </span>
-          <span>{servicePackage.revisions}x revisi</span>
-        </div>
-      </div>
-      <div className="package-card__features">
-        <span className="package-card__label">Yang termasuk</span>
-        <ul>
-          {servicePackage.features.map((feature) => (
-            <li key={feature}>
+
+      {servicePackage.isDiscounted && discountEnds ? (
+        <p className="package-card__fineprint">Harga khusus berlaku sampai {discountEnds}.</p>
+      ) : null}
+
+      {duration || servicePackage.includedRevisions > 0 ? (
+        <div className="package-stats">
+          {duration ? (
+            <div>
               <span className="material-symbols-outlined" aria-hidden="true">
-                check
+                calendar_month
               </span>
-              {feature}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <p className="package-card__fineprint">
-        Revisi tambahan {rupiah.format(servicePackage.extraRevisionPrice)} per revisi.
-      </p>
+              <span>{duration}</span>
+            </div>
+          ) : null}
+          {servicePackage.includedRevisions > 0 ? (
+            <div>
+              <span className="material-symbols-outlined" aria-hidden="true">
+                edit_note
+              </span>
+              <span>{servicePackage.includedRevisions}x revisi</span>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      {servicePackage.features.length ? (
+        <div className="package-card__features">
+          <span className="package-card__label">Yang termasuk</span>
+          <ul>
+            {servicePackage.features.map((feature) => (
+              <li key={feature}>
+                <span className="material-symbols-outlined" aria-hidden="true">
+                  check
+                </span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {servicePackage.extraRevisionPrice ? (
+        <p className="package-card__fineprint">
+          Revisi tambahan {formatRupiah(servicePackage.extraRevisionPrice)} per revisi.
+        </p>
+      ) : null}
+
       <Link
         className="button button--light package-card__cta"
-        href={`/pesan?paket=${servicePackage.slug}`}
+        href={`/pesan?paket=${encodeURIComponent(servicePackage.slug)}`}
       >
-        Pilih paket{' '}
+        {servicePackage.ctaLabel ?? 'Pilih paket'}{' '}
         <span className="material-symbols-outlined" aria-hidden="true">
           arrow_forward
         </span>

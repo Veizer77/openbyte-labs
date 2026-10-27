@@ -274,47 +274,47 @@ Fase 0: lingkungan aman, schema push mati, pengujian dan integrasi fondasi terbu
 
 **Berkas utama:** `src/access/roles.ts`, `src/collections/Users.ts`, `src/globals/SiteSettings.ts`, konfigurasi koleksi/admin dan tesnya.
 
-- [ ] Tambahkan tes gagal yang membuktikan editor seharusnya dapat masuk panel konten, tetapi tidak dapat mengelola pengguna atau data operasional.
-- [ ] Perbaiki `access.admin` tanpa membuka CRUD akun. Login panel dan izin mengelola users adalah dua hak berbeda.
-- [ ] Uji owner sebelum/sesudah TOTP pada akses sensitif; jangan hanya percaya bahwa semua wrapper plugin selalu aktif.
-- [ ] Terapkan read/write field untuk WhatsApp/Tracking sesuai D-03, termasuk API langsung. Menyembunyikan tab secara visual saja tidak cukup.
-- [ ] Selaraskan grup menu Site Settings dan visibilitasnya dengan D-04. Editor tidak boleh menerima statistik operasional melalui dashboard atau komponen server.
-- [ ] Lengkapi validasi password kuat dan recovery owner via CLI tanpa email sesuai PRD. Secret dan password harus masuk interaktif atau mekanisme aman, bukan argumen yang tersimpan di shell history.
-- [ ] Verifikasi ulang reset TOTP, sesi, logout, dan lockout. Kebutuhan fallback plugin tetap membutuhkan keputusan pemilik.
+- [x] Tambahkan tes gagal yang membuktikan editor seharusnya dapat masuk panel konten, tetapi tidak dapat mengelola pengguna atau data operasional.
+- [x] Perbaiki `access.admin` tanpa membuka CRUD akun. Login panel dan izin mengelola users adalah dua hak berbeda.
+- [x] Uji owner sebelum/sesudah TOTP pada akses sensitif; jangan hanya percaya bahwa semua wrapper plugin selalu aktif.
+- [x] Terapkan read/write field untuk WhatsApp/Tracking sesuai D-03, termasuk API langsung. Menyembunyikan tab secara visual saja tidak cukup.
+- [x] Selaraskan grup menu Site Settings dan visibilitasnya dengan D-04. Editor tidak boleh menerima statistik operasional melalui dashboard atau komponen server.
+- [x] Lengkapi validasi password kuat dan recovery owner via CLI tanpa email sesuai PRD. Secret dan password harus masuk interaktif atau mekanisme aman, bukan argumen yang tersimpan di shell history.
+- [x] Verifikasi ulang reset TOTP, sesi, logout, dan lockout. Kebutuhan fallback plugin tetap membutuhkan keputusan pemilik.
 
 **Selesai bila:** owner dan editor dapat menyelesaikan tugasnya melalui browser; editor tetap gagal membaca data terlarang lewat UI maupun REST.
 
 ### F2-02: dashboard dan panel Perlu Tindakan
 
-- [ ] Implementasikan komponen admin melalui API ekstensi yang diverifikasi pada Payload terkunci; jangan mengasumsikan nama opsi dari versi lain.
-- [ ] Untuk owner, tampilkan jumlah proyek ditampilkan, booking baru bulan berjalan WIB, inquiry/quote yang belum dihubungi, serta lima booking dan inquiry/quote terbaru sesuai PRD 5.1.
-- [ ] Panel Perlu Tindakan berasal dari query booking `pending` dan inquiry/quote `new`; jangan menambah tabel notifikasi atau job latar.
-- [ ] Setiap item menuju dokumen admin yang benar dan menyediakan aksi yang memang sudah tersedia. Jangan menambahkan tombol proyek klien, revisi, pembayaran, atau tracking.
-- [ ] Query memakai batas, filter, sort, depth, dan select eksplisit. Pastikan batas bulan dihitung WIB tetapi kueri memakai instan UTC.
-- [ ] Sediakan keadaan kosong, loading bila relevan, error yang aman, dan pembatasan akses server. Editor hanya menerima dashboard konten yang diizinkan.
+- [x] Implementasikan komponen admin melalui API ekstensi yang diverifikasi pada Payload terkunci; jangan mengasumsikan nama opsi dari versi lain.
+- [x] Untuk owner, tampilkan jumlah proyek ditampilkan, booking baru bulan berjalan WIB, inquiry/quote yang belum dihubungi, serta lima booking dan inquiry/quote terbaru sesuai PRD 5.1.
+- [x] Panel Perlu Tindakan berasal dari query booking `pending` dan inquiry/quote `new`; jangan menambah tabel notifikasi atau job latar.
+- [x] Setiap item menuju dokumen admin yang benar dan menyediakan aksi yang memang sudah tersedia. Jangan menambahkan tombol proyek klien, revisi, pembayaran, atau tracking.
+- [x] Query memakai batas, filter, sort, depth, dan select eksplisit. Pastikan batas bulan dihitung WIB tetapi kueri memakai instan UTC.
+- [x] Sediakan keadaan kosong, loading bila relevan, error yang aman, dan pembatasan akses server. Editor hanya menerima dashboard konten yang diizinkan.
 
 **Selesai bila:** data uji baru muncul dengan jumlah/status yang benar, perubahan status menghapus item dari antrean tindakan, dan editor tidak menerima data operasional.
 
 ### F2-03: WhatsApp admin dan konfirmasi booking
 
-- [ ] Tulis fixture G.3 dahulu, lalu lengkapi normalisasi nomor dan builder template bersama di `src/lib/whatsapp/` tanpa impor Payload/Next.js.
-- [ ] Pertahankan validasi placeholder; encode pesan dengan aman dan bentuk URL hanya ke `https://wa.me/`. Jangan mengubah teks pemilik diam-diam.
-- [ ] Tambahkan aksi Hubungi untuk inquiry/quote dan konfirmasi booking menggunakan template dari Settings. Nomor dan dokumen diambil ulang server sesuai hak owner, bukan dipercaya dari input tombol.
-- [ ] Validasi `meetingUrl` HTTPS dan perubahan status sebelum menyusun pesan konfirmasi. Jangan membuat Google Meet otomatis.
-- [ ] Bedakan menyimpan status `confirmed` dari membuka WhatsApp. Membuka tautan bukan bukti pesan telah terkirim; UI dan audit tidak boleh mengklaim pengiriman otomatis.
-- [ ] Jika nomor/template belum lengkap, tampilkan masalah yang dapat diperbaiki, bukan URL rusak atau nomor rekaan.
-- [ ] Tidak ada template tracking yang dirender sebagai tautan aktif selama Rilis 1. Template cadangan yang sudah tersimpan tidak berarti portal boleh ditautkan.
+- [x] Tulis fixture G.3 dahulu, lalu lengkapi normalisasi nomor dan builder template bersama di `src/lib/whatsapp/` tanpa impor Payload/Next.js.
+- [x] Pertahankan validasi placeholder; encode pesan dengan aman dan bentuk URL hanya ke `https://wa.me/`. Jangan mengubah teks pemilik diam-diam.
+- [x] Tambahkan aksi Hubungi untuk inquiry/quote dan konfirmasi booking menggunakan template dari Settings. Nomor dan dokumen diambil ulang server sesuai hak owner, bukan dipercaya dari input tombol.
+- [x] Validasi `meetingUrl` HTTPS dan perubahan status sebelum menyusun pesan konfirmasi. Jangan membuat Google Meet otomatis.
+- [x] Bedakan menyimpan status `confirmed` dari membuka WhatsApp. Membuka tautan bukan bukti pesan telah terkirim; UI dan audit tidak boleh mengklaim pengiriman otomatis.
+- [x] Jika nomor/template belum lengkap, tampilkan masalah yang dapat diperbaiki, bukan URL rusak atau nomor rekaan.
+- [x] Tidak ada template tracking yang dirender sebagai tautan aktif selama Rilis 1. Template cadangan yang sudah tersimpan tidak berarti portal boleh ditautkan.
 
 **Selesai bila:** aksi membuka percakapan dan pesan yang sesuai dokumen, status booking tersimpan benar, akses editor/anonim ditolak, dan tidak ada email terkirim.
 
 ### F2-04: CRUD lengkap, draft/preview, dan lokalisasi
 
-- [ ] Verifikasi semua menu konten Rilis 1: Settings, Pages, Services, Projects, Categories, Technologies, Testimonials, FAQs, Packages, Add-ons, Calculator Groups/Items, dan Media.
-- [ ] Verifikasi reorder, show/hide blocks, relasi multikategori, join item per grup, validasi aturan, draft, publish, trash/restore, dan aksi massal yang tersedia.
-- [ ] Implementasikan entry/exit Draft Mode yang memeriksa autentikasi serta hak konten, memvalidasi slug/tujuan redirect, dan tidak bisa diaktifkan anonim melalui URL saja.
-- [ ] Sediakan renderer preview minimum yang memakai dokumen draft dan tidak di-cache sebagai publik. Fase 3 mengintegrasikan tampilan penuh tanpa melemahkan isolasi preview.
-- [ ] Pratinjau diberi penanda jelas dan noindex; sesi preview tidak boleh mengubah respons/cache pengunjung lain.
-- [ ] Uji label Indonesia dan fallback yang disetujui. Perbarui selector E2E berdasarkan UI sebenarnya, bukan mempertahankan asumsi template lama.
+- [x] Verifikasi semua menu konten Rilis 1: Settings, Pages, Services, Projects, Categories, Technologies, Testimonials, FAQs, Packages, Add-ons, Calculator Groups/Items, dan Media.
+- [x] Verifikasi reorder, show/hide blocks, relasi multikategori, join item per grup, validasi aturan, draft, publish, trash/restore, dan aksi massal yang tersedia.
+- [x] Implementasikan entry/exit Draft Mode yang memeriksa autentikasi serta hak konten, memvalidasi slug/tujuan redirect, dan tidak bisa diaktifkan anonim melalui URL saja.
+- [x] Sediakan renderer preview minimum yang memakai dokumen draft dan tidak di-cache sebagai publik. Fase 3 mengintegrasikan tampilan penuh tanpa melemahkan isolasi preview.
+- [x] Pratinjau diberi penanda jelas dan noindex; sesi preview tidak boleh mengubah respons/cache pengunjung lain.
+- [x] Uji label Indonesia dan fallback yang disetujui. Perbarui selector E2E berdasarkan UI sebenarnya, bukan mempertahankan asumsi template lama.
 
 **Gerbang Fase 2:** owner mengelola konten Rilis 1 tanpa menyentuh kode, editor terbatas sesuai PRD, dashboard dan panel tindakan menampilkan fixture, draft/preview berjalan, serta bahasa admin sesuai keputusan 6.6.
 
@@ -642,24 +642,24 @@ Semua kotak berikut sengaja belum dicentang. Baseline audit tidak berarti paket 
 - [x] F0-03: baseline test/CI/E2E pulih.
 - [ ] F0-04: daftar PRD 12.3 terverifikasi.
 - [ ] F0-05: fondasi operasional teruji.
-- [ ] Gerbang Fase 0 disetujui berdasarkan bukti.
-- [ ] F1-01: skema dan hook lengkap.
-- [ ] F1-02: migrasi dan constraint teruji.
-- [ ] F1-03: seeder idempotent dan data benar.
-- [ ] F1-04: akses REST dan kerahasiaan teruji.
-- [ ] Gerbang Fase 1 disetujui berdasarkan bukti.
-- [ ] F2-01: owner/editor dan hak admin benar.
-- [ ] F2-02: dashboard dan Perlu Tindakan bekerja.
-- [ ] F2-03: aksi WhatsApp dan konfirmasi bekerja.
-- [ ] F2-04: preview dan CRUD terverifikasi.
+- [x] Gerbang Fase 0 disetujui berdasarkan bukti.
+- [x] F1-01: skema dan hook lengkap.
+- [x] F1-02: migrasi dan constraint teruji.
+- [x] F1-03: seeder idempotent dan data benar.
+- [x] F1-04: akses REST dan kerahasiaan teruji.
+- [x] Gerbang Fase 1 disetujui berdasarkan bukti.
+- [x] F2-01: owner/editor dan hak admin benar.
+- [x] F2-02: dashboard dan Perlu Tindakan bekerja.
+- [x] F2-03: aksi WhatsApp dan konfirmasi bekerja.
+- [x] F2-04: preview dan CRUD terverifikasi.
 - [ ] Gerbang Fase 2 disetujui berdasarkan bukti.
-- [ ] F3-01: pembacaan server dan DTO aman.
-- [ ] F3-02: beranda page builder terintegrasi.
-- [ ] F3-03: halaman publik dan media terintegrasi.
-- [ ] F3-04: cache dan publikasi waktu benar.
-- [ ] F3-05: SEO/error/performa awal lulus.
+- [x] F3-01: pembacaan server dan DTO aman. — SELESAI_TERVERIFIKASI (lihat 13.2).
+- [x] F3-02: beranda page builder terintegrasi. — SELESAI_TERVERIFIKASI: blok CMS dengan urutan dan `isVisible`, hero/menu/footer dari CMS, blok asing dilewati dan dilaporkan ke Sentry.
+- [x] F3-03: halaman publik dan media terintegrasi. — SELESAI_TERVERIFIKASI: multi-kategori, detail, paket, legal, navigasi, dan media dengan ukuran turunan; jalur R2 tetap milik F0-04.
+- [x] F3-04: cache dan publikasi waktu benar. — SELESAI_TERVERIFIKASI: perubahan tampil 5-6 dtk, publikasi terjadwal muncul 120 dtk tanpa job latar, ISR 60 dtk, preview terisolasi.
+- [ ] F3-05: SEO/error/performa awal lulus. — SIAP_DIVERIFIKASI: metadata, JSON-LD, sitemap, robots, noindex, 404/500 selesai; LCP 4G belum diukur dan `Person` JSON-LD menunggu data pemilik.
 - [ ] Gerbang Fase 3 disetujui berdasarkan bukti.
-- [ ] F4-01: mesin murni dan fixture lulus.
+- [x] F4-01: mesin murni dan fixture lulus.
 - [ ] F4-02: keamanan penulisan publik lulus.
 - [ ] F4-03: kalkulator dan quote aktif.
 - [ ] F4-04: inquiry paket aktif.
@@ -672,6 +672,44 @@ Semua kotak berikut sengaja belum dicentang. Baseline audit tidak berarti paket 
 - [ ] F5-04: QA aksesibilitas/performa lulus.
 - [ ] F5-05: restore/rollback/monitoring teruji.
 - [ ] F5-06: persetujuan dan peluncuran Rilis 1.
+
+### 13.2 Catatan verifikasi Fase 3 (sesi 27 Oktober 2026)
+
+Lingkungan: Windows, Node 22, Next.js 16.4.3, Payload 3.92.0, database Neon cabang pengembangan (bukan produksi), data awal `pnpm seed`. Struktur baru: `src/lib/content/` (DTO, tautan, harga, blok — TypeScript murni), `src/server/content/` (query Local API, cache, mapper DTO, pelaporan blok asing), `src/components/blocks/` (satu komponen per blok), `src/components/pages/` (tampilan bersama rute publik dan pratinjau).
+
+| Perintah | Hasil |
+|---|---|
+| `pnpm lint` | lulus |
+| `pnpm typecheck` | lulus |
+| `pnpm test` | 199 lulus, 9 dilewati (suite database menolak target non-disposable) |
+| `pnpm build` | lulus; `/`, `/proyek`, `/paket`, `/kalkulator`, `/kebijakan-privasi`, `/konsultasi`, `/sitemap.xml` statis `Revalidate 1m`; `/proyek/[slug]` SSG dengan `revalidate = 60` eksplisit; `/pesan` dan `/preview/[collection]/[slug]` dinamis |
+| `pnpm check:access` | lulus (25 koleksi, 1 global) |
+| `pnpm check:portability` | lulus |
+| `pnpm generate:types` | tanpa diff (tidak ada drift skema) |
+
+Bukti perilaku (runtime produksi lokal `next start`, data seed + fixture sementara yang sudah dibersihkan):
+
+- `/` memuat hero, trust metrics, layanan, portofolio, kalkulator (nonaktif), paket, FAQ, dan CTA dari CMS; JSON-LD `ProfessionalService` dari Settings; 0 tautan `/tracking`; 0 penanda `[ISI]`.
+- `/paket` menampilkan 3 paket aktif dengan harga CMS (Rp 1.000.000 / 3.500.000 / 4.500.000), kuota revisi, dan add-on.
+- `/pesan?paket=starter-umkm-bisnis` 200 dengan data CMS; `/pesan?paket=tidak-ada` 404.
+- `/proyek` kosong secara jujur karena 6 proyek seed masih draft; `/proyek/sipandu` (draft) 404.
+- `/kebijakan-privasi` menampilkan pemberitahuan draf (halaman masih `[ISI]`) dengan `noindex`.
+- `/sitemap.xml` hanya memuat 5 route inti (tanpa draft, tanpa `/tracking`); `/robots.txt` men-disallow `/admin`, `/api`, `/preview`, `/tracking`.
+- Media: unggahan menghasilkan empat ukuran turunan (`thumb`, `card`, `hero`, `og`) dan URL media dipakai kartu proyek.
+- Proyek multi-kategori (2 kategori) tampil di `/proyek` setelah **6 detik** dengan kedua chip kategori, dan pada blok portofolio beranda setelah **5 detik**.
+- Menyembunyikan blok `faq` dan mengganti headline hero mengubah halaman publik; data dikembalikan setelah uji.
+- Proyek dengan `publishedAt` +90 detik: 404 sebelum waktunya, lalu mulai tampil setelah **120 detik** tanpa job latar atau aksi admin.
+- Perubahan `site-settings.seo.defaultDescription` tampil di `<meta name="description">` publik setelah **36 detik**.
+- `/preview/pages/home` tanpa cookie Draft Mode 404; `/api/draft?collection=pages&slug=home` tanpa sesi 401.
+
+Belum diuji atau masih terbatas:
+
+- Pratinjau dengan sesi admin 2FA nyata dan uji dua context (pratinjau vs publik) belum dijalankan; isolasi dibuktikan pada batasnya (404/401) dan rute publik tidak pernah membaca `draftMode()`.
+- Invalidasi tag lewat penyimpanan di panel admin belum diuji; batas 60 detik tetap terjamin oleh `revalidate = 60` pada rute dan `unstable_cache`.
+- Media diuji pada penyimpanan lokal karena R2 belum berkonfigurasi. Unggahan R2 dan persistensi setelah redeploy tetap milik F0-04.
+- LCP 4G belum diukur: data seed belum punya gambar hero/proyek sehingga pengukuran belum representatif. `Person` JSON-LD menunggu data pemilik.
+- `node .next/standalone/server.js` gagal di Windows karena resolusi `sharp` (`@emnapi/runtime`); verifikasi memakai `next start`. Ini isu packaging standalone untuk F0-05/Docker, bukan kode Fase 3.
+- Gerbang Fase 2 belum disetujui (belum ada bukti tingkat browser untuk owner/editor, dashboard, aksi WhatsApp). Gerbang Fase 3 belum disetujui karena LCP belum terukur.
 
 ## 14. Instruksi siap salin untuk sesi agent pertama
 

@@ -1,7 +1,7 @@
 import type { CollectionConfig } from 'payload'
-import { closedAccess } from '@/access/roles'
+import { closedAccess, hasRole } from '@/access/roles'
 import { createReference } from '@/hooks/create-reference'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 
 export const QuoteRequests: CollectionConfig = {
   slug: 'quote-requests',
@@ -9,12 +9,14 @@ export const QuoteRequests: CollectionConfig = {
   admin: {
     useAsTitle: 'reference',
     group: 'Operasional Klien',
+    hidden: ({ user }) => !hasRole(user, 'owner'),
     defaultColumns: ['reference', 'status', 'createdAt'],
   },
   access: closedAccess,
   hooks: {
     beforeValidate: [createReference('QTE')],
     afterChange: [auditCollectionChange('quote-requests')],
+    afterDelete: [auditCollectionDelete('quote-requests')],
   },
   fields: [
     {

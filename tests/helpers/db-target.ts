@@ -12,3 +12,12 @@ export async function assertTestDatabaseTargetIsDisposable(): Promise<void> {
   const uri = databaseAdapterArgs().pool.connectionString
   assertDisposableTestDatabase(uri)
 }
+
+export async function canRunDatabaseTests(): Promise<boolean> {
+  try {
+    await assertTestDatabaseTargetIsDisposable()
+    return true
+  } catch {
+    return false
+  }
+}

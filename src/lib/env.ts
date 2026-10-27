@@ -25,6 +25,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_TURNSTILE_SITE_KEY: optionalValue,
   TURNSTILE_SECRET_KEY: optionalValue,
   SENTRY_DSN: optionalUrl,
+  NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
   IP_HASH_SALT: optionalValue,
   TRACKING_SESSION_SECRET: optionalValue,
   WA_DEFAULT_NUMBER: optionalValue,

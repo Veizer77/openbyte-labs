@@ -1,15 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { servicePackages } from '@/lib/public-content'
+import { getPackageBySlug } from '@/server/content'
+import { formatRupiah } from '@/lib/format'
 
 type OrderPageProps = { searchParams: Promise<{ paket?: string }> }
-
-const rupiah = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  maximumFractionDigits: 0,
-})
 
 export const metadata: Metadata = {
   title: 'Pemesanan Paket',
@@ -17,10 +12,35 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 }
 
+/**
+ * Halaman pemesanan paket (F3-03).
+ *
+ * Paket dibaca ulang dari CMS memakai slug, sehingga paket nonaktif atau tidak
+ * ada berakhir 404 — bukan menampilkan data lama. Formulir masih nonaktif
+ * sampai F4-04 menyelesaikan Server Action inquiry.
+ */
 export default async function OrderPage({ searchParams }: OrderPageProps) {
   const { paket } = await searchParams
-  const selectedPackage = servicePackages.find((item) => item.slug === paket)
 
+  if (!paket) {
+    return (
+      <section className="page-hero page-hero--compact wrap" aria-labelledby="order-title">
+        <span className="section-kicker">Pemesanan paket</span>
+        <h1 id="order-title">Pilih paket terlebih dahulu.</h1>
+        <p>Halaman ini memerlukan pilihan paket. Buka daftar paket untuk memilih salah satu.</p>
+        <p>
+          <Link className="text-link" href="/paket">
+            Lihat daftar paket{' '}
+            <span className="material-symbols-outlined" aria-hidden="true">
+              arrow_forward
+            </span>
+          </Link>
+        </p>
+      </section>
+    )
+  }
+
+  const selectedPackage = await getPackageBySlug(paket)
   if (!selectedPackage) notFound()
 
   return (
@@ -38,35 +58,44 @@ export default async function OrderPage({ searchParams }: OrderPageProps) {
           <article className="order-package">
             <span className="section-kicker">Paket yang dipilih</span>
             <h2>{selectedPackage.name}</h2>
-            <p>{selectedPackage.description}</p>
+            {selectedPackage.categoryName ? <p>{selectedPackage.categoryName}</p> : null}
             <div className="order-package__price">
-              <strong>{rupiah.format(selectedPackage.price)}</strong>
-              <span>harga paket awal</span>
+              <strong>{formatRupiah(selectedPackage.price)}</strong>
+              {selectedPackage.originalPrice ? (
+                <s>{formatRupiah(selectedPackage.originalPrice)}</s>
+              ) : null}
+              <span>harga paket</span>
             </div>
             <dl className="order-facts">
-              <div>
-                <dt>Durasi awal</dt>
-                <dd>{selectedPackage.durationDays} hari kerja</dd>
-              </div>
+              {selectedPackage.estimatedDays ? (
+                <div>
+                  <dt>Durasi awal</dt>
+                  <dd>{selectedPackage.estimatedDays} hari kerja</dd>
+                </div>
+              ) : null}
               <div>
                 <dt>Revisi termasuk</dt>
-                <dd>{selectedPackage.revisions}x</dd>
+                <dd>{selectedPackage.includedRevisions}x</dd>
               </div>
-              <div>
-                <dt>Revisi tambahan</dt>
-                <dd>{rupiah.format(selectedPackage.extraRevisionPrice)}</dd>
-              </div>
+              {selectedPackage.extraRevisionPrice ? (
+                <div>
+                  <dt>Revisi tambahan</dt>
+                  <dd>{formatRupiah(selectedPackage.extraRevisionPrice)}</dd>
+                </div>
+              ) : null}
             </dl>
-            <ul className="order-feature-list">
-              {selectedPackage.features.map((feature) => (
-                <li key={feature}>
-                  <span className="material-symbols-outlined" aria-hidden="true">
-                    check
-                  </span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
+            {selectedPackage.features.length ? (
+              <ul className="order-feature-list">
+                {selectedPackage.features.map((feature) => (
+                  <li key={feature}>
+                    <span className="material-symbols-outlined" aria-hidden="true">
+                      check
+                    </span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            ) : null}
             <Link className="text-link" href="/paket">
               <span className="material-symbols-outlined" aria-hidden="true">
                 arrow_back
@@ -118,8 +147,7 @@ export default async function OrderPage({ searchParams }: OrderPageProps) {
               </button>
             </form>
             <p className="form-preview-notice" role="status">
-              Belum ada data yang dikirim. Paket dan harga ini merupakan daftar awal, konfirmasi
-              akhir dilakukan setelah konsultasi.
+              Belum ada data yang dikirim. Konfirmasi akhir dilakukan setelah konsultasi.
             </p>
           </section>
         </div>

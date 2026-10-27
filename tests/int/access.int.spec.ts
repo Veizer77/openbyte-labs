@@ -9,9 +9,10 @@ import {
 } from '../../src/access/roles'
 
 function requestFor(user?: { roles?: string[] }) {
+  // D-05: sesi admin yang sah adalah sesi TOTP terverifikasi.
   return {
     req: {
-      user: user ? { ...user, _strategy: user.roles?.includes('owner') ? 'totp' : undefined } : undefined,
+      user: user ? { ...user, _strategy: 'totp' } : undefined,
     },
   } as never
 }

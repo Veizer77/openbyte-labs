@@ -1,18 +1,35 @@
 import type { Access, FieldAccess, Where } from 'payload'
 
-type UserWithRoles = { roles?: string[]; _strategy?: string } | null | undefined
+type UserWithRoles = { roles?: string[]; _strategy?: string } | Record<string, unknown> | null | undefined
 
-export function hasRole(user: UserWithRoles, role: 'owner' | 'editor'): boolean {
-  return Boolean(user?.roles?.includes(role))
+export function hasRole(user: unknown, role: 'owner' | 'editor'): boolean {
+  if (!user || typeof user !== 'object') return false
+  const roles = (user as { roles?: unknown }).roles
+  return Array.isArray(roles) && roles.includes(role)
 }
 
+/**
+ * D-05 (keputusan pemilik 27 Oktober 2026): 2FA wajib untuk SEMUA user admin
+ * (owner dan editor). Hanya sesi yang sudah lolos verifikasi TOTP
+ * (`_strategy === 'totp'`, strategi plugin payload-totp) boleh mengoperasikan
+ * koleksi admin — termasuk koleksi konten yang membypass wrapper TOTP plugin
+ * (`contentTotpWrapperBypass`), karena di sana wrapper tidak lagi menahan
+ * sesi password-only.
+ */
 function isAdminUser(user: UserWithRoles): boolean {
-  return (hasRole(user, 'owner') && user?._strategy === 'totp') || hasRole(user, 'editor')
+  return Boolean(user?._strategy === 'totp' && (hasRole(user, 'owner') || hasRole(user, 'editor')))
 }
 
-export const isOwner: Access = ({ req }) => hasRole(req.user as UserWithRoles, 'owner')
+export const isOwner: Access = ({ req }) => {
+  const user = req.user as UserWithRoles
+  return hasRole(user, 'owner') && user?._strategy === 'totp'
+}
 export const isOwnerBoolean = ({ req }: { req: { user?: unknown } }): boolean =>
   hasRole(req.user as UserWithRoles, 'owner')
+export const isStaffBoolean = ({ req }: { req: { user?: unknown } }): boolean => {
+  const user = req.user as UserWithRoles
+  return hasRole(user, 'owner') || hasRole(user, 'editor')
+}
 export const isEditor: Access = ({ req }) => hasRole(req.user as UserWithRoles, 'editor')
 export const isAdmin: Access = ({ req }) => {
   return isAdminUser(req.user as UserWithRoles)
@@ -21,6 +38,14 @@ export const isAdmin: Access = ({ req }) => {
 export const isOwnerField: FieldAccess = ({ req }) => {
   const user = req.user as UserWithRoles
   return hasRole(user, 'owner') && user?._strategy === 'totp'
+}
+
+/**
+ * Sesi admin yang sudah lolos 2FA. Dipakai juga oleh rute pratinjau draft
+ * (F2-04) agar cookie Draft Mode tidak bisa dipakai sesi password-only.
+ */
+export function hasAdminSession(user: unknown): boolean {
+  return isAdminUser(user as UserWithRoles)
 }
 
 export const contentTotpWrapperBypass = {

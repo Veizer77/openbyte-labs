@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { contentTotpWrapperBypass, isAdmin, publishedProjectsOrAdmin } from '@/access/roles'
 import { projectContentBlocks } from '@/blocks/page-blocks'
 import { createSlug } from '@/hooks/create-slug'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 import { revalidateCollectionTag } from '@/hooks/revalidate-content'
 
 const revalidation = revalidateCollectionTag('projects')
@@ -14,6 +14,10 @@ export const Projects: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Konten Website',
     defaultColumns: ['title', 'slug', 'publishedAt', '_status', 'isFeatured'],
+    preview: (doc) => {
+      if (!doc?.slug) return ''
+      return `/api/draft?collection=projects&slug=${doc.slug}`
+    },
   },
   access: {
     read: publishedProjectsOrAdmin,
@@ -28,7 +32,7 @@ export const Projects: CollectionConfig = {
   hooks: {
     beforeValidate: [createSlug('title')],
     afterChange: [auditCollectionChange('projects'), revalidation.afterChange],
-    afterDelete: [revalidation.afterDelete],
+    afterDelete: [auditCollectionDelete('projects'), revalidation.afterDelete],
   },
   fields: [
     { name: 'title', type: 'text', required: true },

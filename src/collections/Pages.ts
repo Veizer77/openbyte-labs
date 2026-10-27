@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { contentTotpWrapperBypass, publicContentAccess } from '@/access/roles'
 import { pageBlocks } from '@/blocks/page-blocks'
 import { createSlug } from '@/hooks/create-slug'
-import { auditCollectionChange } from '@/hooks/audit-collection-change'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
 import { revalidateCollectionTag } from '@/hooks/revalidate-content'
 
 const revalidation = revalidateCollectionTag('pages')
@@ -14,6 +14,10 @@ export const Pages: CollectionConfig = {
     useAsTitle: 'title',
     group: 'Konten Website',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
+    preview: (doc) => {
+      if (!doc?.slug) return ''
+      return `/api/draft?collection=pages&slug=${doc.slug}`
+    },
   },
   access: publicContentAccess,
   custom: contentTotpWrapperBypass,
@@ -22,7 +26,7 @@ export const Pages: CollectionConfig = {
   hooks: {
     beforeValidate: [createSlug('title')],
     afterChange: [auditCollectionChange('pages'), revalidation.afterChange],
-    afterDelete: [revalidation.afterDelete],
+    afterDelete: [auditCollectionDelete('pages'), revalidation.afterDelete],
   },
   fields: [
     { name: 'slug', type: 'text', required: true, unique: true, index: true },

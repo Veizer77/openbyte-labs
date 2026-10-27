@@ -57,4 +57,12 @@ test.describe('Frontend', () => {
     await expect(page.getByRole('heading', { name: 'Jadwal belum tersedia.' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Jadwal konsultasi belum aktif' })).toBeDisabled()
   })
+
+  test('health endpoint reports database status without leaking config', async ({ request }) => {
+    const response = await request.get('http://localhost:3000/health')
+
+    expect(response.status()).toBe(200)
+    expect(response.headers()['cache-control']).toBe('no-store')
+    await expect(response.json()).resolves.toEqual({ status: 'ok', database: 'up' })
+  })
 })

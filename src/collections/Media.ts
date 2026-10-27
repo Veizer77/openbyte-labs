@@ -1,5 +1,11 @@
 import type { CollectionConfig } from 'payload'
 import { contentTotpWrapperBypass, isAdmin } from '@/access/roles'
+import { auditCollectionChange, auditCollectionDelete } from '@/hooks/audit-collection-change'
+import { revalidateCollectionTag } from '@/hooks/revalidate-content'
+
+// Media dipakai lintas halaman, jadi perubahan alt/URL harus menyegarkan tag
+// `content` yang dipakai semua pembacaan publik (F3-04).
+const revalidation = revalidateCollectionTag('content')
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -15,6 +21,10 @@ export const Media: CollectionConfig = {
     create: isAdmin,
     update: isAdmin,
     delete: isAdmin,
+  },
+  hooks: {
+    afterChange: [auditCollectionChange('media'), revalidation.afterChange],
+    afterDelete: [auditCollectionDelete('media'), revalidation.afterDelete],
   },
   fields: [
     {
