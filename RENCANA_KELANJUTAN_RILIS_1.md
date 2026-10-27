@@ -42,6 +42,7 @@ P0/P1/P2 bukan estimasi waktu. Tidak ada persentase kemajuan atau tanggal pelunc
 - Utilitas bersama yang diperlukan lebih awal, seperti pembuat tautan WhatsApp untuk admin, dapat dibuat dalam paket kebutuhan admin dengan uji yang sama. Fase 4 wajib menggunakan kembali utilitas tersebut, bukan membuat versi kedua.
 - Fase sebelumnya yang terblokir tidak boleh ditandai selesai hanya karena agent dapat mengerjakan kode fase berikutnya.
 - Pemilik dapat mengizinkan pengerjaan paket independen saat integrasi eksternal terblokir. Pengecualian harus tercatat; gerbang rilis tidak boleh dilonggarkan.
+- **Pengecualian tercatat (keputusan pemilik, 27 Oktober 2026):** paket F4-02 (keamanan penulisan publik) dikerjakan pada sesi ini meski item F0-04/F0-05 yang butuh kredensial pemilik (R2, Sentry, branch Neon uji) masih `TERBLOKIR`. F4-02 tidak bergantung pada kredensial tersebut; gerbang F0 tidak dilonggarkan dan item terblokir tetap menunggu pemilik.
 
 ## 2. Baseline audit dan keterbatasan bukti
 
@@ -403,15 +404,15 @@ Fase 0: lingkungan aman, schema push mati, pengujian dan integrasi fondasi terbu
 
 ### F4-02: kontrak keamanan semua penulisan publik
 
-- [ ] Definisikan schema zod bersama untuk inquiry, quote, dan booking: tipe, panjang, optional, consent, serta pesan validasi Indonesia. Server selalu memvalidasi ulang.
+- [x] Definisikan schema zod bersama untuk inquiry, quote, dan booking: tipe, panjang, optional, consent, serta pesan validasi Indonesia. Server selalu memvalidasi ulang.
 - [ ] Terapkan urutan PRD: validasi -> Turnstile/honeypot -> rate limit -> pembacaan otoritatif/perhitungan -> Local API tertutup. Jangan melonggarkan REST koleksi.
-- [ ] Verifikasi token Turnstile di server, penolakan token tidak sah/kedaluwarsa/digunakan ulang sesuai kontrak layanan, dan kesesuaian hostname/action bila digunakan.
-- [ ] Kunci uji resmi Turnstile hanya untuk lokal/CI; tidak ada bypass permanen berdasarkan parameter browser. Produksi harus gagal aman bila verifikasi tidak tersedia.
-- [ ] Konfirmasikan limit/jendela form dan login admin yang belum numerik di PRD kepada pemilik, kemudian simpan sebagai konfigurasi tervalidasi. Jangan mengarang kebijakan yang langsung diberlakukan pada pengguna.
+- [x] Verifikasi token Turnstile di server, penolakan token tidak sah/kedaluwarsa/digunakan ulang sesuai kontrak layanan, dan kesesuaian hostname/action bila digunakan.
+- [x] Kunci uji resmi Turnstile hanya untuk lokal/CI; tidak ada bypass permanen berdasarkan parameter browser. Produksi harus gagal aman bila verifikasi tidak tersedia.
+- [x] Konfirmasikan limit/jendela form dan login admin yang belum numerik di PRD kepada pemilik, kemudian simpan sebagai konfigurasi tervalidasi. Jangan mengarang kebijakan yang langsung diberlakukan pada pengguna.
 - [ ] Rate limit menggunakan PostgreSQL dengan increment/check atomik atau transaksi yang teruji terhadap request serentak; bukan pola read-lalu-write yang mudah dilampaui.
 - [ ] Bentuk IP klien dari header proxy yang disetujui untuk hosting target. Jangan mempercayai sembarang `x-forwarded-for` yang dapat dipasok klien.
-- [ ] Simpan IP hanya sebagai hash bersalt. Jangan mencetak token Turnstile, body formulir, nomor WA pelanggan, atau query berisi data pribadi pada log/Sentry.
-- [ ] Pemeriksaan Origin/CSRF dan cookie sesuai Next.js/Payload terkunci tetap aktif. Semua endpoint kustom juga memeriksa identitas dan hak secara mandiri.
+- [x] Simpan IP hanya sebagai hash bersalt. Jangan mencetak token Turnstile, body formulir, nomor WA pelanggan, atau query berisi data pribadi pada log/Sentry.
+- [x] Pemeriksaan Origin/CSRF dan cookie sesuai Next.js/Payload terkunci tetap aktif. Semua endpoint kustom juga memeriksa identitas dan hak secara mandiri.
 - [ ] `status`, `reference`, `consentAt`, harga, durasi, dan informasi turunan yang otoritatif ditetapkan server. Respons sukses minimal, respons error tidak membuka data/internal SQL.
 - [ ] Sediakan feedback pending/sukses/error, pencegahan submit ganda pada UI, dan perilaku retry terdefinisi. Jangan mengklaim exactly-once bila belum ada mekanisme dan uji yang membuktikannya.
 
@@ -710,6 +711,23 @@ Belum diuji atau masih terbatas:
 - LCP 4G belum diukur: data seed belum punya gambar hero/proyek sehingga pengukuran belum representatif. `Person` JSON-LD menunggu data pemilik.
 - `node .next/standalone/server.js` gagal di Windows karena resolusi `sharp` (`@emnapi/runtime`); verifikasi memakai `next start`. Ini isu packaging standalone untuk F0-05/Docker, bukan kode Fase 3.
 - Gerbang Fase 2 belum disetujui (belum ada bukti tingkat browser untuk owner/editor, dashboard, aksi WhatsApp). Gerbang Fase 3 belum disetujui karena LCP belum terukur.
+
+### 13.3 Catatan progres F4-02 (27 Oktober 2026)
+
+Keputusan pemilik yang dicatat di PRD 6.2: form publik maksimal 5 kirim per 15 menit per IP; login admin terkunci setelah 5 upaya gagal selama 15 menit. Pengecualian pengerjaan lintas fase saat F0-04/F0-05 terblokir kredensial dicatat di 1.2.
+
+Fondasi yang tersedia: schema Zod tertutup untuk inquiry/quote/booking; guard bersama menolak Origin asing, memvalidasi schema, memeriksa honeypot dan Siteverify Turnstile, baru menjalankan limit; adapter server mengambil header proxy yang dikonfigurasi dan mewajibkan jumlah hop untuk `x-forwarded-for`; IP dan key bucket memakai HMAC salt; PostgreSQL memakai satu `INSERT ... ON CONFLICT ... RETURNING` atomik. Tidak ada aksi publik yang menulis ke Local API yang ditambahkan pada paket ini; F4-03/F4-04/F4-05 harus memakai `guardPublicRequest()` dan hanya menulis setelah lolos.
+
+| Perintah | Hasil sesi |
+|---|---|
+| `pnpm lint` | lulus |
+| `pnpm typecheck` | lulus |
+| `pnpm test` | 226 lulus, 11 dilewati. Rate-limit database dan 7 skenario live G.7 dilewati karena `.env` menunjuk database pengembangan non-disposable. |
+| `pnpm check:access` | lulus (25 koleksi, 1 global) |
+| `pnpm check:portability` | lulus |
+| Tes unit keamanan baru | 26 lulus; termasuk schema, urutan guard, Origin, token Turnstile, parsing IP/hop, dan hash bersalt. |
+
+Belum terverifikasi: run CI setelah perbaikan fixture G.7 (run `40532798774` gagal pada tes karena `consentAt` wajib belum diberikan; tes kini mengisinya, timeout balapan dinaikkan ke 30 detik); uji PostgreSQL atomik dan E2E anonim REST perlu dijalankan pada DB disposable CI. Live Siteverify Turnstile belum dipanggil; pengujian lokal memakai fetch injeksi. Nilai produksi `TURNSTILE_SECRET_KEY`, `IP_HASH_SALT`, `TRUSTED_IP_HEADER`, dan `TRUSTED_IP_PROXY_HOPS` harus dikonfigurasi pemilik sesuai hosting, tidak dikarang di sesi ini. Aksi tulis nyata serta feedback/pencegahan submit ganda masih bagian integrasi paket F4-03/F4-04/F4-05.
 
 ## 14. Instruksi siap salin untuk sesi agent pertama
 

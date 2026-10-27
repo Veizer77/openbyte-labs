@@ -10,6 +10,11 @@ const optionalUrl = z.preprocess(
   z.string().url().optional(),
 )
 
+const optionalPositiveInteger = z.preprocess(
+  (value) => value === '' || value === undefined ? undefined : Number(value),
+  z.number().int().min(1).max(32).optional(),
+)
+
 const envSchema = z.object({
   PAYLOAD_SECRET: z.string().min(32),
   SITE_URL: z.string().url(),
@@ -30,6 +35,7 @@ const envSchema = z.object({
   TRACKING_SESSION_SECRET: optionalValue,
   WA_DEFAULT_NUMBER: optionalValue,
   TRUSTED_IP_HEADER: optionalValue,
+  TRUSTED_IP_PROXY_HOPS: optionalPositiveInteger,
 })
 
 export function parseEnvironment(source: Record<string, string | undefined> = process.env) {
@@ -51,6 +57,17 @@ export function parseEnvironment(source: Record<string, string | undefined> = pr
       const configuredCredentialValues = credentialValues.filter(Boolean).length
       const isProductionRuntime =
         source.NODE_ENV === 'production' && source.NEXT_PHASE !== 'phase-production-build'
+
+      if (
+        values.TRUSTED_IP_PROXY_HOPS !== undefined &&
+        values.TRUSTED_IP_HEADER?.trim().toLowerCase() !== 'x-forwarded-for'
+      ) {
+        context.addIssue({
+          code: 'custom',
+          message: 'TRUSTED_IP_PROXY_HOPS is valid only with TRUSTED_IP_HEADER=x-forwarded-for',
+          path: ['TRUSTED_IP_PROXY_HOPS'],
+        })
+      }
 
       if (configuredLocationValues > 0 && configuredLocationValues < locationValues.length) {
         context.addIssue({

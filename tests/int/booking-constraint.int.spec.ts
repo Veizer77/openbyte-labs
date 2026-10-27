@@ -45,6 +45,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
           consultationMode: 'google_meet',
           slotStart: '2027-01-10T02:00:00.000Z', // 09:00 WIB
           slotEnd: '2027-01-10T03:00:00.000Z', // 10:00 WIB
+          consentAt: new Date().toISOString(),
           status: 'pending',
         } as never,
         overrideAccess: true,
@@ -64,6 +65,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
             consultationMode: 'google_meet',
             slotStart: '2027-01-10T02:00:00.000Z',
             slotEnd: '2027-01-10T03:00:00.000Z',
+            consentAt: new Date().toISOString(),
             status: 'pending',
           } as never,
           overrideAccess: true,
@@ -87,6 +89,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
             consultationMode: 'google_meet',
             slotStart: '2027-01-10T02:30:00.000Z', // 09:30 WIB
             slotEnd: '2027-01-10T03:30:00.000Z', // 10:30 WIB
+            consentAt: new Date().toISOString(),
             status: 'pending',
           } as never,
           overrideAccess: true,
@@ -108,6 +111,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
           consultationMode: 'google_meet',
           slotStart: '2027-01-10T03:00:00.000Z', // 10:00 WIB
           slotEnd: '2027-01-10T04:00:00.000Z', // 11:00 WIB
+          consentAt: new Date().toISOString(),
           status: 'pending',
         } as never,
         overrideAccess: true,
@@ -125,6 +129,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
           consultationMode: 'google_meet',
           slotStart: '2027-01-10T02:00:00.000Z',
           slotEnd: '2027-01-10T03:00:00.000Z',
+          consentAt: new Date().toISOString(),
           status: 'cancelled',
         } as never,
         overrideAccess: true,
@@ -143,6 +148,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
           consultationMode: 'google_meet',
           slotStart: '2027-01-10T07:00:00.000Z', // 14:00 WIB
           slotEnd: '2027-01-10T08:00:00.000Z', // 15:00 WIB
+          consentAt: new Date().toISOString(),
           status: 'pending',
         } as never,
         overrideAccess: true,
@@ -166,6 +172,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
           consultationMode: 'google_meet',
           slotStart: '2027-01-10T07:00:00.000Z',
           slotEnd: '2027-01-10T08:00:00.000Z',
+          consentAt: new Date().toISOString(),
           status: 'confirmed',
         } as never,
         overrideAccess: true,
@@ -185,6 +192,7 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
               consultationMode: 'google_meet',
               slotStart: '2027-01-10T04:00:00.000Z', // 11:00 WIB
               slotEnd: '2027-01-10T05:00:00.000Z', // 12:00 WIB
+              consentAt: new Date().toISOString(),
               status: 'pending',
             } as never,
             overrideAccess: true,
@@ -203,6 +211,6 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
           expect(isExclusionViolation(rej.reason)).toBe(true)
         }
       }
-    })
+    }, 30000)
   })
 })

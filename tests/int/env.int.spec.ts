@@ -56,4 +56,19 @@ describe('environment validation', () => {
 
     expect(result.R2_ACCESS_KEY_ID).toBeUndefined()
   })
+
+  it('parses a trusted proxy hop count only with the forwarded-for header', () => {
+    const result = parseEnvironment({
+      ...baseEnvironment,
+      TRUSTED_IP_HEADER: 'x-forwarded-for',
+      TRUSTED_IP_PROXY_HOPS: '2',
+    })
+
+    expect(result.TRUSTED_IP_PROXY_HOPS).toBe(2)
+    expect(() => parseEnvironment({
+      ...baseEnvironment,
+      TRUSTED_IP_HEADER: 'cf-connecting-ip',
+      TRUSTED_IP_PROXY_HOPS: '1',
+    })).toThrow('TRUSTED_IP_PROXY_HOPS')
+  })
 })
