@@ -38,8 +38,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm dev',
-    reuseExistingServer: true,
+    // CI builds the app before E2E; serve that build instead of recompiling in dev mode.
+    command: process.env.CI ? 'pnpm start' : 'pnpm dev',
+    reuseExistingServer: !process.env.CI,
     url: 'http://localhost:3000',
+    timeout: 120_000,
   },
 })
