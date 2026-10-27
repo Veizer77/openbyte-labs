@@ -1,0 +1,1572 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      tailwind = { config: { corePlugins: { preflight: false } } };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter%3Awght%40100..900&family=Material+Symbols+Outlined%3Awght%40100..700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, ::before, ::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body style="background-color: #FFFFFF">
+    <div
+      data-pencil-name="CMS / 13 - Log Aktivitas &amp; 2FA"
+      class="box-border w-[1440px] mx-auto h-[1380px] bg-[#FFFFFF] overflow-hidden relative"
+    >
+      <div
+        data-pencil-name="aside"
+        class="box-border w-[288px] h-[1380px] [box-shadow:0px_1px_8px_#0000000a] absolute left-0 top-0 flex flex-col gap-0 justify-between items-start bg-[#FFFFFF] overflow-hidden [z-index:0]"
+      >
+        <div
+          data-pencil-name="div"
+          class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[20px] justify-start items-start"
+        >
+          <div
+            data-pencil-name="Logo Container"
+            class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[0px_0px_16px_0px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="img"
+              class="box-border w-[193px] shrink-0 h-[49px] bg-[url('../assets/img/e72160f2d93da97a.png')] bg-no-repeat bg-contain bg-center"
+            ></div>
+          </div>
+          <div
+            data-pencil-name="Badge Row"
+            class="box-border w-full h-fit shrink-0 flex flex-row gap-[4px] p-[0px_0px_12px_0px] justify-start items-center"
+          >
+            <div
+              data-pencil-name="Superadmin Badge"
+              class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-center items-start bg-[#F0F0F0] rounded-[4px]"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                Superadmin
+              </div>
+            </div>
+            <div
+              data-pencil-name="2FA Badge"
+              class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-center items-start bg-[#E2E89D] rounded-[4px]"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#454A10] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                2FA Active
+              </div>
+            </div>
+          </div>
+          <div
+            data-pencil-name="Nav Section 1"
+            class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[4px_0px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="Header"
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px] justify-start items-start"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-semibold tracking-[0.55px] text-left [white-space:nowrap]"
+              >
+                KONTEN WEBSITE
+              </div>
+            </div>
+            <div
+              data-pencil-name="nav"
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-[2px] justify-start items-start"
+            >
+              <div
+                data-pencil-name="Dashboard"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  dashboard
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Dashboard
+                </div>
+              </div>
+              <div
+                data-pencil-name="Site Settings"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  tune
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Site Settings
+                </div>
+              </div>
+              <div
+                data-pencil-name="Halaman"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  article
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Halaman
+                </div>
+              </div>
+              <div
+                data-pencil-name="Layanan Bento"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  grid_view
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Layanan Bento
+                </div>
+              </div>
+              <div
+                data-pencil-name="Proyek Showcase"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  view_carousel
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Proyek Showcase
+                </div>
+              </div>
+              <div
+                data-pencil-name="Kategori"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  folder
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Kategori
+                </div>
+              </div>
+              <div
+                data-pencil-name="Teknologi"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  terminal
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Teknologi
+                </div>
+              </div>
+              <div
+                data-pencil-name="Testimoni &amp; FAQ"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  chat_bubble_outline
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Testimoni &amp; FAQ
+                </div>
+              </div>
+              <div
+                data-pencil-name="Paket Layanan &amp; Add-on"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  layers
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Paket Layanan &amp; Add-on
+                </div>
+              </div>
+              <div
+                data-pencil-name="Kalkulator Builder"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  calculate
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Kalkulator Builder
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-pencil-name="Nav Section 2"
+            class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[12px_0px_0px_0px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="Header"
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px] justify-start items-start"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-semibold tracking-[0.55px] text-left [white-space:nowrap]"
+              >
+                OPERASIONAL KLIEN
+              </div>
+            </div>
+            <div
+              data-pencil-name="nav"
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-[2px] justify-start items-start"
+            >
+              <div
+                data-pencil-name="Proyek Klien &amp; Tracking"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  assignment
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Proyek Klien &amp; Tracking
+                </div>
+              </div>
+              <div
+                data-pencil-name="Booking Konsultasi"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  calendar_today
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Booking Konsultasi
+                </div>
+              </div>
+              <div
+                data-pencil-name="Inquiry &amp; Pemesanan"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  inbox
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Inquiry &amp; Pemesanan
+                </div>
+              </div>
+              <div
+                data-pencil-name="Quote Kalkulator"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  request_quote
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Quote Kalkulator
+                </div>
+              </div>
+              <div
+                data-pencil-name="Template Tahap"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  schema
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[13px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Template Tahap
+                </div>
+              </div>
+              <div
+                data-pencil-name="Log Aktivitas &amp; 2FA"
+                class="box-border w-full h-[40px] shrink-0 flex flex-row gap-[8px] p-[0px_8px] justify-start items-center bg-[#18181A] rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="icon"
+                  class="text-[18px]/[normal] box-border text-[#FFFFFF] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  verified_user
+                </div>
+                <div
+                  data-pencil-name="label"
+                  class="text-[14px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  Log Aktivitas &amp; 2FA
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          data-pencil-name="Sidebar Footer"
+          class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[16px] justify-start items-start bg-[#F0F0F066]"
+        >
+          <div
+            data-pencil-name="Engine Row"
+            class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+          >
+            <div
+              class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+            >
+              Engine: Laravel 13 / Filament
+            </div>
+            <div class="box-border w-[8px] shrink-0 h-[8px] bg-[#82B440] rounded-[50%]"></div>
+          </div>
+        </div>
+      </div>
+      <div
+        data-pencil-name="header"
+        class="box-border w-[1152px] h-[64px] [box-shadow:0px_1px_8px_#0000000a] [backdrop-filter:blur(12px)] absolute left-[288px] top-0 flex flex-row gap-0 p-[0px_24px] justify-between items-center bg-[#FFFFFFE6] [z-index:1]"
+      >
+        <div
+          data-pencil-name="Search Bar"
+          class="box-border w-[520px] shrink-0 h-[36px] flex flex-row gap-[8px] p-[6px_12px] justify-start items-center bg-[#F0F0F0] rounded-[8px]"
+        >
+          <div
+            class="text-[18px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+          >
+            search
+          </div>
+          <div
+            class="text-[13px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+          >
+            Cari data layanan, inquiry, quote, atau klien...
+          </div>
+          <div
+            data-pencil-name="Kbd Shortcut"
+            class="box-border w-fit shrink-0 h-fit [box-shadow:0px_1px_4px_#0000000a] flex flex-row gap-0 p-[2px_6px] justify-center items-start bg-[#FFFFFF] rounded-[4px]"
+          >
+            <div
+              class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+            >
+              ⌘K
+            </div>
+          </div>
+        </div>
+        <div
+          data-pencil-name="Right Group"
+          class="box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] justify-start items-center"
+        >
+          <div
+            data-pencil-name="Status Pill"
+            class="box-border w-fit shrink-0 h-fit flex flex-row gap-[6px] p-[4px_10px] justify-start items-center bg-[#F0F0F0] rounded-[9999px]"
+          >
+            <div class="box-border w-[6px] shrink-0 h-[6px] bg-[#82B440] rounded-[50%]"></div>
+            <div
+              class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+            >
+              PRODUCTION (Docker / Render)
+            </div>
+          </div>
+          <div
+            data-pencil-name="Public Link"
+            class="box-border w-fit shrink-0 h-fit flex flex-row gap-[4px] justify-start items-center"
+          >
+            <div
+              class="text-[13px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+            >
+              Lihat Website Publik
+            </div>
+            <div
+              class="text-[16px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+            >
+              north_east
+            </div>
+          </div>
+          <div
+            data-pencil-name="Notif Button"
+            class="box-border w-fit shrink-0 h-[34px] flex flex-row gap-0 p-[6px] justify-center items-center rounded-[8px]"
+          >
+            <div
+              class="text-[20px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+            >
+              notifications
+            </div>
+          </div>
+          <div
+            data-pencil-name="Profile Group"
+            class="box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] p-[0px_0px_0px_4px] justify-start items-center"
+          >
+            <div
+              data-pencil-name="Profile Text"
+              class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-end"
+            >
+              <div
+                class="text-[13px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+              >
+                Muhammad Izzat
+              </div>
+              <div
+                class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                Owner
+              </div>
+            </div>
+            <div
+              data-pencil-name="Avatar"
+              class="box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#18181A] rounded-[9999px]"
+            >
+              <div
+                class="text-[18px]/[normal] box-border text-[#FFFFFF] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+              >
+                person
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        data-pencil-name="main"
+        class="box-border w-[1152px] h-fit absolute left-[288px] top-[64px] flex flex-col gap-[20px] p-[24px_24px_32px_24px] justify-start items-start [z-index:2]"
+      >
+        <div
+          data-pencil-name="Page Header"
+          class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-end"
+        >
+          <div
+            data-pencil-name="Title Column"
+            class="box-border w-[760px] shrink-0 h-fit flex flex-col gap-[6px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="Breadcrumb"
+              class="box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] justify-start items-center"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                CMS
+              </div>
+              <div
+                class="text-[14px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+              >
+                chevron_right
+              </div>
+              <div
+                class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                Operasional Klien
+              </div>
+              <div
+                class="text-[14px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+              >
+                chevron_right
+              </div>
+              <div
+                class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+              >
+                Log Aktivitas &amp; 2FA
+              </div>
+            </div>
+            <div
+              class="box-border w-fit h-fit shrink-0 flex flex-row gap-[8px] justify-start items-center"
+            >
+              <div
+                class="text-[26px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-bold tracking-[-0.5px] text-left [white-space:nowrap]"
+              >
+                Audit Trail Keamanan &amp; Autentikasi 2FA
+              </div>
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-[4px] p-[2px_8px] justify-start items-center bg-[#82B4401A] rounded-[9999px]"
+              >
+                <div class="box-border w-[6px] shrink-0 h-[6px] bg-[#82B440] rounded-[50%]"></div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  PDP Compliant • Enkripsi TLS 1.3
+                </div>
+              </div>
+            </div>
+            <div
+              class="text-[13px]/[19px] box-border w-full text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left"
+            >
+              Pemantauan immutable append-only log akses sesi superadmin, verifikasi tanda tangan
+              digital SHA-256, dan proteksi multi-factor.
+            </div>
+          </div>
+          <div
+            class="box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] justify-start items-center"
+          >
+            <div
+              class="box-border w-fit shrink-0 h-[36px] flex flex-row gap-[6px] p-[8px_14px] justify-start items-center bg-[#F4F4F5] rounded-[8px]"
+            >
+              <div
+                class="text-[16px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+              >
+                download
+              </div>
+              <div
+                class="text-[13px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                Export Audit Log (JSON)
+              </div>
+            </div>
+            <div
+              class="box-border w-fit shrink-0 h-[36px] [box-shadow:0px_1px_2px_#00000014] flex flex-row gap-[6px] p-[8px_16px] justify-start items-center bg-[#18181A] rounded-[8px]"
+            >
+              <div
+                class="text-[16px]/[normal] box-border text-[#FFFFFF] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+              >
+                shield
+              </div>
+              <div
+                class="text-[13px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+              >
+                Kebijakan Akses 2FA
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          data-pencil-name="KPI Metrics"
+          class="box-border w-full h-fit shrink-0 flex flex-row gap-[16px] justify-start items-start"
+        >
+          <div
+            class="box-border [flex:1_1_0] h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[8px] p-[16px] justify-start items-start bg-[#FFFFFF] rounded-[12px]"
+          >
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                Status Keamanan Platform
+              </div>
+              <div
+                class="box-border w-[28px] shrink-0 h-[28px] flex flex-row gap-0 justify-center items-center bg-[#F4F4F5] rounded-[6px]"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  verified
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-end"
+            >
+              <div
+                class="text-[20px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-bold tracking-[-0.3px] text-left [white-space:nowrap]"
+              >
+                99.98% Aman
+              </div>
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#82B4401A] rounded-[4px]"
+              >
+                <div
+                  class="text-[10px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  0 insiden anomali
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="box-border [flex:1_1_0] h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[8px] p-[16px] justify-start items-start bg-[#FFFFFF] rounded-[12px]"
+          >
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                Adopsi 2FA Tim Admin
+              </div>
+              <div
+                class="box-border w-[28px] shrink-0 h-[28px] flex flex-row gap-0 justify-center items-center bg-[#F4F4F5] rounded-[6px]"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  lock
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-end"
+            >
+              <div
+                class="text-[20px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-bold tracking-[-0.3px] text-left [white-space:nowrap]"
+              >
+                100% Aktif
+              </div>
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#82B4401A] rounded-[4px]"
+              >
+                <div
+                  class="text-[10px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  4 TOTP Keypair
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="box-border [flex:1_1_0] h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[8px] p-[16px] justify-start items-start bg-[#FFFFFF] rounded-[12px]"
+          >
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                Sesi Login Terverifikasi
+              </div>
+              <div
+                class="box-border w-[28px] shrink-0 h-[28px] flex flex-row gap-0 justify-center items-center bg-[#F4F4F5] rounded-[6px]"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  devices
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-end"
+            >
+              <div
+                class="text-[20px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-bold tracking-[-0.3px] text-left [white-space:nowrap]"
+              >
+                2 Sesi Aktif
+              </div>
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#F0F0F0] rounded-[4px]"
+              >
+                <div
+                  class="text-[10px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  Jakarta &amp; Surabaya
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="box-border [flex:1_1_0] h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[8px] p-[16px] justify-start items-start bg-[#FFFFFF] rounded-[12px]"
+          >
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+            >
+              <div
+                class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                Mutasi Log (24 Jam)
+              </div>
+              <div
+                class="box-border w-[28px] shrink-0 h-[28px] flex flex-row gap-0 justify-center items-center bg-[#F4F4F5] rounded-[6px]"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  history_edu
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-end"
+            >
+              <div
+                class="text-[20px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-bold tracking-[-0.3px] text-left [white-space:nowrap]"
+              >
+                1.428 Event
+              </div>
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#F0F0F0] rounded-[4px]"
+              >
+                <div
+                  class="text-[10px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  Immutable Hash Sign
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          data-pencil-name="Audit Workspace"
+          class="box-border w-full h-fit shrink-0 flex flex-row gap-[16px] justify-start items-start"
+        >
+          <div
+            data-pencil-name="2FA Governance Card"
+            class="box-border w-[360px] shrink-0 h-fit [box-shadow:0px_2px_4px_#0000001a] flex flex-col gap-[16px] p-[20px] justify-start items-start bg-[#18181A] rounded-[16px]"
+          >
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+            >
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] justify-start items-center"
+              >
+                <div
+                  class="box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#242427] rounded-[8px]"
+                >
+                  <div
+                    class="text-[18px]/[normal] box-border text-[#D2D88F] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                  >
+                    security
+                  </div>
+                </div>
+                <div
+                  class="text-[14px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                >
+                  Protokol 2FA Admin
+                </div>
+              </div>
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#E2E89D] rounded-[4px]"
+              >
+                <div
+                  class="text-[10px]/[normal] box-border text-[#454A10] font-[Inter,system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                >
+                  ENFORCED
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-[8px] p-[12px] justify-start items-start bg-[#242427] rounded-[12px]"
+            >
+              <div
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-[6px] justify-start items-center"
+                >
+                  <div
+                    class="text-[16px]/[normal] box-border text-[#82B440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                  >
+                    smartphone
+                  </div>
+                  <div
+                    class="text-[13px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Authenticator App (TOTP)
+                  </div>
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  Terhubung
+                </div>
+              </div>
+              <div
+                class="text-[11px]/[16px] box-border w-full text-[#A8A8AD] font-[Inter,system-ui,sans-serif] font-normal text-left"
+              >
+                Google Authenticator / 1Password terdaftar pada iPhone 15 Pro (M. Izzat). 8 backup
+                code darurat tersimpan aman.
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-[8px] p-[12px] justify-start items-start bg-[#242427] rounded-[12px]"
+            >
+              <div
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+              >
+                <div
+                  class="text-[10px]/[normal] box-border text-[#D2D88F] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                >
+                  SESI LOGIN SAAT INI
+                </div>
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-[4px] justify-start items-center"
+                >
+                  <div class="box-border w-[6px] shrink-0 h-[6px] bg-[#82B440] rounded-[50%]"></div>
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Aktif Sekarang
+                  </div>
+                </div>
+              </div>
+              <div
+                class="text-[13px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+              >
+                182.253.140.82 — Jakarta Selatan, ID
+              </div>
+              <div
+                class="text-[11px]/[16px] box-border w-full text-[#A8A8AD] font-[Inter,system-ui,sans-serif] font-normal text-left"
+              >
+                Chrome 132.0 / macOS Sequoia • Sesi TLS 1.3 AES-256-GCM. Terakhir sinkronisasi 2
+                menit lalu.
+              </div>
+            </div>
+            <div
+              class="text-[10px]/[normal] box-border text-[#A8A8AD] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+            >
+              KEBIJAKAN GOVERNANCE AKTIF
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-[8px] justify-start items-start"
+            >
+              <div
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-start items-center"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#82B440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  check_circle
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border [flex:1_1_0] text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Wajib 2FA TOTP untuk semua mutasi CMS
+                </div>
+              </div>
+              <div
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-start items-center"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#82B440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  check_circle
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border [flex:1_1_0] text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Auto-logout setelah 15 menit inaktivitas
+                </div>
+              </div>
+              <div
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-start items-center"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#82B440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  check_circle
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border [flex:1_1_0] text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Deteksi anomali IP &amp; Geofencing Studio
+                </div>
+              </div>
+              <div
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-start items-center"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#82B440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  check_circle
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border [flex:1_1_0] text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Immutable Cryptographic Sign pada tiap log
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-[36px] shrink-0 flex flex-row gap-[6px] justify-center items-center bg-[#333338] rounded-[8px]"
+            >
+              <div
+                class="text-[16px]/[normal] box-border text-[#FFFFFF] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+              >
+                logout
+              </div>
+              <div
+                class="text-[12px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+              >
+                Revoke Semua Sesi Lain
+              </div>
+            </div>
+          </div>
+          <div
+            data-pencil-name="Audit Trail Card"
+            class="box-border [flex:1_1_0] h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[12px] p-[16px] justify-start items-start bg-[#FFFFFF] rounded-[16px]"
+          >
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+            >
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-[2px] p-[2px] justify-start items-center bg-[#F4F4F5] rounded-[8px]"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-[28px] flex flex-row gap-0 p-[4px_8px] justify-center items-center bg-[#18181A] rounded-[6px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Semua Log (1.428)
+                  </div>
+                </div>
+                <div
+                  class="box-border w-fit shrink-0 h-[28px] flex flex-row gap-0 p-[4px_8px] justify-center items-center rounded-[6px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                  >
+                    Autentikasi (48)
+                  </div>
+                </div>
+                <div
+                  class="box-border w-fit shrink-0 h-[28px] flex flex-row gap-0 p-[4px_8px] justify-center items-center rounded-[6px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                  >
+                    Mutasi Proyek (284)
+                  </div>
+                </div>
+                <div
+                  class="box-border w-fit shrink-0 h-[28px] flex flex-row gap-0 p-[4px_8px] justify-center items-center rounded-[6px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                  >
+                    Security Audit (12)
+                  </div>
+                </div>
+              </div>
+              <div
+                class="box-border w-[220px] shrink-0 h-[32px] flex flex-row gap-[6px] p-[6px_10px] justify-start items-center bg-[#F4F4F5] rounded-[6px]"
+              >
+                <div
+                  class="text-[16px]/[normal] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  search
+                </div>
+                <div
+                  class="text-[12px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  Cari IP, aksi, atau hash...
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-[14px] p-[10px_16px] justify-start items-center bg-[#F0F0F099] rounded-[8px]"
+            >
+              <div
+                class="box-border w-[95px] shrink-0 h-fit flex flex-row gap-0 justify-start items-start"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                >
+                  WAKTU
+                </div>
+              </div>
+              <div
+                class="box-border w-[135px] shrink-0 h-fit flex flex-row gap-0 justify-start items-start"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                >
+                  AKTOR &amp; IP
+                </div>
+              </div>
+              <div
+                class="box-border [flex:1_1_0] h-fit flex flex-row gap-0 justify-start items-start"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                >
+                  AKTIVITAS &amp; MUTASI
+                </div>
+              </div>
+              <div
+                class="box-border w-[120px] shrink-0 h-fit flex flex-row gap-0 justify-start items-start"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                >
+                  HASH SHA-256
+                </div>
+              </div>
+              <div
+                class="box-border w-[75px] shrink-0 h-fit flex flex-row gap-0 justify-end items-start"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                >
+                  STATUS
+                </div>
+              </div>
+            </div>
+            <div
+              class="[box-sizing:content-box] w-[696px] h-[72.5px] shrink-0 flex flex-row gap-[14px] p-[12px_16px] justify-start items-center [border-width:0px_0px_1px_0px] [border-style:solid] [border-color:#F0F0F0] [margin:0px_0px_-0.5px_0px] rounded-[8px]"
+            >
+              <div
+                class="box-border w-[95px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  14:02:18 WIB
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  Hari ini
+                </div>
+              </div>
+              <div
+                class="box-border w-[135px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  m.izzat (Superadmin)
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  182.253.140.82
+                </div>
+              </div>
+              <div
+                class="box-border [flex:1_1_0] h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[16px] box-border w-full text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Update Metadata &amp; WebP Sync SINDUKSADATI
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border w-full text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                >
+                  Target: Portofolio ID #01
+                </div>
+              </div>
+              <div
+                class="box-border w-[120px] shrink-0 h-fit flex flex-row gap-0 p-[3px_6px] justify-start items-center bg-[#F4F4F5] rounded-[4px]"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  sha256:7f4a...9b12
+                </div>
+              </div>
+              <div
+                class="box-border w-[75px] shrink-0 h-fit flex flex-row gap-0 justify-end items-start"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#82B4401A] rounded-[4px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Verified
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="[box-sizing:content-box] w-[696px] h-[72.5px] shrink-0 flex flex-row gap-[14px] p-[12px_16px] justify-start items-center [border-width:0px_0px_1px_0px] [border-style:solid] [border-color:#F0F0F0] [margin:0px_0px_-0.5px_0px] rounded-[8px]"
+            >
+              <div
+                class="box-border w-[95px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  13:48:02 WIB
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  Hari ini
+                </div>
+              </div>
+              <div
+                class="box-border w-[135px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  m.izzat (Superadmin)
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  182.253.140.82
+                </div>
+              </div>
+              <div
+                class="box-border [flex:1_1_0] h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[16px] box-border w-full text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Verifikasi 2FA Login Berhasil via TOTP
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border w-full text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                >
+                  Target: Auth Session #889
+                </div>
+              </div>
+              <div
+                class="box-border w-[120px] shrink-0 h-fit flex flex-row gap-0 p-[3px_6px] justify-start items-center bg-[#F4F4F5] rounded-[4px]"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  sha256:3e8c...1a4f
+                </div>
+              </div>
+              <div
+                class="box-border w-[75px] shrink-0 h-fit flex flex-row gap-0 justify-end items-start"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#82B4401A] rounded-[4px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Verified
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="[box-sizing:content-box] w-[696px] h-[72.5px] shrink-0 flex flex-row gap-[14px] p-[12px_16px] justify-start items-center [border-width:0px_0px_1px_0px] [border-style:solid] [border-color:#F0F0F0] [margin:0px_0px_-0.5px_0px] rounded-[8px]"
+            >
+              <div
+                class="box-border w-[95px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  11:20:44 WIB
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  Hari ini
+                </div>
+              </div>
+              <div
+                class="box-border w-[135px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  system (Worker)
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  10.0.4.12 (Internal)
+                </div>
+              </div>
+              <div
+                class="box-border [flex:1_1_0] h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[16px] box-border w-full text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Auto Backup Database &amp; Upload Snapshot Cloudflare R2
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border w-full text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                >
+                  Target: Backup SQLite+Postgres
+                </div>
+              </div>
+              <div
+                class="box-border w-[120px] shrink-0 h-fit flex flex-row gap-0 p-[3px_6px] justify-start items-center bg-[#F4F4F5] rounded-[4px]"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  sha256:9d11...55be
+                </div>
+              </div>
+              <div
+                class="box-border w-[75px] shrink-0 h-fit flex flex-row gap-0 justify-end items-start"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#82B4401A] rounded-[4px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Verified
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="[box-sizing:content-box] w-[696px] h-[72.5px] shrink-0 flex flex-row gap-[14px] p-[12px_16px] justify-start items-center [border-width:0px_0px_1px_0px] [border-style:solid] [border-color:#F0F0F0] [margin:0px_0px_-0.5px_0px] rounded-[8px]"
+            >
+              <div
+                class="box-border w-[95px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  09:15:30 WIB
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  Hari ini
+                </div>
+              </div>
+              <div
+                class="box-border w-[135px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  m.izzat (Superadmin)
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  182.253.140.82
+                </div>
+              </div>
+              <div
+                class="box-border [flex:1_1_0] h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[16px] box-border w-full text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Generate Token Akses Pelacakan Klien (HIPPAM Web)
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border w-full text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                >
+                  Target: Client Token TK-904
+                </div>
+              </div>
+              <div
+                class="box-border w-[120px] shrink-0 h-fit flex flex-row gap-0 p-[3px_6px] justify-start items-center bg-[#F4F4F5] rounded-[4px]"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  sha256:b402...ee31
+                </div>
+              </div>
+              <div
+                class="box-border w-[75px] shrink-0 h-fit flex flex-row gap-0 justify-end items-start"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#82B4401A] rounded-[4px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Verified
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="[box-sizing:content-box] w-[696px] h-[72.5px] shrink-0 flex flex-row gap-[14px] p-[12px_16px] justify-start items-center [border-width:0px_0px_1px_0px] [border-style:solid] [border-color:#F0F0F0] [margin:0px_0px_-0.5px_0px] rounded-[8px]"
+            >
+              <div
+                class="box-border w-[95px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  Kemarin, 22:10
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  22 Okt 2025
+                </div>
+              </div>
+              <div
+                class="box-border w-[135px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  m.izzat (Superadmin)
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  180.252.88.14
+                </div>
+              </div>
+              <div
+                class="box-border [flex:1_1_0] h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[16px] box-border w-full text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Perubahan Konfigurasi SEO Meta &amp; Webhook Telegram
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border w-full text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                >
+                  Target: Site Settings CMS
+                </div>
+              </div>
+              <div
+                class="box-border w-[120px] shrink-0 h-fit flex flex-row gap-0 p-[3px_6px] justify-start items-center bg-[#F4F4F5] rounded-[4px]"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  sha256:1f90...8c22
+                </div>
+              </div>
+              <div
+                class="box-border w-[75px] shrink-0 h-fit flex flex-row gap-0 justify-end items-start"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#82B4401A] rounded-[4px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#82B440] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Verified
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="[box-sizing:content-box] w-[696px] h-[72.5px] shrink-0 flex flex-row gap-[14px] p-[12px_16px] justify-start items-center [border-width:0px_0px_1px_0px] [border-style:solid] [border-color:#F0F0F0] [margin:0px_0px_-0.5px_0px] rounded-[8px]"
+            >
+              <div
+                class="box-border w-[95px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                >
+                  Kemarin, 16:32
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  22 Okt 2025
+                </div>
+              </div>
+              <div
+                class="box-border w-[135px] shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  system (Security)
+                </div>
+                <div
+                  class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  45.133.1.20 (Block)
+                </div>
+              </div>
+              <div
+                class="box-border [flex:1_1_0] h-fit flex flex-col gap-[2px] justify-start items-start"
+              >
+                <div
+                  class="text-[12px]/[16px] box-border w-full text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                >
+                  Blokir Percobaan Brute Force Login (5x Salah Password)
+                </div>
+                <div
+                  class="text-[11px]/[15px] box-border w-full text-[#52525B] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                >
+                  Target: Firewall Guard PDP
+                </div>
+              </div>
+              <div
+                class="box-border w-[120px] shrink-0 h-fit flex flex-row gap-0 p-[3px_6px] justify-start items-center bg-[#F4F4F5] rounded-[4px]"
+              >
+                <div
+                  class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  sha256:6a55...dd01
+                </div>
+              </div>
+              <div
+                class="box-border w-[75px] shrink-0 h-fit flex flex-row gap-0 justify-end items-start"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-0 p-[2px_6px] justify-start items-start bg-[#FFEDD5] rounded-[4px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#C2410C] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    Blocked
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[8px_4px_0px_4px] justify-between items-center"
+            >
+              <div
+                class="text-[12px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                Menampilkan 6 mutasi terbaru • Hash terotentikasi SHA-256
+              </div>
+              <div
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-[6px] justify-start items-center"
+              >
+                <div
+                  class="box-border w-fit shrink-0 h-[28px] flex flex-row gap-0 p-[4px_10px] justify-start items-center bg-[#F4F4F5] rounded-[6px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                  >
+                    Sebelumnya
+                  </div>
+                </div>
+                <div
+                  class="box-border w-fit shrink-0 h-[28px] flex flex-row gap-0 p-[4px_10px] justify-start items-center bg-[#18181A] rounded-[6px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                  >
+                    1
+                  </div>
+                </div>
+                <div
+                  class="box-border w-fit shrink-0 h-[28px] flex flex-row gap-0 p-[4px_10px] justify-start items-center bg-[#F4F4F5] rounded-[6px]"
+                >
+                  <div
+                    class="text-[11px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                  >
+                    Berikutnya
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var cmsMap = [
+    { text: 'Dashboard', url: 'dashboard-cms-admin.html' },
+    { text: 'Site Settings', url: 'site-settings.html' },
+    { text: 'Layanan Bento', url: 'layanan-bento.html' },
+    { text: 'Proyek Showcase', url: 'proyek-showcase.html' },
+    { text: 'Kategori', url: 'kategori-teknologi.html' },
+    { text: 'Teknologi', url: 'kategori-teknologi.html' },
+    { text: 'Testimoni & FAQ', url: 'testimoni-faq.html' },
+    { text: 'Testimoni', url: 'testimoni-faq.html' },
+    { text: 'Paket Layanan & Add-on', url: 'paket-layanan-addon.html' },
+    { text: 'Paket Layanan', url: 'paket-layanan-addon.html' },
+    { text: 'Kalkulator Builder', url: 'quote-kalkulator.html' },
+    { text: 'Proyek Klien & Tracking', url: 'proyek-klien-tracking.html' },
+    { text: 'Proyek Klien', url: 'proyek-klien-tracking.html' },
+    { text: 'Booking Konsultasi', url: 'booking-konsultasi.html' },
+    { text: 'Inquiry & Pemesanan', url: 'inquiry-pemesanan.html' },
+    { text: 'Inquiry', url: 'inquiry-pemesanan.html' },
+    { text: 'Quote Kalkulator', url: 'quote-kalkulator.html' },
+    { text: 'Template Tahap', url: 'template-tahap.html' },
+    { text: 'Log Aktivitas & 2FA', url: 'log-aktivitas-2fa.html' },
+    { text: 'Log Aktivitas', url: 'log-aktivitas-2fa.html' },
+    { text: 'Invoice & Penagihan', url: 'invoice-penagihan.html' },
+    { text: 'Invoice', url: 'invoice-penagihan.html' },
+    { text: 'Manajemen Staf', url: 'manajemen-staf.html' },
+    { text: 'Staf & Role', url: 'manajemen-staf.html' }
+  ];
+  var aside = document.querySelector('[data-pencil-name="aside"]');
+  if (aside) {
+    var navItems = aside.querySelectorAll('[data-pencil-name="a"]');
+    navItems.forEach(function(item) {
+      item.style.cursor = 'pointer';
+      var text = item.textContent || '';
+      for (var i = 0; i < cmsMap.length; i++) {
+        if (text.includes(cmsMap[i].text)) {
+          (function(url) {
+            item.addEventListener('click', function() { window.location.href = url; });
+          })(cmsMap[i].url);
+          break;
+        }
+      }
+    });
+    var logo = aside.querySelector('[data-pencil-name="img"]');
+    if (logo) {
+      logo.style.cursor = 'pointer';
+      logo.addEventListener('click', function() { window.location.href = 'dashboard-cms-admin.html'; });
+    }
+  }
+});
+</script>
+</body>
+</html>

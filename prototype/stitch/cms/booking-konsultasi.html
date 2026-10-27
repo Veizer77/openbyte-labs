@@ -1,0 +1,1942 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      tailwind = { config: { corePlugins: { preflight: false } } };
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter%3Awght%40100..900&family=Material+Symbols+Outlined%3Awght%40100..700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, ::before, ::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body style="background-color: #f9f9f9">
+    <div
+      data-pencil-name="CMS / 04 - Booking Konsultasi"
+      class="box-border w-[1440px] mx-auto h-[1220px] bg-[#f9f9f9] overflow-hidden relative"
+    >
+      <div
+        data-pencil-name="div"
+        class="box-border w-[1440px] mx-auto h-fit absolute left-0 top-0 flex flex-col gap-0 p-[0px_0px_0px_288px] justify-start items-start [z-index:0]"
+      >
+        <div
+          data-pencil-name="main"
+          class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[64px_0px_0px_0px] justify-start items-start bg-[#f9f9f9] relative [z-index:0]"
+        >
+          <div
+            data-pencil-name="div"
+            class="box-border w-full h-fit shrink-0 flex flex-col gap-[20px] p-[20px_24px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="div"
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-[12px] justify-between items-end"
+            >
+              <div
+                data-pencil-name="div"
+                class="box-border w-[768px] shrink-0 h-[98px] flex flex-col gap-[4px] justify-start items-start"
+              >
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-full h-fit shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                >
+                  <div
+                    data-pencil-name="Admin"
+                    class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                  >
+                    Admin
+                  </div>
+                  <div
+                    data-pencil-name="chevron_right"
+                    class="text-[12px]/[12px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                  >
+                    chevron_right
+                  </div>
+                  <div
+                    data-pencil-name="Operasional Klien"
+                    class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                  >
+                    Operasional Klien
+                  </div>
+                  <div
+                    data-pencil-name="chevron_right"
+                    class="text-[12px]/[12px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                  >
+                    chevron_right
+                  </div>
+                  <div
+                    data-pencil-name="Booking Konsultasi"
+                    class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                  >
+                    Booking Konsultasi
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="Manajemen Booking &amp; Jadwal Konsultasi"
+                  class="text-[28px]/[36px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.7px] text-left [white-space:nowrap]"
+                >
+                  Manajemen Booking &amp; Jadwal Konsultasi
+                </div>
+                <div
+                  data-pencil-name="Verifikasi reservasi klien, atur link Go"
+                  class="text-[14px]/[20px] box-border w-full h-[40px] shrink-0 text-[#52525b] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                >
+                  Verifikasi reservasi klien, atur link Google Meet, konfirmasi via template
+                  WhatsApp, dan atur ketersediaan slot mingguan (Anti Double-Booking).
+                </div>
+              </div>
+              <div
+                data-pencil-name="div"
+                class="box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] p-[4px_12px] justify-start items-center bg-[#f0f0f0] rounded-[12px]"
+              >
+                <div
+                  data-pencil-name="span"
+                  class="box-border w-[8px] shrink-0 h-[8px] opacity-[0.64] bg-[#82b440] rounded-[50%]"
+                ></div>
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-fit shrink-0 h-[25px] flex flex-col gap-0 justify-start items-start"
+                >
+                  <div
+                    data-pencil-name="POSTGRES ENGINE LOCK"
+                    class="text-[11px]/[11px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                  >
+                    POSTGRES ENGINE LOCK
+                  </div>
+                  <div
+                    data-pencil-name="Slot Isolation Guard Active"
+                    class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                  >
+                    Slot Isolation Guard Active
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              data-pencil-name="div"
+              class="box-border w-full h-fit shrink-0 [box-shadow:0px_1px_8px_#00000008] flex flex-col gap-[16px] p-[16px_20px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+            >
+              <div
+                data-pencil-name="div"
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[0px_0px_4px_0px] justify-between items-center"
+              >
+                <div
+                  data-pencil-name="nav"
+                  class="box-border w-fit shrink-0 h-[40px] flex flex-row gap-[2px] p-[4px] justify-start items-center bg-[#F4F4F5] rounded-[12px]"
+                >
+                  <div
+                    data-pencil-name="Daftar Reservasi"
+                    class="box-border w-fit shrink-0 h-[32px] [box-shadow:0px_1px_2px_#00000014] flex flex-row gap-0 p-[6px_14px] justify-center items-center bg-[#18181A] rounded-[8px]"
+                  >
+                    <div
+                      data-pencil-name="Daftar Reservasi"
+                      class="text-[13px]/[normal] box-border text-[#FFFFFF] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                    >
+                      Daftar Reservasi
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="Slot Mingguan"
+                    class="box-border w-fit shrink-0 h-[32px] [box-shadow:0px_1px_2px_#00000014] flex flex-row gap-0 p-[6px_14px] justify-center items-center bg-[#18181A] rounded-[8px]"
+                  >
+                    <div
+                      data-pencil-name="Slot Mingguan"
+                      class="text-[13px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                    >
+                      Slot Mingguan
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="Tanggal Libur"
+                    class="box-border w-fit shrink-0 h-[32px] flex flex-row gap-0 p-[6px_14px] justify-center items-center rounded-[8px]"
+                  >
+                    <div
+                      data-pencil-name="Tanggal Libur"
+                      class="text-[13px]/[normal] box-border text-[#52525B] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                    >
+                      Tanggal Libur
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="button"
+                  class="box-border w-fit shrink-0 h-[34px] flex flex-row gap-[6px] p-[8px_12px] justify-center items-center bg-[#f0f0f0] rounded-[12px]"
+                >
+                  <div
+                    data-pencil-name="sync"
+                    class="text-[16px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                  >
+                    sync
+                  </div>
+                  <div
+                    data-pencil-name="Refresh Cal.com Sync"
+                    class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium text-center [white-space:nowrap]"
+                  >
+                    Refresh Cal.com Sync
+                  </div>
+                </div>
+              </div>
+              <div
+                data-pencil-name="div"
+                class="box-border w-full h-fit shrink-0 flex flex-row gap-[12px] p-[4px_0px_0px_0px] justify-between items-center"
+              >
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-fit shrink-0 h-fit flex flex-row gap-[6px] justify-start items-center"
+                >
+                  <div
+                    data-pencil-name="Semua (28)"
+                    class="box-border w-fit shrink-0 h-[28px] flex flex-col gap-0 p-[4px_12px] justify-center items-center bg-[#18181a] rounded-[9999px]"
+                  >
+                    <div
+                      class="text-[11px]/[14px] box-border text-[#ffffff] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
+                    >
+                      Semua (28)
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="button"
+                    class="box-border w-[167.02px] shrink-0 h-[28px] flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]"
+                  >
+                    <div
+                      data-pencil-name="span"
+                      class="box-border w-[6px] shrink-0 h-[6px] bg-[#f97316] rounded-[50%]"
+                    ></div>
+                    <div
+                      data-pencil-name="Menunggu Konfirmasi (3)"
+                      class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
+                    >
+                      Menunggu Konfirmasi (3)
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="button"
+                    class="box-border w-[115.45px] shrink-0 h-[28px] flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]"
+                  >
+                    <div
+                      data-pencil-name="span"
+                      class="box-border w-[6px] shrink-0 h-[6px] bg-[#82b440] rounded-[50%]"
+                    ></div>
+                    <div
+                      data-pencil-name="Dikonfirmasi (8)"
+                      class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
+                    >
+                      Dikonfirmasi (8)
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="Selesai (15)"
+                    class="box-border w-fit shrink-0 h-[28px] flex flex-col gap-0 p-[4px_12px] justify-center items-center bg-[#f0f0f0] rounded-[9999px]"
+                  >
+                    <div
+                      class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
+                    >
+                      Selesai (15)
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="Dibatalkan (2)"
+                    class="box-border w-fit shrink-0 h-[28px] flex flex-col gap-0 p-[4px_12px] justify-center items-center bg-[#f0f0f0] rounded-[9999px]"
+                  >
+                    <div
+                      class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
+                    >
+                      Dibatalkan (2)
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-fit shrink-0 h-[30px] flex flex-row gap-[4px] p-[6px_8px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
+                >
+                  <div
+                    data-pencil-name="calendar_month"
+                    class="text-[16px]/[16px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                  >
+                    calendar_month
+                  </div>
+                  <div
+                    data-pencil-name="18 Mei 2026 - 31 Mei 2026"
+                    class="text-[12px]/[16px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.12px] text-left [white-space:nowrap]"
+                  >
+                    18 Mei 2026 - 31 Mei 2026
+                  </div>
+                  <div
+                    data-pencil-name="WIB"
+                    class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_4px] justify-center items-start bg-[#ffffff] rounded-[4px]"
+                  >
+                    <div
+                      class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                    >
+                      WIB
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="arrow_drop_down"
+                    class="text-[16px]/[16px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                  >
+                    arrow_drop_down
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              data-pencil-name="div"
+              class="box-border w-full h-fit shrink-0 flex flex-row gap-[24px] justify-start items-start"
+            >
+              <div
+                data-pencil-name="section"
+                class="box-border w-[710px] shrink-0 h-fit flex flex-col gap-[16px] justify-start items-start"
+              >
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[0px_4px] justify-between items-center"
+                >
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-fit shrink-0 h-[24px] flex flex-row gap-[4px] justify-start items-center"
+                  >
+                    <div
+                      data-pencil-name="Daftar Reservasi Konsultasi Masuk"
+                      class="text-[18px]/[24px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                    >
+                      Daftar Reservasi Konsultasi Masuk
+                    </div>
+                    <div
+                      data-pencil-name="3 Item Prioritas"
+                      class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
+                    >
+                      <div
+                        class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                      >
+                        3 Item Prioritas
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="TERURUT WAKTU TERDEKAT"
+                    class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                  >
+                    TERURUT WAKTU TERDEKAT
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="article"
+                  class="box-border w-full h-fit shrink-0 [box-shadow:0px_2px_12px_#0000000a] flex flex-col gap-[12px] p-[20px] justify-start items-start bg-[#ffffff] rounded-[16px] overflow-hidden relative"
+                >
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-[710px] h-[4px] absolute left-0 top-0 bg-[#f97316] [z-index:0]"
+                  ></div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-start relative [z-index:1]"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-fit shrink-0 h-[72px] flex flex-col gap-[4px] justify-start items-start"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-[22px] shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="BKG-2605-89FX"
+                          class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[4px]"
+                        >
+                          <div
+                            class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                          >
+                            BKG-2605-89FX
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="span"
+                          class="box-border w-[174.19px] shrink-0 h-[18px] flex flex-row gap-[6px] p-[2px_10px] justify-start items-center bg-[#f9731626] rounded-[9999px]"
+                        >
+                          <div
+                            data-pencil-name="span"
+                            class="box-border w-[6px] shrink-0 h-[6px] bg-[#f97316] rounded-[50%]"
+                          ></div>
+                          <div
+                            data-pencil-name="MENUNGGU KONFIRMASI"
+                            class="text-[11px]/[14px] box-border text-[#f97316] font-[Inter,system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                          >
+                            MENUNGGU KONFIRMASI
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="Diajukan 12 menit lalu"
+                          class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        >
+                          Diajukan 12 menit lalu
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="Hendra Wijaya, S.T."
+                        class="text-[18px]/[24px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                      >
+                        Hendra Wijaya, S.T.
+                      </div>
+                      <div
+                        data-pencil-name="Direktur Operasional • BUMDes Tirta Mojo"
+                        class="text-[13px]/[18px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                      >
+                        Direktur Operasional • BUMDes Tirta Mojorejo
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-[210px] shrink-0 h-fit flex flex-col gap-[2px] p-[8px] justify-start items-end bg-[#f0f0f0] rounded-[12px]"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="event"
+                          class="text-[16px]/[16px] box-border text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          event
+                        </div>
+                        <div
+                          data-pencil-name="Senin, 18 Mei 2026"
+                          class="text-[16px]/[20px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                        >
+                          Senin, 18 Mei 2026
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-[20px] shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="schedule"
+                          class="text-[14px]/[14px] box-border text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          schedule
+                        </div>
+                        <div
+                          data-pencil-name="09:00 - 11:00 WIB"
+                          class="text-[12px]/[16px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+                        >
+                          09:00 - 11:00 WIB
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="span"
+                        class="box-border w-[159.48px] h-[18px] shrink-0 flex flex-row gap-[4px] p-[2px_8px] justify-start items-center bg-[#ffffff] rounded-[4px]"
+                      >
+                        <div
+                          data-pencil-name="videocam"
+                          class="text-[12px]/[12px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          videocam
+                        </div>
+                        <div
+                          data-pencil-name="Google Meet Online HD"
+                          class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        >
+                          Google Meet Online HD
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-col gap-[4px] p-[12px] justify-start items-start bg-[#f0f0f0b3] rounded-[12px] relative [z-index:2]"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-[18px] shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="MINAT LAYANAN:"
+                        class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                      >
+                        MINAT LAYANAN:
+                      </div>
+                      <div
+                        data-pencil-name="Sistem Informasi Database &amp; Cloud Archit"
+                        class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                      >
+                        Sistem Informasi Database &amp; Cloud Architecture
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="“Kebutuhan migrasi sistem pencatatan met"
+                      class="text-[14px]/[23px] box-border w-full h-[45.5px] shrink-0 text-[#52525b] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                    >
+                      “Kebutuhan migrasi sistem pencatatan meter air manual ke platform web terpusat
+                      dan notifikasi WhatsApp tagihan otomatis untuk 4.200 kepala keluarga.”
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 [box-shadow:inset_0px_2px_4px_#0000000d] flex flex-col gap-[8px] p-[12px] justify-start items-start bg-[#18181a] rounded-[12px] relative [z-index:3]"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit shrink-0 h-[18px] flex flex-row gap-[6px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="verified_user"
+                          class="text-[18px]/[18px] box-border text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          verified_user
+                        </div>
+                        <div
+                          data-pencil-name="Tindakan Cepat: Set Link &amp; Kirim Undanga"
+                          class="text-[13px]/[18px] box-border text-[#ffffff] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                        >
+                          Tindakan Cepat: Set Link &amp; Kirim Undangan Klien
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="Template ID: #WA-BKG-CONFIRM-01"
+                        class="text-[11px]/[14px] box-border text-[#a8a8ad] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                      >
+                        Template ID: #WA-BKG-CONFIRM-01
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-[38px] shrink-0 flex flex-row gap-[12px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border [flex:1_1_0] h-[38px] flex flex-row gap-[8px] p-[8px_12px] justify-start items-center bg-[#242427] rounded-[8px]"
+                      >
+                        <div
+                          data-pencil-name="link"
+                          class="text-[18px]/[18px] box-border text-[#a8a8ad] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          link
+                        </div>
+                        <div
+                          data-pencil-name="https://meet.google.com/xyz-zzxx-abc"
+                          class="box-border [flex:1_1_0] h-[20px] flex flex-col gap-0 justify-center items-start overflow-hidden"
+                        >
+                          <div
+                            class="text-[14px]/[20px] box-border text-[#ffffff] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                          >
+                            https://meet.google.com/xyz-zzxx-abc
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="button"
+                        class="box-border w-fit shrink-0 h-[38px] [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[8px_16px] justify-center items-center bg-[#D2D88F] rounded-[8px]"
+                      >
+                        <div
+                          data-pencil-name="send"
+                          class="text-[18px]/[18px] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                        >
+                          send
+                        </div>
+                        <div
+                          data-pencil-name="Konfirmasi &amp; Buka WhatsApp"
+                          class="text-[13px]/[18px] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-center [white-space:nowrap]"
+                        >
+                          Konfirmasi &amp; Buka WhatsApp
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px_0px_0px_0px] justify-between items-center"
+                    >
+                      <div
+                        data-pencil-name="Nomor WhatsApp Terhubung: +62 812-4491-0"
+                        class="text-[11px]/[14px] box-border text-[#a8a8ad] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                      >
+                        Nomor WhatsApp Terhubung: +62 812-4491-0922
+                      </div>
+                      <div
+                        data-pencil-name="Kirim Cal.ics Attachment Otomatis"
+                        class="text-[11px]/[14px] box-border text-[#a8a8ad] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                      >
+                        Kirim Cal.ics Attachment Otomatis
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="article"
+                  class="box-border w-full h-fit shrink-0 [box-shadow:0px_1px_8px_#00000008] flex flex-col gap-[12px] p-[20px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                >
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-start"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-fit shrink-0 h-[72px] flex flex-col gap-[4px] justify-start items-start"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-[22px] shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="BKG-2605-77AK"
+                          class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[4px]"
+                        >
+                          <div
+                            class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                          >
+                            BKG-2605-77AK
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="span"
+                          class="box-border w-[114.69px] shrink-0 h-[18px] flex flex-row gap-[6px] p-[2px_10px] justify-start items-center bg-[#82b44026] rounded-[9999px]"
+                        >
+                          <div
+                            data-pencil-name="span"
+                            class="box-border w-[6px] shrink-0 h-[6px] bg-[#82b440] rounded-[50%]"
+                          ></div>
+                          <div
+                            data-pencil-name="DIKONFIRMASI"
+                            class="text-[11px]/[14px] box-border text-[#82b440] font-[Inter,system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                          >
+                            DIKONFIRMASI
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="Google Calendar Synced"
+                          class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        >
+                          Google Calendar Synced
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="dr. Ratna Anindita"
+                        class="text-[18px]/[24px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                      >
+                        dr. Ratna Anindita
+                      </div>
+                      <div
+                        data-pencil-name="Owner &amp; Direktur Medis • Klinik Pratama "
+                        class="text-[13px]/[18px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                      >
+                        Owner &amp; Direktur Medis • Klinik Pratama Sehat
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-[210px] shrink-0 h-fit flex flex-col gap-[2px] p-[8px] justify-start items-end bg-[#f0f0f0] rounded-[12px]"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="event"
+                          class="text-[16px]/[16px] box-border text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          event
+                        </div>
+                        <div
+                          data-pencil-name="Rabu, 20 Mei 2026"
+                          class="text-[16px]/[20px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                        >
+                          Rabu, 20 Mei 2026
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-[20px] shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="schedule"
+                          class="text-[14px]/[14px] box-border text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          schedule
+                        </div>
+                        <div
+                          data-pencil-name="13:00 - 15:00 WIB"
+                          class="text-[12px]/[16px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+                        >
+                          13:00 - 15:00 WIB
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="span"
+                        class="box-border w-[159.48px] h-[18px] shrink-0 flex flex-row gap-[4px] p-[2px_8px] justify-start items-center bg-[#ffffff] rounded-[4px]"
+                      >
+                        <div
+                          data-pencil-name="videocam"
+                          class="text-[12px]/[12px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          videocam
+                        </div>
+                        <div
+                          data-pencil-name="Google Meet Online HD"
+                          class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        >
+                          Google Meet Online HD
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-col gap-[4px] p-[12px] justify-start items-start bg-[#f0f0f080] rounded-[12px]"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-[18px] shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="MINAT LAYANAN:"
+                        class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                      >
+                        MINAT LAYANAN:
+                      </div>
+                      <div
+                        data-pencil-name="Aplikasi Rekam Medis Elektronik (RME) &amp; "
+                        class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                      >
+                        Aplikasi Rekam Medis Elektronik (RME) &amp; Integrasi SatuSehat
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="“Membutuhkan perancangan sistem antrean "
+                      class="text-[14px]/[23px] box-border w-full h-[45.5px] shrink-0 text-[#52525b] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                    >
+                      “Membutuhkan perancangan sistem antrean poli, bridging BPJS PCare, serta
+                      sinkronisasi rekam medis digital compliance Kemenkes.”
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[4px_0px_0px_0px] justify-between items-center"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border [flex:1_1_0] h-fit flex flex-row gap-[4px] p-[6px_8px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
+                    >
+                      <div
+                        data-pencil-name="videocam"
+                        class="text-[16px]/[16px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                      >
+                        videocam
+                      </div>
+                      <div
+                        data-pencil-name="meet.google.com/rmk-klinik-sehat"
+                        class="text-[13px]/[18px] box-border [flex:1_1_0] text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium text-left"
+                      >
+                        meet.google.com/rmk-klinik-sehat
+                      </div>
+                      <div
+                        data-pencil-name="button"
+                        class="box-border w-fit shrink-0 h-[24px] flex flex-col gap-0 p-[2px_0px_6px_0px] justify-start items-start"
+                      >
+                        <div
+                          data-pencil-name="content_copy"
+                          class="text-[16px]/[16px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                        >
+                          content_copy
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-fit shrink-0 h-fit flex flex-row gap-[4px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="a"
+                        class="box-border w-fit shrink-0 h-[34px] flex flex-row gap-[6px] p-[8px_12px] justify-start items-center bg-[#f0f0f0] rounded-[12px]"
+                      >
+                        <div
+                          data-pencil-name="chat"
+                          class="text-[16px]/[16px] box-border text-[#25d366] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          chat
+                        </div>
+                        <div
+                          data-pencil-name="Buka WhatsApp"
+                          class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                        >
+                          Buka WhatsApp
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="button"
+                        class="box-border w-fit shrink-0 h-[34px] flex flex-row gap-[6px] p-[8px_12px] justify-start items-center bg-[#18181a] rounded-[12px]"
+                      >
+                        <div
+                          data-pencil-name="task_alt"
+                          class="text-[16px]/[16px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                        >
+                          task_alt
+                        </div>
+                        <div
+                          data-pencil-name="Tandai Selesai"
+                          class="text-[13px]/[18px] box-border text-[#ffffff] font-[Inter,system-ui,sans-serif] font-medium text-center [white-space:nowrap]"
+                        >
+                          Tandai Selesai
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="article"
+                  class="box-border w-full h-fit shrink-0 opacity-[0.85] [box-shadow:0px_1px_4px_#00000005] flex flex-col gap-[8px] p-[20px] justify-start items-start bg-[#ffffffb3] rounded-[16px]"
+                >
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-start"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-fit shrink-0 h-[72px] flex flex-col gap-[4px] justify-start items-start"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-[22px] shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="BKG-2604-12MN"
+                          class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[4px]"
+                        >
+                          <div
+                            class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                          >
+                            BKG-2604-12MN
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="span"
+                          class="box-border w-[78.33px] shrink-0 h-[18px] flex flex-row gap-[6px] p-[2px_10px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]"
+                        >
+                          <div
+                            data-pencil-name="span"
+                            class="box-border w-[6px] shrink-0 h-[6px] bg-[#9ca3af] rounded-[50%]"
+                          ></div>
+                          <div
+                            data-pencil-name="SELESAI"
+                            class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                          >
+                            SELESAI
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="Dilaksanakan 14 Mei 2026"
+                          class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        >
+                          Dilaksanakan 14 Mei 2026
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="Bpk. Sugeng Waluyo"
+                        class="text-[18px]/[24px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                      >
+                        Bpk. Sugeng Waluyo
+                      </div>
+                      <div
+                        data-pencil-name="Pelaku UMKM Kerajinan Ukir • UD Kayu Map"
+                        class="text-[13px]/[18px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                      >
+                        Pelaku UMKM Kerajinan Ukir • UD Kayu Mapan
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-[210px] shrink-0 h-fit flex flex-col gap-[2px] p-[8px] justify-start items-end bg-[#f0f0f099] rounded-[12px]"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="event_available"
+                          class="text-[16px]/[16px] box-border text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          event_available
+                        </div>
+                        <div
+                          data-pencil-name="14 Mei 2026"
+                          class="text-[16px]/[20px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                        >
+                          14 Mei 2026
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit h-fit shrink-0 flex flex-row gap-[4px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="schedule"
+                          class="text-[14px]/[14px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          schedule
+                        </div>
+                        <div
+                          data-pencil-name="16:00 - 18:00 WIB"
+                          class="text-[12px]/[16px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+                        >
+                          16:00 - 18:00 WIB
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px_0px_0px_0px] justify-between items-center"
+                  >
+                    <div
+                      data-pencil-name="Hasil Sesi: Proposal Penawaran Sistem To"
+                      class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                    >
+                      Hasil Sesi: Proposal Penawaran Sistem Toko Online Ekspor terkirim via Email.
+                    </div>
+                    <div
+                      data-pencil-name="button"
+                      class="box-border w-fit shrink-0 h-fit flex flex-row gap-[4px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="Buka Log Notulensi"
+                        class="text-[12px]/[16px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-normal tracking-[0.12px] text-center [white-space:nowrap]"
+                      >
+                        Buka Log Notulensi
+                      </div>
+                      <div
+                        data-pencil-name="arrow_forward"
+                        class="text-[14px]/[14px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                      >
+                        arrow_forward
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                data-pencil-name="aside"
+                class="box-border w-[370px] shrink-0 h-fit flex flex-col gap-[20px] justify-start items-start"
+              >
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-full h-fit shrink-0 [box-shadow:0px_1px_8px_#00000008] flex flex-col gap-0 p-[20px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                >
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-center"
+                  >
+                    <div
+                      data-pencil-name="Card Title"
+                      class="box-border w-fit shrink-0 h-fit flex flex-row gap-[10px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="Icon"
+                        class="box-border w-[36px] shrink-0 h-[36px] flex flex-row gap-0 justify-center items-center bg-[#F0F0F0] rounded-[8px]"
+                      >
+                        <div
+                          data-pencil-name="icon"
+                          class="text-[18px]/[normal] box-border text-[#18181A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          calendar_month
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="Text Col"
+                        class="box-border w-fit shrink-0 h-fit flex flex-col gap-[2px] justify-start items-start"
+                      >
+                        <div
+                          data-pencil-name="Title"
+                          class="text-[15px]/[normal] box-border text-[#18181A] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                        >
+                          Jadwal Slot Mingguan
+                        </div>
+                        <div
+                          data-pencil-name="Sub"
+                          class="text-[12px]/[normal] box-border text-[#71717A] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                        >
+                          Senin s/d Jumat (4 Sesi/Hari)
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="button"
+                      class="box-border w-fit shrink-0 h-[36px] flex flex-col gap-0 p-[6px] justify-start items-start bg-[#f0f0f0] rounded-[8px]"
+                    >
+                      <div
+                        data-pencil-name="settings"
+                        class="text-[18px]/[18px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                      >
+                        settings
+                      </div>
+                    </div>
+                  </div>
+                  <div data-pencil-name="spacer" class="box-border w-full h-[12px] shrink-0"></div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-col gap-[4px] justify-start items-start"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[0px_0px_4px_0px] justify-between items-center"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit shrink-0 h-[18px] flex flex-row gap-[8px] justify-start items-center"
+                      >
+                        <div
+                          data-pencil-name="span"
+                          class="box-border w-[10px] shrink-0 h-[10px] bg-[#82b440] rounded-[50%]"
+                        ></div>
+                        <div
+                          data-pencil-name="Senin s/d Jumat"
+                          class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                        >
+                          Senin s/d Jumat
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="4 Slot / Hari"
+                        class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
+                      >
+                        <div
+                          class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        >
+                          4 Slot / Hari
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-fit shrink-0 flex flex-col gap-[4px] justify-start items-start"
+                    >
+                      <div
+                        class="box-border w-full h-[50px] shrink-0 flex flex-row gap-[4px] justify-start items-start"
+                      >
+                        <div
+                          data-pencil-name="div"
+                          class="box-border [flex:1_1_0] h-[50px] flex flex-row gap-0 p-[8px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                        >
+                          <div
+                            data-pencil-name="div"
+                            class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
+                          >
+                            <div
+                              data-pencil-name="Slot 1"
+                              class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            >
+                              Slot 1
+                            </div>
+                            <div
+                              data-pencil-name="09:00 - 11:00"
+                              class="text-[16px]/[20px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            >
+                              09:00 - 11:00
+                            </div>
+                          </div>
+                          <div
+                            data-pencil-name="check_circle"
+                            class="text-[18px]/[18px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                          >
+                            check_circle
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="div"
+                          class="box-border [flex:1_1_0] h-[50px] flex flex-row gap-0 p-[8px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                        >
+                          <div
+                            data-pencil-name="div"
+                            class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
+                          >
+                            <div
+                              data-pencil-name="Slot 2"
+                              class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            >
+                              Slot 2
+                            </div>
+                            <div
+                              data-pencil-name="13:00 - 15:00"
+                              class="text-[16px]/[20px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            >
+                              13:00 - 15:00
+                            </div>
+                          </div>
+                          <div
+                            data-pencil-name="check_circle"
+                            class="text-[18px]/[18px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                          >
+                            check_circle
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="box-border w-full h-[50px] shrink-0 flex flex-row gap-[4px] justify-start items-start"
+                      >
+                        <div
+                          data-pencil-name="div"
+                          class="box-border [flex:1_1_0] h-[50px] flex flex-row gap-0 p-[8px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                        >
+                          <div
+                            data-pencil-name="div"
+                            class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
+                          >
+                            <div
+                              data-pencil-name="Slot 3"
+                              class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            >
+                              Slot 3
+                            </div>
+                            <div
+                              data-pencil-name="16:00 - 18:00"
+                              class="text-[16px]/[20px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            >
+                              16:00 - 18:00
+                            </div>
+                          </div>
+                          <div
+                            data-pencil-name="check_circle"
+                            class="text-[18px]/[18px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                          >
+                            check_circle
+                          </div>
+                        </div>
+                        <div
+                          data-pencil-name="div"
+                          class="box-border [flex:1_1_0] h-[50px] flex flex-row gap-0 p-[8px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                        >
+                          <div
+                            data-pencil-name="div"
+                            class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
+                          >
+                            <div
+                              data-pencil-name="Slot 4"
+                              class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            >
+                              Slot 4
+                            </div>
+                            <div
+                              data-pencil-name="19:30 - 21:30"
+                              class="text-[16px]/[20px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            >
+                              19:30 - 21:30
+                            </div>
+                          </div>
+                          <div
+                            data-pencil-name="check_circle"
+                            class="text-[18px]/[18px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                          >
+                            check_circle
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-pencil-name="spacer" class="box-border w-full h-[12px] shrink-0"></div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[8px] justify-between items-center bg-[#f0f0f080] rounded-[12px]"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-fit shrink-0 h-[18px] flex flex-row gap-[8px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="span"
+                        class="box-border w-[10px] shrink-0 h-[10px] bg-[#9ca3af] rounded-[50%]"
+                      ></div>
+                      <div
+                        data-pencil-name="Sabtu &amp; Minggu"
+                        class="text-[13px]/[18px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                      >
+                        Sabtu &amp; Minggu
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="NONAKTIF (TUTUP)"
+                      class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                    >
+                      NONAKTIF (TUTUP)
+                    </div>
+                  </div>
+                  <div data-pencil-name="spacer" class="box-border w-full h-[16px] shrink-0"></div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-col gap-[8px] p-[14px] justify-start items-start bg-[#18181a] rounded-[12px]"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-[16px] shrink-0 flex flex-row gap-[6px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="shield"
+                        class="text-[16px]/[16px] box-border text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                      >
+                        shield
+                      </div>
+                      <div
+                        data-pencil-name="PROTEKSI ANTI DOUBLE-BOOKING"
+                        class="text-[11px]/[14px] box-border text-[#e2e89d] font-[Inter,system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                      >
+                        PROTEKSI ANTI DOUBLE-BOOKING
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="Security Desc"
+                      class="text-[12px]/[17px] box-border w-full text-[#a8a8ad] font-[Inter,system-ui,sans-serif] font-normal text-left"
+                    >
+                      Sistem mengunci slot secara otomatis pada layer database untuk mencegah
+                      bentrok jadwal.
+                    </div>
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px_0px_0px_0px] justify-between items-center"
+                    >
+                      <div
+                        data-pencil-name="Zero Collision Guarantee"
+                        class="text-[11px]/[14px] box-border text-[#a8a8ad] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                      >
+                        Zero Collision Guarantee
+                      </div>
+                      <div
+                        data-pencil-name="Enforced at DB Layer"
+                        class="text-[11px]/[14px] box-border text-[#82b440] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                      >
+                        Enforced at DB Layer
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-full h-fit shrink-0 [box-shadow:0px_1px_8px_#00000008] flex flex-col gap-[12px] p-[20px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                >
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-fit shrink-0 h-[38px] flex flex-col gap-0 justify-start items-start"
+                    >
+                      <div
+                        data-pencil-name="BLACKOUT CALENDAR"
+                        class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                      >
+                        BLACKOUT CALENDAR
+                      </div>
+                      <div
+                        data-pencil-name="Tanggal Terblokir"
+                        class="text-[18px]/[24px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                      >
+                        Tanggal Terblokir
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="1 Tanggal Aktif"
+                      class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
+                    >
+                      <div
+                        class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                      >
+                        1 Tanggal Aktif
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[8px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                  >
+                    <div
+                      data-pencil-name="div"
+                      class="box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] justify-start items-center"
+                    >
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-[40px] shrink-0 h-[40px] flex flex-col gap-0 justify-center items-center bg-[#ffffff] rounded-[8px]"
+                      >
+                        <div
+                          data-pencil-name="MEI"
+                          class="text-[10px]/[13px] box-border text-[#f97316] font-[Inter,system-ui,sans-serif] font-bold text-center [white-space:nowrap]"
+                        >
+                          MEI
+                        </div>
+                        <div
+                          data-pencil-name="23"
+                          class="text-[16px]/[16px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-bold text-center [white-space:nowrap]"
+                        >
+                          23
+                        </div>
+                      </div>
+                      <div
+                        data-pencil-name="div"
+                        class="box-border w-fit shrink-0 h-[32px] flex flex-col gap-0 justify-start items-start"
+                      >
+                        <div
+                          data-pencil-name="Libur Nasional Waisak"
+                          class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                        >
+                          Libur Nasional Waisak
+                        </div>
+                        <div
+                          data-pencil-name="Full Day Blocked (Semua Slot Tertutup)"
+                          class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        >
+                          Full Day Blocked (Semua Slot Tertutup)
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      data-pencil-name="button"
+                      class="box-border w-fit shrink-0 h-[32px] flex flex-col gap-0 p-[4px] justify-start items-start"
+                    >
+                      <div
+                        data-pencil-name="delete"
+                        class="text-[18px]/[18px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                      >
+                        delete
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="button"
+                    class="box-border w-full h-[38px] shrink-0 flex flex-row gap-[8px] p-[10px_12px] justify-center items-center bg-[#f0f0f0] rounded-[12px]"
+                  >
+                    <div
+                      data-pencil-name="add_circle"
+                      class="text-[18px]/[18px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap]"
+                    >
+                      add_circle
+                    </div>
+                    <div
+                      data-pencil-name="Tambah Hari Libur / Blokir Tanggal"
+                      class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium text-center [white-space:nowrap]"
+                    >
+                      Tambah Hari Libur / Blokir Tanggal
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-pencil-name="div"
+                  class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-start items-start"
+                >
+                  <div
+                    data-pencil-name="div"
+                    class="box-border [flex:1_1_0] h-fit [box-shadow:0px_1px_4px_#00000005] flex flex-col gap-[4px] p-[16px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                  >
+                    <div
+                      data-pencil-name="KAPASITAS SLOT MINGGU INI"
+                      class="text-[12px]/[15px] box-border text-[#71717A] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                    >
+                      Kapasitas Slot
+                    </div>
+                    <div
+                      data-pencil-name="20 Slot"
+                      class="text-[28px]/[42px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                    >
+                      20 Slot
+                    </div>
+                    <div
+                      data-pencil-name="70% Terisi (14 Sesi)"
+                      class="text-[11px]/[14px] box-border text-[#82b440] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                    >
+                      70% Terisi (14 Sesi)
+                    </div>
+                  </div>
+                  <div
+                    data-pencil-name="div"
+                    class="box-border [flex:1_1_0] h-fit [box-shadow:0px_1px_4px_#00000005] flex flex-col gap-[4px] p-[16px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                  >
+                    <div
+                      data-pencil-name="TINGKAT KEHADIRAN KLIEN"
+                      class="text-[12px]/[15px] box-border text-[#71717A] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                    >
+                      Tingkat Kehadiran
+                    </div>
+                    <div
+                      data-pencil-name="98.4%"
+                      class="text-[28px]/[42px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                    >
+                      98.4%
+                    </div>
+                    <div
+                      data-pencil-name="WhatsApp Reminder Aktif"
+                      class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                    >
+                      WhatsApp Reminder Aktif
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          data-pencil-name="header"
+          class="box-border w-[1152px] h-[64px] [box-shadow:0px_1px_8px_#0000000a] [backdrop-filter:blur(12px)] absolute left-[288px] top-0 flex flex-row gap-0 p-[0px_24px] justify-between items-center bg-[#ffffffe6] [z-index:1]"
+        >
+          <div
+            data-pencil-name="div"
+            class="box-border w-[539.75px] shrink-0 h-[30px] flex flex-row gap-0 p-[6px_8px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
+          >
+            <div
+              data-pencil-name="search"
+              class="text-[18px]/[18px] box-border [flex:1_1_0] text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left"
+            >
+              search
+            </div>
+            <div
+              data-pencil-name="Cari data proyek, klien, booking, invoic"
+              class="text-[12px]/[16px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+            >
+              Cari data proyek, klien, booking, invoice...
+            </div>
+            <div
+              data-pencil-name="⌘K"
+              class="box-border w-fit shrink-0 h-fit [box-shadow:0px_1px_8px_#0000000a] flex flex-col gap-0 p-[2px_6px] justify-center items-start bg-[#ffffff] rounded-[4px]"
+            >
+              <div
+                class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                ⌘K
+              </div>
+            </div>
+          </div>
+          <div
+            data-pencil-name="div"
+            class="box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] justify-start items-center"
+          >
+            <div
+              data-pencil-name="span"
+              class="box-border w-[204.03px] shrink-0 h-[22px] flex flex-row gap-[6px] p-[4px_8px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]"
+            >
+              <div
+                data-pencil-name="span"
+                class="box-border w-[6px] shrink-0 h-[6px] bg-[#82b440] rounded-[50%]"
+              ></div>
+              <div
+                data-pencil-name="PRODUCTION (Docker / Render)"
+                class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                PRODUCTION (Docker / Render)
+              </div>
+            </div>
+            <div
+              data-pencil-name="a"
+              class="box-border w-fit shrink-0 h-[18px] flex flex-row gap-[4px] justify-start items-center"
+            >
+              <div
+                data-pencil-name="Lihat Website Publik"
+                class="text-[13px]/[18px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+              >
+                Lihat Website Publik
+              </div>
+              <div
+                data-pencil-name="north_east"
+                class="text-[16px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+              >
+                north_east
+              </div>
+            </div>
+            <div
+              data-pencil-name="div"
+              class="box-border w-fit shrink-0 h-[34px] flex flex-col gap-0 p-[4px] justify-start items-start rounded-[8px] relative"
+            >
+              <div
+                data-pencil-name="notifications"
+                class="text-[20px]/[20px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] relative [z-index:0]"
+              >
+                notifications
+              </div>
+              <div
+                data-pencil-name="3"
+                class="box-border w-[16px] h-[16px] absolute left-[8px] top-[4px] flex flex-col gap-0 justify-center items-center bg-[#f97316] rounded-[9999px] [z-index:1]"
+              >
+                <div
+                  class="text-[10px]/[10px] box-border text-[#ffffff] font-[Inter,system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                >
+                  3
+                </div>
+              </div>
+            </div>
+            <div
+              data-pencil-name="div"
+              class="box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] p-[0px_0px_0px_4px] justify-start items-center"
+            >
+              <div
+                data-pencil-name="div"
+                class="box-border w-[106.75px] shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
+              >
+                <div
+                  data-pencil-name="Muhammad Izzat"
+                  class="text-[13px]/[16px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium text-right [white-space:nowrap]"
+                >
+                  Muhammad Izzat
+                </div>
+                <div
+                  data-pencil-name="Owner"
+                  class="text-[11px]/[14px] box-border w-full text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
+                >
+                  Owner
+                </div>
+              </div>
+              <div
+                data-pencil-name="div"
+                class="box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#000000] rounded-[9999px]"
+              >
+                <div
+                  data-pencil-name="person"
+                  class="text-[18px]/[18px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  person
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        data-pencil-name="aside"
+        class="box-border w-[288px] h-[1220px] [box-shadow:0px_1px_8px_#0000000a] absolute left-0 top-0 flex flex-col gap-0 justify-between items-start bg-[#ffffff] overflow-hidden [z-index:1]"
+      >
+        <div
+          data-pencil-name="div"
+          class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[20px] justify-start items-start"
+        >
+          <div
+            data-pencil-name="div"
+            class="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[0px_0px_16px_0px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="img"
+              class="box-border w-[193px] shrink-0 h-[49px] [box-shadow:0px_1px_2px_#0000000d] bg-[url('../assets/img/e72160f2d93da97a.png')] bg-no-repeat bg-contain bg-center"
+            ></div>
+          </div>
+          <div
+            data-pencil-name="div"
+            class="box-border w-full h-fit shrink-0 flex flex-row gap-[4px] p-[0px_0px_12px_0px] justify-start items-center"
+          >
+            <div
+              data-pencil-name="Superadmin"
+              class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_4px] justify-center items-start bg-[#f0f0f0] rounded-[4px]"
+            >
+              <div
+                class="text-[11px]/[14px] box-border text-[#18181a] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                Superadmin
+              </div>
+            </div>
+            <div
+              data-pencil-name="2FA Active"
+              class="box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_4px] justify-center items-start bg-[#e2e89d] rounded-[4px]"
+            >
+              <div
+                class="text-[11px]/[14px] box-border text-[#454a10] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+              >
+                2FA Active
+              </div>
+            </div>
+          </div>
+          <div
+            data-pencil-name="div"
+            class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[4px_0px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="KONTEN WEBSITE"
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[4px] justify-center items-start"
+            >
+              <div
+                class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+              >
+                KONTEN WEBSITE
+              </div>
+            </div>
+            <div
+              data-pencil-name="nav"
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-[2px] justify-start items-start"
+            >
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="dashboard"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  dashboard
+                </div>
+                <div
+                  data-pencil-name="Dashboard"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Dashboard
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="tune"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  tune
+                </div>
+                <div
+                  data-pencil-name="Site Settings"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Site Settings
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="article"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  article
+                </div>
+                <div
+                  data-pencil-name="Halaman"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Halaman
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="grid_view"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  grid_view
+                </div>
+                <div
+                  data-pencil-name="Layanan Bento"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Layanan Bento
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="view_carousel"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  view_carousel
+                </div>
+                <div
+                  data-pencil-name="Proyek Showcase"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Proyek Showcase
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="folder"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  folder
+                </div>
+                <div
+                  data-pencil-name="Kategori"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Kategori
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="terminal"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  terminal
+                </div>
+                <div
+                  data-pencil-name="Teknologi"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Teknologi
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="chat_bubble_outline"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  chat_bubble_outline
+                </div>
+                <div
+                  data-pencil-name="Testimoni &amp; FAQ"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Testimoni &amp; FAQ
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="layers"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  layers
+                </div>
+                <div
+                  data-pencil-name="Paket Layanan &amp; Add-on"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Paket Layanan &amp; Add-on
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="calculate"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  calculate
+                </div>
+                <div
+                  data-pencil-name="Kalkulator Builder"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Kalkulator Builder
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            data-pencil-name="div"
+            class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[12px_0px_0px_0px] justify-start items-start"
+          >
+            <div
+              data-pencil-name="OPERASIONAL KLIEN"
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[4px] justify-center items-start"
+            >
+              <div
+                class="text-[11px]/[14px] box-border text-[#595962] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+              >
+                OPERASIONAL KLIEN
+              </div>
+            </div>
+            <div
+              data-pencil-name="nav"
+              class="box-border w-full h-fit shrink-0 flex flex-col gap-[2px] justify-start items-start"
+            >
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="assignment"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  assignment
+                </div>
+                <div
+                  data-pencil-name="Proyek Klien &amp; Tracking"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Proyek Klien &amp; Tracking
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[40px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center bg-[#18181a] rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="calendar_today"
+                  class="text-[18px]/[18px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  calendar_today
+                </div>
+                <div
+                  data-pencil-name="Booking Konsultasi"
+                  class="text-[16px]/[24px] box-border text-[#ffffff] font-[Inter,system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  Booking Konsultasi
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="inbox"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  inbox
+                </div>
+                <div
+                  data-pencil-name="Inquiry &amp; Pemesanan"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Inquiry &amp; Pemesanan
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="request_quote"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  request_quote
+                </div>
+                <div
+                  data-pencil-name="Quote Kalkulator"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Quote Kalkulator
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="schema"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  schema
+                </div>
+                <div
+                  data-pencil-name="Template Tahap"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Template Tahap
+                </div>
+              </div>
+              <div
+                data-pencil-name="a"
+                class="box-border w-full h-[34px] shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-center rounded-[8px]"
+              >
+                <div
+                  data-pencil-name="verified_user"
+                  class="text-[18px]/[18px] box-border text-[#46464a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                >
+                  verified_user
+                </div>
+                <div
+                  data-pencil-name="Log Aktivitas &amp; 2FA"
+                  class="text-[13px]/[18px] box-border text-[#46464a] font-[Inter,system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                >
+                  Log Aktivitas &amp; 2FA
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          data-pencil-name="div"
+          class="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[20px] justify-start items-start bg-[#f0f0f066]"
+        >
+          <div
+            data-pencil-name="div"
+            class="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+          >
+            <div
+              data-pencil-name="Engine: Laravel 13 / Filament"
+              class="text-[11px]/[14px] box-border text-[#52525b] font-[Inter,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+            >
+              Engine: Laravel 13 / Filament
+            </div>
+            <div
+              data-pencil-name="span"
+              class="box-border w-[8px] shrink-0 h-[8px] bg-[#82b440] rounded-[50%]"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var cmsMap = [
+    { text: 'Dashboard', url: 'dashboard-cms-admin.html' },
+    { text: 'Site Settings', url: 'site-settings.html' },
+    { text: 'Layanan Bento', url: 'layanan-bento.html' },
+    { text: 'Proyek Showcase', url: 'proyek-showcase.html' },
+    { text: 'Kategori', url: 'kategori-teknologi.html' },
+    { text: 'Teknologi', url: 'kategori-teknologi.html' },
+    { text: 'Testimoni & FAQ', url: 'testimoni-faq.html' },
+    { text: 'Testimoni', url: 'testimoni-faq.html' },
+    { text: 'Paket Layanan & Add-on', url: 'paket-layanan-addon.html' },
+    { text: 'Paket Layanan', url: 'paket-layanan-addon.html' },
+    { text: 'Kalkulator Builder', url: 'quote-kalkulator.html' },
+    { text: 'Proyek Klien & Tracking', url: 'proyek-klien-tracking.html' },
+    { text: 'Proyek Klien', url: 'proyek-klien-tracking.html' },
+    { text: 'Booking Konsultasi', url: 'booking-konsultasi.html' },
+    { text: 'Inquiry & Pemesanan', url: 'inquiry-pemesanan.html' },
+    { text: 'Inquiry', url: 'inquiry-pemesanan.html' },
+    { text: 'Quote Kalkulator', url: 'quote-kalkulator.html' },
+    { text: 'Template Tahap', url: 'template-tahap.html' },
+    { text: 'Log Aktivitas & 2FA', url: 'log-aktivitas-2fa.html' },
+    { text: 'Log Aktivitas', url: 'log-aktivitas-2fa.html' },
+    { text: 'Invoice & Penagihan', url: 'invoice-penagihan.html' },
+    { text: 'Invoice', url: 'invoice-penagihan.html' },
+    { text: 'Manajemen Staf', url: 'manajemen-staf.html' },
+    { text: 'Staf & Role', url: 'manajemen-staf.html' }
+  ];
+  var aside = document.querySelector('[data-pencil-name="aside"]');
+  if (aside) {
+    var navItems = aside.querySelectorAll('[data-pencil-name="a"]');
+    navItems.forEach(function(item) {
+      item.style.cursor = 'pointer';
+      var text = item.textContent || '';
+      for (var i = 0; i < cmsMap.length; i++) {
+        if (text.includes(cmsMap[i].text)) {
+          (function(url) {
+            item.addEventListener('click', function() { window.location.href = url; });
+          })(cmsMap[i].url);
+          break;
+        }
+      }
+    });
+    var logo = aside.querySelector('[data-pencil-name="img"]');
+    if (logo) {
+      logo.style.cursor = 'pointer';
+      logo.addEventListener('click', function() { window.location.href = 'dashboard-cms-admin.html'; });
+    }
+  }
+});
+</script>
+</body>
+</html>

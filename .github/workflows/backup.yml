@@ -1,0 +1,37 @@
+name: Backup harian
+
+on:
+  schedule:
+    - cron: '17 19 * * *'
+  workflow_dispatch:
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump PostgreSQL
+        env:
+          DATABASE_URI_DIRECT: ${{ secrets.DATABASE_URI_DIRECT }}
+          PG_MAJOR: ${{ vars.PG_MAJOR }}
+        run: |
+          docker run --rm "postgres:${PG_MAJOR}" \
+            pg_dump --format=custom --no-owner "$DATABASE_URI_DIRECT" > backup.dump
+      - name: Enkripsi cadangan
+        env:
+          BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
+        run: |
+          gpg --batch --yes --pinentry-mode loopback \
+            --passphrase "$BACKUP_PASSPHRASE" \
+            --symmetric --cipher-algo AES256 \
+            -o "backup-$(date -u +%F).dump.gpg" backup.dump
+          rm backup.dump
+      - name: Unggah ke bucket cadangan R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.BACKUP_R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          BACKUP_R2_BUCKET: ${{ vars.BACKUP_R2_BUCKET }}
+        run: |
+          aws s3 cp backup-*.dump.gpg "s3://${BACKUP_R2_BUCKET}/" \
+            --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
