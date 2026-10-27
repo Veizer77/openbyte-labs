@@ -44,7 +44,10 @@ test.describe('Frontend', () => {
     await page.getByLabel(/Mobile Android Saja/).check()
 
     await expect(page.getByLabel(/Mobile Android Saja/)).toBeChecked()
-    await expect(page.getByText('Belum tersedia')).toBeVisible()
+    // Panel estimasi memuat dua label 'Belum tersedia' (rentang dan durasi);
+    // asersi di-scope ke panel agar tidak ambiguity strict-mode.
+    const estimatePanel = page.locator('.estimate-panel')
+    await expect(estimatePanel.getByText('Belum tersedia').first()).toBeVisible()
     await expect(page.getByRole('button', { name: /Kirim Rincian Estimasi/ })).toBeDisabled()
   })
 

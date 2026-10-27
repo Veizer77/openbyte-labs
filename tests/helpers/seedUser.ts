@@ -8,6 +8,13 @@ export const testUser = {
 }
 
 /**
+ * Secret TOTP fixture (base32, hanya A-Z2-7) khusus tes. Tidak pernah
+ * dipakai di lingkungan nyata: helper ini hanya berjalan pada database
+ * disposable (lihat guard di atas).
+ */
+export const testTotpSecret = 'OBLETESTSECRETABCD234567'
+
+/**
  * Seeds a test user for e2e admin tests.
  */
 export async function seedTestUser(): Promise<void> {
@@ -26,10 +33,22 @@ export async function seedTestUser(): Promise<void> {
   })
 
   // Create fresh test user
-  await payload.create({
+  const created = await payload.create({
     collection: 'users',
     overrideAccess: true,
     data: { ...testUser, name: 'Test User', roles: ['owner'] },
+  })
+
+  // Daftarkan TOTP dengan secret fixture: penulisan `totpSecret` lewat
+  // Local API dengan overrideAccess, alur yang sama seperti endpoint
+  // setup-totp plugin. Setelah ini user terhitung enrolled (hasTotp
+  // turunan virtual dari totpSecret) dan verifikasi login E2E memakai
+  // TOTP nyata, bukan TOTP yang dinonaktifkan.
+  await payload.update({
+    collection: 'users',
+    id: created.id,
+    data: { totpSecret: testTotpSecret },
+    overrideAccess: true,
   })
 }
 

@@ -48,6 +48,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
+      - run: pnpm check:access
       - run: pnpm check:portability
       - run: pnpm generate:types
       - run: git diff --exit-code -- src/payload-types.ts
