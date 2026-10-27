@@ -1,9 +1,11 @@
+import { randomUUID } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { describe, expect, it, beforeAll } from 'vitest'
 import { getPayload, type Payload } from 'payload'
 import config from '@/payload.config'
 import { canRunDatabaseTests } from '../helpers/db-target'
+import type { PostgresQueryClient } from '../../src/server/security/postgres-rate-limit'
 
 const hasDisposableDb = await canRunDatabaseTests()
 
@@ -181,36 +183,53 @@ describe('Consultation booking exclusion constraint (G.7)', () => {
     })
 
     it('Scenario 7: 12 concurrent requests result in exactly 1 success and 11 rejections', async () => {
-      const results = await Promise.allSettled(
-        Array.from({ length: 12 }, (_, i) =>
-          payload.create({
-            collection: 'consultation-bookings',
-            data: {
-              name: `Concurrent ${i + 1}`,
-              whatsapp: '081234567899',
-              serviceInterest: 'Sistem Informasi',
-              consultationMode: 'google_meet',
-              slotStart: '2027-01-10T04:00:00.000Z', // 11:00 WIB
-              slotEnd: '2027-01-10T05:00:00.000Z', // 12:00 WIB
-              consentAt: new Date().toISOString(),
-              status: 'pending',
-            } as never,
-            overrideAccess: true,
-          }),
-        ),
-      )
+      const database = payload.db as unknown as { drizzle: { $client: PostgresQueryClient } }
+      const client = database.drizzle.$client
+      const referencePrefix = `BKG-TEST-${randomUUID()}`
 
-      const successes = results.filter((r) => r.status === 'fulfilled')
-      const rejections = results.filter((r) => r.status === 'rejected')
+      try {
+        const results = await Promise.allSettled(
+          Array.from({ length: 12 }, (_, i) => client.query(
+            `INSERT INTO "consultation_bookings"
+              ("reference", "name", "whatsapp", "service_interest", "slot_start", "slot_end", "consultation_mode", "status", "consent_at")
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+            [
+              `${referencePrefix}-${i}`,
+              `Concurrent ${i + 1}`,
+              '081234567899',
+              'Sistem Informasi',
+              '2027-01-10T04:00:00.000Z', // 11:00 WIB
+              '2027-01-10T05:00:00.000Z', // 12:00 WIB
+              'google_meet',
+              'pending',
+              new Date().toISOString(),
+            ],
+          )),
+        )
 
-      expect(successes).toHaveLength(1)
-      expect(rejections).toHaveLength(11)
+        const successes = results.filter((result) => result.status === 'fulfilled')
+        const rejections = results.filter((result) => result.status === 'rejected')
 
-      for (const rej of rejections) {
-        if (rej.status === 'rejected') {
-          expect(isExclusionViolation(rej.reason)).toBe(true)
+        expect(successes).toHaveLength(1)
+        expect(rejections).toHaveLength(11)
+
+        for (const rejection of rejections) {
+          if (rejection.status === 'rejected') {
+            expect(isExclusionViolation(rejection.reason)).toBe(true)
+          }
         }
+
+        const count = await client.query(
+          'SELECT count(*) AS count FROM "consultation_bookings" WHERE "reference" LIKE $1',
+          [`${referencePrefix}-%`],
+        )
+        expect(Number(count.rows[0]?.count)).toBe(1)
+      } finally {
+        await client.query(
+          'DELETE FROM "consultation_bookings" WHERE "reference" LIKE $1',
+          [`${referencePrefix}-%`],
+        )
       }
-    }, 30000)
+    }, 15000)
   })
 })
