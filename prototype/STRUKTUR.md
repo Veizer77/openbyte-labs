@@ -4,8 +4,8 @@ Dokumen ini memetakan seluruh struktur berkas dan folder di dalam direktori `pro
 
 > [!IMPORTANT]
 > **Sumber Kebenaran Spesifikasi & Bisnis:**
-> Acuan utama fungsionalitas, skema basis data, dan aturan bisnis proyek adalah [PRD_v1_4.md](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/PRD_v1_4.md) dan aturan kerja di [AGENTS.md](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/AGENTS.md).
-> Berkas [prd-v1-1.md](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/docs/prd-v1-1.md) di dalam folder `prototype/stitch/docs/` merupakan arsip spesifikasi awal (Laravel/Filament) dan **bukan** acuan utama implementasi Next.js + Payload CMS saat ini.
+> Acuan utama fungsionalitas, skema basis data, dan aturan bisnis adalah [PRD_v1_5.md](../PRD_v1_5.md) dan [AGENTS.md](../AGENTS.md). Website dan dashboard custom memakai Next.js, Drizzle, dan Better Auth.
+> Berkas `prototype/stitch/docs/prd-v1-1.md` adalah arsip bawaan prototype, bukan spesifikasi aktif. Nama folder `cms/` menunjuk referensi visual dashboard custom, bukan dependency CMS eksternal.
 
 ---
 

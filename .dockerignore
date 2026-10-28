@@ -1,6 +1,5 @@
 # Rahasia dan lingkungan lokal
-.env
-.env*.local
+.env*
 
 # Git dan CI
 .git
@@ -32,3 +31,4 @@ prototype
 
 # Berkas kerja sementara
 _tmp-*
+.workbuddy-ai

@@ -1,36 +1,10 @@
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTypeScript from 'eslint-config-next/typescript'
 
-const eslintConfig = [
+const config = [
   ...nextVitals,
   ...nextTypeScript,
-  {
-    rules: {
-      '@typescript-eslint/ban-ts-comment': 'warn',
-      '@typescript-eslint/no-empty-object-type': 'warn',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          args: 'after-used',
-          ignoreRestSiblings: false,
-          argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^(_|ignore)',
-        },
-      ],
-    },
-  },
-  {
-    ignores: [
-      '.next/**',
-      'prototype/**',
-      'src/payload-types.ts',
-      'src/payload-generated-schema.ts',
-    ],
-  },
+  { ignores: ['.next/**', 'node_modules/**', 'prototype/**', '.workbuddy-ai/**', 'playwright-report/**', 'test-results/**', 'next-env.d.ts'] },
 ]
 
-export default eslintConfig
+export default config

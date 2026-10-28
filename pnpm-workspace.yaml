@@ -1,7 +1,15 @@
 allowBuilds:
-  '@sentry/cli': true
   esbuild: true
+  sharp: true
   unrs-resolver: true
-overrides:
-  dompurify: 3.4.17
-  happy-dom: 21.0.4
+minimumReleaseAgeExclude:
+  - '@better-auth/core@1.7.14'
+  - '@better-auth/drizzle-adapter@1.7.14'
+  - '@better-auth/kysely-adapter@1.7.14'
+  - '@better-auth/memory-adapter@1.7.14'
+  - '@better-auth/mongo-adapter@1.7.14'
+  - '@better-auth/prisma-adapter@1.7.14'
+  - '@better-auth/telemetry@1.7.14'
+  - better-auth@1.7.14
+  - '@aws-sdk/client-s3@3.1158.0'
+  - '@aws-sdk/s3-request-presigner@3.1158.0'

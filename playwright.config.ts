@@ -1,47 +1,30 @@
-import { defineConfig, devices } from '@playwright/test'
+import { defineConfig } from '@playwright/test'
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-import 'dotenv/config'
-
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: './tests/e2e',
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
-  /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  /* 'github' di CI memunculkan kegagalan per-tes sebagai annotasi check-run,
-     sehingga diagnosis tidak bergantung pada akses log. */
-  reporter: process.env.CI
-    ? [['github'], ['html', { open: 'never' }]]
-    : [['list'], ['html', { open: 'never' }]],
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://localhost:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
-  },
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'], channel: 'chromium' },
-    },
-  ],
+  forbidOnly: Boolean(process.env.CI),
+  retries: 0,
+  workers: 1,
+  reporter: 'list',
+  use: { baseURL: 'http://127.0.0.1:3105' },
   webServer: {
-    // CI builds the app before E2E; serve that build instead of recompiling in dev mode.
-    command: process.env.CI ? 'node .next/standalone/server.js' : 'pnpm dev',
-    reuseExistingServer: !process.env.CI,
-    url: 'http://localhost:3000/health',
-    timeout: 120_000,
+    command: 'node .next/standalone/server.js',
+    url: 'http://127.0.0.1:3105/robots.txt',
+    reuseExistingServer: false,
+    timeout: 60_000,
+    env: {
+      HOSTNAME: '127.0.0.1',
+      PORT: '3105',
+      SITE_URL: 'http://127.0.0.1:3105',
+      BETTER_AUTH_URL: 'http://127.0.0.1:3105',
+      BETTER_AUTH_SECRET: 'test-only-auth-secret-not-a-production-credential',
+      DATABASE_URI: 'postgres://test:test@127.0.0.1:1/openbyte_test',
+      DATABASE_URI_DIRECT: 'postgres://test:test@127.0.0.1:1/openbyte_test',
+      R2_ACCOUNT_ID: '',
+      R2_ACCESS_KEY_ID: '',
+      R2_SECRET_ACCESS_KEY: '',
+      R2_BUCKET_PUBLIC: '',
+      R2_PUBLIC_BASE_URL: '',
+    },
   },
 })

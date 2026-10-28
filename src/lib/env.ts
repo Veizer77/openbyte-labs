@@ -1,201 +1,71 @@
 import { z } from 'zod'
 
-const optionalValue = z.preprocess(
-  (value) => (value === '' ? undefined : value),
-  z.string().optional(),
-)
+const optional = z.preprocess((value) => value === '' ? undefined : value, z.string().optional())
+function parseUrl(value: string): URL | null {
+  try {
+    return new URL(value)
+  } catch {
+    return null
+  }
+}
 
-const optionalUrl = z.preprocess(
-  (value) => (value === '' ? undefined : value),
-  z.string().url().optional(),
-)
-
-const optionalPositiveInteger = z.preprocess(
-  (value) => value === '' || value === undefined ? undefined : Number(value),
-  z.number().int().min(1).max(32).optional(),
-)
-
-const envSchema = z.object({
-  PAYLOAD_SECRET: z.string().min(32),
-  SITE_URL: z.string().url(),
-  NEXT_PUBLIC_SITE_URL: optionalUrl,
-  DATABASE_URI: z.string().url(),
-  DATABASE_URI_DIRECT: z.string().url(),
-  R2_ACCOUNT_ID: optionalValue,
-  R2_ACCESS_KEY_ID: optionalValue,
-  R2_SECRET_ACCESS_KEY: optionalValue,
-  R2_BUCKET_PUBLIC: optionalValue,
-  R2_BUCKET_PRIVATE: optionalValue,
-  R2_PUBLIC_BASE_URL: optionalUrl,
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: optionalValue,
-  TURNSTILE_SECRET_KEY: optionalValue,
-  SENTRY_DSN: optionalUrl,
-  NEXT_PUBLIC_SENTRY_DSN: optionalUrl,
-  IP_HASH_SALT: optionalValue,
-  TRACKING_SESSION_SECRET: optionalValue,
-  WA_DEFAULT_NUMBER: optionalValue,
-  TRUSTED_IP_HEADER: optionalValue,
-  TRUSTED_IP_PROXY_HOPS: optionalPositiveInteger,
+const postgresUrl = z.string().refine((value) => {
+  const url = parseUrl(value)
+  return Boolean(url && ['postgres:', 'postgresql:'].includes(url.protocol) && url.hostname && url.pathname.length > 1)
+})
+const origin = z.string().refine((value) => {
+  const url = parseUrl(value)
+  return Boolean(url && ['https:', 'http:'].includes(url.protocol) && url.pathname === '/' &&
+    !url.search && !url.hash && !url.username && !url.password)
 })
 
-export function parseEnvironment(source: Record<string, string | undefined> = process.env) {
-  if (source.PAYLOAD_DROP_DATABASE === 'true') {
-    throw new Error(
-      'PAYLOAD_DROP_DATABASE is not allowed in this project: schema changes go through Payload migrations only',
-    )
+const schema = z.object({
+  SITE_URL: origin,
+  BETTER_AUTH_URL: origin,
+  BETTER_AUTH_SECRET: z.string().min(32),
+  DATABASE_URI: postgresUrl,
+  DATABASE_URI_DIRECT: postgresUrl,
+  R2_ACCOUNT_ID: optional,
+  R2_ACCESS_KEY_ID: optional,
+  R2_SECRET_ACCESS_KEY: optional,
+  R2_BUCKET_PUBLIC: optional,
+  R2_PUBLIC_BASE_URL: optional,
+  R2_BUCKET_PRIVATE: optional,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: optional,
+  TURNSTILE_SECRET_KEY: optional,
+  IP_HASH_SALT: optional,
+  TRUSTED_IP_HEADER: optional,
+  SENTRY_DSN: optional,
+  WA_DEFAULT_NUMBER: optional,
+  TRACKING_SESSION_SECRET: optional,
+}).superRefine((values, context) => {
+  const authUrl = parseUrl(values.BETTER_AUTH_URL)
+  const siteUrl = parseUrl(values.SITE_URL)
+  if (authUrl && siteUrl && authUrl.origin !== siteUrl.origin) {
+    context.addIssue({ code: 'custom', path: ['BETTER_AUTH_URL'], message: 'Origin auth harus sama dengan situs.' })
   }
+  const storage = [values.R2_ACCOUNT_ID, values.R2_ACCESS_KEY_ID, values.R2_SECRET_ACCESS_KEY, values.R2_BUCKET_PUBLIC, values.R2_PUBLIC_BASE_URL]
+  if (storage.some(Boolean) && !storage.every(Boolean)) {
+    context.addIssue({ code: 'custom', path: ['R2_ACCOUNT_ID'], message: 'Konfigurasi R2 publik harus lengkap.' })
+  }
+  if (values.R2_PUBLIC_BASE_URL) {
+    try {
+      if (new URL(values.R2_PUBLIC_BASE_URL).protocol !== 'https:') throw new Error('protocol')
+    } catch {
+      context.addIssue({ code: 'custom', path: ['R2_PUBLIC_BASE_URL'], message: 'URL media harus HTTPS.' })
+    }
+  }
+})
 
-  const result = envSchema
-    .superRefine((values, context) => {
-      const locationValues = [
-        values.R2_ACCOUNT_ID,
-        values.R2_BUCKET_PUBLIC,
-        values.R2_PUBLIC_BASE_URL,
-      ]
-      const credentialValues = [values.R2_ACCESS_KEY_ID, values.R2_SECRET_ACCESS_KEY]
-      const configuredLocationValues = locationValues.filter(Boolean).length
-      const configuredCredentialValues = credentialValues.filter(Boolean).length
-      const isProductionRuntime =
-        source.NODE_ENV === 'production' && source.NEXT_PHASE !== 'phase-production-build'
-
-      if (
-        values.TRUSTED_IP_PROXY_HOPS !== undefined &&
-        values.TRUSTED_IP_HEADER?.trim().toLowerCase() !== 'x-forwarded-for'
-      ) {
-        context.addIssue({
-          code: 'custom',
-          message: 'TRUSTED_IP_PROXY_HOPS is valid only with TRUSTED_IP_HEADER=x-forwarded-for',
-          path: ['TRUSTED_IP_PROXY_HOPS'],
-        })
-      }
-
-      if (configuredLocationValues > 0 && configuredLocationValues < locationValues.length) {
-        context.addIssue({
-          code: 'custom',
-          message: 'R2 public location variables must be configured together',
-          path: ['R2_ACCOUNT_ID'],
-        })
-      }
-
-      if (configuredCredentialValues === 1) {
-        context.addIssue({
-          code: 'custom',
-          message: 'R2 upload credentials must be configured together',
-          path: ['R2_ACCESS_KEY_ID'],
-        })
-      }
-
-      if (configuredCredentialValues === 2 && configuredLocationValues !== locationValues.length) {
-        context.addIssue({
-          code: 'custom',
-          message: 'R2 upload credentials require a complete public location configuration',
-          path: ['R2_ACCOUNT_ID'],
-        })
-      }
-
-      if (
-        isProductionRuntime && configuredCredentialValues !== credentialValues.length
-      ) {
-        context.addIssue({
-          code: 'custom',
-          message: 'R2 upload credentials are required in production',
-          path: ['R2_ACCESS_KEY_ID'],
-        })
-      }
-
-      if (isProductionRuntime && configuredLocationValues !== locationValues.length) {
-        context.addIssue({
-          code: 'custom',
-          message: 'R2 public storage is required in production',
-          path: ['R2_ACCOUNT_ID'],
-        })
-      }
-    })
-    .safeParse(source)
-
+export function parseEnvironment(source: Record<string, string | undefined>) {
+  const result = schema.safeParse(source)
   if (!result.success) {
-    const invalidKeys = result.error.issues.map((issue) => issue.path.join('.'))
-    throw new Error(`Invalid environment configuration: ${invalidKeys.join(', ')}`)
+    const fields = [...new Set(result.error.issues.map((issue) => issue.path.join('.')))]
+    throw new Error(`Konfigurasi environment tidak valid: ${fields.join(', ')}`)
   }
-
   return result.data
 }
 
-export const env = parseEnvironment()
-
-export type DatabaseConnectionSelection = {
-  /** True saat menjalankan migrasi (PAYLOAD_MIGRATE_DIRECT=1). */
-  migrateDirect: boolean
-  pooledUri?: string
-  directUri?: string
-}
-
-/**
- * Memilih koneksi database: direct hanya untuk migrasi, pooled untuk runtime.
- * Skema hanya boleh berubah lewat migrasi, sehingga migrasi wajib memakai
- * koneksi direct dan gagal cepat bila koneksi itu tidak tersedia.
- */
-export function resolveDatabaseConnectionString({
-  migrateDirect,
-  pooledUri,
-  directUri,
-}: DatabaseConnectionSelection): string {
-  if (migrateDirect) {
-    if (!directUri) {
-      throw new Error('DATABASE_URI_DIRECT is required when PAYLOAD_MIGRATE_DIRECT=1 (migrations)')
-    }
-    return directUri
-  }
-
-  if (!pooledUri) {
-    throw new Error('DATABASE_URI is required for the runtime connection')
-  }
-
-  return pooledUri
-}
-
-const DISPOSABLE_TEST_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]', '::1'])
-
-export type DisposableTestDatabaseOptions = {
-  /**
-   * Nama database remote yang disetujui pemilik untuk dipakai tes.
-   * Harus sama persis dengan nama database pada URI target.
-   */
-  allowRemoteDatabase?: string
-}
-
-/**
- * Menolak operasi yang menulis database bila target bukan database uji
- * disposable. Identitas diperiksa dari URI target (host + nama database),
- * bukan dari nama berkas .env. Target remote hanya diterima bila pemilik
- * menyetujui nama database-nya secara eksplisit.
- */
-export function assertDisposableTestDatabase(
-  rawUri: string,
-  { allowRemoteDatabase }: DisposableTestDatabaseOptions = {},
-): void {
-  let uri: URL
-  try {
-    uri = new URL(rawUri)
-  } catch {
-    throw new Error('Test target database URI is not a valid URL')
-  }
-
-  const databaseName = uri.pathname.replace(/^\//, '')
-  if (!databaseName) {
-    throw new Error('Test target database URI has no database name')
-  }
-
-  if (DISPOSABLE_TEST_HOSTS.has(uri.hostname)) {
-    return
-  }
-
-  if (allowRemoteDatabase && allowRemoteDatabase === databaseName) {
-    return
-  }
-
-  throw new Error(
-    `Refusing to run database-writing operations against non-disposable target '${uri.hostname}/${databaseName}'. ` +
-      'Use a disposable local database, or explicitly approve the remote test database name via allowRemoteDatabase.',
-  )
+export function getEnvironment() {
+  return parseEnvironment(process.env)
 }

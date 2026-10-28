@@ -1,58 +1,42 @@
-# AGENTS.md — OpenByte Labs
+# AGENTS.md: OpenByte Labs
 
-Aturan kerja untuk agen coding (Claude Code, Cursor, dll.) pada repositori ini. **Sumber kebenaran adalah `PRD_v1_4.md`.** Bila kode dan PRD berbeda, jangan memutuskan sendiri: hentikan dan tanyakan pemilik, atau usulkan perubahan PRD.
+## Acuan dan fase
 
-## 1. Proyek Singkat
-Satu aplikasi Next.js (App Router, TypeScript strict) berisi situs publik, panel admin Payload CMS di `/admin`, dan Server Action/endpoint. Database PostgreSQL (Neon), storage Cloudflare R2, styling Tailwind CSS. Bahasa antarmuka: **Indonesia**. Zona waktu tampilan: **Asia/Jakarta (WIB)**.
+- Satu-satunya PRD aktif adalah `PRD_v1_5.md`. Rencana aktif: `RENCANA_IMPLEMENTASI_PRD_1_5.md`.
+- Stack target: Next.js App Router, React, TypeScript strict, Tailwind, Drizzle ORM/Kit, Neon PostgreSQL, Better Auth dengan TOTP, R2, Zod, Vitest, Playwright.
+- Tidak memakai CMS siap pakai, REST/GraphQL CRUD generik, NestJS, email, queue, atau cron aplikasi. Tidak memakai paket `@vercel/*`.
+- Status saat reset: Fase 0 baru dimulai. Hasil tes dan status selesai implementasi sebelum reset tidak berlaku untuk stack ini.
+- Kerjakan satu fase per sesi. Fase 6/portal klien hanya setelah diminta; `/tracking*` tetap 404 pada Rilis 1.
 
-## 2. Cakupan Rilis (jangan melompat)
-* **Rilis 1 (Fase 0-5):** situs company, portofolio, kalkulator, paket, inquiry, booking.
-* **Rilis 2 (Fase 6):** portal klien (tracking, revisi, persetujuan). **Jangan membangun atau menautkannya sebelum diminta.** `/tracking*` harus 404 selama `tracking.trackingEnabled` mati.
-* Kerjakan **satu fase per sesi**; tanyakan fase aktif bila tidak jelas. Kriteria selesai tiap fase: PRD 10.1.
+## Desain dan konten
 
-## 3. Versi Dikunci (PRD, catatan versi paket)
-Payload **3.92.0** (bukan 4 beta), Next.js dalam rentang peer `@payloadcms/next`, Node sesuai `engines` Payload. Semua `@payloadcms/*` **versi sama persis** dengan `payload`. **Jangan menaikkan versi paket** tanpa persetujuan; jangan memakai API yang belum diverifikasi di PRD 12.3 tanpa membaca dokumentasi versi terkunci.
+- Prototype full-page di `prototype/stitch/site/` dan `prototype/stitch/cms/` adalah acuan UI website serta admin custom. Kata CMS pada prototype adalah fungsi pengelolaan konten, bukan pilihan dependency.
+- Jangan menciptakan design system, font, warna, layout, atau logo baru yang bertentangan dengan prototype. Jangan mengubah HTML/aset referensi tanpa persetujuan.
+- Bahasa UI Indonesia, waktu UTC di database dan WIB saat ditampilkan, uang integer Rupiah.
+- Tidak ada testimoni/angka/klaim rekaan. Konten `[ISI]` tidak boleh dipublikasikan.
 
-## 4. Perintah
-`pnpm dev` · `pnpm lint` · `pnpm typecheck` · `pnpm test` · `pnpm test:e2e` · `pnpm generate:types` · `pnpm migrate:create` · `pnpm migrate` · `pnpm seed` · `pnpm check:access` · `pnpm check:portability`.
-Sebelum menyatakan selesai: jalankan `lint`, `typecheck`, `test`, dan (bila menyentuh koleksi) `generate:types` + `check:access`. Laporkan hasil apa adanya, termasuk yang gagal.
+## Server, data, dan keamanan
 
-## 5. Struktur (PRD 2.3)
-`src/app/(frontend)` situs · `src/app/(payload)` admin/API Payload · `src/collections` · `src/globals` · `src/blocks` · `src/access` · `src/hooks` · `src/lib/{calculator,booking,whatsapp,tracking,security,format}` · `src/migrations` · `src/seed` · `tests/`.
-`src/lib/*` adalah **TypeScript murni**: tidak boleh mengimpor dari `app/` atau Payload, agar dipakai browser dan server serta mudah diuji.
+- Ikuti struktur PRD 2.3: `src/app/(public)`, `src/app/admin`, `src/app/api`, `src/db`, `src/auth`, `src/access`, `src/actions`, `src/services`, `src/schemas`, `src/lib`, `src/components`, `src/seed`.
+- Browser tidak mengakses database. Mutasi melalui service berizin; Drizzle tidak menyediakan otorisasi otomatis.
+- Default deny. Setiap aksi/route/admin service memeriksa sesi, penyelesaian TOTP, role, resource, operasi, dan field. Editor tidak boleh mengakses data operasional/Sistem/Settings WhatsApp atau Tracking.
+- `lib/calculator` dan `lib/booking` murni TS tanpa Next.js/DB/auth. Tulis fixture Lampiran F terlebih dahulu sebelum implementasi.
+- Mutasi publik: Zod, Turnstile/honeypot, rate limit atomik, baca otoritatif DB, transaksi/service. Jangan percaya harga/status/slot dari browser.
+- Migrasi Drizzle berversi via koneksi direct, ditinjau sebelum dijalankan. Jangan melakukan push produksi atau membuang constraint booking.
+- Reset kode tidak mengizinkan reset database. Jangan migrasi schema baru pada database berisi data sebelumnya tanpa rencana porting dan persetujuan pemilik.
+- Audit append-only, versi konten, dan perubahan domain terkait berada dalam transaksi. Nilai turunan tidak ditulis manual.
+- Jangan menulis rahasia, password, token, TOTP/recovery code, atau PII ke log/repo/error. IP hanya hash bersalt; header proxy tidak dipercaya tanpa konfigurasi hosting.
+- Jangan merender teks pengguna sebagai HTML. Validasi node rich text, URL, MIME/byte upload; SVG user ditolak.
+- `.env` dan `.env.local` milik pemilik: jangan ditimpa. Variabel baru ditambahkan di `.env.example` dan validator environment.
 
-## 6. Aturan Keras
-**Data dan skema**
-* Uang = **bilangan bulat Rupiah**. Waktu disimpan UTC, ditampilkan WIB. `slotStart`/`slotEnd` untuk booking.
-* Skema diubah lewat **migrasi Payload**, bukan mode *push*. Migrasi harus aman tanpa downtime (tambah dulu, hapus di rilis berikutnya) dan dijalankan lewat `DATABASE_URI_DIRECT`.
-* Kendala eksklusi booking ada di migrasi SQL kustom (PRD G.7); jangan dihapus.
-* Nilai turunan (`paidAmount`, `currentStep`, `revisionsUsed`) **tidak pernah diisi manual**; dihitung hook dalam transaksi.
+## Perintah dan verifikasi
 
-**Keamanan**
-* **Akses tertutup secara bawaan.** Setiap koleksi wajib punya fungsi akses eksplisit; `pnpm check:access` harus lulus. GraphQL dimatikan. REST anonim hanya membaca konten publik yang published/aktif.
-* **Semua penulisan dari publik** lewat Server Action: validasi zod → Turnstile + honeypot → rate limit → Local API. Server memvalidasi ulang semuanya; jangan percaya nilai dari browser (harga, status, id).
-* Teks dari pengguna dirender sebagai **teks**; tidak ada `dangerouslySetInnerHTML` untuk teks klien. HTML mentah wajib disanitasi; tautan hanya `https`/`http`/`mailto`/`tel`.
-* Jangan menulis rahasia, kunci, kode/PIN, atau data pribadi ke log, repositori, atau pesan galat. PIN hanya disimpan sebagai hash; IP hanya sebagai hash bersalt.
-* Pesan galat login tracking selalu generik.
-
-**Portabilitas dan operasi**
-* **Dilarang** `@vercel/*`, Vercel Blob/KV/Cron/Edge Config. Tidak ada pekerjaan latar/cron/queue (PRD 7.7). Konfigurasi platform dari environment.
-* Tidak ada email. Notifikasi lewat panel admin dan tautan WhatsApp.
-* Variabel lingkungan divalidasi di `env.ts`; variabel baru ditambahkan ke `.env.example`.
-
-**Konten dan desain**
-* Ikuti **Lampiran D** (token, tipografi, komponen). Nilai warna/font hanya sebagai token; jangan ditulis langsung di komponen.
-* Teks UI berbahasa Indonesia. **Jangan mengarang** testimoni, angka, atau klaim. Konten yang butuh data pemilik memakai `[ISI]` dan tidak boleh terbit.
-
-## 7. Cara Bekerja
-1. Baca bagian PRD yang relevan sebelum menulis kode; sebut bagian yang dirujuk di deskripsi perubahan.
-2. Untuk `src/lib/*`, **tulis uji lebih dulu** memakai vektor Lampiran G sebagai fixture; implementasi harus menghasilkan nilai identik.
-3. Perubahan kecil dan terfokus; jangan merombak berkas di luar tugas. Jangan menghapus uji agar hijau.
-4. Bila menemukan asumsi PRD yang ternyata salah (mis. opsi Payload tidak ada), **berhenti dan laporkan** dengan bukti, jangan menambal diam-diam.
-5. Setelah selesai: ringkas apa yang diubah, apa yang diuji, dan apa yang belum teruji.
-
-## 8. Hal yang Selalu Ditanyakan ke Pemilik
-Keputusan hosting produksi, domain, isi `[ISI]`, harga, kebijakan privasi/revisi, penghapusan data, dan apa pun yang mengubah cakupan rilis.
+- `pnpm dev`, `pnpm build`, `pnpm start`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e`, `pnpm check:portability`, `pnpm check:access`.
+- Saat ini `check:access` hanya menguji batas reset yang tertutup, bukan matriks RBAC Better Auth yang belum dibangun. Jangan mengklaim N-02/N-06 lulus dari tes tersebut.
+- Perintah migrasi/seed/owner baru ditambahkan setelah schema dan service terkait tersedia. Jangan menggantinya dengan script yang mengklaim sukses tanpa melakukan pekerjaan.
+- Sebelum selesai: lint, typecheck, test, portability, dan pemeriksaan yang relevan; laporkan gagal/dilewati/tidak dijalankan. Build/E2E diperlukan untuk perubahan route/runtime.
+- Versi dependency dikunci persis. Baca API versi terpasang sebelum dipakai; upgrade selanjutnya memerlukan persetujuan. Jangan mempertahankan override dependency tanpa bukti kebutuhan.
+- Tanyakan pemilik untuk hosting/domain/biaya, isi `[ISI]`, harga, kebijakan, penghapusan data, atau perubahan cakupan. Jika PRD dan kemampuan paket berbeda, berhenti dan ajukan keputusan.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
