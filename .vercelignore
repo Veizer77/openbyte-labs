@@ -1,8 +1,15 @@
+# Saat file ini ada, Vercel memakai daftar ini sebagai pengganti .gitignore.
+# Rahasia, dependensi, dan artefak lokal wajib tetap dikecualikan.
 node_modules
 .next
 .vercel
+.vercelignore
 .git
 .github
+.env
+.env.*
+env
+*.local
 prototype
 design-assets
 design.pen
@@ -13,4 +20,10 @@ playwright-report
 blob-report
 backups
 artifacts
+.local
+media
 PRD_v1_6_2.md
+*.tsbuildinfo
+*.dump
+*.dump.enc
+*.pem
