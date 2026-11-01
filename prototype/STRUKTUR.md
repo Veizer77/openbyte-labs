@@ -62,13 +62,13 @@ prototype/
     │   ├── booking-konsultasi.html        # Alur pemilihan jadwal & booking konsultasi
     │   ├── daftar-portofolio.html         # Galeri studi kasus portofolio dengan filter kategori
     │   ├── detail-layanan.html            # Halaman detail layanan tunggal (/layanan/[slug])
-    │   ├── detail-proyek-sinduksadati.html # Studi kasus detail proyek portofolio
+    │   ├── detail-proyek-contoh.html       # Studi kasus anonim berstatus draf
     │   ├── kalkulator-estimasi-biaya.html # Kalkulator biaya modular interaktif & form quote
     │   ├── ketentuan-layanan.html         # Syarat & ketentuan layanan, SLA, dan privasi
     │   ├── otentikasi-tracking-klien.html # Gerbang login tracking klien (Token + PIN)
     │   ├── paket-layanan-harga.html       # Daftar paket harga, komparasi fitur, dan add-on
     │   ├── portal-pelacakan-proyek-klien.html # Portal live tracker klien (Milestone, BAST, revisi)
-    │   └── tentang-kami.html              # Profil engineer Muhammad Izzat & budaya rekayasa
+    │   └── tentang-kami.html              # Profil tim contoh & budaya rekayasa
     │
     └── cms/                       # 16 Layar Prototype Panel Admin CMS
         ├── login-admin.html               # Form login admin CMS & autentikasi 2FA OTP
@@ -107,7 +107,7 @@ Menyediakan dependensi statis mandiri (*self-contained*) agar seluruh halaman mo
 * **`fonts/`**: Berisi 9 file `.woff2` font Inter (berbagai bobot: Regular, Medium, SemiBold, Bold) serta font icon Material Symbols.
 * **`font-0.css`, `font-1.css`, `font-2.css`**: Lembar gaya CSS yang mendeklarasikan `@font-face` lokal menuju berkas `.woff2`.
 * **`tailwind.css`**: Bundle CSS Tailwind hasil build yang memuat kelas utilitas untuk seluruh mockup.
-* **`img/`**: Berisi aset gambar screenshot studi kasus (misalnya mockup aplikasi SINDUKSADATI), foto avatar testimoni, logo partner, dan elemen latar belakang kartu.
+* **`img/`**: Berisi aset visual pratinjau. Gambar proyek, testimoni, dan identitas pihak lain tidak ditampilkan sebelum ditinjau.
 
 ---
 
@@ -152,7 +152,7 @@ Empat halaman visual untuk memandu konsistensi UI/UX:
 3. **[design-system-guidelines.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/system/design-system-guidelines.html)**:
    Pedoman implementasi komponen kartu bento, tombol CTA primer/sekunder, dan tata letak dual-surface.
 4. **[overview-architecture.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/system/overview-architecture.html)**:
-   Ikhtisar profil profesional personal brand Muhammad Izzat Farahidi dan ringkasan kapabilitas teknologi sistem.
+    Ikhtisar brand OpenByte Labs dan ringkasan kapabilitas yang belum diverifikasi.
 
 ---
 
@@ -165,10 +165,10 @@ Halaman prototipe antarmuka publik yang akan diimplementasikan pada Next.js App 
 | **[paket-layanan-harga.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/paket-layanan-harga.html)** | `/layanan` | Kartu paket (Starter, Pro, Enterprise), perbandingan tabel fitur, katalog add-on modular, CTA booking konsultasi. | Rilis 1 (Fase 3) |
 | **[detail-layanan.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/detail-layanan.html)** | `/layanan/[slug]` | Halaman spesifik satu layanan: ruang lingkup deliverable, teknologi yang dipakai, tahapan kerja, estimasi waktu, formulir inquiry. | Rilis 1 (Fase 3) |
 | **[daftar-portofolio.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/daftar-portofolio.html)** | `/portofolio` | Katalog studi kasus portofolio dengan filter kategori interaktif (Web, Mobile, Enterprise), tag teknologi, ringkasan dampak. | Rilis 1 (Fase 3) |
-| **[detail-proyek-sinduksadati.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/detail-proyek-sinduksadati.html)** | `/portofolio/[slug]` | Studi kasus komprehensif proyek (Contoh: SINDUKSADATI): latar belakang masalah, arsitektur solusi, galeri screenshot, metrik dampak. | Rilis 1 (Fase 3) |
+| **[detail-proyek-contoh.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/detail-proyek-contoh.html)** | `/portofolio/[slug]` | Studi kasus anonim berstatus draf; data, hasil, dan aset belum disetujui untuk publikasi. | Draf |
 | **[kalkulator-estimasi-biaya.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/kalkulator-estimasi-biaya.html)** | `/kalkulator` | Kalkulator harga interaktif modular: pemilihan platform, modul fitur, add-on, kalkulasi biaya real-time, form submit quote request. | Rilis 1 (Fase 4) |
 | **[booking-konsultasi.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/booking-konsultasi.html)** | `/booking` | Pemilihan tanggal & slot waktu konsultasi, validasi nomor WhatsApp, anti-double-booking, konfirmasi jadwal. | Rilis 1 (Fase 4) |
-| **[tentang-kami.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/tentang-kami.html)** | `/tentang-kami` | Profil profesional Muhammad Izzat Farahidi, filosofi engineering, standar kualitas kode, sertifikasi/stack. | Rilis 1 (Fase 3) |
+| **[tentang-kami.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/tentang-kami.html)** | `/tentang-kami` | Profil tim contoh dan draf informasi yang menunggu verifikasi serta persetujuan. | Draf |
 | **[blog.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/blog.html)** | `/blog` | Daftar artikel wawasan teknologi, tutorial rekayasa perangkat lunak, dan studi arsitektur sistem. | Rilis 1 (Fase 3) |
 | **[ketentuan-layanan.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/ketentuan-layanan.html)** | `/ketentuan-layanan` | Dokumen hukum syarat & ketentuan, garansi bug, kebijakan revisi (14 hari), SLA, dan kebijakan privasi (UU PDP). | Rilis 1 (Fase 3) |
 | **[404.html](file:///C:/FLUTTER PROJEK/gabut/OpenByteLabs/prototype/stitch/site/404.html)** | `/not-found` & fallback 404 | Tampilan error 404 berestetika bento serta layar fallback jika token pelacakan proyek tidak ditemukan. | Rilis 1 (Fase 3) |

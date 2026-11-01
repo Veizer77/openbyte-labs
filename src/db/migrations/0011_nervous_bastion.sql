@@ -1,0 +1,2 @@
+ALTER TABLE "faqs" ADD COLUMN "requires_tracking" boolean DEFAULT false NOT NULL;--> statement-breakpoint
+ALTER TABLE "faqs" ADD CONSTRAINT "faqs_tracking_release_check" CHECK (NOT "faqs"."requires_tracking" OR NOT "faqs"."is_active");

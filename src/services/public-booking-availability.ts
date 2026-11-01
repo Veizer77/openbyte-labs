@@ -1,0 +1,143 @@
+import "server-only";
+import { z } from "zod";
+import {
+  getDaySlots,
+  getSlots,
+  type DaySlot,
+  wibDay,
+  type AvailabilityRule,
+  type BlockedDate,
+  type ExistingBooking,
+} from "@/lib/booking";
+import type { BookingConfig } from "@/lib/booking";
+
+const inputSchema = z.object({ date: z.iso.date() }).strict();
+const monthInputSchema = z
+  .object({
+    month: z.iso.date().refine((value) => value.endsWith("-01"), {
+      message: "Bulan harus menggunakan tanggal pertama.",
+    }),
+  })
+  .strict();
+
+export interface PublicBookingSchedule {
+  config: BookingConfig;
+  consultationModes: Array<"google_meet" | "whatsapp_call" | "offline">;
+  rules: AvailabilityRule[];
+  blocks: BlockedDate[];
+  bookings: ExistingBooking[];
+}
+
+export interface PublicBookingAvailabilityStore {
+  readSchedule(date: string): Promise<PublicBookingSchedule>;
+  readMonth?(startDate: string, endDate: string): Promise<PublicBookingSchedule>;
+}
+
+export interface PublicBookingAvailability {
+  date: string;
+  consultationModes: PublicBookingSchedule["consultationModes"];
+  slots: ReturnType<typeof getSlots>;
+}
+
+export interface PublicBookingMonthAvailability {
+  month: string;
+  maxDate: string;
+  consultationModes: PublicBookingSchedule["consultationModes"];
+  days: Array<{ date: string; slots: DaySlot[] }>;
+}
+
+export async function getPublicBookingAvailability(
+  store: PublicBookingAvailabilityStore,
+  input: unknown,
+  now = new Date(),
+): Promise<PublicBookingAvailability> {
+  const { date } = inputSchema.parse(input);
+  if (!Number.isFinite(now.getTime())) throw new Error("Jam server tidak valid.");
+
+  const schedule = await store.readSchedule(date);
+  return {
+    date,
+    consultationModes: schedule.consultationModes,
+    slots: getSlots(
+      date,
+      now,
+      schedule.rules,
+      schedule.blocks,
+      schedule.bookings,
+      schedule.config,
+    ),
+  };
+}
+
+/** Reads a month's schedule in one store call, then computes each day's live slots. */
+export async function getPublicBookingMonthAvailability(
+  store: PublicBookingAvailabilityStore,
+  input: unknown,
+  now = new Date(),
+): Promise<PublicBookingMonthAvailability> {
+  const { month } = monthInputSchema.parse(input);
+  if (!Number.isFinite(now.getTime())) throw new Error("Jam server tidak valid.");
+
+  const [year, monthNumber] = month.slice(0, 7).split("-").map(Number);
+  const nextMonth = new Date(Date.UTC(year, monthNumber, 1))
+    .toISOString()
+    .slice(0, 10);
+  const daysInMonth = new Date(Date.UTC(year, monthNumber, 0)).getUTCDate();
+  const dates = Array.from(
+    { length: daysInMonth },
+    (_, index) => `${month.slice(0, 7)}-${String(index + 1).padStart(2, "0")}`,
+  );
+
+  if (store.readMonth) {
+    const schedule = await store.readMonth(month, nextMonth);
+    return {
+      month,
+      maxDate: new Date(
+        Date.parse(`${wibDay(now)}T00:00:00Z`) +
+          schedule.config.maxDaysAhead * 86_400_000,
+      )
+        .toISOString()
+        .slice(0, 10),
+      consultationModes: schedule.consultationModes,
+      days: dates.map((date) => ({
+        date,
+        slots: getDaySlots(
+          date,
+          now,
+          schedule.rules,
+          schedule.blocks,
+          schedule.bookings,
+          schedule.config,
+        ),
+      })),
+    };
+  }
+
+  const schedules = await Promise.all(
+    dates.map((date) => store.readSchedule(date)),
+  );
+  return {
+    month,
+    maxDate: new Date(
+      Date.parse(`${wibDay(now)}T00:00:00Z`) +
+        (schedules[0]?.config.maxDaysAhead ?? 0) * 86_400_000,
+    )
+      .toISOString()
+      .slice(0, 10),
+    consultationModes: schedules[0]?.consultationModes ?? [],
+    days: dates.map((date, index) => {
+      const schedule = schedules[index];
+      return {
+        date,
+        slots: getDaySlots(
+          date,
+          now,
+          schedule.rules,
+          schedule.blocks,
+          schedule.bookings,
+          schedule.config,
+        ),
+      };
+    }),
+  };
+}

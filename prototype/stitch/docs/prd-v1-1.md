@@ -3,7 +3,7 @@
 
 * **Versi:** 1.1.2 (kit infrastruktur Fase 0; sebelumnya 1.1.1: keputusan pemilik)
 * **Status:** Siap implementasi; domain wajib dimiliki sebelum Fase 6 (launch)
-* **Pemilik Produk:** Muhammad Izzat Farahidi (Personal Brand: Software Engineer & System Specialist)
+* **Pemilik Produk:** Belum ditetapkan; dokumen historis, bukan sumber spesifikasi aktif.
 * **Bahasa Antarmuka:** Indonesia saja
 * **Target Stack:** PHP 8.3+, Laravel 13, Filament (rilis stabil terbaru yang kompatibel dengan Laravel 13), Tailwind CSS, Alpine.js, PostgreSQL (Neon), deploy di Render (Docker), storage S3-compatible (Cloudflare R2)
 
@@ -46,7 +46,7 @@
 ## 1. Ikhtisar Produk & Brand Positioning
 
 ### 1.1 Visi Produk
-Platform digital terpadu untuk personal software house / digital agency milik **Muhammad Izzat**, dengan empat fungsi:
+Platform digital untuk OpenByte Labs, dengan empat fungsi yang masih memerlukan tinjauan pemilik:
 
 1. **Katalog Portofolio Terkurasi**: sistem skala instansi, kesehatan, utilitas, UMKM, mobile Flutter, dan undangan digital; seluruhnya dikelola dari CMS.
 2. **Mesin Konversi (Lead Generation)**: kalkulator estimasi, paket harga, pemesanan, booking konsultasi, dan integrasi WhatsApp.
@@ -701,10 +701,10 @@ Instansi / Pemdes; Aplikasi Mobile (Flutter); Bisnis & UMKM; Undangan Digital & 
 ### 8.2 Proyek Awal (dari v1.0)
 | Proyek | Kategori | Stack | Sorotan |
 |---|---|---|---|
-| SINDUKSADATI (Satu Data RW 06 Mojorejo) | Instansi / Pemdes | Next.js 14, PostGIS 3, InsForge (Postgres), Leaflet GIS, QR Surat | Peta batas wilayah RT/RW, Citizen 360, otomasi permohonan surat warga |
-| SIPANDU / Posyandu (Flamboyan RW 06) | Instansi / Pemdes | React 18 SPA, Vite, InsForge SDK, Vitest | Alur 5-Meja Kemenkes, kalkulator Z-Score WHO 2006, deteksi dini stunting (2T) |
-| HIPPAM Web & Mobile | Instansi / Pemdes + Aplikasi Mobile | Next.js 16, Flutter 3.x (Dart), Supabase PostgreSQL, RLS | Pembacaan meter air swadaya, kompresi foto meteran, tarif berjenjang |
-| UMKM-KU | Bisnis & UMKM | React Router v7, Neon Serverless Postgres, AWS S3 | Direktori UMKM warga, verifikasi NIK SINDUKSADATI, checkout via WhatsApp |
+| Proyek Contoh 1 | Organisasi contoh | Belum diverifikasi | Payload anonim; draf, belum disetujui |
+| Proyek Contoh 2 | Organisasi contoh | Belum diverifikasi | Payload anonim; draf, belum disetujui |
+| Proyek Contoh 3 | Organisasi contoh | Belum diverifikasi | Payload anonim; draf, belum disetujui |
+| Proyek Contoh 4 | Organisasi contoh | Belum diverifikasi | Payload anonim; draf, belum disetujui |
 | Terapis Jogoroto (Pijat Akupresur STPT) | Bisnis & UMKM | HTML5 Semantic, Modern CSS, WhatsApp Direct Booking | Landing page luxury warm gold, badge rating 5.0, alur terapi 5 langkah |
 | Prewed (Undangan Digital Fajar & Fifi) | Undangan Digital & Event | HTML5 Canvas Petal Animation, Web Audio API, Sheet RSVP Sync | Amplop 3D wax-seal, musik saxophone, RSVP terhubung spreadsheet |
 
@@ -759,8 +759,8 @@ Harga minimum kalkulator (Settings): **Rp 500.000**. Setelah 3-5 proyek pertama,
 ### 8.5 Nilai Awal Settings
 | Kunci | Nilai |
 |---|---|
-| Nomor WhatsApp utama | `0895386011371` (disimpan apa adanya, dinormalisasi ke `62895386011371` untuk tautan `wa.me`) |
-| Email kontak | `izzatfarahidi@gmail.com` (hanya ditampilkan sebagai kontak; sistem tidak mengirim email) |
+| Nomor WhatsApp utama | Belum dikonfigurasi |
+| Email kontak | Belum dikonfigurasi |
 | Kebijakan revisi | teks pada Lampiran C |
 | Masa revisi / masa garansi bug | 14 hari / 30 hari (usulan, dapat diubah) |
 
@@ -859,7 +859,7 @@ Harga minimum kalkulator (Settings): **Rp 500.000**. Setelah 3-5 proyek pertama,
 |---|---|---|
 | 1 | Harga awal | Setara freelancer junior; nilai awal di 8.4, dapat diubah di CMS kapan saja |
 | 2 | Kuota revisi | Naik sesuai harga paket: 2 / 3 / 4 revisi; biaya tambahan Rp 100.000 / 250.000 / 300.000 |
-| 3 | Kontak | WhatsApp 0895386011371; email izzatfarahidi@gmail.com |
+| 3 | Kontak | Belum dikonfigurasi |
 | 4 | Domain | Belum punya; rencana pada 7.6 |
 | 5 | Notifikasi admin | Panel Filament + WhatsApp; tanpa email |
 | 6 | Proyek selesai ke portofolio | Ya, diusulkan otomatis (5.6) |

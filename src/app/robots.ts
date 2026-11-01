@@ -1,5 +1,6 @@
-import type { MetadataRoute } from 'next'
-
+import type { MetadataRoute } from "next";
+import { publicIndexingEnabled, publicSiteOrigin } from "@/lib/indexing";
 export default function robots(): MetadataRoute.Robots {
-  return { rules: { userAgent: '*', disallow: '/' } }
+  if (publicIndexingEnabled()) return { rules: { userAgent: "*", allow: "/", disallow: ["/admin", "/tracking", "/api", "/preview", "/pesan", "/konsultasi"] }, sitemap: `${publicSiteOrigin()}/sitemap.xml` };
+  return { rules: { userAgent: "*", disallow: "/" } };
 }

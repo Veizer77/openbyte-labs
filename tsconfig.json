@@ -2,13 +2,14 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ES2022"
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
+    "allowJs": false,
+    "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "skipLibCheck": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -25,8 +26,7 @@
       "@/*": [
         "./src/*"
       ]
-    },
-    "allowJs": true
+    }
   },
   "include": [
     "next-env.d.ts",
@@ -34,13 +34,13 @@
     "src/**/*.tsx",
     "tests/**/*.ts",
     "*.ts",
-    "*.mts",
     ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
+    ".next/dev/types/**/*.ts",
+    ".next/tracking-browser/types/**/*.ts",
+    ".next/tracking-browser/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "prototype",
-    ".workbuddy-ai"
+    "prototype"
   ]
 }

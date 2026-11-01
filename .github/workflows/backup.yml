@@ -1,43 +1,40 @@
-name: Backup manual (verifikasi ulang PRD 1.5)
-
+name: Encrypted database backup
 on:
   workflow_dispatch:
-
+  schedule:
+    - cron: "17 19 * * *"
 permissions:
   contents: read
-
+concurrency:
+  group: database-backup
+  cancel-in-progress: false
 jobs:
   backup:
-    runs-on: ubuntu-latest
-    env:
-      DATABASE_URI_DIRECT: ${{ secrets.DATABASE_URI_DIRECT }}
-      BACKUP_PASSPHRASE: ${{ secrets.BACKUP_PASSPHRASE }}
-      PG_MAJOR: ${{ vars.PG_MAJOR }}
-      BACKUP_R2_BUCKET: ${{ vars.BACKUP_R2_BUCKET }}
-      R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.BACKUP_R2_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_R2_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: auto
+    if: vars.BACKUP_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: backup
     steps:
-      - name: Validasi konfigurasi tanpa mencetak rahasia
-        shell: bash
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install PostgreSQL 17 client
         run: |
-          set -euo pipefail
-          for key in DATABASE_URI_DIRECT BACKUP_PASSPHRASE PG_MAJOR BACKUP_R2_BUCKET R2_ACCOUNT_ID AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY; do
-            if [ -z "${!key:-}" ]; then echo "Konfigurasi wajib belum tersedia: $key"; exit 1; fi
-          done
-          [[ "$PG_MAJOR" =~ ^[0-9]+$ ]]
-      - name: Dump dan enkripsi
-        shell: bash
-        run: |
-          set -euo pipefail
-          umask 077
-          trap 'rm -f backup.dump' EXIT
-          docker run --rm -e DATABASE_URI_DIRECT "postgres:${PG_MAJOR}" sh -c 'exec pg_dump --format=custom --no-owner "$DATABASE_URI_DIRECT"' > backup.dump
-          test -s backup.dump
-          printf '%s' "$BACKUP_PASSPHRASE" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --symmetric --cipher-algo AES256 -o "backup-$(date -u +%Y%m%dT%H%M%SZ).dump.gpg" backup.dump
-      - name: Unggah berkas terenkripsi ke bucket cadangan
-        shell: bash
-        run: |
-          set -euo pipefail
-          aws s3 cp backup-*.dump.gpg "s3://${BACKUP_R2_BUCKET}/" --endpoint-url "https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y postgresql-client-17
+      - run: pnpm db:backup
+        env:
+          PG_DUMP_BIN: /usr/lib/postgresql/17/bin/pg_dump
+          BACKUP_DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+          BACKUP_DATABASE_TARGET: ${{ secrets.BACKUP_DATABASE_TARGET }}
+          BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
+          BACKUP_R2_ACCOUNT_ID: ${{ secrets.BACKUP_R2_ACCOUNT_ID }}
+          BACKUP_R2_BUCKET: ${{ secrets.BACKUP_R2_BUCKET }}
+          BACKUP_R2_ACCESS_KEY_ID: ${{ secrets.BACKUP_R2_ACCESS_KEY_ID }}
+          BACKUP_R2_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_R2_SECRET_ACCESS_KEY }}

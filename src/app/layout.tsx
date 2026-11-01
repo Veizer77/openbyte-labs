@@ -1,30 +1,41 @@
-import type { Metadata, Viewport } from 'next'
-import './globals.css'
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { PreviewProvider } from "@/components/preview/PreviewProvider";
+import "./globals.css";
+import { publicIndexingEnabled, publicSiteOrigin } from "@/lib/indexing";
+
+const inter = localFont({
+  src: "../../public/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
+  display: "swap",
+  variable: "--font-inter",
+  weight: "100 900",
+});
 
 export const metadata: Metadata = {
-  title: 'OpenByte Labs • Rekayasa Perangkat Lunak & Sistem Presisi Tinggi',
-  description:
-    'Membangun arsitektur web dan mobile modern untuk instansi dan bisnis. Skalabilitas tinggi, performa tanpa kompromi, dan jaminan kode produksi yang siap diaudit.',
-  icons: {
-    icon: '/brand/openbyte-labs-square-icon-1-1-logo-only.svg',
+  metadataBase: new URL(publicSiteOrigin() ?? "https://openbyte.invalid"),
+  title: {
+    default: "OpenByte Labs | Website, Aplikasi & Sistem Informasi",
+    template: "%s | OpenByte Labs",
   },
-}
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-}
+  description:
+    "Website bisnis, aplikasi mobile Flutter, dan sistem informasi dari OpenByte Labs.",
+  robots: { index: publicIndexingEnabled(), follow: publicIndexingEnabled() },
+  icons: { icon: "/brand/openbyte-labs-square-icon-1-1-logo-only.svg" },
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="id">
-      <body className="min-h-screen bg-[#ffffff] text-[#18181a] antialiased">
-        {children}
+    <html lang="id" className={inter.variable} data-scroll-behavior="smooth">
+      <body>
+        <a className="skip-link" href="#konten">
+          Lewati ke konten
+        </a>
+        <PreviewProvider>{children}</PreviewProvider>
       </body>
     </html>
-  )
+  );
 }

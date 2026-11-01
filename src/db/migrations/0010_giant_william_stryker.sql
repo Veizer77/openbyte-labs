@@ -1,0 +1,1 @@
+ALTER TABLE "faqs" ADD CONSTRAINT "faqs_sort_order_check" CHECK ("faqs"."sort_order" >= 0);

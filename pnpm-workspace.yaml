@@ -1,15 +1,10 @@
 allowBuilds:
   esbuild: true
-  sharp: true
   unrs-resolver: true
-minimumReleaseAgeExclude:
-  - '@better-auth/core@1.7.14'
-  - '@better-auth/drizzle-adapter@1.7.14'
-  - '@better-auth/kysely-adapter@1.7.14'
-  - '@better-auth/memory-adapter@1.7.14'
-  - '@better-auth/mongo-adapter@1.7.14'
-  - '@better-auth/prisma-adapter@1.7.14'
-  - '@better-auth/telemetry@1.7.14'
-  - better-auth@1.7.14
-  - '@aws-sdk/client-s3@3.1158.0'
-  - '@aws-sdk/s3-request-presigner@3.1158.0'
+
+# @esbuild-kit/core-utils is no longer maintained and pins a vulnerable
+# esbuild 0.18.x. Its loader uses the stable transform/build APIs in 0.25.x.
+overrides:
+  '@esbuild-kit/core-utils>esbuild': 0.25.12
+  '@sentry/bundler-plugins>glob': 14.0.2
+  'glob>minimatch': 11.0.1

@@ -39,6 +39,10 @@ yarn-error.log*
 next-env.d.ts
 
 .env
+!.env.example
+
+# Local scratch space (downloaded tools, temporary clusters); never committed
+/.local/
 
 /media
 
@@ -50,3 +54,13 @@ node_modules/
 /playwright/.cache/
 .env*
 !.env.example
+/artifacts/
+.neon
+/.workbuddy-ai/
+/.opencode/
+/backups/
+*.dump
+*.dump.enc
+
+.vercel
+.env*
