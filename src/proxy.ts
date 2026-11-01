@@ -34,7 +34,8 @@ export function proxy(request: NextRequest) {
     "style-src-attr 'unsafe-inline'",
     `img-src ${imageSources.join(" ")}`,
     "font-src 'self' data:",
-    `connect-src 'self' https://challenges.cloudflare.com ${r2UploadOrigins().join(" ")} ${monitoringOrigin()}`,
+    // Turnstile calls per-customer subdomains such as hagen.challenges.cloudflare.com.
+    `connect-src 'self' https://challenges.cloudflare.com https://*.challenges.cloudflare.com ${r2UploadOrigins().join(" ")} ${monitoringOrigin()}`,
     "frame-src https://challenges.cloudflare.com https://www.youtube-nocookie.com https://player.vimeo.com",
     "object-src 'none'",
     "base-uri 'self'",
