@@ -27,11 +27,11 @@ const serviceIconNames: Record<string, string> = {
   Rocket: "rocket_launch",
   ShieldCheck: "verified_user",
   ShoppingCart: "shopping_cart",
-  Smartphone: "smartphone",
+  Smartphone: "phone_iphone",
   Sparkles: "auto_awesome",
   Video: "videocam",
   Workflow: "account_tree",
-  Zap: "bolt",
+  Zap: "speed",
 };
 
 function renderInline(nodes: RichTextInline[]) {
@@ -89,7 +89,7 @@ function renderRichText(blocks: RichText["blocks"]) {
 export function PublicHomeServices({
   services,
   title = "Layanan Unggulan",
-  description = "Solusi yang tersedia mengikuti layanan yang telah dipublikasikan. Rincian dapat disesuaikan dengan kebutuhan proyek.",
+  description = "Cakupan, teknologi, pengujian, dan dokumentasi dibahas serta disepakati untuk setiap proyek.",
   idSuffix = "home",
 }: {
   services: HomeService[];
@@ -100,68 +100,79 @@ export function PublicHomeServices({
   const headingId = `home-services-heading-${idSuffix}`;
   return (
     <section
-      aria-labelledby="home-services-heading"
-      className="flex w-full flex-col gap-5"
-      data-section-padding="true"
+      aria-labelledby={headingId}
+      className="box-border w-full h-fit shrink-0 flex flex-col gap-[20px] justify-start items-start"
     >
-      <div className="flex w-full flex-col items-start justify-between gap-3 md:flex-row md:items-end">
-        <div>
-          <p className="mb-1 text-[11px] font-medium tracking-[.55px] text-[#595962]">
+      <div className="box-border w-full h-fit shrink-0 flex flex-col md:flex-row gap-[12px] justify-between items-start md:items-end">
+        <div className="flex flex-col gap-[4px] justify-start items-start">
+          <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
             KATALOG REKAYASA &amp; EKSEKUSI
-          </p>
+          </div>
           <h2
             id={headingId}
-            className="m-0 text-[28px] font-semibold tracking-[-.56px] text-[#18181a]"
+            className="text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.56px] text-left [white-space:nowrap] m-0"
           >
             {title}
           </h2>
         </div>
-        <p className="m-0 max-w-md text-[13px] leading-5 text-[#52525b]">
+        <div className="text-[13px]/[18px] box-border max-w-[448px] text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left">
           {description}
-        </p>
+        </div>
       </div>
 
       {services.length ? (
-        <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {services.map((service) => (
-            <article
-              key={service.id}
-              className="flex h-full flex-col gap-4 rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-[0_1px_3px_#0000000d]"
-            >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#f0f0f0] text-[#18181a]">
-                <span
-                  aria-hidden="true"
-                  className="symbol font-['Material_Symbols_Outlined',system-ui,sans-serif] text-2xl leading-none"
-                >
-                  {serviceIconNames[service.icon] ?? "layers"}
-                </span>
-              </div>
-              <div className="flex-1">
-                <h3 className="m-0 text-lg font-semibold tracking-[-.2px] text-[#18181a]">
-                  {service.title}
-                </h3>
-                <p className="mb-0 mt-2 text-sm leading-5 text-[#52525b]">
-                  {service.description}
-                </p>
-                {service.highlights.length ? (
-                  <ul className="mb-0 mt-4 space-y-2 pl-4 text-xs leading-5 text-[#52525b]">
-                    {service.highlights.slice(0, 3).map((highlight) => (
-                      <li key={highlight}>{highlight}</li>
-                    ))}
-                  </ul>
-                ) : null}
-              </div>
-              <Link
-                href="/paket"
-                className="inline-flex w-fit items-center gap-1 border-t border-neutral-100 pt-3 text-[13px] font-semibold text-[#18181a] no-underline hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#586016]"
+        <div className="box-border w-full grid grid-cols-1 lg:grid-cols-12 gap-[20px] items-stretch">
+          {services.map((service, index) => {
+            // Asymmetric Bento: Row 1 = 7 cols + 5 cols; Row 2 = 5 cols + 7 cols
+            const isWide = index % 4 === 0 || index % 4 === 3;
+            const colSpan = isWide ? "lg:col-span-7" : "lg:col-span-5";
+            const iconName = serviceIconNames[service.icon] ?? "dataset";
+
+            return (
+              <article
+                key={service.id}
+                className={`box-border ${colSpan} [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col justify-between p-[24px] bg-[#ffffff] rounded-[16px] min-h-[230px]`}
               >
-                Lihat paket
-                <span aria-hidden="true" className="symbol text-sm">
-                  arrow_forward
-                </span>
-              </Link>
-            </article>
-          ))}
+                <div className="box-border w-full flex flex-col gap-0 pb-[20px] justify-start items-start">
+                  <div className="box-border w-[40px] h-[40px] shrink-0 flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[12px] text-[#18181a]">
+                    <span
+                      aria-hidden="true"
+                      className="text-[24px]/[24px] box-border font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+                    >
+                      {iconName}
+                    </span>
+                  </div>
+                  <div className="box-border w-full h-[20px] shrink-0" />
+                  <h3 className="text-[20px]/[26px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left m-0">
+                    {service.title}
+                  </h3>
+                  <div className="box-border w-full h-[4px] shrink-0" />
+                  <p className="text-[14px]/[20px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left m-0">
+                    {service.description}
+                  </p>
+                </div>
+                <div className="box-border w-full flex flex-row gap-0 pt-[12px] justify-between items-center border-t border-neutral-100">
+                  <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+                    {service.highlights[0] ?? "Sektor & ruang lingkup dibahas per proyek"}
+                  </div>
+                  <Link
+                    href="/paket"
+                    className="box-border w-fit shrink-0 h-[20px] flex flex-row gap-[4px] justify-start items-center text-inherit no-underline hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016]"
+                  >
+                    <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]">
+                      Pelajari Solusi
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="text-[14px]/[20px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+                    >
+                      arrow_forward
+                    </span>
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
       ) : (
         <p className="m-0 rounded-xl border border-neutral-200 p-5 text-sm text-[#52525b]">
@@ -174,7 +185,7 @@ export function PublicHomeServices({
 
 export function PublicHomeProjects({
   projects,
-  title = "Proyek Pilihan",
+  title = "Proyek contoh menunggu tinjauan",
   limit = 3,
   featuredOnly = true,
   idSuffix = "home",
@@ -192,109 +203,112 @@ export function PublicHomeProjects({
 
   return (
     <section
-      aria-labelledby="home-projects-heading"
-      className="mt-2 flex w-full flex-col gap-5"
-      data-section-padding="true"
+      aria-labelledby={headingId}
+      className="box-border w-full h-fit shrink-0 flex flex-col gap-[20px] justify-start items-start"
     >
-      <div className="flex w-full items-end justify-between gap-3">
-        <div>
-          <p className="mb-1 text-[11px] font-medium tracking-[.55px] text-[#595962]">
-            STUDI KASUS
-          </p>
+      <div className="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-end">
+        <div className="box-border w-fit shrink-0 flex flex-col gap-[4px] justify-start items-start">
+          <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+            PROYEK PILIHAN • DRAF
+          </div>
           <h2
             id={headingId}
-            className="m-0 text-[28px] font-semibold tracking-[-.56px] text-[#18181a]"
+            className="text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.56px] text-left [white-space:nowrap] m-0"
           >
             {title}
           </h2>
         </div>
         <Link
           href="/proyek"
-          className="inline-flex shrink-0 items-center gap-1 text-[13px] font-semibold text-[#18181a] no-underline hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#586016]"
+          className="box-border w-fit shrink-0 h-[20px] flex flex-row gap-[4px] justify-start items-center text-inherit no-underline hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016]"
         >
-          Semua proyek
-          <span aria-hidden="true" className="symbol text-sm">
+          <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]">
+            Buka Semua Studi Kasus
+          </span>
+          <span
+            aria-hidden="true"
+            className="text-[14px]/[20px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+          >
             arrow_forward
           </span>
         </Link>
       </div>
 
       {featuredProjects.length ? (
-        <div className="grid w-full grid-cols-1 items-stretch gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="box-border w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[20px] items-stretch">
           {featuredProjects.map((project) => (
-            <HomeProjectCard key={project.slug} project={project} />
+            <article
+              key={project.slug}
+              className="box-border [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col justify-between items-start bg-[#ffffff] rounded-[16px] overflow-hidden"
+            >
+              <div className="box-border w-full h-[192px] shrink-0 bg-[#18181a] relative overflow-hidden">
+                {project.imageUrl ? (
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.imageAlt || project.title}
+                    fill
+                    unoptimized
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                ) : (
+                  <div
+                    role="img"
+                    aria-label={project.imageAlt || `Gambar ${project.title}`}
+                    className="w-full h-full flex items-center justify-center text-xs text-[#a8a8ad] bg-[#242427]"
+                  >
+                    Gambar proyek belum tersedia
+                  </div>
+                )}
+              </div>
+              <div className="box-border w-full flex-1 flex flex-col p-[24px] justify-between items-start gap-4">
+                <div className="box-border w-full flex flex-col gap-[4px] justify-start items-start">
+                  <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+                    {project.categories[0] ?? "Kategori Belum Diverifikasi"}
+                  </div>
+                  <h3 className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left m-0">
+                    {project.title}
+                  </h3>
+                  <p className="text-[14px]/[20px] box-border w-full text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left m-0 line-clamp-2">
+                    {project.tagline || project.summary}
+                  </p>
+                </div>
+                <div className="box-border w-full flex flex-row gap-0 pt-[8px] justify-between items-center border-t border-neutral-100">
+                  <div className="text-[11px]/[14px] box-border text-[#82b440] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+                    {project.isFeatured ? "Unggulan • Terverifikasi" : "Draf • belum disetujui"}
+                  </div>
+                  <Link
+                    href={`/proyek/${encodeURIComponent(project.slug)}`}
+                    className="box-border w-fit shrink-0 h-[18px] flex flex-row gap-[4px] justify-start items-center text-inherit no-underline hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016]"
+                  >
+                    <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]">
+                      Studi Kasus
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="text-[12px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+                    >
+                      arrow_forward
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </article>
           ))}
         </div>
       ) : (
         <p className="m-0 rounded-xl border border-neutral-200 p-5 text-sm text-[#52525b]">
-          Belum ada proyek unggulan yang dipublikasikan.
+          Belum ada proyek yang dipublikasikan.
         </p>
       )}
     </section>
   );
 }
 
-function HomeProjectCard({ project }: { project: HomeProject }) {
-  return (
-    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-neutral-200/80 bg-white shadow-[0_1px_3px_#0000000d]">
-      <Link
-        href={`/proyek/${encodeURIComponent(project.slug)}`}
-        aria-label={`Lihat proyek ${project.title}`}
-        className="group flex h-full flex-col text-inherit no-underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016]"
-      >
-        {project.imageUrl ? (
-          <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#f0f0f0]">
-            <Image
-              src={project.imageUrl}
-              alt={project.imageAlt || project.title}
-              fill
-              unoptimized
-              sizes="(max-width: 768px) 100vw, (max-width: 1199px) 50vw, 33vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-            />
-          </div>
-        ) : (
-          <div
-            role="img"
-            aria-label={`Gambar ${project.title} belum tersedia`}
-            className="flex aspect-[16/9] w-full items-center justify-center bg-[#f0f0f0] text-sm text-[#52525b]"
-          >
-            Gambar proyek belum tersedia
-          </div>
-        )}
-        <div className="flex flex-1 flex-col p-5">
-          {project.categories.length ? (
-            <div className="mb-3 flex flex-wrap gap-2">
-              {project.categories.slice(0, 2).map((category) => (
-                <span
-                  key={category}
-                  className="rounded-md bg-[#f0f0f0] px-2 py-1 text-[11px] text-[#52525b]"
-                >
-                  {category}
-                </span>
-              ))}
-            </div>
-          ) : null}
-          <h3 className="m-0 text-lg font-semibold text-[#18181a]">
-            {project.title}
-          </h3>
-          <p className="mb-0 mt-2 text-sm leading-5 text-[#52525b]">
-            {project.tagline || project.summary}
-          </p>
-          <div className="mt-4 flex items-center justify-between gap-3 border-t border-neutral-100 pt-3 text-[11px] text-[#52525b]">
-            <span>{project.clientName ?? "Studi kasus"}</span>
-            {project.year ? <span>{project.year}</span> : null}
-          </div>
-        </div>
-      </Link>
-    </article>
-  );
-}
-
 export function PublicHomeFaqs({
   faqs,
-  title = "Informasi sebelum memulai",
-  limit = 6,
+  title = "Informasi Proyek",
+  limit = 4,
   showContact = true,
   idSuffix = "home",
 }: {
@@ -307,83 +321,80 @@ export function PublicHomeFaqs({
   const visibleFaqs = faqs.slice(0, limit);
   const headingId = `home-faq-heading-${idSuffix}`;
   return (
-    <section
+    <div
       aria-labelledby={headingId}
-      className={`grid w-full grid-cols-1 items-stretch gap-5 ${showContact ? "lg:grid-cols-12" : ""}`}
+      className="box-border w-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[12px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
     >
-      {showContact ? <div className="flex flex-col justify-between gap-6 rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-[0_1px_3px_#0000000d] lg:col-span-5">
-        <div>
-          <p className="mb-1 text-[11px] font-medium tracking-[.55px] text-[#595962]">
-            KONSULTASI
-          </p>
-          <h2 className="m-0 text-xl font-semibold tracking-[-.3px] text-[#18181a]">
-            Bahas kebutuhan proyek Anda
-          </h2>
-          <p className="mb-0 mt-3 text-sm leading-6 text-[#52525b]">
-            Ceritakan tujuan, calon pengguna, dan kendala yang ingin ditangani.
-            Tim kami dapat membantu merumuskan ruang lingkup solusi.
-          </p>
+      <div className="box-border w-full flex flex-col gap-[4px] justify-start items-start">
+        <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+          PERTANYAAN UMUM
         </div>
-        <Link
-          href="/konsultasi"
-          className="inline-flex w-fit items-center gap-2 rounded-lg bg-[#18181a] px-4 py-3 text-[13px] font-semibold text-white no-underline hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#586016]"
+        <h2
+          id={headingId}
+          className="text-[20px]/[26px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap] m-0"
         >
-          Jadwalkan konsultasi
-          <span aria-hidden="true" className="symbol text-base">
-            arrow_forward
-          </span>
-        </Link>
-      </div> : null}
+          {title}
+        </h2>
+      </div>
 
-      <div className={`flex flex-col gap-4 rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-[0_1px_3px_#0000000d] ${showContact ? "lg:col-span-7" : "lg:col-span-1"}`}>
-        <div>
-          <p className="mb-1 text-[11px] font-medium tracking-[.55px] text-[#595962]">
-            PERTANYAAN UMUM
-          </p>
-          <h2
-            id={headingId}
-            className="m-0 text-xl font-semibold tracking-[-.3px] text-[#18181a]"
-          >
-            {title}
-          </h2>
-        </div>
-
+      <div className="box-border w-full flex flex-col gap-[8px] justify-start items-start">
         {visibleFaqs.length ? (
-          <div className="flex w-full flex-col gap-2">
-            {visibleFaqs.map((faq) => (
-              <details
-                key={faq.id}
-                className="group rounded-xl bg-[#f0f0f0] p-3"
-              >
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-[13px] font-semibold text-[#18181a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016] [&::-webkit-details-marker]:hidden">
+          visibleFaqs.map((faq) => (
+            <details
+              key={faq.id}
+              className="group box-border w-full flex flex-col gap-0 p-[12px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+            >
+              <summary className="box-border w-full flex flex-row gap-0 justify-between items-center cursor-pointer list-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016] [&::-webkit-details-marker]:hidden">
+                <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left">
                   {faq.question}
-                  <span
-                    aria-hidden="true"
-                    className="symbol shrink-0 text-xl leading-5 text-[#52525b] transition-transform group-open:rotate-180"
-                  >
-                    expand_more
-                  </span>
-                </summary>
-                <div className="mt-3 space-y-3 border-t border-neutral-200/80 pt-3">
-                  {renderRichText(faq.answer.blocks)}
-                </div>
-              </details>
-            ))}
-          </div>
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="text-[24px]/[24px] box-border text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol shrink-0 transition-transform group-open:rotate-180"
+                >
+                  expand_more
+                </span>
+              </summary>
+              <div className="mt-3 space-y-2 border-t border-neutral-200/80 pt-3 text-[13px]/[19px] text-[#52525b]">
+                {renderRichText(faq.answer.blocks)}
+              </div>
+            </details>
+          ))
         ) : (
           <p className="m-0 text-sm leading-6 text-[#52525b]">
             Belum ada pertanyaan umum yang dipublikasikan.
           </p>
         )}
       </div>
-    </section>
+
+      {showContact ? (
+        <div className="box-border w-full flex flex-col sm:flex-row gap-3 p-[12px] justify-between items-start sm:items-center bg-[#f0f0f0] rounded-[12px]">
+          <div className="flex flex-col gap-[4px] justify-start items-start">
+            <div className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]">
+              Ada pertanyaan teknis spesifik?
+            </div>
+            <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left">
+              Konsultasikan kebutuhan arsitektur Anda langsung bersama Engineer.
+            </div>
+          </div>
+          <Link
+            href="/konsultasi"
+            className="box-border w-fit shrink-0 flex flex-col gap-0 p-[8px_14px] justify-center items-center bg-[#18181a] rounded-[8px] text-inherit no-underline hover:opacity-85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016]"
+          >
+            <span className="text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]">
+              Jadwalkan Diskusi
+            </span>
+          </Link>
+        </div>
+      ) : null}
+    </div>
   );
 }
 
 export function PublicTestimonials({
   testimonials,
-  title = "Cerita klien",
-  limit = 6,
+  title = "Testimoni Klien",
+  limit = 2,
   idSuffix = "home",
 }: {
   testimonials: HomeTestimonial[];
@@ -393,29 +404,115 @@ export function PublicTestimonials({
 }) {
   const visible = testimonials.slice(0, limit);
   const headingId = `public-testimonials-title-${idSuffix}`;
-  if (!visible.length) return null;
+
   return (
-    <section aria-labelledby={headingId} className="flex w-full flex-col gap-5">
-      <div>
-        <p className="mb-1 text-[11px] font-medium tracking-[.55px] text-[#595962]">TESTIMONI</p>
-        <h2 id={headingId} className="m-0 text-[28px] font-semibold tracking-[-.56px] text-[#18181a]">{title}</h2>
+    <div
+      aria-labelledby={headingId}
+      className="box-border w-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col justify-between p-[24px] bg-[#ffffff] rounded-[16px] min-h-[440px]"
+    >
+      <div className="box-border w-full flex flex-col gap-0 justify-start items-start">
+        <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+          TESTIMONI • DIVERIFIKASI
+        </div>
+        <div className="box-border w-full h-[4px] shrink-0" />
+        <h2
+          id={headingId}
+          className="text-[20px]/[26px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap] m-0"
+        >
+          {title}
+        </h2>
+        <div className="box-border w-full h-[12px] shrink-0" />
+        <div className="box-border w-full flex flex-col gap-[12px] justify-start items-start">
+          {visible.length ? (
+            visible.map((testimonial, index) => (
+              <figure
+                key={`${testimonial.authorName}-${index}`}
+                className="box-border w-full m-0 flex flex-col gap-[8px] p-[12px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+              >
+                <div className="box-border w-full flex flex-row gap-[4px] justify-start items-center">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <span
+                      key={i}
+                      className="text-[14px]/[20px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+                    >
+                      more_horiz
+                    </span>
+                  ))}
+                </div>
+                <blockquote className="text-[14px]/[20px] box-border w-full text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal italic text-left m-0">
+                  “{testimonial.quote}”
+                </blockquote>
+                <figcaption className="box-border w-full flex flex-row gap-[12px] justify-start items-center pt-1">
+                  <div className="box-border w-[32px] shrink-0 h-[32px] flex flex-col justify-center items-center bg-[#e2e2e2] rounded-[9999px] overflow-hidden">
+                    {testimonial.photoUrl ? (
+                      <Image
+                        src={testimonial.photoUrl}
+                        alt={testimonial.authorName}
+                        width={32}
+                        height={32}
+                        unoptimized
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-[12px]/[16px] text-[#18181a] font-bold">
+                        {testimonial.authorName.charAt(0)}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-[2px] justify-start items-start">
+                    <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]">
+                      {testimonial.authorName}
+                    </span>
+                    <span className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+                      {testimonial.authorRole ?? "Klien OpenByte Labs"}
+                    </span>
+                  </div>
+                </figcaption>
+              </figure>
+            ))
+          ) : (
+            <div className="box-border w-full flex flex-col gap-[8px] p-[12px] justify-start items-start bg-[#f0f0f0] rounded-[12px]">
+              <div className="box-border w-full flex flex-row gap-[4px] justify-start items-center">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <span
+                    key={i}
+                    className="text-[14px]/[20px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+                  >
+                    more_horiz
+                  </span>
+                ))}
+              </div>
+              <p className="text-[14px]/[20px] box-border w-full text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal italic text-left m-0">
+                Testimoni menunggu persetujuan rilis. Hasil kerja dan dokumen serah terima diverifikasi untuk setiap sistem.
+              </p>
+              <div className="box-border w-full flex flex-row gap-[12px] justify-start items-center">
+                <div className="box-border w-[32px] shrink-0 h-[32px] flex flex-col justify-center items-center bg-[#e2e2e2] rounded-[9999px]">
+                  <span className="text-[12px]/[16px] text-[#18181a] font-bold">—</span>
+                </div>
+                <div className="flex flex-col gap-[2px] justify-start items-start">
+                  <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left">
+                    Klien Terverifikasi
+                  </span>
+                  <span className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left">
+                    Instansi &amp; Pengelola Sistem
+                  </span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {visible.map((testimonial, index) => (
-          <figure key={`${testimonial.authorName}-${index}`} className="m-0 flex h-full flex-col gap-5 rounded-2xl border border-neutral-200 bg-white p-6">
-            <blockquote className="m-0 flex-1 text-sm leading-6 text-[#52525b]">“{testimonial.quote}”</blockquote>
-            <figcaption className="flex items-center gap-3 border-t border-neutral-100 pt-4">
-              {testimonial.photoUrl ? (
-                <Image src={testimonial.photoUrl} alt="" width={40} height={40} unoptimized className="h-10 w-10 rounded-full object-cover" />
-              ) : null}
-              <span className="flex flex-col">
-                <span className="text-sm font-semibold text-[#18181a]">{testimonial.authorName}</span>
-                {testimonial.authorRole ? <span className="text-xs text-[#71717a]">{testimonial.authorRole}</span> : null}
-              </span>
-            </figcaption>
-          </figure>
-        ))}
+      <div className="box-border w-full flex flex-row gap-[8px] pt-[16px] justify-start items-center border-t border-neutral-100">
+        <span
+          aria-hidden="true"
+          className="text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+        >
+          verified
+        </span>
+        <span className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+          Dokumen serah terima dibahas dan disepakati per proyek
+        </span>
       </div>
-    </section>
+    </div>
   );
 }

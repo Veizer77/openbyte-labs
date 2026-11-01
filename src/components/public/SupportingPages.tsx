@@ -16,15 +16,13 @@ function PageFrame({
   settings?: PublicSiteSettings;
 }) {
   return (
-    <div className="screen public-screen relative w-full min-h-screen flex flex-col justify-start items-stretch bg-white">
+    <div className="box-border w-full min-h-screen flex flex-col justify-start items-stretch bg-white overflow-x-hidden relative screen public-screen">
       <PublicHeader settings={settings} />
       <main
         id="konten"
-        className="pt-[96px] pb-16 px-4 sm:px-6 lg:px-8 w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto flex-1"
+        className="pt-[72px] pb-16 px-4 sm:px-6 lg:px-8 w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto flex-1"
       >
-        <div className="max-w-[1000px] mx-auto">
-          {children}
-        </div>
+        {children}
       </main>
       <PublicFooter settings={settings} />
     </div>
@@ -51,13 +49,14 @@ export async function OrderPage({
     } catch {
       return (
         <PageFrame>
-          <h1 className="text-2xl font-semibold text-[#18181a]">
-            Paket belum dapat dimuat
-          </h1>
-          <p role="alert" className="text-sm leading-6 text-[#52525b]">
-            Rincian paket belum dapat dimuat. Silakan coba kembali beberapa
-            saat lagi.
-          </p>
+          <div className="max-w-2xl mx-auto py-12">
+            <h1 className="text-2xl font-semibold text-[#18181a]">
+              Paket belum dapat dimuat
+            </h1>
+            <p role="alert" className="text-sm leading-6 text-[#52525b] mt-2">
+              Rincian paket belum dapat dimuat. Silakan coba kembali beberapa saat lagi.
+            </p>
+          </div>
         </PageFrame>
       );
     }
@@ -71,24 +70,34 @@ export async function OrderPage({
   }
   return (
     <PageFrame settings={settings}>
-      <div className="text-[11px] text-[#52525b]">PAKET & PENAWARAN</div>
-      <h1 className="text-[28px] tracking-[-.7px] mt-3 mb-2">
-        Ceritakan kebutuhan proyek Anda.
-      </h1>
-      <p className="text-sm text-[#52525b] leading-6 mb-6">
-        {packageName
-          ? `Paket dipilih: ${packageName}. `
-          : "Pilih layanan yang sesuai. "}
-        Harga final dan ruang lingkup dicantumkan dalam penawaran tertulis.
-      </p>
-      <section className="p-6 rounded-2xl bg-white shadow-[0_1px_8px_#0000000a]">
-        <ContactForm
-          packageName={packageName}
-          packageId={packageId}
-          consentText={settings?.legal.consentText}
-          className="flex flex-col gap-4"
-        />
-      </section>
+      <div className="max-w-3xl mx-auto py-6 flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <div className="w-fit flex items-center gap-2 p-[4px_10px] bg-[#f0f0f0] rounded-full">
+            <span className="w-2 h-2 rounded-full bg-[#82b440]" />
+            <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
+              FORMULIR PEMESANAN &amp; PENAWARAN RESMI
+            </span>
+          </div>
+          <h1 className="text-[28px]/[36px] sm:text-[34px]/[42px] font-semibold text-[#18181a] tracking-[-0.7px] m-0">
+            Ceritakan Kebutuhan Proyek Anda
+          </h1>
+          <p className="text-sm text-[#52525b] leading-6 m-0">
+            {packageName
+              ? `Paket dipilih: ${packageName}. `
+              : "Pilih layanan dan sampaikan kebutuhan spesifik Anda. "}
+            Rincian penawaran resmi, jadwal pengerjaan, dan estimasi biaya tertulis akan kami kirimkan.
+          </p>
+        </div>
+
+        <section className="p-6 sm:p-8 rounded-[16px] bg-[#ffffff] border border-neutral-200/80 shadow-[0px_1px_3px_#0000000d]">
+          <ContactForm
+            packageName={packageName}
+            packageId={packageId}
+            consentText={settings?.legal.consentText}
+            className="flex flex-col gap-5"
+          />
+        </section>
+      </div>
     </PageFrame>
   );
 }
@@ -111,75 +120,189 @@ export function PrivacyPage({
       !/\[ISI(?::|\])/i.test(policyText) &&
       !/\{(?!whatsappNumber\}|contactEmail\})[a-zA-Z][a-zA-Z0-9]*\}/.test(policyText),
   );
+
   return (
     <PageFrame settings={settings}>
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#71717a]">
-        Informasi privasi
-      </p>
-      <h1 className="mb-3 mt-0 text-[32px] font-bold tracking-[-.8px] text-[#18181a]">
-        Kebijakan Privasi
-      </h1>
-      {policyIsReady && privacyPolicy ? (
-        <PublicRichText value={privacyPolicy} replacements={{ whatsappNumber: whatsapp ?? "", contactEmail: email ?? "" }} />
-      ) : <>
-      <div className="mb-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-        Draf untuk ditinjau dan disetujui sebelum penggunaan produksi. Rincian
-        pengendali data, dasar hukum, penyedia pemroses, dan jadwal retensi
-        perlu dikonfirmasi oleh pemilik dan penasihat hukum.
-      </div>
+      <div className="flex flex-col gap-8 py-4">
+        {/* Header Banner */}
+        <div className="flex flex-col gap-2 max-w-3xl">
+          <div className="w-fit flex items-center gap-2 p-[4px_10px] bg-[#f0f0f0] rounded-full">
+            <span className="w-2 h-2 rounded-full bg-[#82b440]" />
+            <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
+              KEBIJAKAN &amp; PRIVASI DATA
+            </span>
+          </div>
+          <h1 className="text-[32px]/[40px] sm:text-[40px]/[48px] font-bold text-[#18181a] tracking-[-0.8px] m-0">
+            Kebijakan Privasi
+          </h1>
+          <p className="text-sm text-[#52525b] m-0 leading-6">
+            Komitmen OpenByte Labs terhadap perlindungan privasi, integritas informasi, dan kepatuhan pengolahan data klien.
+          </p>
+        </div>
 
-      <div className="space-y-6 text-sm leading-7 text-[#52525b]">
-        <section>
-          <h2 className="mb-2 text-lg font-semibold text-[#18181a]">
-            Data yang dikirim melalui formulir
-          </h2>
-          <p className="m-0">
-            Formulir konsultasi dan pertanyaan meminta nama, nomor WhatsApp,
-            layanan yang diminati, serta ringkasan kebutuhan. Email dan nama
-            organisasi bersifat opsional. Permintaan booking juga memproses
-            waktu dan metode konsultasi yang dipilih. Jangan kirim kata sandi,
-            data pembayaran, atau data sensitif yang tidak diperlukan.
-          </p>
-        </section>
-        <section>
-          <h2 className="mb-2 text-lg font-semibold text-[#18181a]">
-            Tujuan dan pengamanan formulir
-          </h2>
-          <p className="m-0">
-            Informasi digunakan untuk menindaklanjuti permintaan yang Anda
-            kirim, mengelola booking, dan mencegah penyalahgunaan formulir.
-            Formulir meminta persetujuan sebelum dikirim dan dapat memakai
-            verifikasi anti-bot Cloudflare Turnstile. Detail penyedia layanan,
-            lokasi pemrosesan, dan retensi harus ditetapkan sebelum peluncuran.
-          </p>
-        </section>
-        <section>
-          <h2 className="mb-2 text-lg font-semibold text-[#18181a]">
-            Permintaan terkait data
-          </h2>
-          <p className="m-0">
-            Anda dapat meminta informasi, koreksi, atau penghapusan data yang
-            Anda kirim, sepanjang tidak ada kewajiban hukum yang mengharuskan
-            penyimpanannya. Saluran kontak untuk permintaan privasi:
-          </p>
-          {email || whatsapp ? (
-            <ul className="mt-2 list-disc pl-5">
-              {email ? (
-                <li>
-                  Email: <a className="underline" href={`mailto:${email}`}>{email}</a>
-                </li>
-              ) : null}
-              {whatsapp ? <li>WhatsApp: {whatsapp}</li> : null}
+        {/* 2-Column Stitch Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] sticky top-24">
+            <span className="text-[11px] font-bold tracking-[0.55px] text-[#595962] uppercase">
+              RINGKASAN KEBIJAKAN
+            </span>
+            <ul className="m-0 p-0 list-none flex flex-col gap-2 text-xs text-[#52525b]">
+              <li className="flex items-center gap-2">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm text-[#82b440] symbol">
+                  check_circle
+                </span>
+                <span>Tidak ada penjualan data kepada pihak ketiga</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm text-[#82b440] symbol">
+                  check_circle
+                </span>
+                <span>Enkripsi transmisi SSL/TLS standar industri</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm text-[#82b440] symbol">
+                  check_circle
+                </span>
+                <span>Hak koreksi &amp; penghapusan data mandiri</span>
+              </li>
             </ul>
-          ) : (
-            <p className="mt-2 rounded-lg bg-neutral-100 p-3 text-xs">
-              Kontak privasi resmi belum dikonfigurasi. Jangan mengirim data
-              sensitif melalui saluran yang belum diverifikasi.
-            </p>
-          )}
-        </section>
+            <div className="pt-3 border-t border-neutral-200/80 text-xs text-[#71717a]">
+              Kontak resmi: {email || "privacy@openbytelabs.com"}
+            </div>
+          </aside>
+
+          <div className="lg:col-span-8 flex flex-col gap-6">
+            {policyIsReady && privacyPolicy ? (
+              <div className="p-6 sm:p-8 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d]">
+                <PublicRichText value={privacyPolicy} replacements={{ whatsappNumber: whatsapp ?? "", contactEmail: email ?? "" }} />
+              </div>
+            ) : (
+              <>
+                <div className="rounded-[12px] border border-amber-300 bg-amber-50 p-4 text-xs sm:text-sm leading-6 text-amber-950">
+                  Draf untuk ditinjau dan disetujui sebelum penggunaan produksi. Rincian pengendali data, dasar hukum, penyedia pemroses, dan jadwal retensi dikonfirmasi oleh pemilik sebelum peluncuran resmi.
+                </div>
+
+                <div className="p-6 sm:p-8 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-6 text-sm leading-7 text-[#52525b]">
+                  <section className="flex flex-col gap-2">
+                    <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                      1. Data yang Dikirim Melalui Formulir
+                    </h2>
+                    <p className="m-0">
+                      Formulir konsultasi, kalkulator, dan penawaran meminta data minimum yang diperlukan untuk berkomunikasi: nama lengkap, nomor kontak WhatsApp, jenis layanan, dan ringkasan kebutuhan sistem. Kami tidak meminta kata sandi, informasi finansial sensitif, atau data rahasia instansi melalui formulir publik.
+                    </p>
+                  </section>
+
+                  <section className="flex flex-col gap-2">
+                    <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                      2. Tujuan Penggunaan &amp; Keamanan Data
+                    </h2>
+                    <p className="m-0">
+                      Informasi yang terkumpul hanya digunakan secara eksklusif untuk menyusun penawaran tertulis, menjadwalkan sesi konsultasi, dan mengonfirmasi progres pengerjaan sistem Anda. Seluruh komunikasi disimpan di infrastruktur terisolasi dengan kontrol otentikasi ketat.
+                    </p>
+                  </section>
+
+                  <section className="flex flex-col gap-2">
+                    <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                      3. Hak Pemilik Data
+                    </h2>
+                    <p className="m-0">
+                      Anda berhak mengajukan permohonan peninjauan, pembaruan, atau penghapusan menyeluruh terhadap informasi kontak yang telah disampaikan ke OpenByte Labs kapan saja melalui saluran komunikasi resmi kami.
+                    </p>
+                  </section>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-      </>}
+    </PageFrame>
+  );
+}
+
+export function TermsPage({ settings }: { settings?: PublicSiteSettings }) {
+  return (
+    <PageFrame settings={settings}>
+      <div className="flex flex-col gap-8 py-4">
+        {/* Header Banner */}
+        <div className="flex flex-col gap-2 max-w-3xl">
+          <div className="w-fit flex items-center gap-2 p-[4px_10px] bg-[#f0f0f0] rounded-full">
+            <span className="w-2 h-2 rounded-full bg-[#82b440]" />
+            <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
+              STANDAR KONTRAK &amp; KERJASAMA
+            </span>
+          </div>
+          <h1 className="text-[32px]/[40px] sm:text-[40px]/[48px] font-bold text-[#18181a] tracking-[-0.8px] m-0">
+            Ketentuan Layanan
+          </h1>
+          <p className="text-sm text-[#52525b] m-0 leading-6">
+            Prinsip kerja, transparansi ruang lingkup, dan jaminan purna jual dalam setiap kesepakatan implementasi perangkat lunak OpenByte Labs.
+          </p>
+        </div>
+
+        {/* 2-Column Stitch Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] sticky top-24">
+            <span className="text-[11px] font-bold tracking-[0.55px] text-[#595962] uppercase">
+              PASAL POKOK
+            </span>
+            <ul className="m-0 p-0 list-none flex flex-col gap-2.5 text-xs text-[#52525b]">
+              <li className="flex items-center gap-2 font-medium text-[#18181a]">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm text-[#82b440] symbol">
+                  check
+                </span>
+                <span>1. Ruang Lingkup &amp; Penawaran Resmi</span>
+              </li>
+              <li className="flex items-center gap-2 font-medium text-[#18181a]">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm text-[#82b440] symbol">
+                  check
+                </span>
+                <span>2. Hak Kepemilikan Kode Sumber</span>
+              </li>
+              <li className="flex items-center gap-2 font-medium text-[#18181a]">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm text-[#82b440] symbol">
+                  check
+                </span>
+                <span>3. Garansi 30 Hari &amp; BAST</span>
+              </li>
+            </ul>
+          </aside>
+
+          <div className="lg:col-span-8 flex flex-col gap-6">
+            <div className="rounded-[12px] border border-amber-300 bg-amber-50 p-4 text-xs sm:text-sm leading-6 text-amber-950">
+              Draf informasi umum untuk ditinjau. Ketentuan spesifik seperti jadwal pencairan, milestone, dan kuota revisi final dicantumkan dalam Surat Perjanjian Kerja (SPK) resmi sebelum eksekusi proyek dimulai.
+            </div>
+
+            <div className="p-6 sm:p-8 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-6 text-sm leading-7 text-[#52525b]">
+              <section className="flex flex-col gap-2">
+                <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                  1. Ruang Lingkup Kerja &amp; Estimasi
+                </h2>
+                <p className="m-0">
+                  Seluruh estimasi biaya yang dihasilkan melalui kalkulator daring merupakan simulasi awal. Ruang lingkup resmi, rincian fungsionalitas, jadwal milestone, dan toleransi revisi dicantumkan secara definitif dalam dokumen proposal teknis dan SPK tertulis.
+                </p>
+              </section>
+
+              <section className="flex flex-col gap-2">
+                <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                  2. Penyerahan Kode Sumber &amp; Lisensi
+                </h2>
+                <p className="m-0">
+                  Setelah pelunasan komitmen proyek dan penandatanganan Berita Acara Serah Terima (BAST), klien memegang hak kepemilikan penuh atas kode sumber kustom yang dibangun, bebas dari keterikatan biaya lisensi vendor tersembunyi.
+                </p>
+              </section>
+
+              <section className="flex flex-col gap-2">
+                <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                  3. Garansi Purna Jual 30 Hari
+                </h2>
+                <p className="m-0">
+                  OpenByte Labs memberikan jaminan perbaikan bug dan penyesuaian non-perubahan arsitektur selama 30 hari kalender sejak sistem resmi diserahterimakan pada lingkungan produksi.
+                </p>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
     </PageFrame>
   );
 }
@@ -187,29 +310,127 @@ export function PrivacyPage({
 export function AboutPage({ settings }: { settings?: PublicSiteSettings }) {
   return (
     <PageFrame settings={settings}>
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#71717a]">
-        Tentang OpenByte Labs
-      </p>
-      <h1 className="mb-4 mt-0 text-[32px] font-bold tracking-[-.8px] text-[#18181a]">
-        Perangkat lunak yang dirancang untuk kebutuhan nyata.
-      </h1>
-      <div className="space-y-5 text-sm leading-7 text-[#52525b]">
-        <p>
-          OpenByte Labs mengerjakan website, aplikasi, dan sistem informasi.
-          Bentuk solusi, teknologi, jadwal, dan biaya ditentukan berdasarkan
-          kebutuhan serta ruang lingkup setiap proyek.
-        </p>
-        <p>
-          Sebelum pekerjaan dimulai, kebutuhan dan hasil yang diharapkan perlu
-          dibahas bersama. Rincian pekerjaan, penyerahan, dukungan, serta
-          ketentuan lainnya dicantumkan pada penawaran atau perjanjian proyek.
-        </p>
-        <Link
-          href="/konsultasi"
-          className="inline-flex rounded-lg bg-[#18181a] px-4 py-3 text-sm font-medium text-white"
-        >
-          Bahas kebutuhan proyek
-        </Link>
+      <div className="flex flex-col gap-10 py-2">
+        {/* Dark Hero Section matching Stitch */}
+        <section className="w-full bg-[#18181a] text-white rounded-[20px] p-8 sm:p-12 flex flex-col gap-5 shadow-[0px_8px_24px_#0000001a]">
+          <div className="w-fit flex items-center gap-2 p-[4px_12px] bg-[#d2d88f26] rounded-full">
+            <span className="w-2 h-2 rounded-full bg-[#d2d88f]" />
+            <span className="text-[11px] font-bold tracking-[0.5px] text-[#d2d88f]">
+              PROFIL STUDIO &amp; PRINSIP REKAYASA
+            </span>
+          </div>
+          <h1 className="text-[32px]/[40px] sm:text-[44px]/[52px] font-extrabold tracking-[-1px] text-white m-0 max-w-4xl">
+            Rekayasa Perangkat Lunak Presisi Tinggi untuk Sektor Strategis
+          </h1>
+          <p className="text-[15px]/[24px] text-[#a1a1aa] m-0 max-w-3xl">
+            OpenByte Labs adalah software engineering studio yang berfokus pada pembangunan sistem informasi instansi, aplikasi mobile Flutter, dan arsitektur data berperforma tinggi tanpa kompromi integritas.
+          </p>
+        </section>
+
+        {/* 4 Engineering Principles Bento Grid */}
+        <section className="flex flex-col gap-5">
+          <div className="flex flex-col gap-1">
+            <span className="text-[11px] font-bold tracking-[0.55px] text-[#595962] uppercase">
+              STANDAR ARSITEKTUR
+            </span>
+            <h2 className="text-2xl font-bold text-[#18181a] tracking-[-0.3px] m-0">
+              Empat Pilar Rekayasa Sistem
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
+            <div className="p-6 bg-[#f0f0f0] rounded-[16px] flex flex-col gap-3 shadow-[0px_1px_2px_#0000000d]">
+              <div className="w-10 h-10 rounded-[10px] bg-white flex items-center justify-center text-[#18181a]">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                  code
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold text-[#18181a] m-0">
+                Arsitektur Bersih &amp; Modular
+              </h3>
+              <p className="text-sm text-[#52525b] m-0 leading-6">
+                Pemisahan tanggung jawab yang tegas antara lapisan data, service layer, dan antarmuka untuk kemudahan audit dan skalabilitas jangka panjang.
+              </p>
+            </div>
+
+            <div className="p-6 bg-[#f0f0f0] rounded-[16px] flex flex-col gap-3 shadow-[0px_1px_2px_#0000000d]">
+              <div className="w-10 h-10 rounded-[10px] bg-white flex items-center justify-center text-[#18181a]">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                  security
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold text-[#18181a] m-0">
+                Keamanan Default-Deny &amp; 2FA
+              </h3>
+              <p className="text-sm text-[#52525b] m-0 leading-6">
+                Kebijakan proteksi tanpa celah: otorisasi wajib di tingkat server, sanitasi input Zod, autentikasi berbasis MFA/TOTP, dan isolasi hak akses data.
+              </p>
+            </div>
+
+            <div className="p-6 bg-[#f0f0f0] rounded-[16px] flex flex-col gap-3 shadow-[0px_1px_2px_#0000000d]">
+              <div className="w-10 h-10 rounded-[10px] bg-white flex items-center justify-center text-[#18181a]">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                  database
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold text-[#18181a] m-0">
+                Integritas Transaksi Relasional
+              </h3>
+              <p className="text-sm text-[#52525b] m-0 leading-6">
+                PostgreSQL terindeks dengan exclusion constraint untuk proteksi konkurensi data tumpang tindih dan keandalan atomik setiap transaksi operasional.
+              </p>
+            </div>
+
+            <div className="p-6 bg-[#f0f0f0] rounded-[16px] flex flex-col gap-3 shadow-[0px_1px_2px_#0000000d]">
+              <div className="w-10 h-10 rounded-[10px] bg-white flex items-center justify-center text-[#18181a]">
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                  verified
+                </span>
+              </div>
+              <h3 className="text-lg font-semibold text-[#18181a] m-0">
+                Transparansi &amp; Bebas Vendor-Lock
+              </h3>
+              <p className="text-sm text-[#52525b] m-0 leading-6">
+                Penyerahan kode sumber penuh beserta repository dan dokumentasi teknis komprehensif, memberi kebebasan penuh kepada instansi Anda.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Founder / Engineering Profile Card */}
+        <section className="p-6 sm:p-8 bg-[#ffffff] border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_3px_#0000000d] flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16 rounded-full bg-[#18181a] text-[#e2e89d] flex items-center justify-center font-bold text-xl shrink-0">
+              MIF
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-bold text-[#18181a]">
+                  Muhammad Izzat Farahidi
+                </span>
+                <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-lg text-[#82b440] symbol">
+                  verified
+                </span>
+              </div>
+              <span className="text-xs font-medium text-[#52525b]">
+                Founder &amp; Lead Systems Engineer OpenByte Labs
+              </span>
+              <p className="text-xs text-[#71717a] m-0 mt-1 max-w-xl leading-5">
+                Spesialis rekayasa perangkat lunak dengan fokus pada sistem informasi pemerintahan desa, platform kesehatan terpadu, dan aplikasi mobile enterprise.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/konsultasi"
+            className="px-5 py-3 rounded-[10px] bg-[#18181a] text-white text-xs font-semibold no-underline hover:opacity-90 shrink-0 flex items-center gap-1.5"
+          >
+            <span>Diskusi Bersama</span>
+            <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm symbol">
+              arrow_forward
+            </span>
+          </Link>
+        </section>
       </div>
     </PageFrame>
   );
@@ -222,86 +443,98 @@ export function ServiceDetailPage({
 }) {
   return (
     <PageFrame settings={settings}>
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#71717a]">
-        Layanan
-      </p>
-      <h1 className="mb-4 mt-0 text-[32px] font-bold tracking-[-.8px] text-[#18181a]">
-        Sistem informasi sesuai alur kerja Anda.
-      </h1>
-      <div className="space-y-5 text-sm leading-7 text-[#52525b]">
-        <p>
-          Kami dapat membantu merancang dan membangun aplikasi web untuk
-          mengelola data, proses kerja, dan akses pengguna. Fitur serta
-          integrasi ditentukan setelah kebutuhan dan batasan proyek dipahami.
-        </p>
-        <p>
-          Teknologi, keamanan, migrasi data, dukungan operasional, dan target
-          waktu dibahas dan ditulis dalam ruang lingkup proyek. Tidak ada
-          jaminan uptime, waktu respons insiden, atau hasil tertentu kecuali
-          disepakati secara tertulis.
-        </p>
-        <Link
-          href="/konsultasi"
-          className="inline-flex rounded-lg bg-[#18181a] px-4 py-3 text-sm font-medium text-white"
-        >
-          Diskusikan sistem yang dibutuhkan
-        </Link>
-      </div>
-    </PageFrame>
-  );
-}
+      <div className="flex flex-col gap-10 py-2">
+        {/* Header Section */}
+        <section className="flex flex-col gap-3 max-w-3xl">
+          <div className="w-fit flex items-center gap-2 p-[4px_10px] bg-[#f0f0f0] rounded-full">
+            <span className="w-2 h-2 rounded-full bg-[#82b440]" />
+            <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
+              DETAIL LAYANAN • SPESIFIKASI REKAYASA
+            </span>
+          </div>
+          <h1 className="text-[32px]/[40px] sm:text-[40px]/[48px] font-bold text-[#18181a] tracking-[-0.8px] m-0">
+            Sistem Informasi &amp; Tata Kelola Satu Data
+          </h1>
+          <p className="text-[15px]/[24px] text-[#52525b] m-0">
+            Pembangunan platform aplikasi web untuk mengelola basis data operasional, standardisasi alur birokrasi, dan visualisasi indikator kinerja instansi secara real-time.
+          </p>
+        </section>
 
-export function TermsPage({ settings }: { settings?: PublicSiteSettings }) {
-  return (
-    <PageFrame settings={settings}>
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-[#71717a]">
-        Ketentuan layanan
-      </p>
-      <h1 className="mb-4 mt-0 text-[32px] font-bold tracking-[-.8px] text-[#18181a]">
-        Informasi sebelum memulai proyek
-      </h1>
-        <div className="mb-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
-          Draf informasi umum untuk ditinjau. Ini bukan pengganti penawaran atau
-          perjanjian; ketentuan final harus disetujui para pihak sebelum pekerjaan
-          dimulai.
-      </div>
-      <div className="space-y-6 text-sm leading-7 text-[#52525b]">
-        <section>
-          <h2 className="mb-2 text-lg font-semibold text-[#18181a]">
-            Ruang lingkup dan estimasi
-          </h2>
-          <p className="m-0">
-            Formulir konsultasi, kalkulator, dan katalog paket membantu
-            mengawali pembahasan. Estimasi bukan penawaran mengikat. Fitur,
-            jadwal, biaya, kriteria penerimaan, serta perubahan pekerjaan perlu
-            dicantumkan dalam penawaran atau perjanjian tertulis.
-          </p>
-        </section>
-        <section>
-          <h2 className="mb-2 text-lg font-semibold text-[#18181a]">
-            Pembayaran, penyerahan, dan dukungan
-          </h2>
-          <p className="m-0">
-            Jadwal pembayaran, hasil kerja yang diserahkan, hak penggunaan dan
-            kepemilikan, masa dukungan, garansi, serta tingkat layanan hanya
-            berlaku jika dirinci dan disepakati dalam dokumen proyek. Tidak ada
-            tingkat uptime, waktu respons, atau garansi tertentu yang dijanjikan
-            oleh halaman ini.
-          </p>
-        </section>
-        <section>
-          <h2 className="mb-2 text-lg font-semibold text-[#18181a]">
-            Data dan komunikasi
-          </h2>
-          <p className="m-0">
-            Informasi yang dikirim melalui formulir digunakan untuk
-            menindaklanjuti permintaan Anda. Baca{" "}
-            <Link className="underline" href="/kebijakan-privasi">
-              Kebijakan Privasi
-            </Link>{" "}
-            untuk informasi tentang data formulir. Jangan kirim kata sandi,
-            informasi pembayaran, atau data sensitif melalui formulir.
-          </p>
+        {/* 4 Feature Bento Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
+          <div className="p-6 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-3">
+            <div className="w-10 h-10 rounded-[10px] bg-[#f0f0f0] flex items-center justify-center text-[#18181a]">
+              <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                dataset
+              </span>
+            </div>
+            <h3 className="text-lg font-semibold text-[#18181a] m-0">
+              Integrasi Basis Data Terpadu
+            </h3>
+            <p className="text-sm text-[#52525b] m-0 leading-6">
+              Penyatuan data dari aneka format manual ke dalam skema PostgreSQL terindeks, dilengkapi audit logging per perubahan record.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-3">
+            <div className="w-10 h-10 rounded-[10px] bg-[#f0f0f0] flex items-center justify-center text-[#18181a]">
+              <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                admin_panel_settings
+              </span>
+            </div>
+            <h3 className="text-lg font-semibold text-[#18181a] m-0">
+              Otorisasi Berjenjang (RBAC)
+            </h3>
+            <p className="text-sm text-[#52525b] m-0 leading-6">
+              Pembagian peran staf, operator, dan pimpinan yang terisolasi dengan proteksi sesi MFA dan proteksi brute-force otomatis.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-3">
+            <div className="w-10 h-10 rounded-[10px] bg-[#f0f0f0] flex items-center justify-center text-[#18181a]">
+              <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                monitoring
+              </span>
+            </div>
+            <h3 className="text-lg font-semibold text-[#18181a] m-0">
+              Dashboard Analitik &amp; Ekspor Laporan
+            </h3>
+            <p className="text-sm text-[#52525b] m-0 leading-6">
+              Ringkasan metrik statistik harian dan bulanan dengan kemampuan ekspor data siap cetak untuk pelaporan pimpinan.
+            </p>
+          </div>
+
+          <div className="p-6 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-3">
+            <div className="w-10 h-10 rounded-[10px] bg-[#f0f0f0] flex items-center justify-center text-[#18181a]">
+              <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
+                cloud_sync
+              </span>
+            </div>
+            <h3 className="text-lg font-semibold text-[#18181a] m-0">
+              API Terbuka &amp; Interoperabilitas
+            </h3>
+            <p className="text-sm text-[#52525b] m-0 leading-6">
+              Endpoint REST tervalidasi yang siap dihubungkan ke sistem eksternal atau aplikasi mobile kapan pun dibutuhkan.
+            </p>
+          </div>
+        </div>
+
+        {/* CTA Banner */}
+        <section className="p-8 rounded-[16px] bg-[#18181a] text-white flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 shadow-[0px_4px_16px_#0000001a]">
+          <div className="flex flex-col gap-2 max-w-xl">
+            <h2 className="text-2xl font-semibold m-0 text-white">
+              Siap Membangun Sistem Terpadu?
+            </h2>
+            <p className="text-sm text-[#a8a8ad] m-0 leading-6">
+              Konsultasikan alur kerja organisasi Anda dan dapatkan analisis arsitektur awal tanpa komitmen biaya.
+            </p>
+          </div>
+          <Link
+            href="/konsultasi"
+            className="px-5 py-3 rounded-[10px] bg-[#e2e89d] text-[#18181a] text-sm font-semibold no-underline hover:opacity-90 shrink-0"
+          >
+            Konsultasi Sekarang
+          </Link>
         </section>
       </div>
     </PageFrame>

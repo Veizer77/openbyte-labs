@@ -483,9 +483,6 @@ export default function SiteBeranda({
             </section>
             <PublicHomeServices services={catalog?.services ?? []} />
             <PublicHomeProjects projects={catalog?.projects ?? []} />
-            {catalog?.testimonials.length ? (
-              <PublicTestimonials testimonials={catalog.testimonials} />
-            ) : null}
             <div
               className={
                 "box-border w-full h-fit shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-col lg:flex-row gap-[24px] p-[24px] justify-between items-center bg-[#e2e89d] rounded-[16px] overflow-hidden relative"
@@ -623,7 +620,17 @@ export default function SiteBeranda({
                 </Link>
               </div>
             </div>
-            <PublicHomeFaqs faqs={catalog?.faqs ?? []} />
+            <section
+              aria-label="Testimoni dan Informasi Proyek"
+              className="box-border w-full h-fit shrink-0 grid grid-cols-1 lg:grid-cols-12 gap-[20px] items-stretch"
+            >
+              <div className="box-border lg:col-span-5 flex flex-col justify-start items-stretch">
+                <PublicTestimonials testimonials={catalog?.testimonials ?? []} />
+              </div>
+              <div className="box-border lg:col-span-7 flex flex-col justify-start items-stretch">
+                <PublicHomeFaqs faqs={catalog?.faqs ?? []} />
+              </div>
+            </section>
           </div>
         </main>
         <PublicFooter settings={siteSettings} />

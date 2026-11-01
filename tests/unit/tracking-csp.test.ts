@@ -18,6 +18,17 @@ describe("private R2 upload CSP", () => {
     );
     expect(policy).not.toContain("*.r2.cloudflarestorage.com");
   });
+  it("allows the Turnstile challenge iframe and its per-customer subdomains", () => {
+    const policy = proxy(
+      new NextRequest("https://example.test/konsultasi"),
+    ).headers.get("Content-Security-Policy")!;
+    expect(policy).toContain(
+      "frame-src https://challenges.cloudflare.com https://*.challenges.cloudflare.com",
+    );
+    expect(policy).toContain(
+      "connect-src 'self' https://challenges.cloudflare.com https://*.challenges.cloudflare.com",
+    );
+  });
   it("does not let a malformed environment value add CSP sources or directives", () => {
     vi.stubEnv("R2_ACCOUNT_ID", "a".repeat(32));
     vi.stubEnv("R2_BUCKET_STAGING", "bad; connect-src https://evil.example");
