@@ -57,7 +57,7 @@ export async function checkAuthBrowser(browser: Browser, db: Database, origin: s
     expect(signup.ok()).toBe(false);
     console.log("PASS: editor cannot access client operations, cross-origin login is denied, public signup is closed.");
     stage = "second login and recovery";
-    const signedOut = await context.request.post(`${origin}/api/auth/sign-out`, { headers: { Origin: origin }, data: {} });
+    const signedOut = await context.request.post(`${origin}/api/admin/logout`, { headers: { Origin: origin }, data: {} });
     if (!signedOut.ok()) throw new Error(`sign-out status=${signedOut.status()} body=${(await signedOut.text()).slice(0, 200).replace(/\s+/g, " ")}`);
     await page.goto(`${origin}/admin/login`);
     await page.getByLabel("EMAIL / USERNAME ADMIN").fill(email);
@@ -68,7 +68,7 @@ export async function checkAuthBrowser(browser: Browser, db: Database, origin: s
     await page.getByLabel("KODE PEMULIHAN CADANGAN (RECOVERY CODE)").fill(recovery);
     await page.getByRole("button", { name: "Masuk ke Dashboard CMS" }).click();
     await page.waitForURL("**/admin/dashboard");
-    await context.request.post(`${origin}/api/auth/sign-out`, { headers: { Origin: origin }, data: {} });
+    await context.request.post(`${origin}/api/admin/logout`, { headers: { Origin: origin }, data: {} });
     await context.request.post(`${origin}/api/admin/login`, { headers: { Origin: origin }, data: { email, password } });
     const replay = await context.request.post(`${origin}/api/admin/totp`, { headers: { Origin: origin }, data: { method: "recovery", code: recovery } });
     expect(replay.status()).toBe(401);

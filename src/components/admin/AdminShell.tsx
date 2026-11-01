@@ -165,6 +165,12 @@ export function AdminHeader() {
           <span className="hidden sm:inline">Lihat Website Publik</span>
           <span className="symbol text-base">north_east</span>
         </Link>
+        <form action="/api/admin/logout" method="post">
+          <button type="submit" className="text-[13px] flex items-center gap-1 hover:text-black">
+            <span className="hidden sm:inline">Keluar</span>
+            <span className="symbol text-base" aria-hidden="true">logout</span>
+          </button>
+        </form>
       </div>
     </header>
   );
