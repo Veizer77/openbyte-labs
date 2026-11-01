@@ -1,0 +1,16 @@
+node_modules
+.next
+.vercel
+.git
+.github
+prototype
+design-assets
+design.pen
+docs
+tests
+test-results
+playwright-report
+blob-report
+backups
+artifacts
+PRD_v1_6_2.md
