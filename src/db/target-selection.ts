@@ -30,11 +30,26 @@ export function directDatabaseUri(
   return env.DATABASE_URI_DIRECT ?? env.DATABASE_DIRECT_URL ?? "";
 }
 
+export interface TargetOptions {
+  /**
+   * Production preflight must never silently fall back to `TEST_DATABASE_URL`
+   * just because a developer's `.env` happens to define one. Without this the
+   * operator asks for the production database and quietly inspects the test one.
+   */
+  requireDirect?: boolean;
+}
+
 export function selectDatabaseTarget(
   env: Record<string, string | undefined>,
   role: TargetRole,
+  options: TargetOptions = {},
 ): SelectedTarget {
-  if ((role === "seed" || role === "preflight") && env.TEST_DATABASE_URL) {
+  const testAllowed = !options.requireDirect;
+  if (
+    testAllowed &&
+    (role === "seed" || role === "preflight") &&
+    env.TEST_DATABASE_URL
+  ) {
     return {
       uri: env.TEST_DATABASE_URL,
       approvedTarget: env.TEST_DATABASE_TARGET ?? "",

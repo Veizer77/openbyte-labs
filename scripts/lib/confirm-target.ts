@@ -29,7 +29,9 @@ export async function confirmTarget(
     expectedDatabase?: string;
   },
 ): Promise<ConfirmedTarget> {
-  const selected = selectDatabaseTarget(process.env, role);
+  const selected = selectDatabaseTarget(process.env, role, {
+    requireDirect: options.expectedSource === "direct",
+  });
   if (!selected.uri)
     throw new OperatorInputError(
       "Koneksi database belum diatur. Isi DATABASE_URI_DIRECT (atau DATABASE_DIRECT_URL) pada environment lokal.",

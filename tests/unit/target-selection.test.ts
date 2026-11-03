@@ -72,4 +72,17 @@ describe("pemilihan target operator", () => {
       source: "direct",
     });
   });
+  it("preflight produksi tidak jatuh ke database test meski TEST_DATABASE_URL ada", () => {
+    const env = {
+      TEST_DATABASE_URL: "postgres://u:p@test-db/openbyte_test",
+      TEST_DATABASE_TARGET: "test-db/openbyte_test",
+      DATABASE_URI_DIRECT: "postgres://u:p@prod-db/openbyte_labs",
+      DATABASE_PREFLIGHT_TARGET: "prod-db/openbyte_labs",
+    };
+    expect(selectDatabaseTarget(env, "preflight", { requireDirect: true })).toEqual({
+      uri: "postgres://u:p@prod-db/openbyte_labs",
+      approvedTarget: "prod-db/openbyte_labs",
+      source: "direct",
+    });
+  });
 });
