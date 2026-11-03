@@ -136,4 +136,4 @@ Typecheck, lint, unit test, dan build diverifikasi ulang pada 3 November 2026 (R
 | `pnpm lint` | 0 error, 8 warning (variabel tak terpakai) |
 | `pnpm db:preflight --allow-production` | Lulus 12/12 pemeriksaan pada `main.openbyte_labs` |
 | `pnpm build` | Lulus pada Next.js 16.4.3 |
-| Smoke produksi | 21 dari 23 rute sesuai harapan; 2 sisanya menunggu paket & layanan diaktifkan |
+| Smoke produksi | **24 dari 26** rute sesuai harapan; 2 sisanya (`/layanan/sistem-informasi`, `/pesan?paket=starter-umkm`) menunggu paket & layanan diaktifkan |
