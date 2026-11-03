@@ -129,6 +129,22 @@ describe("pembuatan booking server", () => {
       clock.mock.invocationCallOrder[0],
     );
   });
+  it("menolak slot yang jamnya sudah lewat walau booking hari yang sama diizinkan", async () => {
+    // minDaysAhead = 0 opens today's schedule; only the wall-clock guard can
+    // reject the 09:00 WIB slot once the server clock reaches 09:30 WIB.
+    const sameDay = schedule();
+    sameDay.config = { ...sameDay.config, minDaysAhead: 0 };
+    const ctx = setup(sameDay);
+    await expect(
+      createBooking(request, ipHash, {
+        ...ctx,
+        now: () => new Date("2026-11-02T02:30:00Z"),
+      }),
+    ).rejects.toMatchObject({ code: "slot_unavailable" });
+    expect(ctx.readSchedule).toHaveBeenCalledWith("2026-11-02");
+    expect(ctx.tryInsert).not.toHaveBeenCalled();
+    expect(ctx.insertAudit).not.toHaveBeenCalled();
+  });
   it("mengulang benturan referensi dan membatasi percobaan", async () => {
     const ctx = setup();
     ctx.tryInsert

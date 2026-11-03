@@ -7,7 +7,8 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { getEnv } from "@/env";
+import { getEnv, type ServerEnv } from "@/env";
+import { MediaServiceError } from "@/services/media-errors";
 import type { MediaObjectStorage } from "@/services/media";
 
 export interface R2MediaStorageConfig {
@@ -22,7 +23,15 @@ export interface R2MediaStorageConfig {
 let cachedClient: S3Client | undefined;
 
 function getR2Configuration(): R2MediaStorageConfig {
-  const env = getEnv();
+  let env: ServerEnv;
+  try {
+    env = getEnv();
+  } catch {
+    throw new MediaServiceError(
+      "media_unavailable",
+      "Penyimpanan media belum siap: konfigurasi lingkungan tidak valid.",
+    );
+  }
   const values = {
     accountId: env.R2_ACCOUNT_ID,
     accessKeyId: env.R2_ACCESS_KEY_ID,
@@ -34,14 +43,29 @@ function getR2Configuration(): R2MediaStorageConfig {
   const missing = Object.entries(values)
     .filter(([, value]) => !value)
     .map(([key]) => key);
+  // Kesalahan konfigurasi adalah kegagalan layanan, bukan kesalahan input dari
+  // pengguna. Dipetakan ke `media_unavailable` agar UI menampilkan pesan
+  // penyebab yang bisa ditindaklanjuti operator, bukan pesan generik.
   if (missing.length)
-    throw new Error(
-      `Konfigurasi media R2 belum lengkap: ${missing.join(", ")}.`,
+    throw new MediaServiceError(
+      "media_unavailable",
+      `Penyimpanan media belum siap: konfigurasi R2 belum lengkap (${missing.join(", ")}).`,
     );
   if (values.stagingBucket === values.publicBucket)
-    throw new Error("Bucket staging R2 harus terpisah dari bucket publik.");
+    throw new MediaServiceError(
+      "media_unavailable",
+      "Penyimpanan media belum siap: bucket privat harus terpisah dari bucket publik.",
+    );
 
-  const publicUrl = new URL(values.publicBaseUrl!);
+  let publicUrl: URL;
+  try {
+    publicUrl = new URL(values.publicBaseUrl!);
+  } catch {
+    throw new MediaServiceError(
+      "media_unavailable",
+      "Penyimpanan media belum siap: R2_PUBLIC_BASE_URL bukan URL yang valid.",
+    );
+  }
   if (
     publicUrl.username ||
     publicUrl.password ||
@@ -49,7 +73,10 @@ function getR2Configuration(): R2MediaStorageConfig {
     publicUrl.hash ||
     (env.NODE_ENV === "production" && publicUrl.protocol !== "https:")
   )
-    throw new Error("R2_PUBLIC_BASE_URL harus berupa URL publik yang aman.");
+    throw new MediaServiceError(
+      "media_unavailable",
+      "Penyimpanan media belum siap: R2_PUBLIC_BASE_URL harus berupa URL publik yang aman.",
+    );
 
   return {
     accountId: values.accountId!,

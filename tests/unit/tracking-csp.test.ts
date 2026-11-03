@@ -29,6 +29,27 @@ describe("private R2 upload CSP", () => {
       "connect-src 'self' https://challenges.cloudflare.com https://*.challenges.cloudflare.com",
     );
   });
+  it("keeps nonce-only styles outside development so inline <style> stays blocked", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    const policy = proxy(
+      new NextRequest("https://example.test/konsultasi"),
+    ).headers.get("Content-Security-Policy")!;
+    expect(policy).toMatch(/style-src 'self' 'nonce-[^']+'/);
+    // A nonce makes browsers ignore 'unsafe-inline', so it must not be advertised.
+    expect(policy).not.toContain("style-src 'self' 'unsafe-inline'");
+  });
+  it("allows inline styles in development so Next.js dev tools can style themselves", () => {
+    vi.stubEnv("NODE_ENV", "development");
+    const policy = proxy(
+      new NextRequest("https://example.test/konsultasi"),
+    ).headers.get("Content-Security-Policy")!;
+    // The overlay and indicator inject <style> without the request nonce; a nonce
+    // here would silently drop 'unsafe-inline' and leave them unstyled.
+    expect(policy).toContain("style-src 'self' 'unsafe-inline'");
+    expect(policy).not.toMatch(/style-src 'self' 'nonce-/);
+    // Scripts keep the nonce in development too.
+    expect(policy).toMatch(/script-src 'self' 'nonce-[^']+'/);
+  });
   it("does not let a malformed environment value add CSP sources or directives", () => {
     vi.stubEnv("R2_ACCOUNT_ID", "a".repeat(32));
     vi.stubEnv("R2_BUCKET_STAGING", "bad; connect-src https://evil.example");

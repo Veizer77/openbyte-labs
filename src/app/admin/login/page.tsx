@@ -1,4 +1,5 @@
 import LoginScreen from "@/components/screens/cms/login-admin";
+import { quickLoginEnabled } from "@/auth/dev-bypass";
 
 /**
  * Rendered per request so the middleware CSP nonce matches the inline scripts.
@@ -7,5 +8,6 @@ import LoginScreen from "@/components/screens/cms/login-admin";
 export const dynamic = "force-dynamic";
 
 export default function LoginPage() {
-  return <LoginScreen />;
+  // Resolved on the server: the client never decides whether the bypass exists.
+  return <LoginScreen quickLogin={quickLoginEnabled()} />;
 }

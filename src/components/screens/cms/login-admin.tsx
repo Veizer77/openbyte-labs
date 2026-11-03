@@ -5,7 +5,7 @@ import Link from "next/link";
 import { ScreenState } from "@/components/preview/Controls";
 import { LoginForm } from "@/components/admin/LoginForm";
 
-export default function CmsLoginAdmin() {
+export default function CmsLoginAdmin({ quickLogin = false }: { quickLogin?: boolean }) {
   return (
     <ScreenState screen={"cms/login-admin"}>
       <div
@@ -279,7 +279,7 @@ export default function CmsLoginAdmin() {
           data-pencil-name="Form Surface Container"
           className="box-border flex-1 w-full min-h-0 lg:min-h-screen flex flex-col gap-0 p-6 sm:p-8 lg:p-10 justify-center items-center bg-[#F9F9FA]"
         >
-          <LoginForm />
+          <LoginForm quickLogin={quickLogin} />
 
           {/* Footer Navigation Row */}
           <Link

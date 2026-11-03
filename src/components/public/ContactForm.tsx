@@ -64,16 +64,24 @@ export function ContactForm({
     setServerError("");
     setSlotError("");
 
-    if (
-      kind === "booking" &&
-      (!booking?.slot ||
-        !booking.availability?.consultationModes.includes(booking.mode))
-    ) {
-      setSlotError(
-        booking?.error ||
-          "Pilih tanggal, jam, dan mode konsultasi yang tersedia terlebih dahulu.",
-      );
-      return;
+    if (kind === "booking") {
+      if (!booking?.slot) {
+        setSlotError(
+          booking?.error ||
+            "Pilih tanggal, jam, dan mode konsultasi yang tersedia terlebih dahulu.",
+        );
+        return;
+      }
+      if (Date.parse(booking.slot) <= booking.now.getTime()) {
+        setSlotError(
+          "Jam sesi konsultasi yang dipilih sudah terlewat. Silakan pilih sesi lain yang masih aktif pada kalender.",
+        );
+        return;
+      }
+      if (!booking.availability?.consultationModes.includes(booking.mode)) {
+        setSlotError("Pilih mode konsultasi yang tersedia terlebih dahulu.");
+        return;
+      }
     }
     if (
       !turnstileToken &&

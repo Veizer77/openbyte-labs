@@ -68,10 +68,9 @@ const routes = {
   "site/booking-konsultasi": "/konsultasi",
   "site/tentang-kami": "/tentang-kami",
   "site/ketentuan-layanan": "/ketentuan-layanan",
-  "site/blog": "/preview/site/blog",
-  "site/otentikasi-tracking-klien": "/preview/site/otentikasi-tracking-klien",
-  "site/portal-pelacakan-proyek-klien":
-    "/preview/site/portal-pelacakan-proyek-klien",
+  "site/blog": "/blog",
+  "site/otentikasi-tracking-klien": "/tracking",
+  "site/portal-pelacakan-proyek-klien": "/tracking/proyek",
   "site/404": "/404",
   "cms/login-admin": "/admin/login",
   "cms/dashboard-cms-admin": "/admin",
@@ -417,7 +416,7 @@ function render(node, parent, insideControl = false) {
       ].includes(n))
   ) {
     if (rawHeader && plain === "Tracking Klien")
-      return `{process.env.NODE_ENV === "development" ? <NavLink href="/preview/site/portal-pelacakan-proyek-klien"${props}>${body(true)}</NavLink> : null}`;
+      return `<NavLink href="/tracking"${props}>${body(true)}</NavLink>`;
     const href = navRoutes[plain] ?? navRoutes[n];
     if (href) return `<NavLink href=${q(href)}${props}>${body(true)}</NavLink>`;
   }
@@ -576,7 +575,7 @@ import { LoginForm } from "@/components/admin/LoginForm";
 import { ContactForm } from "@/components/public/ContactForm";
 import { CalculatorProvider, CalculatorOption, CalculatorValue, CalculatorItemDays, CalculatorUnits, CalculatorBreakdown, CalculatorContact, CalculatorSend } from "@/components/public/Calculator";
 import { BookingProvider, BookingCalendar, BookingSlots, BookingValue } from "@/components/public/Booking";\n`;
-const inventory = [];
+let count = 0;
 for (const area of ["site", "cms", "system"]) {
   await mkdir(join(target, area), { recursive: true });
   for (const file of (await readdir(join(source, area)))
@@ -630,13 +629,7 @@ for (const area of ["site", "cms", "system"]) {
       join(target, area, `${file.slice(0, -5)}.tsx`),
       `// Ported from ${source}/${area}/${file}. Prototype remains read-only.\n${usedImports}\nexport default function ${component}() {\nreturn <ScreenState screen=${q(screenKey)}>${jsx}</ScreenState>;\n}\n`,
     );
-    inventory.push({
-      key: screenKey,
-      component,
-      title: name(elements(bodyNode)[0]),
-      route: routes[screenKey] ?? `/preview/${screenKey}`,
-      source: `${source}/${area}/${file}`,
-    });
+    count++;
   }
 }
 
@@ -654,11 +647,6 @@ await writeTsx(
   `import Link from "next/link";\nimport { NavLink } from "@/components/preview/Controls";\nimport { ReferenceImage } from "./ReferenceImage";\nexport function PublicHeader() { return (${headerJsx}); }\n`,
 );
 
-await mkdir("src/fixtures", { recursive: true });
-await writeFile(
-  "src/fixtures/screens.json",
-  JSON.stringify(inventory, null, 2) + "\n",
-);
 console.log(
-  `Migrated ${inventory.length} screens into standalone React TSX. No prototype runtime dependency.`,
+  `Migrated ${count} screens into standalone React TSX. No prototype runtime dependency.`,
 );

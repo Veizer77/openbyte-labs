@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import Link from "next/link";
-import { AdminHeader, AdminSidebar } from "./AdminShell";
+import { AdminFrame } from "./AdminFrame";
+import { BentoCard, Chip, EmptyState, ToolbarButton } from "./AdminUi";
 import {
   deleteServiceAction,
   listServicesAction,
@@ -25,6 +25,9 @@ const newService = (): ServiceInput => ({
   isActive: false,
   sortOrder: 0,
 });
+
+const inputClass =
+  "h-[38px] w-full rounded-[10px] bg-[#f0f0f0] px-3 text-xs text-[#18181a] placeholder-[#71717a] outline-none border border-transparent focus:border-[#18181a] transition-all";
 
 export function AdminServicesPage() {
   const [services, setServices] = useState<ServiceRecord[]>([]);
@@ -154,291 +157,302 @@ export function AdminServicesPage() {
     }
   }
 
+  const activeCount = services.filter((s) => s.isActive).length;
+  const draftCount = services.length - activeCount;
+
   return (
-    <div className="screen admin-screen relative flex min-h-screen w-full flex-col bg-[#f9f9f9]">
-      <AdminSidebar />
-      <div className="flex min-h-screen w-full flex-col lg:pl-[288px]">
-        <AdminHeader />
-        <main
-          id="konten"
-          className="mx-auto w-full max-w-[1920px] flex-1 px-4 pb-12 pt-20 sm:px-6 lg:px-8"
-        >
-          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <AdminFrame
+      title="Manajemen Layanan & Kartu Bento"
+      description="Kelola modul layanan yang ditampilkan pada landing page publik. Hanya layanan aktif yang ditampilkan."
+      screenKey="cms/layanan-bento"
+      actions={
+        <div className="flex items-center gap-2">
+          <ToolbarButton href="/" variant="light" icon="open_in_new">
+            Lihat Publik
+          </ToolbarButton>
+          <ToolbarButton variant="dark" icon="add" onClick={startNew}>
+            Tambah Layanan
+          </ToolbarButton>
+        </div>
+      }
+    >
+      {/* Metrics Row */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
+        <div className="rounded-[14px] border border-[#eaeaea] bg-white p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#71717a]">Total Layanan</div>
+          <div className="text-2xl font-semibold text-[#18181a] mt-1">{services.length}</div>
+        </div>
+        <div className="rounded-[14px] border border-[#d6eed3] bg-[#eef8ed] p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#457c1d]">Layanan Aktif</div>
+          <div className="text-2xl font-semibold text-[#457c1d] mt-1">{activeCount}</div>
+        </div>
+        <div className="rounded-[14px] border border-[#eaeaea] bg-white p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#71717a]">Draft / Nonaktif</div>
+          <div className="text-2xl font-semibold text-[#18181a] mt-1">{draftCount}</div>
+        </div>
+      </div>
+
+      {error ? (
+        <div className="mb-4 rounded-[12px] border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-center gap-2">
+          <span className="symbol text-base">error</span>
+          <span>{error}</span>
+        </div>
+      ) : null}
+      {status ? (
+        <div className="mb-4 rounded-[12px] border border-green-200 bg-green-50 p-3.5 text-xs text-green-900 flex items-center gap-2">
+          <span className="symbol text-base">check_circle</span>
+          <span>{status}</span>
+        </div>
+      ) : null}
+
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[1.4fr_1fr]">
+        {/* Left Side: Services List */}
+        <BentoCard>
+          <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#eaeaea] pb-3">
             <div>
-              <nav
-                aria-label="Breadcrumb"
-                className="mb-2 flex gap-1.5 text-[11px] text-[#52525b]"
-              >
-                <span>Admin</span>
-                <span aria-hidden="true">/</span>
-                <span>Konten Website</span>
-                <span aria-hidden="true">/</span>
-                <span className="font-semibold text-[#18181a]">
-                  Layanan Bento
-                </span>
-              </nav>
-              <h1 className="m-0 text-2xl font-semibold tracking-[-.5px] text-[#18181a]">
-                Manajemen Layanan
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm leading-5 text-[#52525b]">
-                Kelola layanan yang ditampilkan pada katalog website. Hanya
-                layanan aktif yang tersedia untuk publik.
+              <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                Katalog Layanan
+              </h2>
+              <p className="mt-0.5 text-xs text-[#71717a]">
+                Daftar kartu bento di beranda dan halaman layanan
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Link
-                href="/"
-                target="_blank"
-                className="secondary-button min-h-11"
-              >
-                Lihat Website Publik
-              </Link>
-              <button
-                type="button"
-                onClick={startNew}
-                className="primary-button min-h-11"
-              >
-                Tambah Layanan
-              </button>
-            </div>
+            <ToolbarButton
+              variant="light"
+              icon="sync"
+              disabled={isLoading || isSubmitting}
+              onClick={() => void loadServices()}
+            >
+              Refresh
+            </ToolbarButton>
           </div>
 
-          <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,.8fr)]">
-            <section
-              aria-labelledby="service-list-heading"
-              className="rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6"
-            >
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <h2
-                  id="service-list-heading"
-                  className="m-0 text-lg font-semibold text-[#18181a]"
-                >
-                  Katalog layanan
-                </h2>
-                <button
-                  type="button"
-                  onClick={() => void loadServices()}
-                  disabled={isLoading || isSubmitting}
-                  className="secondary-button min-h-10"
-                >
-                  Muat ulang
-                </button>
-              </div>
-
-              {error ? (
-                <p role="alert" className="mb-4 text-sm text-red-700">
-                  {error}
-                </p>
-              ) : null}
-              {status ? (
-                <p role="status" className="mb-4 text-sm text-green-800">
-                  {status}
-                </p>
-              ) : null}
-              {isLoading ? (
-                <p role="status" aria-live="polite" className="text-sm text-[#52525b]">
-                  Memuat layanan...
-                </p>
-              ) : error && services.length === 0 ? null : services.length ? (
-                <ul className="m-0 list-none divide-y divide-neutral-200 p-0">
-                  {services.map((service) => (
-                    <li
-                      key={service.id}
-                      className="flex flex-col gap-4 py-4 sm:flex-row sm:items-start sm:justify-between"
-                    >
-                      <div className="min-w-0">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="m-0 text-base font-semibold text-[#18181a]">
-                            {service.title}
-                          </h3>
-                          <span
-                            className={`rounded-md px-2 py-1 text-[11px] font-medium ${
-                              service.isActive
-                                ? "bg-[#e8efd8] text-[#3f5212]"
-                                : "bg-[#f0f0f0] text-[#52525b]"
-                            }`}
-                          >
-                            {service.isActive ? "Aktif" : "Draft"}
+          {isLoading ? (
+            <p className="text-center text-xs text-[#71717a] py-8">Memuat layanan...</p>
+          ) : services.length === 0 ? (
+            <EmptyState
+              icon="grid_view"
+              title="Belum ada layanan"
+              description="Tambahkan layanan pertama untuk mengisi katalog bento publik."
+            />
+          ) : (
+            <div className="grid gap-3">
+              {services.map((service) => {
+                const isSelected = editingId === service.id;
+                return (
+                  <div
+                    key={service.id}
+                    className={`rounded-[12px] border p-4 transition-all ${
+                      isSelected
+                        ? "border-[#18181a] bg-[#fafafa] shadow-sm ring-1 ring-[#18181a]"
+                        : "border-[#eaeaea] bg-white hover:bg-[#fcfcfc]"
+                    }`}
+                  >
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-[#f0f0f0] text-[#18181a]">
+                          <span className="symbol text-xl">
+                            {service.icon || "view_quilt"}
                           </span>
                         </div>
-                        <p className="my-2 text-sm leading-5 text-[#52525b]">
-                          {service.description || "Deskripsi belum diisi."}
-                        </p>
-                        {service.highlights.length ? (
-                          <p className="m-0 text-xs leading-5 text-[#52525b]">
-                            {service.highlights.join(" · ")}
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <h3 className="m-0 text-sm font-semibold text-[#18181a]">
+                              {service.title}
+                            </h3>
+                            <Chip
+                              variant={service.isActive ? "success" : "neutral"}
+                              size="sm"
+                            >
+                              {service.isActive ? "Aktif" : "Draft"}
+                            </Chip>
+                            <span className="text-[11px] text-[#71717a] font-mono">
+                              Urutan: {service.sortOrder}
+                            </span>
+                          </div>
+                          <p className="m-0 mt-1.5 text-xs text-[#52525b] leading-relaxed">
+                            {service.description || "Deskripsi belum diisi."}
                           </p>
-                        ) : null}
+                          {service.highlights.length ? (
+                            <div className="mt-2.5 flex flex-wrap gap-1.5">
+                              {service.highlights.map((h, i) => (
+                                <span
+                                  key={i}
+                                  className="rounded-[6px] bg-[#f0f0f0] px-2 py-0.5 text-[11px] text-[#52525b]"
+                                >
+                                  {h}
+                                </span>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
                       </div>
-                      <div className="flex shrink-0 gap-2">
-                        <button
-                          type="button"
+
+                      <div className="flex shrink-0 gap-1.5 self-end sm:self-start">
+                        <ToolbarButton
+                          variant="light"
                           disabled={isSubmitting}
                           onClick={() => editService(service)}
-                          className="secondary-button min-h-10"
                         >
                           Ubah
-                        </button>
-                        <button
-                          type="button"
+                        </ToolbarButton>
+                        <ToolbarButton
+                          variant="danger"
                           disabled={isSubmitting}
                           onClick={() => void removeService(service)}
-                          className="secondary-button min-h-10 text-red-700"
                         >
                           Hapus
-                        </button>
+                        </ToolbarButton>
                       </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="rounded-xl bg-[#f9f9f9] p-4 text-sm text-[#52525b]">
-                  Belum ada layanan. Tambahkan layanan pertama untuk mengisi
-                  katalog publik.
-                </p>
-              )}
-            </section>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </BentoCard>
 
-            <section
-              aria-labelledby="service-editor-heading"
-              className="rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6"
-            >
-              <h2
-                id="service-editor-heading"
-                className="mb-5 mt-0 text-lg font-semibold text-[#18181a]"
-              >
-                {editingId ? "Ubah layanan" : "Layanan baru"}
+        {/* Right Side: Form Editor */}
+        <BentoCard className="sticky top-20">
+          <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#eaeaea] pb-3">
+            <div>
+              <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                {editingId ? "Ubah Layanan" : "Tambah Layanan Baru"}
               </h2>
-              <form onSubmit={save} className="flex flex-col gap-4">
-                <fieldset
-                  disabled={isSubmitting}
-                  className="m-0 flex flex-col gap-4 border-0 p-0"
-                >
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                    Nama layanan
-                    <input
-                      required
-                      maxLength={150}
-                      value={form.title}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          title: event.target.value,
-                        }))
-                      }
-                      className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                    Deskripsi
-                    <textarea
-                      rows={4}
-                      maxLength={2000}
-                      value={form.description}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          description: event.target.value,
-                        }))
-                      }
-                      className="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-normal"
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                    Poin layanan, satu per baris
-                    <textarea
-                      rows={4}
-                      value={form.highlights.join("\n")}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          highlights: event.target.value
-                            .split("\n")
-                            .map((value) => value.trim())
-                            .filter(Boolean),
-                        }))
-                      }
-                      className="rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm font-normal"
-                    />
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                    Ikon
-                    <select
-                      value={form.icon}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          icon: event.target.value as ServiceInput["icon"],
-                        }))
-                      }
-                      className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                    >
-                      {serviceIconNames.map((icon) => (
-                        <option value={icon} key={icon}>
-                          {icon || "Tanpa ikon"}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                    Urutan
-                    <input
-                      type="number"
-                      min={0}
-                      max={2_147_483_647}
-                      value={form.sortOrder}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          sortOrder: Number(event.target.value),
-                        }))
-                      }
-                      className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                    />
-                  </label>
-                  <label className="flex min-h-11 items-center gap-2 text-sm text-[#18181a]">
-                    <input
-                      type="checkbox"
-                      checked={form.isActive}
-                      onChange={(event) =>
-                        setForm((current) => ({
-                          ...current,
-                          isActive: event.target.checked,
-                        }))
-                      }
-                      className="size-4 accent-[#586016]"
-                    />
-                    Tampilkan pada katalog publik
-                  </label>
-                </fieldset>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting || isLoading}
-                    className="primary-button min-h-11"
-                  >
-                    {isSubmitting
-                      ? "Menyimpan..."
-                      : editingId
-                        ? "Simpan perubahan"
-                        : "Tambah layanan"}
-                  </button>
-                  {editingId ? (
-                    <button
-                      type="button"
-                      disabled={isSubmitting}
-                      onClick={startNew}
-                      className="secondary-button min-h-11"
-                    >
-                      Batal mengubah
-                    </button>
-                  ) : null}
-                </div>
-              </form>
-            </section>
+              <p className="mt-0.5 text-xs text-[#71717a]">
+                Konfigurasi judul, ikon, urutan bento, dan sorotan
+              </p>
+            </div>
+            {editingId ? (
+              <button
+                type="button"
+                disabled={isSubmitting}
+                onClick={startNew}
+                className="text-xs font-medium text-[#71717a] hover:text-[#18181a] underline"
+              >
+                Batal Edit
+              </button>
+            ) : null}
           </div>
-        </main>
+
+          <form onSubmit={save} className="grid gap-3.5">
+            <fieldset disabled={isSubmitting} className="m-0 grid gap-3 border-0 p-0">
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Nama Layanan
+                <input
+                  required
+                  maxLength={150}
+                  value={form.title}
+                  onChange={(e) =>
+                    setForm((c) => ({ ...c, title: e.target.value }))
+                  }
+                  className={inputClass}
+                  placeholder="Contoh: Modern Web Development"
+                />
+              </label>
+
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Deskripsi Singkat
+                <textarea
+                  rows={3}
+                  maxLength={2000}
+                  value={form.description}
+                  onChange={(e) =>
+                    setForm((c) => ({ ...c, description: e.target.value }))
+                  }
+                  className="w-full rounded-[10px] bg-[#f0f0f0] p-3 text-xs text-[#18181a] outline-none border border-transparent focus:border-[#18181a] resize-y"
+                  placeholder="Penjelasan ringkas nilai lebih layanan..."
+                />
+              </label>
+
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Sorotan Utama (satu poin per baris)
+                <textarea
+                  rows={3}
+                  value={form.highlights.join("\n")}
+                  onChange={(e) =>
+                    setForm((c) => ({
+                      ...c,
+                      highlights: e.target.value
+                        .split("\n")
+                        .map((v) => v.trim())
+                        .filter(Boolean),
+                    }))
+                  }
+                  className="w-full rounded-[10px] bg-[#f0f0f0] p-3 text-xs text-[#18181a] outline-none border border-transparent focus:border-[#18181a] resize-y"
+                  placeholder="Next.js App Router&#10;Cloudflare Edge Deploy&#10;Audit Lighthouse 95+"
+                />
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Ikon Simbol
+                  <select
+                    value={form.icon}
+                    onChange={(e) =>
+                      setForm((c) => ({
+                        ...c,
+                        icon: e.target.value as ServiceInput["icon"],
+                      }))
+                    }
+                    className={inputClass}
+                  >
+                    {serviceIconNames.map((icon) => (
+                      <option value={icon} key={icon}>
+                        {icon || "Tanpa Ikon"}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Urutan Tampil
+                  <input
+                    type="number"
+                    min={0}
+                    max={2_147_483_647}
+                    value={form.sortOrder}
+                    onChange={(e) =>
+                      setForm((c) => ({
+                        ...c,
+                        sortOrder: Number(e.target.value),
+                      }))
+                    }
+                    className={inputClass}
+                  />
+                </label>
+              </div>
+
+              <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer pt-1">
+                <input
+                  type="checkbox"
+                  checked={form.isActive}
+                  onChange={(e) =>
+                    setForm((c) => ({ ...c, isActive: e.target.checked }))
+                  }
+                  className="rounded border-[#d4d4d8]"
+                />
+                Tampilkan pada Katalog Publik
+              </label>
+            </fieldset>
+
+            <div className="flex gap-2 pt-2">
+              <ToolbarButton
+                type="submit"
+                variant="dark"
+                disabled={isSubmitting || isLoading}
+                className="w-full"
+              >
+                {isSubmitting
+                  ? "Menyimpan…"
+                  : editingId
+                  ? "Simpan Perubahan"
+                  : "Tambah Layanan"}
+              </ToolbarButton>
+            </div>
+          </form>
+        </BentoCard>
       </div>
-    </div>
+    </AdminFrame>
   );
 }

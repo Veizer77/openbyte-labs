@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getDaySlots,
   getSlots,
+  isSlotBookable,
   wibDay,
   type BlockedDate,
   type ExistingBooking,
@@ -140,5 +141,31 @@ describe("Slot WIB PRD F.2", () => {
       "19:30 - 20:30",
       "20:30 - 21:30",
     ]);
+  });
+  it("isSlotBookable menolak slot yang jam mulainya sudah lewat", () => {
+    const daySlots = getDaySlots(
+      "2026-10-26",
+      now,
+      availabilityRules,
+      [],
+      [],
+      { ...bookingConfig, minDaysAhead: 0 },
+    );
+    const bookable = daySlots
+      .filter((slot) => isSlotBookable(slot, now.getTime()))
+      .map((slot) => slot.label);
+    expect(bookable).toEqual([
+      "13:00 - 14:00",
+      "14:00 - 15:00",
+      "16:00 - 17:00",
+      "17:00 - 18:00",
+      "19:30 - 20:30",
+      "20:30 - 21:30",
+    ]);
+    // The clock moves on: 13:00 WIB is no longer bookable at 13:01 WIB even
+    // though the server-side snapshot still says isAvailable.
+    const after13 = Date.parse("2026-10-26T13:01:00+07:00");
+    expect(isSlotBookable(daySlots[2], after13)).toBe(false);
+    expect(isSlotBookable(daySlots[3], after13)).toBe(true);
   });
 });

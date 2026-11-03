@@ -33,6 +33,10 @@ function omitKeys<T extends object, K extends keyof T>(
   return result as Omit<T, K>;
 }
 
+export async function getPublicServiceList() {
+  return listPublicServices(createServiceStore(getDb()), listOptions);
+}
+
 /**
  * Server Component loader for the first database-backed public catalog.
  * Each section is validated and projected by its domain service.

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   createContext,
   useContext,
@@ -119,7 +118,7 @@ export function CalculatorProvider({
   const [units, updateUnits] = useState(0);
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
-  const [consent, setConsent] = useState(false);
+  const [consent, setConsent] = useState(true);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const getItem = (id: string) => resolveConfiguredItem(config, id);
@@ -461,73 +460,78 @@ export function CalculatorContact(props: Props) {
     setName,
     whatsapp,
     setWhatsapp,
-    consent,
-    setConsent,
     setTurnstileToken,
     turnstileResetKey,
-    disclaimer,
-    consentText,
   } = useCalculator();
+
   return (
     <div {...props}>
-      <label className="flex flex-col gap-1 w-full text-[11px] text-[#a8a8ad]">
-        Nama / Perusahaan *
-        <input
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Nama PIC (opsional)"
-          className="bg-[#242427] text-white rounded-lg px-3 py-[10px] h-[38px] text-[13px] border border-[#3f3f46] focus:border-white outline-none"
-          autoComplete="name"
-        />
-      </label>
-      <label className="flex flex-col gap-1 w-full text-[11px] text-[#a8a8ad]">
-        Nomor WhatsApp *
-        <input
-          value={whatsapp}
-          onChange={(event) => setWhatsapp(event.target.value)}
-          placeholder="0812xxxxxxx"
-          inputMode="tel"
-          autoComplete="tel"
-          className="bg-[#242427] text-white rounded-lg px-3 py-[10px] h-[38px] text-[13px] border border-[#3f3f46] focus:border-white outline-none"
-        />
-      </label>
-
-      {/* Transparansi Estimasi */}
-      <div className="flex items-center justify-between p-2 rounded-lg bg-[#242427] border border-[#3f3f46] text-[11px] text-[#a8a8ad]">
-        <div className="flex items-center gap-1.5">
-          <span className="symbol text-sm text-[#82b440]">info</span>
-          <span className="text-white font-medium">Perhitungan Indikatif</span>
+      <div className="box-border w-full h-fit shrink-0 flex flex-col gap-[4px] justify-start items-start">
+        <label
+          htmlFor="calc-name"
+          className="text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+        >
+          Nama / Perusahaan
+        </label>
+        <div className="box-border w-full h-[38px] shrink-0 flex flex-col gap-0 p-[10px_12px] justify-center items-start bg-[#242427] rounded-[8px] overflow-hidden focus-within:ring-1 focus-within:ring-white">
+          <input
+            id="calc-name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
+            placeholder="Bpk/Ibu PIC Proyek"
+            className="w-full bg-transparent text-[13px]/[18px] text-[#ffffff] placeholder:text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left outline-none border-none p-0"
+            autoComplete="name"
+          />
         </div>
-        <span className="text-[10px] text-[#71717a]">Estimasi Lokal Langsung</span>
       </div>
 
-      <label className="flex items-start gap-2 text-[11px] leading-4 text-[#a8a8ad] cursor-pointer">
-        <input
-          type="checkbox"
-          checked={consent}
-          onChange={(event) => setConsent(event.target.checked)}
-          className="mt-0.5"
-        />
-        <span>
-          {consentText || "Saya menyetujui pemrosesan data kontak untuk konsultasi rincian estimasi ini sesuai"}{" "}
-          {!consentText.toLowerCase().includes("kebijakan privasi") ? <Link href="/kebijakan-privasi" className="underline">Kebijakan Privasi</Link> : null}
-          {consentText.trim().endsWith(".") ? null : "."}
-        </span>
-      </label>
-      <TurnstileWidget
-        action="calculator"
-        onTokenChange={setTurnstileToken}
-        resetKey={turnstileResetKey}
-        theme="dark"
-      />
-      <span className="text-[11px] text-[#71717a]">
-        {disclaimer || "Estimasi awal yang perlu dikonfirmasi setelah konsultasi."}
-      </span>
+      <div className="box-border w-full h-fit shrink-0 flex flex-col gap-[4px] justify-start items-start">
+        <label
+          htmlFor="calc-wa"
+          className="text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+        >
+          Nomor WhatsApp
+        </label>
+        <div className="box-border w-full h-fit shrink-0 flex flex-col gap-0 justify-start items-start relative">
+          <div className="box-border w-full h-[38px] shrink-0 flex flex-col gap-0 p-[10px_36px_10px_12px] justify-center items-start bg-[#242427] rounded-[8px] overflow-hidden relative [z-index:0] focus-within:ring-1 focus-within:ring-white">
+            <input
+              id="calc-wa"
+              value={whatsapp}
+              onChange={(event) => setWhatsapp(event.target.value)}
+              placeholder="0812xxxxxxx"
+              inputMode="tel"
+              autoComplete="tel"
+              className="w-full bg-transparent text-[13px]/[18px] text-[#ffffff] placeholder:text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left outline-none border-none p-0"
+            />
+          </div>
+          <div
+            className="text-[16px]/[24px] box-border absolute right-[12px] top-[7px] text-[#a8a8ad] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:1] pointer-events-none symbol"
+            aria-hidden="true"
+          >
+            chat
+          </div>
+        </div>
+      </div>
+
+      {turnstileSiteKey ? (
+        <div className="w-full pt-1">
+          <TurnstileWidget
+            action="calculator"
+            onTokenChange={setTurnstileToken}
+            resetKey={turnstileResetKey}
+            theme="dark"
+          />
+        </div>
+      ) : null}
     </div>
   );
 }
 
-export function CalculatorSend({ children, ...props }: Props) {
+export function CalculatorSend({
+  children,
+  className,
+  ...props
+}: Props & { className?: string }) {
   const {
     selection,
     groups,
@@ -535,7 +539,6 @@ export function CalculatorSend({ children, ...props }: Props) {
     minimumPrice,
     name,
     whatsapp,
-    consent,
     turnstileToken,
     setTurnstileToken,
     resetTurnstile,
@@ -548,20 +551,24 @@ export function CalculatorSend({ children, ...props }: Props) {
     error?: string;
   } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const currentConfigKey = JSON.stringify({ selection, name, whatsapp, consent });
+  const currentConfigKey = JSON.stringify({ selection, name, whatsapp });
   const currentSubmission =
     submission?.configKey === currentConfigKey ? submission : null;
 
   const handleSend = async () => {
-    if (!name.trim() || !normalizeWhatsapp(whatsapp) || !consent) {
-      notify(
-        "Lengkapi nama, nomor WhatsApp yang valid, dan persetujuan kontak terlebih dahulu.",
-      );
+    const cleanWhatsapp = whatsapp.trim();
+    const normalizedNumber = cleanWhatsapp ? normalizeWhatsapp(cleanWhatsapp) : null;
+    if (cleanWhatsapp && !normalizedNumber) {
+      const errMsg = "Mohon masukkan nomor WhatsApp yang valid (contoh: 0812xxxxxxx).";
+      setSubmission({ configKey: currentConfigKey, error: errMsg });
+      notify(errMsg);
       return;
     }
+
     if (
       !turnstileToken &&
-      (turnstileSiteKey || process.env.NODE_ENV === "production")
+      turnstileSiteKey &&
+      process.env.NODE_ENV === "production"
     ) {
       setSubmission({
         configKey: currentConfigKey,
@@ -585,8 +592,8 @@ export function CalculatorSend({ children, ...props }: Props) {
     try {
       const response = await submitQuoteAction({
         selection,
-        contactName: name.trim(),
-        contactWhatsapp: normalizeWhatsapp(whatsapp) ?? "",
+        contactName: name.trim() || undefined,
+        contactWhatsapp: normalizedNumber ?? undefined,
         consent: true,
         turnstileToken,
         honeypot: "",
@@ -602,6 +609,9 @@ export function CalculatorSend({ children, ...props }: Props) {
         reference: response.data.reference,
       });
       notify("Estimasi tersimpan. Rincian siap dikirim melalui WhatsApp.");
+      if (typeof window !== "undefined" && response.data.whatsappUrl) {
+        window.open(response.data.whatsappUrl, "_blank", "noopener,noreferrer");
+      }
     } catch {
       setSubmission({
         configKey: currentConfigKey,
@@ -615,40 +625,57 @@ export function CalculatorSend({ children, ...props }: Props) {
     }
   };
 
+  const buttonProps = props as HTMLAttributes<HTMLButtonElement>;
+
+  const buttonClass =
+    className ||
+    "box-border w-full h-[56px] shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_12px] justify-center items-center bg-[#e2e89d] hover:bg-[#d4da8f] active:scale-[0.99] rounded-[12px] cursor-pointer transition-all disabled:opacity-60";
+
   return (
-    <div className="flex flex-col gap-3 w-full">
+    <div className="box-border w-full h-fit flex flex-col gap-[10px] items-stretch">
       <button
-        {...(props as HTMLAttributes<HTMLButtonElement>)}
+        {...buttonProps}
         type="button"
         onClick={handleSend}
         disabled={isSubmitting}
         aria-busy={isSubmitting}
-        className="primary-button justify-center font-semibold text-sm !h-[48px]"
+        className={buttonClass}
       >
-        {isSubmitting ? "Menyimpan Estimasi…" : children}
+        {isSubmitting ? (
+          <div className="flex items-center gap-2 text-[#1b1d00] font-bold text-[14px]">
+            <span className="symbol animate-spin text-[18px]">progress_activity</span>
+            <span>Menyimpan Estimasi…</span>
+          </div>
+        ) : (
+          children
+        )}
       </button>
 
       {currentSubmission?.error ? (
-        <p className="m-0 text-xs text-[#fca5a5]" role="alert">
+        <p className="m-0 text-xs text-[#fca5a5] bg-[#3f1d1d] p-2.5 rounded-lg border border-[#ef4444]/30" role="alert">
           {currentSubmission.error}
         </p>
       ) : null}
 
       {currentSubmission?.url ? (
-        <>
-          <p className="m-0 text-xs text-[#e2e89d]" role="status">
-            Estimasi {currentSubmission.reference} tercatat di server.
+        <div className="flex flex-col gap-2 p-3 bg-[#242427] border border-[#82b440]/40 rounded-xl" role="status">
+          <div className="flex items-center gap-1.5 text-[#e2e89d] text-xs font-semibold">
+            <span className="symbol text-base text-[#82b440]">check_circle</span>
+            <span>Estimasi #{currentSubmission.reference} Berhasil Dicatat</span>
+          </div>
+          <p className="m-0 text-[11px] text-[#a8a8ad] leading-relaxed">
+            WhatsApp telah dibuka di tab baru. Jika peramban memblokir pop-up otomatis, silakan klik tombol berikut:
           </p>
           <a
             href={currentSubmission.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="primary-button bg-[#e2e89d] text-[#18181a] hover:bg-[#d2d88f] w-full text-center justify-center font-bold !h-[44px] flex items-center gap-2"
+            className="box-border w-full h-[44px] flex flex-row gap-[6px] justify-center items-center bg-[#e2e89d] hover:bg-[#d4da8f] text-[#1b1d00] font-bold text-xs rounded-[8px] transition-all"
           >
-            <span className="symbol text-lg">chat</span>
-            Kirim Rincian Estimasi ke WhatsApp
+            <span className="symbol text-base">chat</span>
+            <span>Buka WhatsApp Sekarang</span>
           </a>
-        </>
+        </div>
       ) : null}
     </div>
   );

@@ -80,10 +80,36 @@ describe("public booking availability", () => {
 
     expect(result.consultationModes).toEqual(["google_meet", "whatsapp_call"]);
     expect(readMonth).toHaveBeenCalledWith("2026-11-01", "2026-12-01");
+    // Clients must compare slots against the server clock, never the device clock.
+    expect(result.serverNow).toBe(fixedNow.toISOString());
     expect(monday?.slots.map((slot) => [slot.label, slot.isBlocked, slot.isBooked, slot.isAvailable])).toEqual([
       ["09:00 - 10:00", true, false, false],
       ["10:00 - 11:00", false, true, false],
       ["11:00 - 12:00", false, false, true],
+    ]);
+  });
+
+  it("marks a slot as unavailable once the server clock passes its start", async () => {
+    // 10:30 WIB on the booking day: the 09:00 and 10:00 sessions have started,
+    // so only 11:00 may remain bookable even though the row still exists.
+    const base = makeStore();
+    const readMonth = vi.fn(async () => {
+      const schedule = await base.readSchedule("2026-11-02");
+      // minDaysAhead 0 opens today's schedule so only the wall clock decides.
+      return { ...schedule, config: { ...schedule.config, minDaysAhead: 0 } };
+    });
+    const result = await getPublicBookingMonthAvailability(
+      { ...base, readMonth },
+      { month: "2026-11-01" },
+      new Date("2026-11-02T03:30:00.000Z"),
+    );
+    const monday = result.days.find((day) => day.date === "2026-11-02");
+    expect(
+      monday?.slots.map((slot) => [slot.label, slot.isPast, slot.isAvailable]),
+    ).toEqual([
+      ["09:00 - 10:00", true, false],
+      ["10:00 - 11:00", true, false],
+      ["11:00 - 12:00", false, true],
     ]);
   });
 });

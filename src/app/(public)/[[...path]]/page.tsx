@@ -4,29 +4,26 @@ import { screenLoaders, type ScreenKey } from "@/lib/screens";
 import {
   AboutPage,
   PrivacyPage,
-  ServiceDetailPage,
   TermsPage,
 } from "@/components/public/SupportingPages";
 import { ProjectDetail } from "@/components/public/ProjectDetail";
 import { PublicProjectCatalog } from "@/components/public/PublicProjectCatalog";
-import { PublicPackageCatalog } from "@/components/public/PublicPackageCatalog";
 import { getPublicProject } from "@/lib/server/public-projects";
 import { getPublicProjectListing } from "@/lib/server/public-projects";
-import { getPublicCatalog } from "@/lib/server/public-catalog";
+import { getPublicCatalog, getPublicServiceList } from "@/lib/server/public-catalog";
 import { getPublicSiteSettings } from "@/lib/server/public-site";
 import type { PublicSiteSettings } from "@/schemas/public-site-settings";
 import { getPublicPageView } from "@/lib/server/public-pages";
 import { PublicPageBuilder } from "@/components/public/PublicPageBuilder";
+import { PublicBlog } from "@/components/public/PublicBlog";
+import { PublicServiceDetail } from "@/components/public/PublicServiceDetail";
+import { findServiceBySlug } from "@/lib/service-slug";
 import { publicIndexingEnabled } from "@/lib/indexing";
 
 const routes: Record<string, { key: ScreenKey; title: string }> = {
   "": { key: "site/beranda", title: "Website, Aplikasi & Sistem Informasi" },
   proyek: { key: "site/daftar-portofolio", title: "Proyek Portofolio" },
   paket: { key: "site/paket-layanan-harga", title: "Paket Layanan & Harga" },
-  "layanan/sistem-informasi": {
-    key: "site/detail-layanan",
-    title: "Sistem Informasi & Satu Data",
-  },
   kalkulator: {
     key: "site/kalkulator-estimasi-biaya",
     title: "Kalkulator Estimasi Biaya",
@@ -36,6 +33,8 @@ const routes: Record<string, { key: ScreenKey; title: string }> = {
     key: "site/ketentuan-layanan",
     title: "Ketentuan Layanan",
   },
+  // Title only: the render branch above handles `/blog` before the fallback lookup.
+  blog: { key: "site/blog", title: "Blog & Wawasan Rekayasa" },
 };
 interface Props {
   params: Promise<{ path?: string[] }>;
@@ -78,6 +77,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       page = null;
     }
   }
+  if (/^layanan\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(path)) {
+    try {
+      const service = findServiceBySlug(
+        await getPublicServiceList(),
+        path.slice("layanan/".length),
+      );
+      projectTitle = service?.title;
+      projectDescription = service?.description || undefined;
+    } catch {
+      // Metadata stays generic when the service catalog is unavailable.
+    }
+  }
   const title =
     page?.metaTitle ??
     page?.title ??
@@ -116,8 +127,7 @@ export default async function PublicPage({ params }: Props) {
   if (
     path === "kebijakan-privasi" ||
     path === "ketentuan-layanan" ||
-    path === "tentang-kami" ||
-    path === "layanan/sistem-informasi"
+    path === "tentang-kami"
   ) {
     let settings: PublicSiteSettings | undefined;
     try {
@@ -127,8 +137,20 @@ export default async function PublicPage({ params }: Props) {
     }
     if (path === "kebijakan-privasi") return <PrivacyPage settings={settings} />;
     if (path === "ketentuan-layanan") return <TermsPage settings={settings} />;
-    if (path === "tentang-kami") return <AboutPage settings={settings} />;
-    return <ServiceDetailPage settings={settings} />;
+    return <AboutPage settings={settings} />;
+  }
+
+  if (/^layanan\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(path)) {
+    const slug = path.slice("layanan/".length);
+    const service = findServiceBySlug(await getPublicServiceList(), slug);
+    if (!service) notFound();
+    let settings: PublicSiteSettings | undefined;
+    try {
+      settings = await getPublicSiteSettings();
+    } catch {
+      settings = undefined;
+    }
+    return <PublicServiceDetail service={service} settings={settings} />;
   }
 
   if (path === "") {
@@ -144,7 +166,18 @@ export default async function PublicPage({ params }: Props) {
 
   if (path === "paket") {
     const catalog = await getPublicCatalog();
-    return <PublicPackageCatalog catalog={catalog} />;
+    const { default: Screen } = await screenLoaders["site/paket-layanan-harga"]();
+    return <Screen catalog={catalog} />;
+  }
+
+  if (path === "blog") {
+    let settings: PublicSiteSettings | undefined;
+    try {
+      settings = await getPublicSiteSettings();
+    } catch {
+      settings = undefined;
+    }
+    return <PublicBlog settings={settings} />;
   }
 
   if (/^proyek\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(path)) {

@@ -117,6 +117,11 @@ export async function createBooking(
       const now = (deps.now ?? (() => new Date()))();
       if (!Number.isFinite(now.getTime()))
         throw new Error("Jam server tidak valid.");
+      // `getSlots` already drops past slots, so this guard is belt-and-braces:
+      // it keeps the rejection independent of config validity and makes the
+      // intent explicit next to the database-level `booking_future_check`.
+      if (selected.getTime() <= now.getTime())
+        throw new BookingSubmissionError("slot_unavailable");
       if (!schedule.config.availableModes.includes(request.consultationMode))
         throw new BookingSubmissionError("mode_unavailable");
       const slot = getSlots(

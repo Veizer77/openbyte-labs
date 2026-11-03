@@ -55,6 +55,17 @@ export type AdminDashboardData = {
       status: string;
       submittedAt: Date;
     }>;
+    latestProjects?: Array<{
+      id: string;
+      projectTitle: string;
+      clientName: string;
+      currentStep: number;
+      revisionsUsed: number;
+      revisionsIncluded: number;
+      paymentStatus: "unpaid" | "down_payment" | "paid_off";
+      totalCost: number;
+      balance: number;
+    }>;
   };
 };
 
@@ -97,6 +108,7 @@ export async function readAdminDashboardAction(): Promise<
       latestInquiries,
       latestQuotes,
       revisions,
+      latestProjects,
     ] = await Promise.all([
       db
         .select({ value: count() })
@@ -180,6 +192,22 @@ export async function readAdminDashboardAction(): Promise<
         .where(eq(revisionRequests.status, "submitted"))
         .orderBy(desc(revisionRequests.submittedAt))
         .limit(5),
+      db
+        .select({
+          id: clientProjects.id,
+          projectTitle: clientProjects.projectTitle,
+          clientName: clientProjects.clientName,
+          currentStep: clientProjects.currentStep,
+          revisionsUsed: clientProjects.revisionsUsed,
+          revisionsIncluded: clientProjects.revisionsIncluded,
+          paymentStatus: clientProjects.paymentStatus,
+          totalCost: clientProjects.totalCost,
+          balance: clientProjects.balance,
+        })
+        .from(clientProjects)
+        .where(and(isNull(clientProjects.archivedAt), isNull(clientProjects.deletedAt)))
+        .orderBy(desc(clientProjects.createdAt))
+        .limit(5),
     ]);
 
     return ok({
@@ -195,6 +223,7 @@ export async function readAdminDashboardAction(): Promise<
         latestInquiries,
         latestQuotes,
         revisions,
+        latestProjects,
       },
     });
   } catch (error) {

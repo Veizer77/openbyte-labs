@@ -29,6 +29,7 @@ export default async function SiteBookingKonsultasi() {
           id="konten"
           tabIndex={-1}
         >
+          <PublicHeader settings={settings} />
           <main
             className={
               "box-border w-full flex-1 flex flex-col gap-0 pt-[72px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
@@ -70,10 +71,10 @@ export default async function SiteBookingKonsultasi() {
                       className={
                         "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
                       }
-                      data-pencil-name={"Booking konsultasi"}
+                      data-pencil-name={"PRD 8.3 Guaranteed SLA"}
                       data-text="true"
                     >
-                      {"Booking konsultasi"}
+                      {"PRD 8.3 Guaranteed SLA"}
                     </div>
                   </div>
                   <div
@@ -97,10 +98,10 @@ export default async function SiteBookingKonsultasi() {
                       className={
                         "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
                       }
-                      data-pencil-name={"Lihat jadwal yang tersedia"}
+                      data-pencil-name={"Real-time Sync (WIB / UTC+7)"}
                       data-text="true"
                     >
-                      {"Lihat jadwal yang tersedia"}
+                      {"Real-time Sync (WIB / UTC+7)"}
                     </div>
                   </div>
                 </div>
@@ -134,12 +135,12 @@ export default async function SiteBookingKonsultasi() {
                         "text-[14px]/[20px] box-border w-full h-[40px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
                       }
                       data-pencil-name={
-                        "Diskusikan kebutuhan website, aplikasi, atau sistem informasi Anda."
+                        "Diskusikan arsitektur sistem, kelayakan teknologi, dan roadmap digital Anda bersama Senior System Specialist."
                       }
                       data-text="true"
                     >
                       {
-                        "Diskusikan kebutuhan website, aplikasi, atau sistem informasi Anda."
+                        "Diskusikan arsitektur sistem, kelayakan teknologi, dan roadmap digital Anda bersama Senior System Specialist."
                       }
                     </div>
                   </div>
@@ -160,10 +161,10 @@ export default async function SiteBookingKonsultasi() {
                         className={
                           "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
                         }
-                        data-pencil-name={"JADWAL"}
+                        data-pencil-name={"SLOT AKTIF"}
                         data-text="true"
                       >
-                        {"JADWAL"}
+                        {"SLOT AKTIF"}
                       </div>
                       <div
                         className={
@@ -174,10 +175,10 @@ export default async function SiteBookingKonsultasi() {
                           className={
                             "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-center [white-space:nowrap]"
                           }
-                          data-pencil-name={"Pilih di kalender"}
+                          data-pencil-name={"16"}
                           data-text="true"
                         >
-                          {"Pilih di kalender"}
+                          {"16"}
                         </div>
                       </div>
                     </div>
@@ -191,10 +192,10 @@ export default async function SiteBookingKonsultasi() {
                         className={
                           "text-[11px]/[14px] box-border w-full text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-center"
                         }
-                        data-pencil-name={"PEMESANAN"}
+                        data-pencil-name={"TERISI"}
                         data-text="true"
                       >
-                        {"PEMESANAN"}
+                        {"TERISI"}
                       </div>
                       <div
                         className={
@@ -205,10 +206,10 @@ export default async function SiteBookingKonsultasi() {
                           className={
                             "text-[16px]/[20px] box-border text-[#f97316] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-center [white-space:nowrap]"
                           }
-                          data-pencil-name={"Diperiksa"}
+                          data-pencil-name={"4"}
                           data-text="true"
                         >
-                          {"Diperiksa"}
+                          {"4"}
                         </div>
                       </div>
                     </div>
@@ -223,10 +224,10 @@ export default async function SiteBookingKonsultasi() {
                         className={
                           "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
                         }
-                        data-pencil-name={"KONFIRMASI"}
+                        data-pencil-name={"RESPONSE"}
                         data-text="true"
                       >
-                        {"KONFIRMASI"}
+                        {"RESPONSE"}
                       </div>
                       <div
                         className={
@@ -237,10 +238,10 @@ export default async function SiteBookingKonsultasi() {
                           className={
                             "text-[16px]/[20px] box-border text-[#82b440] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-center [white-space:nowrap]"
                           }
-                          data-pencil-name={"Setelah ditinjau"}
+                          data-pencil-name={"< 1 Jam"}
                           data-text="true"
                         >
-                          {"Setelah ditinjau"}
+                          {"< 1 Jam"}
                         </div>
                       </div>
                     </div>
@@ -441,7 +442,6 @@ export default async function SiteBookingKonsultasi() {
             </div>
           </main>
           <PublicFooter settings={settings} />
-          <PublicHeader settings={settings} />
         </div>
       </BookingProvider>
     </ScreenState>

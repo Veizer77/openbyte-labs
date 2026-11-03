@@ -13,6 +13,7 @@ import {
   revisionRequests,
 } from "@/db/schema/portal";
 import { ok, toFailure, type ActionResult } from "../result";
+import { getEnv } from "@/env";
 
 export type AdminPrivateFile = {
   id: string;
@@ -27,15 +28,20 @@ export type AdminPrivateFile = {
 };
 
 function privateStorageReady() {
-  const privateBucket = process.env.R2_BUCKET_STAGING;
-  const publicBucket = process.env.R2_BUCKET_PUBLIC;
-  return Boolean(
-    process.env.R2_ACCOUNT_ID &&
-      process.env.R2_ACCESS_KEY_ID &&
-      process.env.R2_SECRET_ACCESS_KEY &&
-      privateBucket &&
-      privateBucket !== publicBucket,
-  );
+  // Dibaca lewat getEnv() agar alias R2_BUCKET_STAGING/R2_BUCKET_PRIVATE dan
+  // validasi skema berlaku sama seperti jalur unggah/unduh sebenarnya.
+  try {
+    const env = getEnv();
+    return Boolean(
+      env.R2_ACCOUNT_ID &&
+        env.R2_ACCESS_KEY_ID &&
+        env.R2_SECRET_ACCESS_KEY &&
+        env.R2_BUCKET_STAGING &&
+        env.R2_BUCKET_STAGING !== env.R2_BUCKET_PUBLIC,
+    );
+  } catch {
+    return false;
+  }
 }
 
 export async function listAdminPrivateFilesAction(): Promise<

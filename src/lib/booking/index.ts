@@ -31,6 +31,18 @@ export interface DaySlot extends Slot {
   isBooked: boolean;
   isAvailable: boolean;
 }
+/**
+ * Single source of truth for "may a visitor pick this slot right now".
+ * `getDaySlots` already clears `isAvailable` for past slots, but the clock keeps
+ * moving between render and click, so the wall-clock check is repeated here
+ * instead of being copied into every component.
+ */
+export const isSlotBookable = (
+  slot: Pick<DaySlot, "start" | "isPast" | "isAvailable">,
+  nowMs: number,
+) =>
+  slot.isAvailable && !slot.isPast && Date.parse(slot.start) > nowMs;
+
 const DAY = 86_400_000;
 const WIB = 7 * 3_600_000;
 const minutes = (time: string) => {

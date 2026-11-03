@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import inventory from "../../src/fixtures/screens.json";
 
 async function expectRenderedNotFound(response: {
   status: () => number;
@@ -11,32 +10,6 @@ async function expectRenderedNotFound(response: {
   expect(await response.text()).toContain(
     "Halaman Tidak Ditemukan atau Sesi Kedaluwarsa",
   );
-}
-
-for (const screen of inventory) {
-  test(`layar ${screen.key}`, async ({ page }) => {
-    const errors: string[] = [];
-    page.on("pageerror", (error) => errors.push(error.message));
-    await page.setViewportSize({ width: 1440, height: 1000 });
-    const response = await page.goto(`/preview/${screen.key}`);
-    expect(response?.status()).toBe(200);
-    await expect(page.locator("[data-screen]").first()).toBeVisible();
-    await expect(page.getByTestId("preview-indicator")).toBeVisible();
-    expect(errors).toEqual([]);
-  });
-  test(`mobile ${screen.key}`, async ({ page }) => {
-    await page.setViewportSize({ width: 360, height: 900 });
-    const errors: string[] = [];
-    page.on("pageerror", (error) => errors.push(error.message));
-    await page.goto(`/preview/${screen.key}`);
-    await expect(page.locator("[data-screen]").first()).toBeVisible();
-    expect(
-      await page.evaluate(
-        () => document.documentElement.scrollWidth <= innerWidth + 1,
-      ),
-    ).toBe(true);
-    expect(errors).toEqual([]);
-  });
 }
 
 test("navigasi publik dan status aktivasi tracking", async ({ page, request }) => {
@@ -174,7 +147,7 @@ test("admin: tanpa sesi MFA diarahkan ke login", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("FAQ dan filter portofolio", async ({ page }) => {
+test("interaksi FAQ", async ({ page }) => {
   await page.goto("/");
   const question = page
     .locator("summary")
@@ -185,15 +158,6 @@ test("FAQ dan filter portofolio", async ({ page }) => {
   await expect(
     page.getByText(/Garansi bug awal mengikuti PRD/),
   ).not.toBeVisible();
-  await page.goto("/preview/site/daftar-portofolio");
-  await page
-    .getByRole("button", { name: "Bisnis & UMKM 2", exact: true })
-    .click();
-  await expect(page.locator("article")).toHaveCount(2);
-  await page
-    .getByRole("button", { name: "Semua Proyek 6", exact: true })
-    .click();
-  await expect(page.locator("article")).toHaveCount(6);
 });
 
 test("katalog publik hanya menautkan proyek yang diterbitkan", async ({
@@ -222,7 +186,7 @@ test("katalog publik hanya menautkan proyek yang diterbitkan", async ({
   } else {
     await expect(page.getByRole("alert")).toBeVisible();
   }
-  await page.goto("/preview/site/beranda");
+  await page.goto("/");
   const links = await page
     .locator("a[href^='/']")
     .evaluateAll((elements) => [
@@ -230,45 +194,6 @@ test("katalog publik hanya menautkan proyek yang diterbitkan", async ({
     ]);
   for (const href of links)
     expect((await request.get(href)).status(), href).toBe(200);
-});
-
-test("menu admin mobile bisa dibuka, navigasi, dan Escape", async ({
-  page,
-}) => {
-  await page.setViewportSize({ width: 360, height: 900 });
-  await page.goto("/preview/cms/dashboard-cms-admin");
-  await page.getByRole("button", { name: "Buka menu admin" }).click();
-  const menu = page.getByRole("dialog", { name: "Navigasi admin" });
-  await expect(menu).toBeVisible();
-  await expect(
-    menu.getByRole("link", { name: "Media", exact: false }),
-  ).toHaveAttribute("href", "/admin/media");
-  await page.keyboard.press("Escape");
-  await expect(menu).not.toBeVisible();
-});
-
-test("media lokal: tolak SVG, preview dan alt", async ({ page }) => {
-  await page.goto("/preview/cms/media");
-  const input = page.locator("input[type=file]");
-  await input.setInputFiles({
-    name: "icon.svg",
-    mimeType: "image/svg+xml",
-    buffer: Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>'),
-  });
-  await expect(
-    page.getByRole("alert").filter({ hasText: "SVG tidak diizinkan" }),
-  ).toBeVisible();
-  await input.setInputFiles("public/images/OpenByte Labs Tech Logo-1.png");
-  await page
-    .getByRole("textbox", { name: "Teks alternatif" })
-    .fill("Dashboard contoh");
-  await expect(
-    page.getByRole("img", { name: "Dashboard contoh" }),
-  ).toBeVisible();
-  await page.getByRole("button", { name: "Hapus dari preview" }).click();
-  await expect(
-    page.getByText("Belum ada media di preview.", { exact: false }),
-  ).toBeVisible();
 });
 
 for (const width of [360, 768, 1024, 1440]) {

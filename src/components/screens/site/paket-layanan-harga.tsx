@@ -7,7 +7,20 @@ import {
   DataRows,
   ScreenState,
 } from "@/components/preview/Controls";
-export default function SitePaketLayananHarga() {
+import type { PublicCatalog } from "@/lib/server/public-catalog";
+import { normalizeWhatsapp } from "@/lib/whatsapp";
+
+export default function SitePaketLayananHarga({
+  catalog,
+}: {
+  catalog?: PublicCatalog;
+} = {}) {
+  const whatsappNumber = catalog?.settings?.general.whatsappNumber ?? "";
+  const whatsappDigits = whatsappNumber ? normalizeWhatsapp(whatsappNumber) : null;
+  const whatsappUrl = whatsappDigits
+    ? `https://wa.me/${whatsappDigits}?text=${encodeURIComponent("Halo OpenByte Labs, saya ingin mendiskusikan paket layanan.")}`
+    : "/konsultasi";
+
   return (
     <ScreenState screen={"site/paket-layanan-harga"}>
       <div
@@ -19,6 +32,7 @@ export default function SitePaketLayananHarga() {
         id="konten"
         tabIndex={-1}
       >
+        <PublicHeader settings={catalog?.settings} />
         <main
           className={
             "box-border w-full flex-1 flex flex-col gap-0 pt-[72px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
@@ -2671,8 +2685,10 @@ export default function SitePaketLayananHarga() {
                 }
                 data-pencil-name={"div"}
               >
-                <Link
-                  href={"/konsultasi"}
+                <a
+                  href={whatsappUrl}
+                  target={whatsappDigits ? "_blank" : undefined}
+                  rel={whatsappDigits ? "noopener noreferrer" : undefined}
                   className={
                     "box-border w-fit shrink-0 h-[52px] [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_20px] justify-start items-center bg-[#242427] rounded-[12px]"
                   }
@@ -2698,9 +2714,9 @@ export default function SitePaketLayananHarga() {
                   >
                     {"Diskusi via WhatsApp"}
                   </div>
-                </Link>
-                <UiAction
-                  label={"Isi Form Spesifikasi Kustom"}
+                </a>
+                <Link
+                  href={"/konsultasi"}
                   className={
                     "box-border w-fit shrink-0 h-[52px] [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[12px_20px] justify-start items-center bg-[#e2e89d] rounded-[12px]"
                   }
@@ -2726,13 +2742,12 @@ export default function SitePaketLayananHarga() {
                   >
                     {"arrow_forward"}
                   </div>
-                </UiAction>
+                </Link>
               </div>
             </section>
           </div>
         </main>
-        <PublicFooter />
-        <PublicHeader />
+        <PublicFooter settings={catalog?.settings} />
       </div>
     </ScreenState>
   );

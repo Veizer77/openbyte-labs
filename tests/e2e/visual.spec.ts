@@ -19,9 +19,6 @@ test.beforeAll(async () => {
 });
 
 for (const [key, route] of [
-  ["site/beranda", "/preview/site/beranda"],
-  ["site/daftar-portofolio", "/preview/site/daftar-portofolio"],
-  ["cms/dashboard-cms-admin", "/preview/cms/dashboard-cms-admin"],
   ["cms/login-admin", "/admin/login"],
 ]) {
   test(`visual reference ${key}`, async ({ browser, page }) => {
@@ -71,7 +68,7 @@ for (const [key, route] of [
     await page.evaluate(() => document.fonts.ready);
     await page.addStyleTag({
       content:
-        '[data-testid="preview-indicator"] { visibility: hidden !important; } html { scroll-behavior: auto !important; } nextjs-portal { display: none !important; }',
+        'html { scroll-behavior: auto !important; } nextjs-portal { display: none !important; }',
     });
     await page.locator("img").evaluateAll(async (images) => {
       for (const image of images) {
@@ -90,22 +87,7 @@ for (const [key, route] of [
       fullPage: true,
     });
     await page.screenshot({ path: `${dir}/${id}-react.png`, fullPage: true });
-    const names = [
-      "Rekayasa Perangkat Lunak",
-      "Portofolio Sistem",
-      "Dasbor Operasional",
-      "Portal Kontrol",
-    ];
-    expect(await page.locator("body").innerText()).toContain(
-      names[
-        [
-          "site/beranda",
-          "site/daftar-portofolio",
-          "cms/dashboard-cms-admin",
-          "cms/login-admin",
-        ].indexOf(key)
-      ],
-    );
+    expect(await page.locator("body").innerText()).toContain("Portal Kontrol");
     await writeFile(
       `${dir}/${id}-measurements.json`,
       JSON.stringify(

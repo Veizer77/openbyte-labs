@@ -5,10 +5,13 @@ import {
   useContext,
   useState,
   useEffect,
+  useMemo,
+  useRef,
+  useCallback,
   type HTMLAttributes,
   type ReactNode,
 } from "react";
-import { wibDay } from "@/lib/booking";
+import { isSlotBookable, wibDay } from "@/lib/booking";
 import { dateWib } from "@/lib/format";
 import {
   getPublicBookingMonthAvailabilityAction,
@@ -50,6 +53,20 @@ export function BookingProvider({
   initialNow: string;
 }) {
   const [now, setNow] = useState(() => new Date(initialNow));
+  /**
+   * Slots are compared against the *server* clock, not the device clock: a
+   * visitor whose PC clock or timezone is wrong would otherwise see sessions
+   * that already ended as still bookable. The server sends `serverNow` with the
+   * availability snapshot; elapsed time is measured with `performance.now()` so
+   * a client clock jump cannot rewind the comparison either.
+   */
+  const clock = useRef<{ serverMs: number; perfMs: number } | null>(null);
+  const readNow = useCallback(() => {
+    const anchor = clock.current;
+    if (!anchor) return new Date(initialNow);
+    const perf = typeof performance === "undefined" ? 0 : performance.now();
+    return new Date(anchor.serverMs + Math.max(0, perf - anchor.perfMs));
+  }, [initialNow]);
   const [initialMonth] = useState(
     () => `${wibDay(new Date(initialNow)).slice(0, 7)}-01`,
   );
@@ -70,10 +87,10 @@ export function BookingProvider({
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setNow(new Date());
+      setNow(readNow());
     }, 30_000);
     return () => clearInterval(timer);
-  }, []);
+  }, [readNow]);
 
   useEffect(() => {
     let active = true;
@@ -88,14 +105,24 @@ export function BookingProvider({
           return;
         }
         const data = result.data;
+        // Re-anchor the clock to the server the snapshot was computed with.
+        clock.current = {
+          serverMs: Date.parse(data.serverNow),
+          perfMs: typeof performance === "undefined" ? 0 : performance.now(),
+        };
+        const serverNow = readNow();
+        setNow(serverNow);
         const openDay = data.days.find((day) =>
-          day.slots.some((candidate) => candidate.isAvailable),
+          day.slots.some((candidate) =>
+            isSlotBookable(candidate, serverNow.getTime()),
+          ),
         );
         setAvailabilityState({ month, data, error: "" });
         updateDate(openDay?.date ?? "");
         updateSlot(
-          openDay?.slots.find((candidate) => candidate.isAvailable)?.start ??
-            "",
+          openDay?.slots.find((candidate) =>
+            isSlotBookable(candidate, serverNow.getTime()),
+          )?.start ?? "",
         );
         if (data.consultationModes.length) {
           updateMode((prev) =>
@@ -119,14 +146,15 @@ export function BookingProvider({
     return () => {
       active = false;
     };
-  }, [month]);
+  }, [month, readNow]);
 
   const setDate = (newDate: string) => {
     const day = availability?.days.find((candidate) => candidate.date === newDate);
-    const nextSlot = day?.slots.find((candidate) => candidate.isAvailable);
-    if (!nextSlot) return;
+    const nextSlot = day?.slots.find((candidate) =>
+      isSlotBookable(candidate, now.getTime()),
+    );
     updateDate(newDate);
-    updateSlot(nextSlot.start);
+    updateSlot(nextSlot?.start ?? "");
   };
 
   const setMonth = (nextMonth: string) => {
@@ -300,23 +328,31 @@ export function BookingCalendar(props: Props) {
           const daySlots = availability?.days.find(
             (entry) => entry.date === day,
           )?.slots;
-          const available =
-            !loading && !!daySlots?.some((candidate) => candidate.isAvailable);
+          const hasSlots = (daySlots?.length ?? 0) > 0;
+          const isPastDay = day < wibDay(now);
+          const hasAvailableSlots =
+            !loading &&
+            !!daySlots?.some((candidate) =>
+              isSlotBookable(candidate, now.getTime()),
+            );
+          const isClickable = !loading && hasSlots && !isPastDay;
           const isSelected = date === day;
           return (
             <button
               key={day}
               type="button"
-              disabled={!available || loading}
+              disabled={!isClickable}
               aria-label={dateWib(`${day}T00:00:00+07:00`)}
               aria-pressed={isSelected}
               onClick={() => setDate(day)}
               className={`box-border w-full h-[34px] flex flex-col gap-0 p-[8px] justify-center items-center rounded-[8px] transition-colors ${
                 isSelected
                   ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#18181a] cursor-pointer"
-                  : available
+                  : hasAvailableSlots
                     ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#ffffff] hover:bg-[#e4e4e7] cursor-pointer"
-                    : "bg-transparent opacity-60 cursor-not-allowed"
+                    : isClickable
+                      ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#f4f4f5] hover:bg-[#e4e4e7] cursor-pointer"
+                      : "bg-transparent opacity-40 cursor-not-allowed"
               }`}
               data-pencil-name={String(index + 1)}
             >
@@ -324,9 +360,9 @@ export function BookingCalendar(props: Props) {
                 className={`text-[13px]/[18px] box-border font-[var(--font-inter),system-ui,sans-serif] text-center [white-space:nowrap] ${
                   isSelected
                     ? "text-[#ffffff] font-bold"
-                    : available
+                    : hasAvailableSlots
                       ? "text-[#18181a] font-medium"
-                      : "text-[#9ca3af99] font-medium"
+                      : "text-[#71717a] font-medium"
                 }`}
               >
                 {index + 1}
@@ -346,7 +382,9 @@ export function BookingCalendar(props: Props) {
         </p>
       ) : availability &&
         !availability.days.some((day) =>
-          day.slots.some((candidate) => candidate.isAvailable),
+          day.slots.some((candidate) =>
+            isSlotBookable(candidate, now.getTime()),
+          ),
         ) ? (
         <p className="m-0 text-[11px] text-[#71717a]" role="status">
           Tidak ada slot konsultasi yang tersedia pada bulan ini.
@@ -408,12 +446,34 @@ export function BookingCalendar(props: Props) {
 }
 
 export function BookingSlots(props: Props) {
-  const { date, slot, setSlot, mode, setMode, availability, loading, error } =
-    useBooking()!;
-  const allSlots =
-    availability?.days.find((day) => day.date === date)?.slots ?? [];
-  const availableSlotsCount = allSlots.filter((s) => s.isAvailable).length;
+  const {
+    date,
+    slot,
+    setSlot,
+    mode,
+    setMode,
+    availability,
+    loading,
+    error,
+    now,
+  } = useBooking()!;
+  const allSlots = useMemo(
+    () => availability?.days.find((day) => day.date === date)?.slots ?? [],
+    [availability, date],
+  );
+  const availableSlotsCount = allSlots.filter((s) =>
+    isSlotBookable(s, now.getTime()),
+  ).length;
   const modes = availability?.consultationModes ?? [];
+
+  useEffect(() => {
+    if (!slot) return;
+    const selectedOption = allSlots.find((s) => s.start === slot);
+    if (!selectedOption) return;
+    // Drop the selection the moment it stops being bookable so the form can
+    // never submit a slot the visitor can no longer honour.
+    if (!isSlotBookable(selectedOption, now.getTime())) setSlot("");
+  }, [slot, allSlots, now, setSlot]);
 
   return (
     <div {...props}>
@@ -429,7 +489,13 @@ export function BookingSlots(props: Props) {
             className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
             data-pencil-name="SLOT WAKTU SESI"
           >
-            SLOT WAKTU SESI
+            {`SLOT WAKTU SESI • ${
+              date
+                ? date === wibDay(now)
+                  ? `HARI INI (${dateWib(`${date}T00:00:00+07:00`)})`
+                  : dateWib(`${date}T00:00:00+07:00`)
+                : "PILIH TANGGAL"
+            }`}
           </div>
           <div
             className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
@@ -475,10 +541,13 @@ export function BookingSlots(props: Props) {
           {allSlots.map((option, index) => {
             const isSelected = slot === option.start;
             const period = getSessionPeriod(option.label, index);
-            const isPast = option.isPast;
+            // Display flag: a slot whose start has passed is shown disabled with
+            // its own label instead of disappearing, so the grid stays stable.
+            const isPast =
+              option.isPast || Date.parse(option.start) <= now.getTime();
             const isBooked = option.isBooked;
             const isBlocked = option.isBlocked;
-            const isAvailable = option.isAvailable;
+            const isAvailable = isSlotBookable(option, now.getTime());
 
             let statusText = "Tersedia untuk Booking";
             let dotColor = "bg-[#82b440]";
@@ -493,6 +562,10 @@ export function BookingSlots(props: Props) {
               dotColor = "bg-[#f97316]";
               statusTextColor = "text-[#f97316]";
             } else if (isBlocked) {
+              statusText = "Tidak Tersedia";
+              dotColor = "bg-[#a1a1aa]";
+              statusTextColor = "text-[#71717a]";
+            } else if (!isAvailable) {
               statusText = "Tidak Tersedia";
               dotColor = "bg-[#a1a1aa]";
               statusTextColor = "text-[#71717a]";

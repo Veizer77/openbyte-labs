@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
-import { AdminHeader, AdminSidebar } from "./AdminShell";
+import { AdminFrame } from "./AdminFrame";
+import { BentoCard, Chip, EmptyState, SearchField, ToolbarButton } from "./AdminUi";
 import {
   createMediaUploadAction,
   finalizeMediaUploadAction,
@@ -20,6 +21,9 @@ function formatBytes(bytes: number) {
     ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
     : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
+
+const inputClass =
+  "h-[38px] w-full rounded-[10px] bg-[#f0f0f0] px-3 text-xs text-[#18181a] placeholder-[#71717a] outline-none border border-transparent focus:border-[#18181a] transition-all";
 
 export function AdminMediaPage() {
   const [assets, setAssets] = useState<MediaAsset[]>([]);
@@ -57,7 +61,7 @@ export function AdminMediaPage() {
         setIsLoading(false);
       }
     },
-    [],
+    []
   );
 
   useEffect(() => {
@@ -127,14 +131,14 @@ export function AdminMediaPage() {
         });
       } catch {
         setUploadError(
-          "Upload ke penyimpanan gagal. Periksa koneksi dan pengaturan CORS bucket staging.",
+          "Upload ke penyimpanan gagal. Periksa koneksi dan pengaturan CORS bucket staging."
         );
         setStatus("");
         return;
       }
       if (!response.ok) {
         setUploadError(
-          "Penyimpanan menolak upload. Coba lagi atau periksa pengaturan bucket staging.",
+          "Penyimpanan menolak upload. Coba lagi atau periksa pengaturan bucket staging."
         );
         setStatus("");
         return;
@@ -157,7 +161,9 @@ export function AdminMediaPage() {
       if (fileInput.current) fileInput.current.value = "";
       await loadAssets(query, 0, false);
     } catch {
-      setUploadError("Upload media tidak selesai. Periksa koneksi lalu coba lagi.");
+      setUploadError(
+        "Upload media tidak selesai. Periksa koneksi lalu coba lagi."
+      );
       setStatus("");
     } finally {
       setIsUploading(false);
@@ -165,209 +171,205 @@ export function AdminMediaPage() {
   }
 
   return (
-    <div className="screen admin-screen relative flex min-h-screen w-full flex-col bg-[#f9f9f9]">
-      <AdminSidebar />
-      <div className="flex min-h-screen w-full flex-col lg:pl-[288px]">
-        <AdminHeader />
-        <main
-          id="konten"
-          className="mx-auto w-full max-w-[1920px] flex-1 px-4 pb-12 pt-20 sm:px-6 lg:px-8"
-        >
-          <div className="mb-6">
-            <nav
-              aria-label="Breadcrumb"
-              className="mb-2 flex gap-1.5 text-[11px] text-[#52525b]"
-            >
-              <span>Admin</span>
-              <span aria-hidden="true">/</span>
-              <span>Konten Website</span>
-              <span aria-hidden="true">/</span>
-              <span className="font-semibold text-[#18181a]">Media</span>
-            </nav>
-            <h1 className="m-0 text-2xl font-semibold tracking-[-.5px] text-[#18181a]">
-              Media Library
-            </h1>
-            <p className="mb-0 mt-2 max-w-3xl text-sm leading-5 text-[#52525b]">
-              Gambar final disimpan sebagai varian WebP dan dapat dipilih pada
-              editor konten. File staging yang belum selesai tidak tampil di
-              daftar ini.
+    <AdminFrame
+      title="Media Library"
+      description="Kelola penyimpanan gambar publik teroptimasi WebP. Berkas diproses di server sebelum dapat dipilih pada editor portofolio atau blok halaman."
+      screenKey="cms/media-library"
+      actions={
+        <div className="flex items-center gap-2">
+          <ToolbarButton
+            variant="light"
+            icon="sync"
+            disabled={isLoading || isUploading}
+            onClick={() => void loadAssets(query, 0, false)}
+          >
+            Refresh
+          </ToolbarButton>
+        </div>
+      }
+    >
+      {error ? (
+        <div className="mb-4 rounded-[12px] border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-center gap-2">
+          <span className="symbol text-base">error</span>
+          <span>{error}</span>
+        </div>
+      ) : null}
+      {status ? (
+        <div className="mb-4 rounded-[12px] border border-green-200 bg-green-50 p-3.5 text-xs text-green-900 flex items-center gap-2">
+          <span className="symbol text-base">check_circle</span>
+          <span>{status}</span>
+        </div>
+      ) : null}
+
+      <div className="grid items-start gap-5 xl:grid-cols-[340px_1fr]">
+        {/* Left Side: Upload Form */}
+        <BentoCard className="sticky top-20">
+          <div className="mb-4 border-b border-[#eaeaea] pb-3">
+            <h2 className="m-0 text-base font-semibold text-[#18181a]">
+              Unggah Media Baru
+            </h2>
+            <p className="mt-0.5 text-xs text-[#71717a]">
+              PNG, JPEG, WebP. Maks 15 MB. Diproses otomatis ke varian WebP responsif
             </p>
           </div>
 
-          <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(320px,.7fr)_minmax(0,1.3fr)]">
-            <section className="rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">
-              <h2 className="m-0 text-lg font-semibold text-[#18181a]">
-                Unggah gambar
-              </h2>
-              <p className="mb-5 mt-2 text-xs leading-5 text-[#52525b]">
-                Format PNG, JPEG, atau WebP. Maksimal 15 MB. Gambar diproses di
-                server sebelum dapat dipakai di website.
-              </p>
-              <form onSubmit={(event) => void upload(event)}>
-                <fieldset
-                  disabled={isUploading}
-                  className="m-0 flex flex-col gap-4 border-0 p-0"
-                >
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                    Berkas gambar
-                    <input
-                      ref={fileInput}
-                      type="file"
-                      accept="image/png,image/jpeg,image/webp"
-                      onChange={(event) =>
-                        handleFileChange(event.currentTarget.files?.[0])
-                      }
-                      className="min-h-11 w-full rounded-lg border border-neutral-300 bg-white p-2 text-sm font-normal file:mr-3 file:min-h-8 file:rounded-md file:border-0 file:bg-[#f0f0f0] file:px-3 file:text-xs file:font-medium"
-                    />
-                  </label>
-                  {file ? (
-                    <p className="m-0 break-words text-xs text-[#52525b]">
-                      {file.name} · {formatBytes(file.size)}
-                    </p>
-                  ) : null}
-                  <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                    Teks alternatif
-                    <input
-                      required
-                      maxLength={250}
-                      value={alt}
-                      onChange={(event) => setAlt(event.target.value)}
-                      placeholder="Deskripsikan informasi pada gambar"
-                      className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                    />
-                    <span className="text-xs font-normal leading-5 text-[#52525b]">
-                      Digunakan pembaca layar dan editor proyek.
-                    </span>
-                  </label>
-                  {uploadError ? (
-                    <p role="alert" className="m-0 text-sm text-red-700">
-                      {uploadError}
-                    </p>
-                  ) : null}
-                  {status ? (
-                    <p role="status" className="m-0 text-sm text-green-800">
-                      {status}
-                    </p>
-                  ) : null}
-                  <button
-                    type="submit"
-                    disabled={isUploading || !file}
-                    className="primary-button min-h-11 w-fit"
-                  >
-                    {isUploading ? "Memproses gambar..." : "Unggah dan finalisasi"}
-                  </button>
-                </fieldset>
-              </form>
-            </section>
+          <form onSubmit={(e) => void upload(e)} className="grid gap-3.5">
+            <fieldset
+              disabled={isUploading}
+              className="m-0 grid gap-3 border-0 p-0"
+            >
+              <label className="grid gap-1.5 text-xs font-medium text-[#52525b]">
+                Pilih Berkas Gambar
+                <input
+                  ref={fileInput}
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={(e) =>
+                    handleFileChange(e.currentTarget.files?.[0])
+                  }
+                  className="w-full rounded-[10px] border border-[#eaeaea] bg-white p-2 text-xs text-[#18181a] file:mr-3 file:rounded-[6px] file:border-0 file:bg-[#f0f0f0] file:px-2.5 file:py-1 file:text-xs file:font-medium file:text-[#18181a]"
+                />
+              </label>
 
-            <section className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">
-              <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-                <div>
-                  <h2 className="m-0 text-lg font-semibold text-[#18181a]">
-                    Aset final
-                  </h2>
-                  <p className="mb-0 mt-1 text-xs text-[#52525b]">
-                    {assets.length} aset pada halaman ini
-                  </p>
+              {file ? (
+                <div className="rounded-[8px] bg-[#f9f9f9] p-2 text-xs text-[#52525b] border border-[#eaeaea]">
+                  <span className="font-semibold text-[#18181a] block truncate">
+                    {file.name}
+                  </span>
+                  <span className="text-[11px] text-[#71717a]">
+                    {formatBytes(file.size)} · {file.type}
+                  </span>
                 </div>
-                <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => void loadAssets(query, 0, false)}
-                  className="secondary-button min-h-11"
-                >
-                  Muat ulang
-                </button>
-              </div>
-              <form
-                aria-label="Cari aset media"
-                className="mb-4 flex flex-col gap-2 sm:flex-row"
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  void loadAssets(query, 0, false);
-                }}
-              >
-                <label className="flex min-w-0 flex-1 flex-col gap-1.5 text-xs font-medium text-[#52525b]">
-                  Cari nama berkas atau teks alternatif
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal text-[#18181a]"
-                  />
-                </label>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="secondary-button min-h-11 self-end"
-                >
-                  Cari
-                </button>
-              </form>
+              ) : null}
 
-              {error ? (
-                <p role="alert" className="text-sm text-red-700">
-                  {error}
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Teks Alternatif (Alt Text)
+                <input
+                  required
+                  maxLength={250}
+                  value={alt}
+                  onChange={(e) => setAlt(e.target.value)}
+                  placeholder="Deskripsi gambar untuk aksesibilitas..."
+                  className={inputClass}
+                />
+                <span className="text-[10px] text-[#71717a]">
+                  Wajib diisi untuk kepatuhan aksesibilitas web &amp; SEO.
+                </span>
+              </label>
+
+              {uploadError ? (
+                <p className="m-0 rounded-[8px] bg-red-50 p-2 text-xs text-red-800">
+                  {uploadError}
                 </p>
               ) : null}
-              {isLoading ? (
-                <p role="status" className="text-sm text-[#52525b]">
-                  Memuat aset media...
-                </p>
-              ) : assets.length ? (
-                <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 2xl:grid-cols-3">
-                  {assets.map((asset) => (
-                    <li
-                      key={asset.id}
-                      className="overflow-hidden rounded-xl border border-neutral-200 bg-[#f9f9f9]"
-                    >
-                      <div className="relative aspect-[4/3] bg-[#f0f0f0]">
-                        <Image
-                          src={asset.urls.card}
-                          alt={asset.alt || asset.filename}
-                          fill
-                          unoptimized
-                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="p-3">
-                        <h3 className="m-0 truncate text-sm font-semibold text-[#18181a]">
-                          {asset.filename}
-                        </h3>
-                        <p className="mb-0 mt-1 line-clamp-2 min-h-8 text-xs leading-4 text-[#52525b]">
-                          {asset.alt || "Tanpa teks alternatif"}
-                        </p>
-                        <p className="mb-0 mt-2 text-[11px] text-[#52525b]">
-                          {asset.width} × {asset.height} px · {formatBytes(asset.sizeBytes)}
-                        </p>
-                        <p className="mb-0 mt-2 break-all font-mono text-[10px] leading-4 text-[#52525b]">
-                          {asset.id}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="rounded-xl border border-neutral-200 bg-[#f9f9f9] p-5 text-sm text-[#52525b]">
-                  Belum ada media final yang cocok. Unggah gambar di panel ini
-                  atau ubah kata pencarian.
-                </p>
-              )}
-              {hasMore && !isLoading ? (
-              <button
-                  type="button"
-                  disabled={isLoading}
-                  onClick={() => void loadAssets(query, assets.length, true)}
-                  className="secondary-button mt-4 min-h-11"
+
+              <div className="pt-2">
+                <ToolbarButton
+                  type="submit"
+                  variant="dark"
+                  disabled={isUploading || !file}
+                  className="w-full"
                 >
-                  Muat media berikutnya
-                </button>
-              ) : null}
-            </section>
+                  {isUploading
+                    ? "Memproses Gambar…"
+                    : "Unggah dan Finalisasi"}
+                </ToolbarButton>
+              </div>
+            </fieldset>
+          </form>
+        </BentoCard>
+
+        {/* Right Side: Media Grid */}
+        <BentoCard>
+          <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center border-b border-[#eaeaea] pb-3">
+            <div>
+              <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                Katalog Media ({assets.length})
+              </h2>
+              <p className="mt-0.5 text-xs text-[#71717a]">
+                Aset gambar yang telah diproses dan siap digunakan pada konten
+              </p>
+            </div>
+
+            <div className="w-full sm:w-64">
+              <SearchField
+                value={query}
+                onChange={(q) => {
+                  setQuery(q);
+                  void loadAssets(q, 0, false);
+                }}
+                placeholder="Cari nama atau teks alt..."
+              />
+            </div>
           </div>
-        </main>
+
+          {isLoading ? (
+            <p className="py-8 text-center text-xs text-[#71717a]">
+              Memuat aset media…
+            </p>
+          ) : assets.length === 0 ? (
+            <EmptyState
+              icon="photo_library"
+              title="Tidak ada aset media"
+              description="Belum ada berkas media yang cocok. Unggah gambar baru di sebelah kiri."
+            />
+          ) : (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+              {assets.map((asset) => (
+                <div
+                  key={asset.id}
+                  className="overflow-hidden rounded-[12px] border border-[#eaeaea] bg-white transition-all hover:shadow-sm hover:border-[#18181a33]"
+                >
+                  <div className="relative aspect-[16/10] bg-[#f0f0f0]">
+                    <Image
+                      src={asset.urls.card}
+                      alt={asset.alt || asset.filename}
+                      fill
+                      unoptimized
+                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                    <div className="absolute top-2 right-2">
+                      <Chip variant="neutral" size="sm">
+                        {asset.mimeType.split("/")[1]?.toUpperCase()}
+                      </Chip>
+                    </div>
+                  </div>
+
+                  <div className="p-3">
+                    <h3 className="m-0 truncate text-xs font-semibold text-[#18181a]">
+                      {asset.filename}
+                    </h3>
+                    <p className="m-0 mt-1 line-clamp-1 text-[11px] text-[#52525b]">
+                      {asset.alt || "Tanpa alt text"}
+                    </p>
+                    <div className="mt-2 flex items-center justify-between border-t border-[#f0f0f0] pt-2 text-[10px] text-[#71717a]">
+                      <span>
+                        {asset.width} × {asset.height} px
+                      </span>
+                      <span>{formatBytes(asset.sizeBytes)}</span>
+                    </div>
+                    <div className="mt-1.5 truncate font-mono text-[9px] text-[#a1a1aa]">
+                      ID: {asset.id}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {hasMore && !isLoading ? (
+            <div className="mt-4 flex justify-center border-t border-[#eaeaea] pt-3">
+              <ToolbarButton
+                variant="light"
+                onClick={() => void loadAssets(query, assets.length, true)}
+              >
+                Muat Media Berikutnya
+              </ToolbarButton>
+            </div>
+          ) : null}
+        </BentoCard>
       </div>
-    </div>
+    </AdminFrame>
   );
 }

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
-import { AdminHeader, AdminSidebar } from "./AdminShell";
+import { AdminFrame } from "./AdminFrame";
+import { BentoCard, Chip, EmptyState, TabFilter, ToolbarButton } from "./AdminUi";
 import {
   convertClientProjectToPortfolioAction,
   createClientProjectAction,
@@ -21,17 +22,7 @@ import {
   DownloadFile,
   type Attachment,
 } from "@/components/tracking/TrackingFiles";
-import {
-  Panel,
-  Field,
-  Notice,
-  RichTextContent,
-  inputClass,
-  buttonClass,
-  secondaryClass,
-  dateTime,
-  money,
-} from "@/components/tracking/ui";
+import { RichTextContent, dateTime, money } from "@/components/tracking/ui";
 
 type Options = {
   categories: { id: string; name: string }[];
@@ -53,6 +44,9 @@ const visibilityLabels = {
   documents: "Dokumen",
   timeline: "Timeline",
 };
+
+const inputClass =
+  "h-[38px] w-full rounded-[10px] bg-[#f0f0f0] px-3 text-xs text-[#18181a] placeholder-[#71717a] outline-none border border-transparent focus:border-[#18181a] transition-all";
 
 function ProjectForm({
   project,
@@ -93,9 +87,10 @@ function ProjectForm({
     });
   }
   return (
-    <form onSubmit={submit} className="space-y-5">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Nama proyek">
+    <form onSubmit={submit} className="grid gap-3.5">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Nama Proyek
           <input
             name="projectTitle"
             className={inputClass}
@@ -103,8 +98,9 @@ function ProjectForm({
             maxLength={200}
             defaultValue={project?.projectTitle}
           />
-        </Field>
-        <Field label="Nama klien">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Nama Klien
           <input
             name="clientName"
             className={inputClass}
@@ -112,24 +108,27 @@ function ProjectForm({
             maxLength={200}
             defaultValue={project?.clientName}
           />
-        </Field>
-        <Field label="WhatsApp klien">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          WhatsApp Klien
           <input
             name="clientWhatsapp"
             className={inputClass}
             required
             defaultValue={project?.clientWhatsapp}
           />
-        </Field>
-        <Field label="Email (opsional)">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Email Klien (opsional)
           <input
             name="clientEmail"
             type="email"
             className={inputClass}
             defaultValue={project?.clientEmail ?? ""}
           />
-        </Field>
-        <Field label="Kategori">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Kategori
           <select
             name="categoryId"
             className={inputClass}
@@ -142,8 +141,9 @@ function ProjectForm({
               </option>
             ))}
           </select>
-        </Field>
-        <Field label="Paket (kuota disalin saat pembuatan)">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Paket Layanan
           <select
             name="servicePackageId"
             className={inputClass}
@@ -156,8 +156,9 @@ function ProjectForm({
               </option>
             ))}
           </select>
-        </Field>
-        <Field label="Total biaya (Rp)">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Total Biaya (IDR)
           <input
             name="totalCost"
             type="number"
@@ -168,8 +169,9 @@ function ProjectForm({
             required
             defaultValue={project?.totalCost ?? 0}
           />
-        </Field>
-        <Field label="Kuota revisi (proyek custom)">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Kuota Revisi Termasuk
           <input
             name="revisionsIncluded"
             type="number"
@@ -179,8 +181,9 @@ function ProjectForm({
             required
             defaultValue={project?.revisionsIncluded ?? 2}
           />
-        </Field>
-        <Field label="Biaya revisi tambahan (Rp, opsional)">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Biaya Revisi Tambahan (IDR, opsional)
           <input
             name="extraRevisionPrice"
             type="number"
@@ -189,61 +192,68 @@ function ProjectForm({
             className={inputClass}
             defaultValue={project?.extraRevisionPrice ?? ""}
           />
-        </Field>
-        <Field label="Tanggal mulai">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Tanggal Mulai
           <input
             name="startDate"
             type="date"
             className={inputClass}
             defaultValue={project?.startDate ?? ""}
           />
-        </Field>
-        <Field label="Target selesai">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Target Selesai
           <input
             name="targetCompletionDate"
             type="date"
             className={inputClass}
             defaultValue={project?.targetCompletionDate ?? ""}
           />
-        </Field>
-        <Field label="URL staging">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          URL Staging
           <input
             name="stagingUrl"
             type="url"
             className={inputClass}
             defaultValue={project?.stagingUrl ?? ""}
           />
-        </Field>
-        <Field label="URL produksi">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          URL Produksi
           <input
             name="productionUrl"
             type="url"
             className={inputClass}
             defaultValue={project?.productionUrl ?? ""}
           />
-        </Field>
-        <Field label="URL GitHub">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          URL Repository GitHub
           <input
             name="githubUrl"
             type="url"
             className={inputClass}
             defaultValue={project?.githubUrl ?? ""}
           />
-        </Field>
+        </label>
       </div>
-      <fieldset className="rounded-xl border border-[#e4e4e7] p-4">
-        <legend className="px-1 text-sm font-semibold">
-          Tampilkan ke klien
-        </legend>
-        <div className="flex flex-wrap gap-x-6 gap-y-2">
+
+      <div className="rounded-[10px] border border-[#eaeaea] p-3">
+        <span className="text-xs font-medium text-[#18181a] block mb-2">
+          Visibilitas Menu ke Klien
+        </span>
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
           {Object.entries(visibilityLabels).map(([key, label]) => (
             <label
               key={key}
-              className="flex min-h-11 items-center gap-2 text-sm"
+              className="flex items-center gap-1.5 text-xs text-[#52525b] cursor-pointer"
             >
               <input
                 type="checkbox"
                 name={`visibility-${key}`}
+                className="rounded border-[#d4d4d8]"
                 defaultChecked={
                   project?.clientVisibility[key as keyof typeof closed] ?? false
                 }
@@ -252,24 +262,30 @@ function ProjectForm({
             </label>
           ))}
         </div>
-      </fieldset>
-      <Field label="Catatan internal (tidak tampil ke klien)">
+      </div>
+
+      <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+        Catatan Internal (rahasia, tidak tampil ke klien)
         <textarea
           name="internalNotes"
-          className={inputClass}
+          className="w-full rounded-[10px] bg-[#f0f0f0] p-2.5 text-xs text-[#18181a] outline-none border border-transparent focus:border-[#18181a] resize-y"
           rows={3}
           maxLength={20000}
           defaultValue={project?.internalNotes ?? ""}
         />
-      </Field>
-      <button className={buttonClass} disabled={busy}>
-        {project ? "Simpan Proyek" : "Buat Proyek & PIN"}
-      </button>
+      </label>
+
+      <div className="pt-2">
+        <ToolbarButton type="submit" variant="dark" disabled={busy} className="w-full">
+          {project ? "Simpan Perubahan Proyek" : "Buat Proyek & Terbitkan PIN"}
+        </ToolbarButton>
+      </div>
     </form>
   );
 }
 
 type Mutate = (input: unknown) => Promise<boolean>;
+
 function Steps({
   data,
   mutate,
@@ -280,17 +296,31 @@ function Steps({
   busy: boolean;
 }) {
   return (
-    <div className="space-y-4">
+    <div className="grid gap-3">
       {data.steps.map((step) => (
         <details
           key={`${step.id}:${String(step.updatedAt)}`}
-          className="rounded-xl border border-[#e4e4e7] p-4"
+          className="rounded-[12px] border border-[#eaeaea] bg-white p-3.5"
         >
-          <summary className="cursor-pointer text-sm font-semibold">
-            {step.stepNumber}. {step.title} ({step.status})
+          <summary className="cursor-pointer text-xs font-semibold text-[#18181a] flex items-center justify-between">
+            <span>
+              {step.stepNumber}. {step.title}
+            </span>
+            <Chip
+              variant={
+                step.status === "done"
+                  ? "success"
+                  : step.status === "in_progress"
+                  ? "warning"
+                  : "neutral"
+              }
+              size="sm"
+            >
+              {step.status}
+            </Chip>
           </summary>
           <form
-            className="mt-5 space-y-4"
+            className="mt-4 grid gap-3 border-t border-[#f0f0f0] pt-3"
             onSubmit={async (e) => {
               e.preventDefault();
               const f = new FormData(e.currentTarget);
@@ -312,7 +342,8 @@ function Steps({
               });
             }}
           >
-            <Field label="Judul tahap">
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              Judul Tahap
               <input
                 className={inputClass}
                 name="title"
@@ -320,47 +351,51 @@ function Steps({
                 maxLength={200}
                 required
               />
-            </Field>
-            <Field label="Keterangan">
+            </label>
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              Keterangan
               <textarea
-                className={inputClass}
+                className="w-full rounded-[10px] bg-[#f0f0f0] p-2.5 text-xs text-[#18181a] outline-none resize-y"
                 name="description"
                 defaultValue={step.description}
                 maxLength={2000}
-                rows={3}
+                rows={2}
               />
-            </Field>
-            <Field label="Status">
+            </label>
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              Status
               <select
                 className={inputClass}
                 name="status"
                 defaultValue={step.status}
               >
                 <option value="pending">Belum dimulai</option>
-                <option value="in_progress">Dikerjakan</option>
+                <option value="in_progress">Sedang dikerjakan</option>
                 <option value="done">Selesai</option>
               </select>
-            </Field>
-            <Field label="Milestone, satu per baris. Awali [x] untuk selesai.">
+            </label>
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              Milestone (satu per baris, awali [x] untuk selesai)
               <textarea
-                className={inputClass}
+                className="w-full rounded-[10px] bg-[#f0f0f0] p-2.5 text-xs text-[#18181a] outline-none font-mono resize-y"
                 name="milestones"
-                rows={5}
+                rows={4}
                 defaultValue={data.milestones
                   .filter((m) => m.projectStepId === step.id)
                   .map((m) => `${m.isCompleted ? "[x]" : "[ ]"} ${m.title}`)
                   .join("\n")}
               />
-            </Field>
-            <button className={buttonClass} disabled={busy}>
+            </label>
+            <ToolbarButton type="submit" variant="dark" disabled={busy}>
               Simpan Tahap {step.stepNumber}
-            </button>
+            </ToolbarButton>
           </form>
         </details>
       ))}
     </div>
   );
 }
+
 function Payments({
   data,
   mutate,
@@ -374,24 +409,31 @@ function Payments({
   const [files, setFiles] = useState<Attachment[]>([]);
   const row = data.payments.find((p) => p.id === editing);
   return (
-    <div className="space-y-6">
-      <dl className="flex flex-wrap gap-6 text-sm">
-        <div>
-          <dt>Total</dt>
-          <dd className="font-semibold">{money(data.project.totalCost)}</dd>
+    <div className="grid gap-5">
+      <div className="grid grid-cols-3 gap-3">
+        <div className="rounded-[10px] bg-[#f9f9f9] p-3 border border-[#eaeaea]">
+          <span className="text-[11px] text-[#71717a] block">Total Biaya</span>
+          <span className="text-sm font-semibold text-[#18181a]">
+            {money(data.project.totalCost)}
+          </span>
         </div>
-        <div>
-          <dt>Terbayar</dt>
-          <dd className="font-semibold">{money(data.project.paidAmount)}</dd>
+        <div className="rounded-[10px] bg-[#f9f9f9] p-3 border border-[#eaeaea]">
+          <span className="text-[11px] text-[#71717a] block">Terbayar</span>
+          <span className="text-sm font-semibold text-[#457c1d]">
+            {money(data.project.paidAmount)}
+          </span>
         </div>
-        <div>
-          <dt>Sisa</dt>
-          <dd className="font-semibold">{money(data.project.balance)}</dd>
+        <div className="rounded-[10px] bg-[#f9f9f9] p-3 border border-[#eaeaea]">
+          <span className="text-[11px] text-[#71717a] block">Sisa Saldo</span>
+          <span className="text-sm font-semibold text-[#c2410c]">
+            {money(data.project.balance)}
+          </span>
         </div>
-      </dl>
+      </div>
+
       <form
         key={editing ?? "new"}
-        className="max-w-2xl space-y-4"
+        className="grid gap-3.5 rounded-[12px] border border-[#eaeaea] p-4 bg-[#fafafa]"
         onSubmit={async (e) => {
           e.preventDefault();
           const form = e.currentTarget;
@@ -414,21 +456,38 @@ function Payments({
           }
         }}
       >
-        <h3 className="font-semibold">
-          {editing ? "Ubah pembayaran" : "Catat pembayaran"}
+        <h3 className="m-0 text-sm font-semibold text-[#18181a]">
+          {editing ? "Ubah Pembayaran" : "Catat Pembayaran Baru"}
         </h3>
-        <Field label="Jumlah (Rp)">
-          <input
-            className={inputClass}
-            name="amount"
-            type="number"
-            min={1}
-            max={2147483647}
-            defaultValue={row?.amount}
-            required
-          />
-        </Field>
-        <Field label="Tanggal dan jam pembayaran (waktu perangkat)">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+            Nominal (IDR)
+            <input
+              className={inputClass}
+              name="amount"
+              type="number"
+              min={1}
+              max={2147483647}
+              defaultValue={row?.amount}
+              required
+            />
+          </label>
+          <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+            Metode
+            <select
+              name="method"
+              className={inputClass}
+              defaultValue={row?.method ?? "transfer"}
+            >
+              <option value="transfer">Transfer Bank</option>
+              <option value="tunai">Tunai</option>
+              <option value="qris">QRIS</option>
+            </select>
+          </label>
+        </div>
+
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Waktu Pembayaran
           <input
             className={inputClass}
             name="paidAt"
@@ -438,88 +497,88 @@ function Payments({
               row
                 ? new Date(
                     new Date(row.paidAt).getTime() -
-                      new Date(row.paidAt).getTimezoneOffset() * 60000,
+                      new Date(row.paidAt).getTimezoneOffset() * 60000
                   )
                     .toISOString()
                     .slice(0, 16)
                 : ""
             }
           />
-        </Field>
-        <Field label="Metode">
-          <select
-            name="method"
-            className={inputClass}
-            defaultValue={row?.method ?? "transfer"}
-          >
-            <option value="transfer">Transfer</option>
-            <option value="tunai">Tunai</option>
-            <option value="qris">QRIS</option>
-          </select>
-        </Field>
-        <Field label="Catatan">
+        </label>
+
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Catatan
           <textarea
-            className={inputClass}
+            className="w-full rounded-[10px] bg-[#f0f0f0] p-2.5 text-xs text-[#18181a] outline-none resize-y"
             name="note"
             rows={2}
             maxLength={2000}
             defaultValue={row?.note}
           />
-        </Field>
-        <label className="flex min-h-11 items-center gap-2 text-sm">
+        </label>
+
+        <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
           <input
             type="checkbox"
             name="visible"
+            className="rounded border-[#d4d4d8]"
             defaultChecked={row?.isVisibleToClient ?? true}
           />
-          Tampilkan pembayaran ke klien
+          Tampilkan pembayaran ke portal klien
         </label>
+
         <TrackingAttachments
           value={files}
           onChange={setFiles}
           adminProjectId={data.project.id}
           max={1}
         />
-        <button className={buttonClass} disabled={busy}>
-          Simpan Pembayaran
-        </button>
-        {editing ? (
-          <button
-            type="button"
-            className={`${secondaryClass} ml-2`}
-            onClick={() => {
-              setEditing(null);
-              setFiles([]);
-            }}
-          >
-            Batal Ubah
-          </button>
-        ) : null}
+
+        <div className="flex gap-2">
+          <ToolbarButton type="submit" variant="dark" disabled={busy}>
+            Simpan Pembayaran
+          </ToolbarButton>
+          {editing ? (
+            <ToolbarButton
+              variant="light"
+              onClick={() => {
+                setEditing(null);
+                setFiles([]);
+              }}
+            >
+              Batal
+            </ToolbarButton>
+          ) : null}
+        </div>
       </form>
+
       {data.payments.length ? (
-        <ul className="space-y-3">
+        <div className="grid gap-2">
           {data.payments.map((p) => (
-            <li
+            <div
               key={p.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#e4e4e7] p-3 text-sm"
+              className="flex items-center justify-between gap-3 rounded-[12px] border border-[#eaeaea] p-3.5 bg-white text-xs"
             >
               <div>
-                <strong>{money(p.amount)}</strong> · {p.method}
-                <p className="mt-1 text-xs text-[#71717a]">
+                <span className="font-semibold text-sm text-[#18181a]">
+                  {money(p.amount)}
+                </span>
+                <span className="ml-2 text-[#71717a]">· {p.method}</span>
+                <p className="m-0 mt-1 text-[11px] text-[#71717a]">
                   {dateTime(p.paidAt)} ·{" "}
-                  {p.isVisibleToClient ? "Tampil ke klien" : "Internal"}
+                  {p.isVisibleToClient ? "Tampil di portal" : "Internal"}
                 </p>
               </div>
-              <div className="flex gap-2">
-                <button
-                  className={secondaryClass}
+              <div className="flex items-center gap-1.5">
+                <ToolbarButton
+                  variant="light"
                   onClick={() => {
                     setEditing(p.id);
                     setFiles([]);
                   }}
                 >
                   Ubah
-                </button>
+                </ToolbarButton>
                 {p.proofFileId ? (
                   <DownloadFile
                     fileId={p.proofFileId}
@@ -527,30 +586,27 @@ function Payments({
                     adminProjectId={data.project.id}
                   />
                 ) : null}
-                <button
-                  className={secondaryClass}
+                <ToolbarButton
+                  variant="danger"
                   disabled={busy}
                   onClick={() => {
-                    if (
-                      window.confirm(
-                        "Hapus pembayaran ini dan hitung ulang saldo?",
-                      )
-                    )
+                    if (window.confirm("Hapus pembayaran ini dan hitung ulang saldo?"))
                       void mutate({ kind: "deletePayment", id: p.id });
                   }}
                 >
                   Hapus
-                </button>
+                </ToolbarButton>
               </div>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
-        <p className="text-sm text-[#71717a]">Belum ada pembayaran.</p>
+        <p className="text-xs text-[#71717a]">Belum ada riwayat pembayaran.</p>
       )}
     </div>
   );
 }
+
 function Documents({
   data,
   mutate,
@@ -562,9 +618,9 @@ function Documents({
 }) {
   const [files, setFiles] = useState<Attachment[]>([]);
   return (
-    <div className="space-y-6">
+    <div className="grid gap-4">
       <form
-        className="max-w-2xl space-y-4"
+        className="grid gap-3.5 rounded-[12px] border border-[#eaeaea] p-4 bg-[#fafafa]"
         onSubmit={async (e) => {
           e.preventDefault();
           const form = e.currentTarget;
@@ -583,36 +639,47 @@ function Documents({
           }
         }}
       >
-        <Field label="Judul dokumen">
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Judul Dokumen
           <input name="title" className={inputClass} required maxLength={200} />
-        </Field>
-        <Field label="URL HTTPS (kosongkan jika mengunggah berkas)">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          URL HTTPS (kosongkan jika mengunggah berkas)
           <input type="url" name="url" className={inputClass} />
-        </Field>
+        </label>
         <TrackingAttachments
           value={files}
           onChange={setFiles}
           adminProjectId={data.project.id}
           max={1}
         />
-        <label className="flex min-h-11 items-center gap-2 text-sm">
-          <input type="checkbox" name="visible" defaultChecked />
-          Tampilkan dokumen ke klien
+        <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+          <input
+            type="checkbox"
+            name="visible"
+            className="rounded border-[#d4d4d8]"
+            defaultChecked
+          />
+          Tampilkan dokumen ke portal klien
         </label>
-        <button className={buttonClass} disabled={busy}>
+        <ToolbarButton type="submit" variant="dark" disabled={busy}>
           Tambahkan Dokumen
-        </button>
+        </ToolbarButton>
       </form>
-      <ul className="space-y-3">
+
+      <div className="grid gap-2">
         {data.documents.map((d) => (
-          <li
+          <div
             key={d.id}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#e4e4e7] p-3 text-sm"
+            className="flex items-center justify-between gap-3 rounded-[12px] border border-[#eaeaea] p-3 bg-white text-xs"
           >
-            <span>
-              {d.title} · {d.isVisibleToClient ? "Tampil" : "Internal"}
-            </span>
-            <div className="flex gap-2">
+            <div>
+              <span className="font-semibold text-[#18181a]">{d.title}</span>
+              <span className="ml-2 text-[11px] text-[#71717a]">
+                · {d.isVisibleToClient ? "Tampil" : "Internal"}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5">
               {d.fileId ? (
                 <DownloadFile
                   fileId={d.fileId}
@@ -622,15 +689,15 @@ function Documents({
               ) : (
                 <a
                   href={d.url!}
-                  className={secondaryClass}
+                  className="inline-flex items-center justify-center gap-1.5 h-[34px] px-3.5 rounded-[12px] text-[13px] font-medium bg-white border border-[#eaeaea] text-[#18181a] hover:bg-[#f9f9f9]"
                   rel="noreferrer"
                   target="_blank"
                 >
                   Buka
                 </a>
               )}
-              <button
-                className={secondaryClass}
+              <ToolbarButton
+                variant="danger"
                 disabled={busy}
                 onClick={() => {
                   if (window.confirm("Hapus dokumen dari proyek?"))
@@ -638,17 +705,18 @@ function Documents({
                 }}
               >
                 Hapus
-              </button>
+              </ToolbarButton>
             </div>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
       {!data.documents.length ? (
-        <p className="text-sm text-[#71717a]">Belum ada dokumen.</p>
+        <p className="text-xs text-[#71717a]">Belum ada dokumen proyek.</p>
       ) : null}
     </div>
   );
 }
+
 function Revisions({
   data,
   mutate,
@@ -659,38 +727,56 @@ function Revisions({
   busy: boolean;
 }) {
   return (
-    <div className="space-y-5">
+    <div className="grid gap-4">
       {data.revisions.map((r) => (
-        <article
+        <div
           key={`${r.id}:${String(r.updatedAt)}`}
-          className="rounded-xl border border-[#e4e4e7] p-4"
+          className="rounded-[12px] border border-[#eaeaea] bg-white p-4"
         >
-          <p className="text-xs text-[#71717a]">
-            #{r.roundNumber} · {r.type} · {r.status}
-          </p>
-          <h3 className="my-3 font-semibold">{r.title}</h3>
-          <p className="whitespace-pre-wrap break-words text-sm leading-6">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[11px] text-[#71717a]">
+              #{r.roundNumber} · {r.type}
+            </span>
+            <Chip
+              variant={
+                r.status === "done"
+                  ? "success"
+                  : r.status === "rejected"
+                  ? "danger"
+                  : "warning"
+              }
+              size="sm"
+            >
+              {r.status}
+            </Chip>
+          </div>
+          <h3 className="my-2 text-sm font-semibold text-[#18181a]">{r.title}</h3>
+          <p className="m-0 text-xs text-[#52525b] whitespace-pre-wrap leading-relaxed">
             {r.description}
           </p>
-          <div className="my-3 flex flex-wrap gap-2">
-            {r.attachments.map((a) => (
-              <DownloadFile
-                key={a.fileId}
-                fileId={a.fileId}
-                label={a.filename}
-                adminProjectId={data.project.id}
-              />
-            ))}
-          </div>
-          {r.quotedPrice !== null ? (
-            <p className="my-3 text-sm">
-              Penawaran: {money(r.quotedPrice)} ·{" "}
-              {r.clientAcceptedQuoteAt ? "Disetujui klien" : "Belum disetujui"}
-            </p>
+          {r.attachments.length ? (
+            <div className="my-3 flex flex-wrap gap-2">
+              {r.attachments.map((a) => (
+                <DownloadFile
+                  key={a.fileId}
+                  fileId={a.fileId}
+                  label={a.filename}
+                  adminProjectId={data.project.id}
+                />
+              ))}
+            </div>
           ) : null}
+
+          {r.quotedPrice !== null ? (
+            <div className="my-3 rounded-[8px] bg-[#f9f9f9] p-2.5 text-xs text-[#18181a]">
+              Penawaran Biaya: <strong>{money(r.quotedPrice)}</strong> ·{" "}
+              {r.clientAcceptedQuoteAt ? "Disetujui klien" : "Belum disetujui"}
+            </div>
+          ) : null}
+
           {!["done", "rejected"].includes(r.status) ? (
             <form
-              className="mt-5 space-y-3"
+              className="mt-3 grid gap-3 border-t border-[#f0f0f0] pt-3"
               onSubmit={async (e) => {
                 e.preventDefault();
                 const f = new FormData(e.currentTarget);
@@ -704,7 +790,8 @@ function Revisions({
                 });
               }}
             >
-              <Field label="Aksi revisi">
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Aksi Tanggapan Revisi
                 <select className={inputClass} name="event">
                   {r.status === "submitted" || r.status === "needs_payment" ? (
                     <>
@@ -714,7 +801,7 @@ function Revisions({
                           Tetapkan / ubah penawaran biaya
                         </option>
                       ) : null}
-                      <option value="REJECT">Tolak (tanggapan wajib)</option>
+                      <option value="REJECT">Tolak (wajib beri tanggapan)</option>
                     </>
                   ) : null}
                   {r.status === "accepted" ? (
@@ -724,9 +811,11 @@ function Revisions({
                     <option value="DONE">Tandai selesai</option>
                   ) : null}
                 </select>
-              </Field>
+              </label>
+
               {r.status === "needs_payment" ? (
-                <Field label="Biaya penawaran (Rp)">
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Biaya Penawaran (IDR)
                   <input
                     type="number"
                     className={inputClass}
@@ -735,34 +824,40 @@ function Revisions({
                     max={2147483647}
                     defaultValue={r.quotedPrice ?? ""}
                   />
-                </Field>
+                </label>
               ) : null}
-              <Field label="Tanggapan admin">
+
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Tanggapan Admin
                 <textarea
-                  className={inputClass}
+                  className="w-full rounded-[10px] bg-[#f0f0f0] p-2.5 text-xs text-[#18181a] outline-none resize-y"
                   name="response"
                   rows={2}
                   maxLength={2000}
                   defaultValue={r.adminResponse ?? ""}
                 />
-              </Field>
-              <button className={buttonClass} disabled={busy}>
+              </label>
+
+              <ToolbarButton type="submit" variant="dark" disabled={busy}>
                 Proses Revisi #{r.roundNumber}
-              </button>
+              </ToolbarButton>
             </form>
           ) : (
-            <p className="mt-3 text-sm">{r.adminResponse}</p>
+            <p className="mt-2 text-xs text-[#52525b] italic">
+              {r.adminResponse || "Tidak ada tanggapan tertulis."}
+            </p>
           )}
-        </article>
+        </div>
       ))}
       {!data.revisions.length ? (
-        <p className="text-sm text-[#71717a]">
+        <p className="text-xs text-[#71717a]">
           Belum ada pengajuan revisi dari klien.
         </p>
       ) : null}
     </div>
   );
 }
+
 function Discussion({
   data,
   mutate,
@@ -774,9 +869,9 @@ function Discussion({
 }) {
   const [files, setFiles] = useState<Attachment[]>([]);
   return (
-    <div className="space-y-5">
+    <div className="grid gap-4">
       <form
-        className="max-w-2xl space-y-4"
+        className="grid gap-3.5 rounded-[12px] border border-[#eaeaea] p-4 bg-[#fafafa]"
         onSubmit={async (e) => {
           e.preventDefault();
           const form = e.currentTarget;
@@ -795,64 +890,83 @@ function Discussion({
           }
         }}
       >
-        <Field label="Utasan">
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Utasan Diskusi
           <select className={inputClass} name="revisionRequestId">
-            <option value="">Diskusi umum</option>
+            <option value="">Diskusi umum proyek</option>
             {data.revisions.map((r) => (
               <option key={r.id} value={r.id}>
                 #{r.roundNumber}: {r.title}
               </option>
             ))}
           </select>
-        </Field>
-        <Field label="Tanggapan atau catatan">
+        </label>
+        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+          Pesan / Catatan
           <textarea
-            className={inputClass}
+            className="w-full rounded-[10px] bg-[#f0f0f0] p-2.5 text-xs text-[#18181a] outline-none resize-y"
             name="body"
             required
             maxLength={10000}
-            rows={4}
+            rows={3}
           />
-        </Field>
-        <label className="flex min-h-11 items-center gap-2 text-sm">
-          <input type="checkbox" name="internal" />
-          Catatan internal (jangan tampilkan ke klien)
+        </label>
+        <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+          <input
+            type="checkbox"
+            name="internal"
+            className="rounded border-[#d4d4d8]"
+          />
+          Catatan internal rahasia (jangan tampilkan ke klien)
         </label>
         <TrackingAttachments
           value={files}
           onChange={setFiles}
           adminProjectId={data.project.id}
         />
-        <button className={buttonClass} disabled={busy}>
+        <ToolbarButton type="submit" variant="dark" disabled={busy}>
           Kirim Tanggapan
-        </button>
+        </ToolbarButton>
       </form>
-      {data.comments.map((c) => (
-        <article
-          key={c.id}
-          className={`rounded-xl border p-4 ${c.isInternal ? "border-amber-200 bg-amber-50" : "border-[#e4e4e7]"}`}
-        >
-          <p className="text-sm font-semibold">
-            {c.authorName} {c.isInternal ? "(Internal)" : ""}
-          </p>
-          <p className="my-2 text-xs text-[#71717a]">{dateTime(c.createdAt)}</p>
-          <p className="whitespace-pre-wrap break-words text-sm leading-6">
-            {c.body}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {c.attachments.map((a) => (
-              <DownloadFile
-                key={a.fileId}
-                fileId={a.fileId}
-                label={a.filename}
-                adminProjectId={data.project.id}
-              />
-            ))}
+
+      <div className="grid gap-2.5">
+        {data.comments.map((c) => (
+          <div
+            key={c.id}
+            className={`rounded-[12px] border p-3.5 text-xs ${
+              c.isInternal
+                ? "border-amber-200 bg-amber-50 text-amber-900"
+                : "border-[#eaeaea] bg-white text-[#18181a]"
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-semibold">
+                {c.authorName} {c.isInternal ? "(Internal Only)" : ""}
+              </span>
+              <span className="text-[11px] text-[#71717a]">
+                {dateTime(c.createdAt)}
+              </span>
+            </div>
+            <p className="m-0 mt-1.5 whitespace-pre-wrap leading-relaxed">
+              {c.body}
+            </p>
+            {c.attachments.length ? (
+              <div className="mt-2.5 flex flex-wrap gap-2">
+                {c.attachments.map((a) => (
+                  <DownloadFile
+                    key={a.fileId}
+                    fileId={a.fileId}
+                    label={a.filename}
+                    adminProjectId={data.project.id}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
-        </article>
-      ))}
+        ))}
+      </div>
       {!data.comments.length ? (
-        <p className="text-sm text-[#71717a]">Belum ada diskusi.</p>
+        <p className="text-xs text-[#71717a]">Belum ada diskusi.</p>
       ) : null}
     </div>
   );
@@ -876,6 +990,7 @@ export function AdminTrackingPage() {
     code: string;
     pin: string;
   } | null>(null);
+
   const load = useCallback(async () => {
     try {
       const result = await listClientProjectsAction();
@@ -892,6 +1007,7 @@ export function AdminTrackingPage() {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
     let active = true;
     void listClientProjectsAction()
@@ -915,6 +1031,7 @@ export function AdminTrackingPage() {
       active = false;
     };
   }, []);
+
   async function select(id: string) {
     setBusy(true);
     setError("");
@@ -932,6 +1049,7 @@ export function AdminTrackingPage() {
       setBusy(false);
     }
   }
+
   async function mutate(input: unknown) {
     if (!detail) return false;
     setBusy(true);
@@ -961,480 +1079,548 @@ export function AdminTrackingPage() {
       setBusy(false);
     }
   }
+
   return (
-    <div
-      className="screen admin-screen relative min-h-screen w-full bg-[#f9f9f9] text-[#18181a]"
-      data-screen="admin/client-projects"
+    <AdminFrame
+      title="Proyek Klien & Tracking"
+      description="Kelola progres, kredensial PIN klien, pencatatan termin, dan persetujuan serah terima."
+      screenKey="cms/proyek-klien-tracking"
+      actions={
+        <div className="flex items-center gap-2">
+          <ToolbarButton
+            variant="light"
+            icon="sync"
+            disabled={busy || loading}
+            onClick={() => void load()}
+          >
+            Refresh Data
+          </ToolbarButton>
+          <ToolbarButton
+            variant="dark"
+            icon="add"
+            disabled={busy || loading}
+            onClick={() => {
+              setCreating(true);
+              setDetail(null);
+              setError("");
+              setTab("project");
+            }}
+          >
+            Buat Proyek Klien
+          </ToolbarButton>
+        </div>
+      }
     >
-      <AdminSidebar />
-      <div className="min-h-screen lg:pl-[288px]">
-        <AdminHeader />
-        <main
-          id="konten"
-          className="mx-auto flex max-w-[1920px] flex-col gap-6 px-4 pb-12 pt-24 sm:px-6 lg:px-8"
-        >
-          <header className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <p className="mb-2 text-xs text-[#71717a]">
-                ADMIN / OPERASIONAL KLIEN
-              </p>
-              <h1 className="text-2xl font-semibold sm:text-3xl">
-                Proyek Klien & Tracking
-              </h1>
-              <p className="mt-2 text-sm text-[#52525b]">
-                Kelola proyek, akses PIN, progres, pembayaran, dan komunikasi
-                klien dari database.
-              </p>
-            </div>
+      {error ? (
+        <div className="mb-4 rounded-[12px] border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-center gap-2">
+          <span className="symbol text-base">error</span>
+          <span>{error}</span>
+        </div>
+      ) : null}
+      {status ? (
+        <div className="mb-4 rounded-[12px] border border-green-200 bg-green-50 p-3.5 text-xs text-green-900 flex items-center gap-2">
+          <span className="symbol text-base">check_circle</span>
+          <span>{status}</span>
+        </div>
+      ) : null}
+
+      {/* Credentials Banner */}
+      {credentials ? (
+        <div className="mb-5 rounded-[14px] border border-[#d2d88f] bg-[#f9faeb] p-4 text-xs text-[#454a10]">
+          <h3 className="m-0 text-sm font-semibold text-[#18181a]">
+            Simpan PIN ini sekarang (hanya ditampilkan sekali)
+          </h3>
+          <p className="mt-1 text-xs">
+            Kode Tracking: <strong>{credentials.code}</strong>
+          </p>
+          <p className="mt-1 text-xs">
+            PIN Akses:{" "}
+            <strong className="font-mono text-base tracking-[.2em] text-[#18181a]">
+              {credentials.pin}
+            </strong>
+          </p>
+          <p className="mt-1 text-[11px] text-[#71717a]">
+            Kirim kode dan PIN secara terpisah melalui kanal pribadi klien.
+          </p>
+          <div className="mt-3">
+            <ToolbarButton
+              variant="light"
+              onClick={() => setCredentials(null)}
+            >
+              Saya Sudah Menyimpan PIN
+            </ToolbarButton>
+          </div>
+        </div>
+      ) : null}
+
+      {/* Portal Status Card */}
+      <BentoCard className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h3 className="m-0 text-sm font-semibold text-[#18181a]">
+              Portal Tracking Publik:
+            </h3>
+            <Chip variant={enabled ? "success" : "neutral"} size="sm">
+              {enabled ? "Aktif" : "Nonaktif"}
+            </Chip>
+          </div>
+          <p className="mt-0.5 text-xs text-[#71717a]">
+            {enabled
+              ? "Klien dapat mengakses link tracking dengan kode & PIN."
+              : "Semua akses portal klien saat ini diblokir."}
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <ToolbarButton href="/tracking" variant="light" icon="open_in_new">
+            Buka Portal
+          </ToolbarButton>
+          <ToolbarButton
+            variant={enabled ? "light" : "dark"}
+            disabled={busy || loading}
+            onClick={async () => {
+              if (
+                !window.confirm(
+                  enabled
+                    ? "Nonaktifkan seluruh akses portal klien?"
+                    : "Aktifkan portal dan menu Tracking Klien untuk pengunjung?"
+                )
+              )
+                return;
+              setBusy(true);
+              setError("");
+              try {
+                const result = await toggleTrackingAction(!enabled);
+                if (!result.ok) {
+                  setError(result.message);
+                  return;
+                }
+                setEnabled(!enabled);
+                setStatus("Pengaturan status portal disimpan.");
+              } catch {
+                setError("Pengaturan belum dapat disimpan.");
+              } finally {
+                setBusy(false);
+              }
+            }}
+          >
+            {enabled ? "Nonaktifkan Portal" : "Aktifkan Portal"}
+          </ToolbarButton>
+        </div>
+      </BentoCard>
+
+      <div className="grid items-start gap-5 xl:grid-cols-[300px_1fr]">
+        {/* Left Side: Client Projects List */}
+        <BentoCard>
+          <div className="mb-3 flex items-center justify-between border-b border-[#eaeaea] pb-2.5">
+            <h2 className="m-0 text-xs font-semibold uppercase tracking-wider text-[#71717a]">
+              Proyek Klien ({projects.length})
+            </h2>
             <button
-              className={buttonClass}
-              disabled={busy || loading}
+              className="text-xs text-[#71717a] hover:text-[#18181a] underline"
               onClick={() => {
-                setCreating(true);
-                setDetail(null);
                 setError("");
-                setTab("project");
+                void load();
               }}
+              disabled={busy}
             >
-              Buat Proyek Klien
+              Refresh
             </button>
-          </header>
-          <Notice error={error} status={status} />
-          {credentials ? (
-            <section
-              className="rounded-xl border border-[#c5ce78] bg-[#f6f8e7] p-5"
-              aria-label="Kredensial baru"
-            >
-              <h2 className="font-semibold">
-                Simpan PIN ini sekarang, hanya ditampilkan sekali
-              </h2>
-              <p className="mt-2 text-sm">
-                Kode: <strong>{credentials.code}</strong>
-              </p>
-              <p className="mt-2 text-sm">
-                PIN:{" "}
-                <strong className="font-mono text-lg tracking-[.3em]">
-                  {credentials.pin}
-                </strong>
-              </p>
-              <p className="my-3 text-xs">
-                Kirim kode dan PIN secara terpisah melalui kanal pribadi. PIN
-                tidak dapat dibaca kembali dari database.
-              </p>
-              <button
-                className={secondaryClass}
-                onClick={() => setCredentials(null)}
-              >
-                Saya sudah menyimpan PIN
-              </button>
-            </section>
-          ) : null}
-          <section className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#e4e4e7] bg-white p-5">
-            <div>
-              <h2 className="text-sm font-semibold">
-                Portal klien: {enabled ? "Aktif" : "Nonaktif"}
-              </h2>
-              <p className="mt-1 text-xs leading-5 text-[#71717a]">
-                Aktifkan setelah data proyek siap. Menonaktifkan portal
-                memblokir semua akses klien.
-              </p>
+          </div>
+
+          {loading ? (
+            <p className="text-center text-xs text-[#71717a] py-6">Memuat proyek…</p>
+          ) : projects.length === 0 ? (
+            <EmptyState
+              icon="assignment"
+              title="Belum ada proyek"
+              description="Buat proyek klien pertama untuk menerbitkan kode tracking."
+            />
+          ) : (
+            <div className="grid gap-2 max-h-[700px] overflow-y-auto">
+              {projects.map((p) => {
+                const isSelected = detail?.project.id === p.id;
+                return (
+                  <button
+                    key={p.id}
+                    className={`w-full rounded-[10px] border p-3 text-left transition-all ${
+                      isSelected
+                        ? "border-[#18181a] bg-[#fafafa] shadow-sm ring-1 ring-[#18181a]"
+                        : "border-[#eaeaea] bg-white hover:bg-[#fcfcfc]"
+                    }`}
+                    disabled={busy}
+                    onClick={() => {
+                      setTab("project");
+                      void select(p.id);
+                    }}
+                  >
+                    <strong className="block text-xs font-semibold text-[#18181a] truncate">
+                      {p.projectTitle}
+                    </strong>
+                    <div className="mt-1 flex items-center justify-between text-[11px] text-[#52525b]">
+                      <span className="truncate">{p.clientName}</span>
+                      <Chip variant="neutral" size="sm">
+                        Tahap {p.currentStep}
+                      </Chip>
+                    </div>
+                    <div className="mt-1 text-[10px] text-[#71717a] font-mono">
+                      {p.trackingCode}
+                      {p.archivedAt ? " · Diarsipkan" : ""}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-            <div className="flex gap-2">
-              <Link href="/tracking" className={secondaryClass}>
-                Buka Portal
-              </Link>
-              <button
-                className={buttonClass}
-                disabled={busy || loading}
-                onClick={async () => {
-                  if (
-                    !window.confirm(
-                      enabled
-                        ? "Nonaktifkan seluruh akses portal klien?"
-                        : "Aktifkan portal dan menu Tracking Klien untuk pengunjung?",
-                    )
-                  )
-                    return;
+          )}
+        </BentoCard>
+
+        {/* Right Side: Detail & Action Tabs */}
+        <div className="min-w-0">
+          {creating ? (
+            <BentoCard>
+              <h2 className="mb-4 mt-0 text-base font-semibold text-[#18181a]">
+                Buat Proyek Klien Baru
+              </h2>
+              <ProjectForm
+                options={options}
+                busy={busy}
+                onSave={async (value) => {
                   setBusy(true);
                   setError("");
                   try {
-                    const result = await toggleTrackingAction(!enabled);
+                    const result = await createClientProjectAction(value);
                     if (!result.ok) {
                       setError(result.message);
                       return;
                     }
-                    setEnabled(!enabled);
-                    setStatus("Pengaturan portal sudah disimpan.");
+                    setCredentials({
+                      code: result.data.project.trackingCode,
+                      pin: result.data.pin,
+                    });
+                    await load();
+                    await select(result.data.project.id);
+                    setStatus("Proyek dan enam tahap berhasil dibuat.");
                   } catch {
-                    setError("Pengaturan belum dapat disimpan.");
+                    setError("Koneksi terputus. Gagal membuat proyek.");
                   } finally {
                     setBusy(false);
                   }
                 }}
-              >
-                {enabled ? "Nonaktifkan Portal" : "Aktifkan Portal"}
-              </button>
-            </div>
-          </section>
-          {loading ? <p role="status">Memuat proyek klien…</p> : null}
-          <div className="grid items-start gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
-            <section aria-label="Daftar proyek klien" className="space-y-2">
-              <div className="mb-3 flex items-center justify-between">
-                <h2 className="text-sm font-semibold">200 proyek terbaru</h2>
-                <button
-                  className="min-h-11 px-2 text-xs underline"
-                  onClick={() => {
-                    setError("");
-                    void load();
-                  }}
-                  disabled={busy}
-                >
-                  Muat ulang
-                </button>
-              </div>
-              {projects.map((p) => (
-                <button
-                  key={p.id}
-                  className={`w-full rounded-xl border p-4 text-left ${detail?.project.id === p.id ? "border-[#c5ce78] bg-[#f6f8e7]" : "border-[#e4e4e7] bg-white"}`}
-                  disabled={busy}
-                  onClick={() => {
-                    setTab("project");
-                    void select(p.id);
-                  }}
-                >
-                  <strong className="block break-words text-sm">
-                    {p.projectTitle}
-                  </strong>
-                  <span className="mt-2 block text-xs text-[#52525b]">
-                    {p.clientName} · Tahap {p.currentStep}
-                  </span>
-                  <span className="mt-1 block text-xs text-[#71717a]">
-                    {p.trackingCode}
-                    {p.archivedAt ? " · Diarsipkan" : ""}
-                  </span>
-                </button>
-              ))}
-              {!projects.length && !loading ? (
-                <p className="text-sm text-[#71717a]">
-                  Belum ada proyek. Buat proyek klien pertama untuk menerbitkan
-                  kode dan PIN.
-                </p>
-              ) : null}
-            </section>
-            <div className="min-w-0 space-y-5">
-              {creating ? (
-                <Panel title="Proyek Klien Baru">
+              />
+            </BentoCard>
+          ) : detail ? (
+            <div className="grid gap-4">
+              {/* Project Header Info */}
+              <BentoCard className="p-4">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                      {detail.project.projectTitle}
+                    </h2>
+                    <p className="mt-0.5 text-xs text-[#71717a] font-mono">
+                      Kode: {detail.project.trackingCode} · Klien:{" "}
+                      {detail.project.clientName}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <a
+                      className="inline-flex items-center justify-center gap-1.5 h-[34px] px-3 rounded-[12px] text-xs font-medium bg-[#e2e89d] text-[#454a10] hover:bg-[#d2d88f]"
+                      href={`https://wa.me/${detail.project.clientWhatsapp}?text=${encodeURIComponent(
+                        `Halo ${detail.project.clientName}, pantau proyek "${
+                          detail.project.projectTitle
+                        }" di ${
+                          typeof window !== "undefined"
+                            ? window.location.origin
+                            : ""
+                        }/tracking\nKode Tracking: ${
+                          detail.project.trackingCode
+                        }\nPIN dikirim terpisah.`
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <span className="symbol text-base">chat</span>
+                      Kirim WA
+                    </a>
+
+                    <ToolbarButton
+                      variant="light"
+                      disabled={busy}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            "Buat PIN baru? Semua sesi klien yang lama langsung tidak berlaku."
+                          )
+                        )
+                          void mutate({ kind: "pin" });
+                      }}
+                    >
+                      Reset PIN
+                    </ToolbarButton>
+
+                    <ToolbarButton
+                      variant="light"
+                      disabled={busy}
+                      onClick={() => {
+                        if (
+                          window.confirm(
+                            detail.project.archivedAt
+                              ? "Pulihkan akses proyek ini?"
+                              : "Arsipkan proyek dan tutup akses klien?"
+                          )
+                        )
+                          void mutate({
+                            kind: "archive",
+                            archived: !detail.project.archivedAt,
+                          });
+                      }}
+                    >
+                      {detail.project.archivedAt ? "Pulihkan" : "Arsipkan"}
+                    </ToolbarButton>
+
+                    <ToolbarButton
+                      variant="light"
+                      disabled={busy || detail.project.currentStep !== 6}
+                      title={
+                        detail.project.currentStep !== 6
+                          ? "Selesaikan seluruh tahap terlebih dahulu"
+                          : undefined
+                      }
+                      onClick={async () => {
+                        if (
+                          !window.confirm(
+                            "Buat draft portofolio tanpa nama atau data identitas klien? Draft tetap perlu dilengkapi gambar dan konten sebelum diterbitkan."
+                          )
+                        )
+                          return;
+                        setBusy(true);
+                        setError("");
+                        setStatus("");
+                        try {
+                          const result =
+                            await convertClientProjectToPortfolioAction(
+                              detail.project.id
+                            );
+                          if (!result.ok) setError(result.message);
+                          else
+                            setStatus(
+                              result.data.alreadyLinked
+                                ? "Proyek ini sudah terhubung ke draft portofolio."
+                                : `Draft portofolio /${result.data.slug} dibuat tanpa data identitas klien.`
+                            );
+                        } catch {
+                          setError("Draft portofolio tidak dapat dibuat.");
+                        } finally {
+                          setBusy(false);
+                        }
+                      }}
+                    >
+                      Ke Portofolio
+                    </ToolbarButton>
+                  </div>
+                </div>
+
+                {/* Subnavigation Tabs */}
+                <div className="mt-4 border-t border-[#eaeaea] pt-3">
+                  <TabFilter
+                    tabs={[
+                      { id: "project", label: "Proyek" },
+                      { id: "steps", label: "Tahap & Milestone" },
+                      { id: "payments", label: "Pembayaran" },
+                      { id: "revisions", label: "Revisi" },
+                      { id: "discussion", label: "Diskusi" },
+                      { id: "documents", label: "Dokumen" },
+                      { id: "updates", label: "Timeline" },
+                      { id: "approvals", label: "Persetujuan" },
+                    ]}
+                    active={tab}
+                    onChange={setTab}
+                  />
+                </div>
+              </BentoCard>
+
+              {/* Tab Contents */}
+              <BentoCard>
+                {tab === "project" ? (
                   <ProjectForm
+                    key={detail.project.id}
+                    project={detail.project}
                     options={options}
                     busy={busy}
                     onSave={async (value) => {
-                      setBusy(true);
-                      setError("");
-                      try {
-                        const result = await createClientProjectAction(value);
-                        if (!result.ok) {
-                          setError(result.message);
-                          return;
-                        }
-                        setCredentials({
-                          code: result.data.project.trackingCode,
-                          pin: result.data.pin,
-                        });
-                        await load();
-                        await select(result.data.project.id);
-                        setStatus("Proyek dan enam tahap berhasil dibuat.");
-                      } catch {
-                        setError(
-                          "Koneksi terputus. Muat ulang daftar sebelum mencoba membuat proyek lagi.",
-                        );
-                      } finally {
-                        setBusy(false);
-                      }
+                      await mutate({ kind: "update", value });
                     }}
                   />
-                </Panel>
-              ) : null}
-              {detail ? (
-                <>
-                  <section className="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                      <h2 className="text-xl font-semibold">
-                        {detail.project.projectTitle}
-                      </h2>
-                      <p className="mt-1 text-xs text-[#71717a]">
-                        {detail.project.trackingCode}
-                      </p>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <a
-                        className={secondaryClass}
-                        href={`https://wa.me/${detail.project.clientWhatsapp}?text=${encodeURIComponent(`Halo ${detail.project.clientName}, pantau proyek "${detail.project.projectTitle}" di ${typeof window !== "undefined" ? window.location.origin : ""}/tracking\nKode Tracking: ${detail.project.trackingCode}\nPIN dikirim terpisah.`)}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Kirim Link via WhatsApp
-                      </a>
-                      <button
-                        className={secondaryClass}
+                ) : null}
+
+                {tab === "steps" ? (
+                  <Steps data={detail} mutate={mutate} busy={busy} />
+                ) : null}
+
+                {tab === "payments" ? (
+                  <Payments data={detail} mutate={mutate} busy={busy} />
+                ) : null}
+
+                {tab === "documents" ? (
+                  <Documents data={detail} mutate={mutate} busy={busy} />
+                ) : null}
+
+                {tab === "discussion" ? (
+                  <Discussion data={detail} mutate={mutate} busy={busy} />
+                ) : null}
+
+                {tab === "revisions" ? (
+                  <div className="grid gap-4">
+                    <div className="flex items-center justify-between gap-3 rounded-[10px] bg-[#f9f9f9] p-3 border border-[#eaeaea] text-xs">
+                      <span>
+                        Revisi terpakai:{" "}
+                        <strong className="text-[#18181a]">
+                          {detail.project.revisionsUsed} /{" "}
+                          {detail.project.revisionsIncluded}
+                        </strong>
+                      </span>
+                      <ToolbarButton
+                        variant={detail.project.isReviewOpen ? "light" : "dark"}
                         disabled={busy}
                         onClick={() => {
                           if (
                             window.confirm(
-                              "Buat PIN baru? Semua sesi klien yang lama langsung tidak berlaku.",
-                            )
-                          )
-                            void mutate({ kind: "pin" });
-                        }}
-                      >
-                        Regenerasi PIN
-                      </button>
-                      <button
-                        className={secondaryClass}
-                        disabled={busy}
-                        onClick={() => {
-                          if (
-                            window.confirm(
-                              detail.project.archivedAt
-                                ? "Pulihkan akses proyek ini?"
-                                : "Arsipkan proyek dan tutup akses klien?",
+                              detail.project.isReviewOpen
+                                ? "Tutup review klien?"
+                                : "Buka periode review dan tahap 5 untuk klien?"
                             )
                           )
                             void mutate({
-                              kind: "archive",
-                              archived: !detail.project.archivedAt,
+                              kind: "review",
+                              open: !detail.project.isReviewOpen,
                             });
                         }}
                       >
-                        {detail.project.archivedAt ? "Pulihkan" : "Arsipkan"}
-                      </button>
-                      <button
-                        className={secondaryClass}
-                        disabled={busy || detail.project.currentStep !== 6}
-                        title={detail.project.currentStep !== 6 ? "Selesaikan seluruh tahap terlebih dahulu" : undefined}
-                        onClick={async () => {
-                          if (!window.confirm("Buat draft portofolio tanpa nama atau data identitas klien? Draft tetap perlu dilengkapi gambar dan konten sebelum diterbitkan.")) return;
-                          setBusy(true);
-                          setError("");
-                          setStatus("");
-                          try {
-                            const result = await convertClientProjectToPortfolioAction(detail.project.id);
-                            if (!result.ok) setError(result.message);
-                            else setStatus(result.data.alreadyLinked ? "Proyek ini sudah terhubung ke draft portofolio." : `Draft portofolio /${result.data.slug} dibuat tanpa data identitas klien. Lengkapi dari Showcase sebelum diterbitkan.`);
-                          } catch {
-                            setError("Draft portofolio tidak dapat dibuat.");
-                          } finally {
-                            setBusy(false);
-                          }
-                        }}
-                      >
-                        Buat draft portofolio
-                      </button>
-                      <Link href="/admin/showcase" className={secondaryClass}>
-                        Buka Showcase
-                      </Link>
+                        {detail.project.isReviewOpen
+                          ? "Tutup Review"
+                          : "Buka Review Klien"}
+                      </ToolbarButton>
                     </div>
-                  </section>
-                  <nav
-                    className="flex gap-1 overflow-x-auto rounded-xl bg-[#ededee] p-1"
-                    aria-label="Pengelolaan proyek"
-                  >
-                    {[
-                      ["project", "Proyek"],
-                      ["steps", "Tahap & Milestone"],
-                      ["payments", "Pembayaran"],
-                      ["revisions", "Revisi"],
-                      ["discussion", "Diskusi"],
-                      ["documents", "Dokumen"],
-                      ["updates", "Timeline"],
-                      ["approvals", "Persetujuan"],
-                    ].map(([key, label]) => (
-                      <button
-                        key={key}
-                        className={`min-h-11 shrink-0 rounded-lg px-3 text-xs ${tab === key ? "bg-[#18181a] text-white" : "text-[#52525b]"}`}
-                        aria-pressed={tab === key}
-                        onClick={() => setTab(key)}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </nav>
-                  <Panel
-                    title={
-                      {
-                        project: "Rincian Proyek",
-                        steps: "Progres Produksi",
-                        payments: "Pembayaran",
-                        revisions: "Review & Revisi",
-                        discussion: "Diskusi & Catatan Internal",
-                        documents: "Dokumen Proyek",
-                        updates: "Timeline Proyek",
-                        approvals: "Bukti Persetujuan Klien",
-                      }[tab] ?? "Proyek"
-                    }
-                  >
-                    {tab === "project" ? (
-                      <ProjectForm
-                        key={detail.project.id}
-                        project={detail.project}
-                        options={options}
-                        busy={busy}
-                        onSave={async (value) => {
-                          await mutate({ kind: "update", value });
-                        }}
-                      />
-                    ) : null}
-                    {tab === "steps" ? (
-                      <Steps data={detail} mutate={mutate} busy={busy} />
-                    ) : null}
-                    {tab === "payments" ? (
-                      <Payments data={detail} mutate={mutate} busy={busy} />
-                    ) : null}
-                    {tab === "documents" ? (
-                      <Documents data={detail} mutate={mutate} busy={busy} />
-                    ) : null}
-                    {tab === "discussion" ? (
-                      <Discussion data={detail} mutate={mutate} busy={busy} />
-                    ) : null}
-                    {tab === "revisions" ? (
-                      <div className="space-y-5">
-                        <p className="text-sm">
-                          Revisi terpakai: {detail.project.revisionsUsed} /{" "}
-                          {detail.project.revisionsIncluded}
-                        </p>
-                        <button
-                          className={buttonClass}
-                          disabled={busy}
-                          onClick={() => {
-                            if (
-                              window.confirm(
-                                detail.project.isReviewOpen
-                                  ? "Tutup review klien?"
-                                  : "Buka periode review dan tahap 5 untuk klien?",
-                              )
-                            )
-                              void mutate({
-                                kind: "review",
-                                open: !detail.project.isReviewOpen,
-                              });
-                          }}
+                    <Revisions data={detail} mutate={mutate} busy={busy} />
+                  </div>
+                ) : null}
+
+                {tab === "updates" ? (
+                  <div className="grid gap-4">
+                    <form
+                      className="grid gap-3 rounded-[12px] border border-[#eaeaea] p-4 bg-[#fafafa]"
+                      onSubmit={async (e) => {
+                        e.preventDefault();
+                        const form = e.currentTarget;
+                        const f = new FormData(form);
+                        if (
+                          await mutate({
+                            kind: "updatePost",
+                            title: f.get("title"),
+                            body: f.get("body"),
+                            isVisibleToClient: f.has("visible"),
+                          })
+                        )
+                          form.reset();
+                      }}
+                    >
+                      <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                        Judul Pembaruan
+                        <input
+                          className={inputClass}
+                          name="title"
+                          required
+                          maxLength={200}
+                        />
+                      </label>
+                      <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                        Isi Pembaruan
+                        <textarea
+                          className="w-full rounded-[10px] bg-[#f0f0f0] p-2.5 text-xs text-[#18181a] outline-none resize-y"
+                          name="body"
+                          rows={3}
+                          required
+                          maxLength={10000}
+                        />
+                      </label>
+                      <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+                        <input
+                          type="checkbox"
+                          name="visible"
+                          className="rounded border-[#d4d4d8]"
+                          defaultChecked
+                        />
+                        Tampilkan ke portal klien
+                      </label>
+                      <ToolbarButton type="submit" variant="dark" disabled={busy}>
+                        Terbitkan Pembaruan
+                      </ToolbarButton>
+                    </form>
+
+                    <div className="grid gap-2.5">
+                      {detail.updates.map((u) => (
+                        <div
+                          key={u.id}
+                          className="rounded-[12px] border border-[#eaeaea] p-3.5 bg-white text-xs"
                         >
-                          {detail.project.isReviewOpen
-                            ? "Tutup Review"
-                            : "Buka Review Klien"}
-                        </button>
-                        <Revisions data={detail} mutate={mutate} busy={busy} />
-                      </div>
-                    ) : null}
-                    {tab === "updates" ? (
-                      <div className="space-y-6">
-                        <form
-                          className="space-y-4"
-                          onSubmit={async (e) => {
-                            e.preventDefault();
-                            const form = e.currentTarget;
-                            const f = new FormData(form);
-                            if (
-                              await mutate({
-                                kind: "updatePost",
-                                title: f.get("title"),
-                                body: f.get("body"),
-                                isVisibleToClient: f.has("visible"),
-                              })
-                            )
-                              form.reset();
-                          }}
-                        >
-                          <Field label="Judul pembaruan">
-                            <input
-                              className={inputClass}
-                              name="title"
-                              required
-                              maxLength={200}
-                            />
-                          </Field>
-                          <Field label="Isi pembaruan">
-                            <textarea
-                              className={inputClass}
-                              name="body"
-                              rows={4}
-                              required
-                              maxLength={10000}
-                            />
-                          </Field>
-                          <label className="flex min-h-11 items-center gap-2 text-sm">
-                            <input
-                              type="checkbox"
-                              name="visible"
-                              defaultChecked
-                            />
-                            Tampilkan ke klien
-                          </label>
-                          <button className={buttonClass} disabled={busy}>
-                            Terbitkan Pembaruan
-                          </button>
-                        </form>
-                        {detail.updates.map((u) => (
-                          <article
-                            key={u.id}
-                            className="border-t border-[#e4e4e7] pt-4"
-                          >
-                            <h3 className="font-semibold">{u.title}</h3>
-                            <p className="my-2 text-xs text-[#71717a]">
-                              {dateTime(u.createdAt)} ·{" "}
-                              {u.isVisibleToClient
-                                ? "Tampil ke klien"
-                                : "Internal"}
-                            </p>
-                            <RichTextContent value={u.body} />
-                          </article>
-                        ))}
-                      </div>
-                    ) : null}
-                    {tab === "approvals" ? (
-                      <div className="space-y-4">
-                        {detail.approvals.map((a) => (
-                          <article
-                            key={a.id}
-                            className="rounded-xl border border-[#e4e4e7] p-4"
-                          >
-                            <h3 className="text-sm font-semibold">
-                              {a.type === "step_review"
-                                ? "Persetujuan hasil review"
-                                : "Serah terima akhir"}
-                            </h3>
-                            <p className="my-2 text-sm">
-                              {a.approvedByName} · {dateTime(a.approvedAt)}
-                            </p>
-                            <p className="whitespace-pre-wrap text-sm">
-                              {a.note}
-                            </p>
-                            <p className="mt-3 break-all text-xs text-[#71717a]">
-                              ID bukti: {a.id}
-                            </p>
-                          </article>
-                        ))}
-                        {!detail.approvals.length ? (
-                          <p className="text-sm text-[#71717a]">
-                            Belum ada persetujuan. Bukti hanya dibuat oleh klien
-                            dengan memasukkan ulang PIN dan tidak dapat diedit.
+                          <h4 className="m-0 font-semibold text-[#18181a]">{u.title}</h4>
+                          <p className="m-0 my-1 text-[11px] text-[#71717a]">
+                            {dateTime(u.createdAt)} ·{" "}
+                            {u.isVisibleToClient ? "Tampil ke klien" : "Internal"}
                           </p>
-                        ) : null}
+                          <div className="mt-2 text-xs text-[#52525b]">
+                            <RichTextContent value={u.body} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {tab === "approvals" ? (
+                  <div className="grid gap-3">
+                    {detail.approvals.map((a) => (
+                      <div
+                        key={a.id}
+                        className="rounded-[12px] border border-[#eaeaea] p-3.5 bg-white text-xs"
+                      >
+                        <h4 className="m-0 font-semibold text-[#18181a]">
+                          {a.type === "step_review"
+                            ? "Persetujuan Hasil Review"
+                            : "Serah Terima Akhir Proyek"}
+                        </h4>
+                        <p className="my-1 text-[11px] text-[#71717a]">
+                          Disetujui oleh: {a.approvedByName} · {dateTime(a.approvedAt)}
+                        </p>
+                        <p className="m-0 mt-1.5 text-xs text-[#52525b] whitespace-pre-wrap">
+                          {a.note}
+                        </p>
+                        <p className="mt-2 font-mono text-[10px] text-[#a1a1aa]">
+                          ID Bukti Hash: {a.id}
+                        </p>
                       </div>
+                    ))}
+                    {!detail.approvals.length ? (
+                      <p className="text-xs text-[#71717a]">
+                        Belum ada persetujuan. Bukti hanya dibuat oleh klien dengan
+                        memasukkan ulang PIN.
+                      </p>
                     ) : null}
-                  </Panel>
-                </>
-              ) : !creating ? (
-                <Panel title="Pilih Proyek">
-                  <p className="text-sm text-[#71717a]">
-                    Pilih proyek dari daftar untuk mengelola akses dan data
-                    klien.
-                  </p>
-                </Panel>
-              ) : null}
+                  </div>
+                ) : null}
+              </BentoCard>
             </div>
-          </div>
-        </main>
+          ) : (
+            <BentoCard>
+              <EmptyState
+                icon="touch_app"
+                title="Pilih proyek klien"
+                description="Pilih salah satu proyek dari daftar di sebelah kiri untuk melihat detail, checklist tahapan, atau mencatat pembayaran termin."
+              />
+            </BentoCard>
+          )}
+        </div>
       </div>
-    </div>
+    </AdminFrame>
   );
 }

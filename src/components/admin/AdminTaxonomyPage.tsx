@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import Link from "next/link";
-import { AdminHeader, AdminSidebar } from "./AdminShell";
+import { AdminFrame } from "./AdminFrame";
+import { BentoCard, Chip, EmptyState, SearchField, TabFilter, ToolbarButton } from "./AdminUi";
 import {
   deleteCategoryAction,
   listCategoriesAction,
@@ -44,6 +44,9 @@ function newTechnology(): TechnologyInput {
   return { name: "", slug: "", icon: "", color: "#586016" };
 }
 
+const inputClass =
+  "h-[38px] w-full rounded-[10px] bg-[#f0f0f0] px-3 text-xs text-[#18181a] placeholder-[#71717a] outline-none border border-transparent focus:border-[#18181a] transition-all";
+
 export function AdminTaxonomyPage() {
   const [tab, setTab] = useState<TaxonomyTab>("categories");
   const [categories, setCategories] = useState<CategoryRecord[]>([]);
@@ -53,7 +56,7 @@ export function AdminTaxonomyPage() {
     useState<TechnologyInput>(newTechnology);
   const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
   const [editingTechnologyId, setEditingTechnologyId] = useState<string | null>(
-    null,
+    null
   );
   const [query, setQuery] = useState("");
   const [reloadKey, setReloadKey] = useState(0);
@@ -78,14 +81,14 @@ export function AdminTaxonomyPage() {
             !categoryResult.ok
               ? categoryResult.message
               : !technologyResult.ok
-                ? technologyResult.message
-                : "Data kategori dan teknologi tidak dapat dimuat.",
+              ? technologyResult.message
+              : "Data kategori dan teknologi tidak dapat dimuat."
           );
           return;
         }
         setCategories(z.array(categoryRecordSchema).parse(categoryResult.data));
         setTechnologies(
-          z.array(technologyRecordSchema).parse(technologyResult.data),
+          z.array(technologyRecordSchema).parse(technologyResult.data)
         );
       } catch {
         if (active) setError("Data kategori dan teknologi tidak dapat dimuat.");
@@ -100,10 +103,10 @@ export function AdminTaxonomyPage() {
   }, [reloadKey]);
 
   const filteredCategories = categories.filter((item) =>
-    `${item.name} ${item.slug}`.toLowerCase().includes(query.trim().toLowerCase()),
+    `${item.name} ${item.slug}`.toLowerCase().includes(query.trim().toLowerCase())
   );
   const filteredTechnologies = technologies.filter((item) =>
-    `${item.name} ${item.slug}`.toLowerCase().includes(query.trim().toLowerCase()),
+    `${item.name} ${item.slug}`.toLowerCase().includes(query.trim().toLowerCase())
   );
 
   function editCategory(item: CategoryRecord) {
@@ -202,7 +205,7 @@ export function AdminTaxonomyPage() {
     if (
       isSaving ||
       !window.confirm(
-        `Hapus kategori “${item.name}”? Kategori yang digunakan paket atau proyek tidak dapat dihapus.`,
+        `Hapus kategori “${item.name}”? Kategori yang digunakan paket atau proyek tidak dapat dihapus.`
       )
     )
       return;
@@ -232,7 +235,7 @@ export function AdminTaxonomyPage() {
     if (
       isSaving ||
       !window.confirm(
-        `Hapus teknologi “${item.name}”? Teknologi yang digunakan proyek tidak dapat dihapus.`,
+        `Hapus teknologi “${item.name}”? Teknologi yang digunakan proyek tidak dapat dihapus.`
       )
     )
       return;
@@ -268,434 +271,427 @@ export function AdminTaxonomyPage() {
   }
 
   return (
-    <div className="screen admin-screen relative flex min-h-screen w-full flex-col bg-[#f9f9f9]">
-      <AdminSidebar />
-      <div className="flex min-h-screen w-full flex-col lg:pl-[288px]">
-        <AdminHeader />
-        <main
-          id="konten"
-          className="mx-auto w-full max-w-[1920px] flex-1 px-4 pb-12 pt-20 sm:px-6 lg:px-8"
-        >
-          <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+    <AdminFrame
+      title="Kategori & Teknologi"
+      description="Kelola taksonomi untuk filter katalog proyek portofolio dan paket layanan publik."
+      screenKey="cms/kategori-teknologi"
+      actions={
+        <div className="flex items-center gap-2">
+          <ToolbarButton href="/admin/showcase" variant="light" icon="collections">
+            Buka Showcase
+          </ToolbarButton>
+          <ToolbarButton
+            variant="light"
+            icon="sync"
+            disabled={isLoading || isSaving}
+            onClick={() => setReloadKey((c) => c + 1)}
+          >
+            Refresh
+          </ToolbarButton>
+          <ToolbarButton variant="dark" icon="add" onClick={startNew}>
+            Item Baru
+          </ToolbarButton>
+        </div>
+      }
+    >
+      {/* Metrics Row */}
+      <div className="grid grid-cols-2 gap-3 mb-5">
+        <div className="rounded-[14px] border border-[#eaeaea] bg-white p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#71717a]">Total Kategori</div>
+          <div className="text-2xl font-semibold text-[#18181a] mt-1">{categories.length}</div>
+        </div>
+        <div className="rounded-[14px] border border-[#eaeaea] bg-white p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#71717a]">Total Teknologi</div>
+          <div className="text-2xl font-semibold text-[#18181a] mt-1">{technologies.length}</div>
+        </div>
+      </div>
+
+      {error ? (
+        <div className="mb-4 rounded-[12px] border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-center gap-2">
+          <span className="symbol text-base">error</span>
+          <span>{error}</span>
+        </div>
+      ) : null}
+      {status ? (
+        <div className="mb-4 rounded-[12px] border border-green-200 bg-green-50 p-3.5 text-xs text-green-900 flex items-center gap-2">
+          <span className="symbol text-base">check_circle</span>
+          <span>{status}</span>
+        </div>
+      ) : null}
+
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[1.3fr_1fr]">
+        {/* Left Side: Taxonomy items list */}
+        <BentoCard>
+          <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             <div>
-              <nav
-                aria-label="Breadcrumb"
-                className="mb-2 flex gap-1.5 text-[11px] text-[#52525b]"
-              >
-                <span>Admin</span>
-                <span aria-hidden="true">/</span>
-                <span>Konten Website</span>
-                <span aria-hidden="true">/</span>
-                <span className="font-semibold text-[#18181a]">
-                  Kategori & Teknologi
-                </span>
-              </nav>
-              <h1 className="m-0 text-2xl font-semibold tracking-[-.5px] text-[#18181a]">
-                Kategori & Teknologi
-              </h1>
-              <p className="mb-0 mt-2 max-w-3xl text-sm leading-5 text-[#52525b]">
-                Data ini dipakai pada filter katalog publik dan editor proyek.
-                Item yang masih digunakan tidak dapat dihapus.
+              <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                Daftar Taksonomi
+              </h2>
+              <p className="mt-0.5 text-xs text-[#71717a]">
+                Pilih tab untuk mengelola kategori atau teknologi
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
-              <Link href="/admin/showcase" className="secondary-button min-h-11">
-                Buka proyek showcase
-              </Link>
-              <button
-                type="button"
-                disabled={isLoading || isSaving}
-                onClick={() => setReloadKey((current) => current + 1)}
-                className="secondary-button min-h-11"
-              >
-                Muat ulang
-              </button>
-            </div>
+            <TabFilter
+              tabs={[
+                { id: "categories", label: "Kategori", count: categories.length },
+                { id: "technologies", label: "Teknologi", count: technologies.length },
+              ]}
+              active={tab}
+              onChange={setTab}
+            />
           </div>
 
-          {error ? (
-            <p role="alert" className="mb-4 text-sm text-red-700">
-              {error}
-            </p>
-          ) : null}
-          {status ? (
-            <p role="status" className="mb-4 text-sm text-green-800">
-              {status}
-            </p>
-          ) : null}
+          <div className="mb-4">
+            <SearchField
+              value={query}
+              onChange={setQuery}
+              placeholder="Cari nama atau slug..."
+            />
+          </div>
 
-          <div className="grid grid-cols-1 items-start gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,.85fr)]">
-            <section className="min-w-0 rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">
-              <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div>
-                  <h2 className="m-0 text-lg font-semibold text-[#18181a]">
-                    Referensi konten
-                  </h2>
-                  <p className="mb-0 mt-1 text-xs text-[#52525b]">
-                    {tab === "categories"
-                      ? `${categories.length} kategori tersimpan`
-                      : `${technologies.length} teknologi tersimpan`}
-                  </p>
-                </div>
-                <div
-                  role="group"
-                  aria-label="Pilih jenis referensi"
-                  className="flex flex-wrap gap-2"
-                >
-                  <button
-                    type="button"
-                    aria-pressed={tab === "categories"}
-                    onClick={() => setTab("categories")}
-                    className={
-                      tab === "categories"
-                        ? "primary-button min-h-11"
-                        : "secondary-button min-h-11"
-                    }
-                  >
-                    Kategori
-                  </button>
-                  <button
-                    type="button"
-                    aria-pressed={tab === "technologies"}
-                    onClick={() => setTab("technologies")}
-                    className={
-                      tab === "technologies"
-                        ? "primary-button min-h-11"
-                        : "secondary-button min-h-11"
-                    }
-                  >
-                    Teknologi
-                  </button>
-                </div>
-              </div>
-
-              <label className="mb-4 flex flex-col gap-1.5 text-xs font-medium text-[#52525b]">
-                Cari berdasarkan nama atau slug
-                <input
-                  type="search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal text-[#18181a]"
-                />
-              </label>
-
-              {isLoading ? (
-                <p role="status" className="text-sm text-[#52525b]">
-                  Memuat kategori dan teknologi...
-                </p>
-              ) : tab === "categories" ? (
-                filteredCategories.length ? (
-                  <ul className="m-0 list-none divide-y divide-neutral-200 p-0">
-                    {filteredCategories.map((item) => (
-                      <li
-                        key={item.id}
-                        className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between"
-                      >
-                        <div className="min-w-0">
-                          <div className="flex flex-wrap items-center gap-2">
-                            <h3 className="m-0 text-sm font-semibold text-[#18181a]">
-                              {item.name}
-                            </h3>
-                            <span className="rounded-md bg-[#f0f0f0] px-2 py-1 text-[11px] text-[#52525b]">
-                              {item.isActive ? "Aktif" : "Nonaktif"}
-                            </span>
-                            {item.showInFilter ? (
-                              <span className="rounded-md bg-[#e8efd8] px-2 py-1 text-[11px] text-[#3f5212]">
-                                Filter publik
-                              </span>
-                            ) : null}
-                          </div>
-                          <p className="mb-0 mt-1 break-all text-xs text-[#52525b]">
-                            {item.slug}
-                          </p>
-                        </div>
-                        <div className="flex shrink-0 gap-2">
-                          <button
-                            type="button"
-                            disabled={isSaving}
-                            onClick={() => editCategory(item)}
-                            className="secondary-button min-h-11"
-                          >
-                            Ubah
-                          </button>
-                          <button
-                            type="button"
-                            disabled={isSaving}
-                            onClick={() => void removeCategory(item)}
-                            className="secondary-button min-h-11 text-red-700"
-                          >
-                            Hapus
-                          </button>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="rounded-xl border border-neutral-200 bg-[#f9f9f9] p-5 text-sm text-[#52525b]">
-                    Tidak ada kategori yang cocok dengan pencarian.
-                  </p>
-                )
-              ) : filteredTechnologies.length ? (
-                <ul className="m-0 list-none divide-y divide-neutral-200 p-0">
-                  {filteredTechnologies.map((item) => (
-                    <li
+          {isLoading ? (
+            <p className="text-center text-xs text-[#71717a] py-8">Memuat data taksonomi...</p>
+          ) : tab === "categories" ? (
+            filteredCategories.length === 0 ? (
+              <EmptyState
+                icon="category"
+                title="Tidak ada kategori"
+                description="Kategori tidak ditemukan untuk pencarian ini."
+              />
+            ) : (
+              <div className="grid gap-2">
+                {filteredCategories.map((item) => {
+                  const isSelected = editingCategoryId === item.id;
+                  return (
+                    <div
                       key={item.id}
-                      className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between"
+                      className={`flex items-center justify-between gap-3 rounded-[12px] border p-3 transition-all ${
+                        isSelected
+                          ? "border-[#18181a] bg-[#fafafa] shadow-sm ring-1 ring-[#18181a]"
+                          : "border-[#eaeaea] bg-white hover:bg-[#fcfcfc]"
+                      }`}
                     >
-                      <div className="flex min-w-0 items-center gap-3">
-                        <span
-                          aria-hidden="true"
-                          className="size-5 shrink-0 rounded-md border border-neutral-300"
-                          style={{ backgroundColor: item.color }}
-                        />
-                        <div className="min-w-0">
-                          <h3 className="m-0 truncate text-sm font-semibold text-[#18181a]">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          {item.icon ? (
+                            <span className="symbol text-base text-[#52525b]">
+                              {item.icon}
+                            </span>
+                          ) : null}
+                          <span className="text-xs font-semibold text-[#18181a]">
                             {item.name}
-                          </h3>
-                          <p className="mb-0 mt-1 break-all text-xs text-[#52525b]">
-                            {item.slug}
-                          </p>
+                          </span>
+                          <Chip variant={item.isActive ? "success" : "neutral"} size="sm">
+                            {item.isActive ? "Aktif" : "Nonaktif"}
+                          </Chip>
+                          {item.showInFilter ? (
+                            <Chip variant="lime" size="sm">
+                              Filter
+                            </Chip>
+                          ) : null}
+                        </div>
+                        <div className="mt-1 text-xs text-[#71717a] font-mono">
+                          {item.slug} · urutan: {item.sortOrder}
                         </div>
                       </div>
-                      <div className="flex shrink-0 gap-2">
-                        <button
-                          type="button"
+
+                      <div className="flex gap-1.5 shrink-0">
+                        <ToolbarButton
+                          variant="light"
                           disabled={isSaving}
-                          onClick={() => editTechnology(item)}
-                          className="secondary-button min-h-11"
+                          onClick={() => editCategory(item)}
                         >
                           Ubah
-                        </button>
-                        <button
-                          type="button"
+                        </ToolbarButton>
+                        <ToolbarButton
+                          variant="danger"
                           disabled={isSaving}
-                          onClick={() => void removeTechnology(item)}
-                          className="secondary-button min-h-11 text-red-700"
+                          onClick={() => void removeCategory(item)}
                         >
                           Hapus
-                        </button>
+                        </ToolbarButton>
                       </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="rounded-xl border border-neutral-200 bg-[#f9f9f9] p-5 text-sm text-[#52525b]">
-                  Tidak ada teknologi yang cocok dengan pencarian.
-                </p>
-              )}
-            </section>
-
-            <section className="rounded-2xl border border-neutral-200 bg-white p-5 sm:p-6">
-              <div className="mb-4 flex items-center justify-between gap-3">
-                <h2 className="m-0 text-lg font-semibold text-[#18181a]">
-                  {tab === "categories"
-                    ? editingCategoryId
-                      ? "Ubah kategori"
-                      : "Kategori baru"
-                    : editingTechnologyId
-                      ? "Ubah teknologi"
-                      : "Teknologi baru"}
-                </h2>
-                {(editingCategoryId || editingTechnologyId) && (
-                  <button
-                    type="button"
-                    disabled={isSaving}
-                    onClick={startNew}
-                    className="text-xs font-medium text-[#52525b] underline underline-offset-4"
-                  >
-                    Batalkan edit
-                  </button>
-                )}
+                    </div>
+                  );
+                })}
               </div>
+            )
+          ) : filteredTechnologies.length === 0 ? (
+            <EmptyState
+              icon="code"
+              title="Tidak ada teknologi"
+              description="Teknologi tidak ditemukan untuk pencarian ini."
+            />
+          ) : (
+            <div className="grid gap-2">
+              {filteredTechnologies.map((item) => {
+                const isSelected = editingTechnologyId === item.id;
+                return (
+                  <div
+                    key={item.id}
+                    className={`flex items-center justify-between gap-3 rounded-[12px] border p-3 transition-all ${
+                      isSelected
+                        ? "border-[#18181a] bg-[#fafafa] shadow-sm ring-1 ring-[#18181a]"
+                        : "border-[#eaeaea] bg-white hover:bg-[#fcfcfc]"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        aria-hidden="true"
+                        className="size-5 shrink-0 rounded-[6px] border border-neutral-300"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <div className="min-w-0">
+                        <span className="text-xs font-semibold text-[#18181a]">
+                          {item.name}
+                        </span>
+                        <div className="text-xs text-[#71717a] font-mono">
+                          {item.slug} · {item.color}
+                        </div>
+                      </div>
+                    </div>
 
-              {tab === "categories" ? (
-                <form onSubmit={(event) => void saveCategory(event)}>
-                  <fieldset
-                    disabled={isSaving}
-                    className="m-0 flex flex-col gap-4 border-0 p-0"
-                  >
-                    <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                      Nama kategori
-                      <input
-                        required
-                        maxLength={150}
-                        value={categoryValue.name}
-                        onChange={(event) =>
-                          setCategoryValue((current) => ({
-                            ...current,
-                            name: event.target.value,
-                          }))
-                        }
-                        className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                      />
-                    </label>
-                    <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                      Slug
-                      <input
-                        required
-                        maxLength={100}
-                        pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
-                        value={categoryValue.slug}
-                        onChange={(event) =>
-                          setCategoryValue((current) => ({
-                            ...current,
-                            slug: event.target.value,
-                          }))
-                        }
-                        placeholder="contoh: instansi-pemdes"
-                        className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                      />
-                    </label>
-                    <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                      Ikon (nama Material Symbol)
-                      <input
-                        maxLength={80}
-                        value={categoryValue.icon}
-                        onChange={(event) =>
-                          setCategoryValue((current) => ({
-                            ...current,
-                            icon: event.target.value,
-                          }))
-                        }
-                        className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                      />
-                    </label>
-                    <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                      Urutan
-                      <input
-                        type="number"
-                        min={0}
-                        max={2_147_483_647}
-                        value={categoryValue.sortOrder}
-                        onChange={(event) =>
-                          setCategoryValue((current) => ({
-                            ...current,
-                            sortOrder: Number(event.target.value),
-                          }))
-                        }
-                        className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                      />
-                    </label>
-                    <label className="flex min-h-11 items-center gap-2 text-sm text-[#18181a]">
-                      <input
-                        type="checkbox"
-                        checked={categoryValue.isActive}
-                        onChange={(event) =>
-                          setCategoryValue((current) => ({
-                            ...current,
-                            isActive: event.target.checked,
-                          }))
-                        }
-                        className="size-4 accent-[#586016]"
-                      />
-                      Aktif untuk data baru
-                    </label>
-                    <label className="flex min-h-11 items-center gap-2 text-sm text-[#18181a]">
-                      <input
-                        type="checkbox"
-                        checked={categoryValue.showInFilter}
-                        onChange={(event) =>
-                          setCategoryValue((current) => ({
-                            ...current,
-                            showInFilter: event.target.checked,
-                          }))
-                        }
-                        className="size-4 accent-[#586016]"
-                      />
-                      Tampilkan pada filter proyek publik
-                    </label>
-                    <button
-                      type="submit"
-                      disabled={isSaving || isLoading}
-                      className="primary-button min-h-11 self-start"
-                    >
-                      {isSaving ? "Menyimpan..." : "Simpan kategori"}
-                    </button>
-                  </fieldset>
-                </form>
-              ) : (
-                <form onSubmit={(event) => void saveTechnology(event)}>
-                  <fieldset
-                    disabled={isSaving}
-                    className="m-0 flex flex-col gap-4 border-0 p-0"
-                  >
-                    <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                      Nama teknologi
-                      <input
-                        required
-                        maxLength={100}
-                        value={technologyValue.name}
-                        onChange={(event) =>
-                          setTechnologyValue((current) => ({
-                            ...current,
-                            name: event.target.value,
-                          }))
-                        }
-                        className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                      />
-                    </label>
-                    <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                      Slug
-                      <input
-                        required
-                        maxLength={100}
-                        pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
-                        value={technologyValue.slug}
-                        onChange={(event) =>
-                          setTechnologyValue((current) => ({
-                            ...current,
-                            slug: event.target.value,
-                          }))
-                        }
-                        placeholder="contoh: next-js"
-                        className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                      />
-                    </label>
-                    <label className="flex flex-col gap-1.5 text-sm font-medium text-[#18181a]">
-                      Ikon (nama Material Symbol)
-                      <input
-                        maxLength={100}
-                        value={technologyValue.icon}
-                        onChange={(event) =>
-                          setTechnologyValue((current) => ({
-                            ...current,
-                            icon: event.target.value,
-                          }))
-                        }
-                        className="min-h-11 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-normal"
-                      />
-                    </label>
-                    <label className="flex items-center gap-3 text-sm font-medium text-[#18181a]">
-                      Warna
+                    <div className="flex gap-1.5 shrink-0">
+                      <ToolbarButton
+                        variant="light"
+                        disabled={isSaving}
+                        onClick={() => editTechnology(item)}
+                      >
+                        Ubah
+                      </ToolbarButton>
+                      <ToolbarButton
+                        variant="danger"
+                        disabled={isSaving}
+                        onClick={() => void removeTechnology(item)}
+                      >
+                        Hapus
+                      </ToolbarButton>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </BentoCard>
+
+        {/* Right Side: Form Editor */}
+        <BentoCard className="sticky top-20">
+          <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#eaeaea] pb-3">
+            <div>
+              <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                {tab === "categories"
+                  ? editingCategoryId
+                    ? "Ubah Kategori"
+                    : "Tambah Kategori"
+                  : editingTechnologyId
+                  ? "Ubah Teknologi"
+                  : "Tambah Teknologi"}
+              </h2>
+              <p className="mt-0.5 text-xs text-[#71717a]">
+                {tab === "categories"
+                  ? "Atur slug, visibilitas filter, dan urutan"
+                  : "Atur nama, slug, ikon, dan kode warna"}
+              </p>
+            </div>
+            {editingCategoryId || editingTechnologyId ? (
+              <button
+                type="button"
+                disabled={isSaving}
+                onClick={startNew}
+                className="text-xs font-medium text-[#71717a] hover:text-[#18181a] underline"
+              >
+                Batal Edit
+              </button>
+            ) : null}
+          </div>
+
+          {tab === "categories" ? (
+            <form onSubmit={(e) => void saveCategory(e)} className="grid gap-3.5">
+              <fieldset disabled={isSaving} className="m-0 grid gap-3 border-0 p-0">
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Nama Kategori
+                  <input
+                    required
+                    maxLength={150}
+                    value={categoryValue.name}
+                    onChange={(e) =>
+                      setCategoryValue((c) => ({ ...c, name: e.target.value }))
+                    }
+                    className={inputClass}
+                    placeholder="Contoh: Instansi Pemdes"
+                  />
+                </label>
+
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Slug URL
+                  <input
+                    required
+                    maxLength={100}
+                    pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+                    value={categoryValue.slug}
+                    onChange={(e) =>
+                      setCategoryValue((c) => ({ ...c, slug: e.target.value }))
+                    }
+                    className={inputClass}
+                    placeholder="contoh: instansi-pemdes"
+                  />
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                    Ikon (Material Symbol)
+                    <input
+                      maxLength={80}
+                      value={categoryValue.icon}
+                      onChange={(e) =>
+                        setCategoryValue((c) => ({ ...c, icon: e.target.value }))
+                      }
+                      className={inputClass}
+                      placeholder="apartment"
+                    />
+                  </label>
+
+                  <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                    Urutan
+                    <input
+                      type="number"
+                      min={0}
+                      max={2_147_483_647}
+                      value={categoryValue.sortOrder}
+                      onChange={(e) =>
+                        setCategoryValue((c) => ({
+                          ...c,
+                          sortOrder: Number(e.target.value),
+                        }))
+                      }
+                      className={inputClass}
+                    />
+                  </label>
+                </div>
+
+                <div className="grid gap-2 pt-1">
+                  <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={categoryValue.isActive}
+                      onChange={(e) =>
+                        setCategoryValue((c) => ({
+                          ...c,
+                          isActive: e.target.checked,
+                        }))
+                      }
+                      className="rounded border-[#d4d4d8]"
+                    />
+                    Kategori Aktif
+                  </label>
+
+                  <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={categoryValue.showInFilter}
+                      onChange={(e) =>
+                        setCategoryValue((c) => ({
+                          ...c,
+                          showInFilter: e.target.checked,
+                        }))
+                      }
+                      className="rounded border-[#d4d4d8]"
+                    />
+                    Tampilkan pada Filter Showcase Publik
+                  </label>
+                </div>
+              </fieldset>
+
+              <div className="pt-2">
+                <ToolbarButton
+                  type="submit"
+                  variant="dark"
+                  disabled={isSaving || isLoading}
+                  className="w-full"
+                >
+                  {isSaving ? "Menyimpan…" : "Simpan Kategori"}
+                </ToolbarButton>
+              </div>
+            </form>
+          ) : (
+            <form onSubmit={(e) => void saveTechnology(e)} className="grid gap-3.5">
+              <fieldset disabled={isSaving} className="m-0 grid gap-3 border-0 p-0">
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Nama Teknologi
+                  <input
+                    required
+                    maxLength={100}
+                    value={technologyValue.name}
+                    onChange={(e) =>
+                      setTechnologyValue((c) => ({ ...c, name: e.target.value }))
+                    }
+                    className={inputClass}
+                    placeholder="Contoh: Next.js"
+                  />
+                </label>
+
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Slug URL
+                  <input
+                    required
+                    maxLength={100}
+                    pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+                    value={technologyValue.slug}
+                    onChange={(e) =>
+                      setTechnologyValue((c) => ({ ...c, slug: e.target.value }))
+                    }
+                    className={inputClass}
+                    placeholder="contoh: next-js"
+                  />
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                    Ikon Simbol
+                    <input
+                      maxLength={100}
+                      value={technologyValue.icon}
+                      onChange={(e) =>
+                        setTechnologyValue((c) => ({ ...c, icon: e.target.value }))
+                      }
+                      className={inputClass}
+                      placeholder="code"
+                    />
+                  </label>
+
+                  <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                    Warna Badge
+                    <div className="flex items-center gap-2">
                       <input
                         type="color"
                         value={technologyValue.color}
-                        onChange={(event) =>
-                          setTechnologyValue((current) => ({
-                            ...current,
-                            color: event.target.value,
-                          }))
+                        onChange={(e) =>
+                          setTechnologyValue((c) => ({ ...c, color: e.target.value }))
                         }
-                        className="size-11 cursor-pointer rounded-md border border-neutral-300 bg-white p-1"
+                        className="h-[38px] w-12 cursor-pointer rounded-[8px] border border-[#eaeaea] bg-white p-1"
                       />
-                      <span className="font-mono text-xs font-normal text-[#52525b]">
+                      <span className="font-mono text-xs text-[#52525b]">
                         {technologyValue.color}
                       </span>
-                    </label>
-                    <button
-                      type="submit"
-                      disabled={isSaving || isLoading}
-                      className="primary-button min-h-11 self-start"
-                    >
-                      {isSaving ? "Menyimpan..." : "Simpan teknologi"}
-                    </button>
-                  </fieldset>
-                </form>
-              )}
-            </section>
-          </div>
-        </main>
+                    </div>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div className="pt-2">
+                <ToolbarButton
+                  type="submit"
+                  variant="dark"
+                  disabled={isSaving || isLoading}
+                  className="w-full"
+                >
+                  {isSaving ? "Menyimpan…" : "Simpan Teknologi"}
+                </ToolbarButton>
+              </div>
+            </form>
+          )}
+        </BentoCard>
       </div>
-    </div>
+    </AdminFrame>
   );
 }

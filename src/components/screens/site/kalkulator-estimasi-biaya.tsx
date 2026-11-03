@@ -59,6 +59,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
           id="konten"
           tabIndex={-1}
         >
+          <PublicHeader settings={calculatorConfig.settings} />
           <main
             className={
               "box-border w-full h-fit shrink-0 flex flex-col gap-0 pt-[72px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
@@ -136,11 +137,11 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
                       }
                       data-pencil-name={
-                        "Estimasi indikatif • konfigurasi layanan"
+                        "Algoritma Penjadwalan Aktif • SLA 2026"
                       }
                       data-text="true"
                     >
-                      {"Estimasi indikatif • konfigurasi layanan"}
+                      {"Algoritma Penjadwalan Aktif • SLA 2026"}
                     </div>
                   </div>
                   <div
@@ -1611,7 +1612,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 </div>
                 <div
                   className={
-                    "box-border w-full lg:col-span-5 sticky top-[88px] flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#18181a] rounded-[22px] [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] z-10"
+                    "box-border w-full lg:col-span-5 self-start sticky top-[88px] flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#18181a] rounded-[22px] [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] z-10"
                   }
                   data-pencil-name={"div"}
                   data-section-padding="true"
@@ -1821,7 +1822,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <CalculatorSend
                       className={
-                        "box-border w-full h-[56px] shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_12px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                        "box-border w-full h-[56px] shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_12px] justify-center items-center bg-[#e2e89d] hover:bg-[#d4da8f] active:scale-[0.99] rounded-[12px] cursor-pointer transition-all"
                       }
                       data-pencil-name={"button"}
                       data-responsive="flow"
@@ -2003,10 +2004,10 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       className={
                         "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
                       }
-                      data-pencil-name={"Rincian penyerahan dan dukungan"}
+                      data-pencil-name={"Standard Garansi Bug 60 Hari"}
                       data-text="true"
                     >
-                      {"Penyerahan & dukungan"}
+                      {"Standard Garansi Bug 60 Hari"}
                     </div>
                     <div
                       className={"box-border w-full h-[4px] shrink-0"}
@@ -2022,7 +2023,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       data-text="true"
                     >
                       {
-                        "Hasil penyerahan dan masa dukungan dicantumkan dalam penawaran atau perjanjian proyek."
+                        "Setiap delivery disertai garansi hotfix stabilitas sistem serta pendampingan deploy cloud production."
                       }
                     </div>
                   </div>
@@ -2030,7 +2031,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     className={
                       "box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[4px_0px_0px_0px] justify-center items-start"
                     }
-                    data-pencil-name={"Sesuai kesepakatan tertulis"}
+                    data-pencil-name={"Production-Ready Reliability"}
                   >
                     <div
                       className={
@@ -2038,7 +2039,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       }
                       data-text="true"
                     >
-                      {"Sesuai kesepakatan tertulis"}
+                      {"Production-Ready Reliability"}
                     </div>
                   </div>
                 </div>
@@ -2125,7 +2126,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
             </div>
           </main>
           <PublicFooter settings={calculatorConfig.settings} />
-          <PublicHeader settings={calculatorConfig.settings} />
         </div>
       </CalculatorProvider>
     </ScreenState>

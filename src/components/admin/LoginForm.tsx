@@ -7,7 +7,14 @@ import { usePreview } from "@/components/preview/PreviewProvider";
 
 type AuthStage = "password" | "totp" | "enroll";
 
-export function LoginForm({ className }: { className?: string }) {
+export function LoginForm({
+  className,
+  quickLogin = false,
+}: {
+  className?: string;
+  /** Server-resolved: only development with DEV_ADMIN_QUICK_LOGIN=true. */
+  quickLogin?: boolean;
+}) {
   const router = useRouter();
   const preview = usePreview();
 
@@ -201,6 +208,29 @@ export function LoginForm({ className }: { className?: string }) {
       }
     } catch {
       setErrorMessage("Gagal mengonfirmasi kode pendaftaran ke server.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Step 4: development-only quick login (skips the TOTP challenge)
+  const handleQuickLogin = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setErrorMessage("");
+    try {
+      const response = await fetch("/api/admin/dev-login", { method: "POST" });
+      if (response.ok) {
+        preview.notify("Login cepat pengembangan berhasil. Membuka dashboard...");
+        router.push("/admin");
+      } else {
+        const data = (await response.json().catch(() => ({}))) as {
+          error?: string;
+        };
+        setErrorMessage(data.error || "Login cepat tidak tersedia.");
+      }
+    } catch {
+      setErrorMessage("Gagal menghubungi server login cepat.");
     } finally {
       setIsSubmitting(false);
     }
@@ -402,6 +432,28 @@ export function LoginForm({ className }: { className?: string }) {
               </>
             )}
           </button>
+
+          {quickLogin ? (
+            <div className="w-full flex flex-col gap-2 border-t border-dashed border-[#E4E4E7] pt-[16px]">
+              <div className="text-[11px] text-[#71717A] leading-[15px]">
+                Mode pengembangan: lewati verifikasi 2FA. Hanya aktif bila
+                <span className="font-semibold text-[#52525B]">
+                  {" "}
+                  DEV_ADMIN_QUICK_LOGIN=true
+                </span>{" "}
+                dan tidak pernah tersedia di produksi.
+              </div>
+              <button
+                type="button"
+                onClick={handleQuickLogin}
+                disabled={isSubmitting}
+                className="w-full h-[44px] flex justify-center items-center gap-[8px] bg-[#F0F0F0] hover:bg-[#E4E4E7] disabled:opacity-50 text-[#18181A] border border-[#E4E4E7] rounded-[12px] cursor-pointer transition-colors font-semibold text-[13px]"
+              >
+                <span className="symbol text-[18px] text-[#586016]">bolt</span>
+                Masuk tanpa 2FA (mode pengembangan)
+              </button>
+            </div>
+          ) : null}
         </form>
       )}
 

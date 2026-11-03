@@ -41,6 +41,8 @@ export interface PublicBookingAvailability {
 
 export interface PublicBookingMonthAvailability {
   month: string;
+  /** Server clock when the snapshot was computed; clients must use this as "now". */
+  serverNow: string;
   maxDate: string;
   consultationModes: PublicBookingSchedule["consultationModes"];
   days: Array<{ date: string; slots: DaySlot[] }>;
@@ -92,6 +94,7 @@ export async function getPublicBookingMonthAvailability(
     const schedule = await store.readMonth(month, nextMonth);
     return {
       month,
+      serverNow: now.toISOString(),
       maxDate: new Date(
         Date.parse(`${wibDay(now)}T00:00:00Z`) +
           schedule.config.maxDaysAhead * 86_400_000,
@@ -118,6 +121,7 @@ export async function getPublicBookingMonthAvailability(
   );
   return {
     month,
+    serverNow: now.toISOString(),
     maxDate: new Date(
       Date.parse(`${wibDay(now)}T00:00:00Z`) +
         (schedules[0]?.config.maxDaysAhead ?? 0) * 86_400_000,

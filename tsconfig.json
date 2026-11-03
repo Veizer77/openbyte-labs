@@ -37,7 +37,9 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     ".next/tracking-browser/types/**/*.ts",
-    ".next/tracking-browser/dev/types/**/*.ts"
+    ".next/tracking-browser/dev/types/**/*.ts",
+    ".next-s1/types/**/*.ts",
+    ".next-s1/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

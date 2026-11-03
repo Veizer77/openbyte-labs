@@ -39,7 +39,7 @@ import { hasOperatorConfirmation } from "./operator-confirmation";
 const DATASET_KEY = "openbyte-frontend-r1";
 const TARGET_HOST = "ep-calm-mouse-azykslas.c-3.ap-southeast-1.aws.neon.tech";
 const TARGET_DATABASE = "openbyte_labs_dev";
-const STAGING_BUCKET = "openbytelabs-staging";
+const STAGING_BUCKET = "openbytelabs-private";
 const PUBLIC_BUCKET = "openbytelabs";
 const PUBLIC_R2_HOST = "pub-56e1d9e9745541f7bbe1141aa7cc3be3.r2.dev";
 const MAX_UPLOAD_BYTES = 15 * 1024 * 1024;

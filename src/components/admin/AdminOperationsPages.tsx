@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState, type FormEvent, type ReactNode } from "react";
-import { AdminHeader, AdminSidebar } from "./AdminShell";
+import { useCallback, useEffect, useState, type FormEvent } from "react";
+import { AdminFrame } from "./AdminFrame";
 import {
   confirmBookingAction,
   listBookingsAction,
@@ -24,6 +24,7 @@ import {
 import type { BookingAdminDto } from "@/services/booking-admin";
 import type { InquiryAdminDto } from "@/services/inquiry-admin";
 import type { QuoteAdminDto } from "@/services/quote-admin";
+import { BentoCard, Chip, EmptyState, SearchField, TabFilter, ToolbarButton } from "./AdminUi";
 
 type BookingStatus = BookingAdminDto["status"];
 type InquiryStatus = InquiryAdminDto["status"];
@@ -85,78 +86,33 @@ function phoneUrl(value: string) {
   return digits ? `https://wa.me/${digits}` : null;
 }
 
-function PageFrame({
-  title,
-  description,
-  children,
-}: {
-  title: string;
-  description: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="screen admin-screen relative flex min-h-screen w-full flex-col bg-[#f9f9f9]">
-      <AdminSidebar />
-      <div className="flex min-h-screen w-full flex-col lg:pl-[288px]">
-        <AdminHeader />
-        <main className="mx-auto flex w-full max-w-[1920px] flex-1 flex-col gap-5 bg-[#f9f9f9] px-4 pb-12 pt-20 sm:px-6 lg:px-8">
-          <header className="flex flex-col gap-1">
-            <div className="text-[11px] font-medium tracking-wide text-[#71717a]">
-              ADMIN / OPERASIONAL KLIEN
-            </div>
-            <h1 className="m-0 text-2xl font-semibold tracking-tight text-[#18181a] sm:text-[28px]">
-              {title}
-            </h1>
-            <p className="m-0 max-w-3xl text-sm leading-6 text-[#52525b]">
-              {description}
-            </p>
-      </header>
-          {children}
-        </main>
-      </div>
-    </div>
-  );
-}
-
 function Feedback({ error, status }: { error: string; status: string }) {
   return (
     <>
       {error ? (
-        <p className="m-0 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800" role="alert">
-          {error}
-        </p>
+        <div
+          className="mb-4 rounded-[12px] border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-center gap-2"
+          role="alert"
+        >
+          <span className="symbol text-base">error</span>
+          <span>{error}</span>
+        </div>
       ) : null}
       {status ? (
-        <p className="m-0 rounded-lg border border-green-200 bg-green-50 px-3 py-2 text-sm text-green-900" role="status">
-          {status}
-        </p>
+        <div
+          className="mb-4 rounded-[12px] border border-green-200 bg-green-50 p-3.5 text-xs text-green-900 flex items-center gap-2"
+          role="status"
+        >
+          <span className="symbol text-base">check_circle</span>
+          <span>{status}</span>
+        </div>
       ) : null}
     </>
   );
 }
 
-function Panel({ children }: { children: ReactNode }) {
-  return (
-    <section className="rounded-2xl border border-[#e4e4e7] bg-white p-4 shadow-[0px_1px_6px_#00000008] sm:p-5">
-      {children}
-    </section>
-  );
-}
-
-const buttonClass =
-  "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-[#18181a] px-4 py-2 text-sm font-semibold text-white hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-50";
-const secondaryButtonClass =
-  "inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#d4d4d8] bg-white px-3 py-2 text-sm font-medium text-[#27272a] hover:bg-[#f4f4f5] disabled:cursor-not-allowed disabled:opacity-50";
 const inputClass =
-  "min-h-10 w-full rounded-lg border border-[#d4d4d8] bg-white px-3 py-2 text-sm text-[#18181a] outline-none focus:border-[#586016] focus:ring-2 focus:ring-[#586016]/15";
-
-function LoadingMessage({ loading }: { loading: boolean }) {
-  return loading ? (
-    <p className="m-0 text-sm text-[#71717a]" role="status">
-      Memuat data…
-    </p>
-  ) : null;
-}
+  "h-[38px] w-full rounded-[10px] bg-[#f0f0f0] px-3 text-xs text-[#18181a] placeholder-[#71717a] outline-none border border-transparent focus:border-[#18181a] transition-all";
 
 export function AdminBookingPage() {
   const [tab, setTab] = useState<"bookings" | "weekly" | "blocked">("bookings");
@@ -225,7 +181,9 @@ export function AdminBookingPage() {
         ...current,
         [booking.id]: result.data.whatsappUrl,
       }));
-      setStatus(`Booking ${booking.reference} dikonfirmasi. Buka tautan WhatsApp untuk mengirim konfirmasi ke klien.`);
+      setStatus(
+        `Booking ${booking.reference} dikonfirmasi. Buka tautan WhatsApp untuk mengirim konfirmasi ke klien.`
+      );
       await loadBookings();
     } catch {
       setError("Booking tidak dapat dikonfirmasi. Coba lagi.");
@@ -235,114 +193,215 @@ export function AdminBookingPage() {
   }
 
   const visibleBookings = bookings.filter(
-    (booking) => filter === "all" || booking.status === filter,
+    (booking) => filter === "all" || booking.status === filter
   );
   const pendingCount = bookings.filter((booking) => booking.status === "pending").length;
 
   return (
-    <PageFrame
-      title="Booking Konsultasi"
-      description="Tinjau reservasi klien, konfirmasi jadwal, dan kelola slot mingguan serta tanggal libur."
+    <AdminFrame
+      title="Manajemen Booking & Jadwal Konsultasi"
+      description="Verifikasi reservasi klien, atur link Google Meet, dan kelola slot mingguan serta tanggal libur."
+      screenKey="cms/booking-konsultasi"
+      actions={
+        <ToolbarButton
+          variant="light"
+          icon="sync"
+          onClick={() => void loadBookings()}
+        >
+          Refresh Data
+        </ToolbarButton>
+      }
     >
-      <nav aria-label="Booking dan jadwal" className="flex flex-wrap gap-2">
-        {([
-          ["bookings", "Daftar Reservasi"],
-          ["weekly", "Slot Mingguan"],
-          ["blocked", "Tanggal Libur"],
-        ] as const).map(([value, label]) => (
-          <button
-            key={value}
-            type="button"
-            aria-pressed={tab === value}
-            className={tab === value ? buttonClass : secondaryButtonClass}
-            onClick={() => setTab(value)}
-          >
-            {label}
-          </button>
-        ))}
-      </nav>
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-[#eaeaea] pb-4">
+        <TabFilter
+          tabs={[
+            { id: "bookings", label: "Daftar Reservasi", count: bookings.length },
+            { id: "weekly", label: "Slot Mingguan" },
+            { id: "blocked", label: "Tanggal Libur" },
+          ]}
+          active={tab}
+          onChange={setTab}
+        />
+        {tab === "bookings" ? (
+          <div className="flex items-center gap-2">
+            <select
+              className="h-[34px] rounded-[10px] bg-[#f0f0f0] px-3 text-xs font-medium text-[#18181a] outline-none"
+              aria-label="Filter status booking"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value as "all" | BookingStatus)}
+            >
+              <option value="all">Semua Status</option>
+              {Object.entries(bookingStatusLabel).map(([val, lbl]) => (
+                <option key={val} value={val}>
+                  {lbl}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : null}
+      </div>
+
+      <Feedback error={error} status={status} />
 
       {tab === "bookings" ? (
-        <>
-          <Feedback error={error} status={status} />
-          <Panel>
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="m-0 text-base font-semibold text-[#18181a]">Reservasi terbaru</h2>
-                <p className="mb-0 mt-1 text-xs text-[#71717a]">
-                  {pendingCount} menunggu konfirmasi · menampilkan maksimal 100 data terbaru
-                </p>
+        <div className="flex flex-col gap-4">
+          {pendingCount > 0 && filter === "all" ? (
+            <div className="flex items-center justify-between gap-3 rounded-[12px] border border-[#ffedd5] bg-[#fff7ed] p-3.5 text-xs text-[#c2410c]">
+              <div className="flex items-center gap-2">
+                <span className="symbol text-lg">priority_high</span>
+                <span className="font-semibold">{pendingCount} reservasi menunggu konfirmasi</span>
               </div>
-              <div className="flex gap-2">
-                <select
-                  className={inputClass + " w-auto min-w-40"}
-                  aria-label="Filter status booking"
-                  value={filter}
-                  onChange={(event) => setFilter(event.target.value as "all" | BookingStatus)}
-                >
-                  <option value="all">Semua status</option>
-                  {Object.entries(bookingStatusLabel).map(([value, label]) => (
-                    <option key={value} value={value}>{label}</option>
-                  ))}
-                </select>
-                <button type="button" className={secondaryButtonClass} onClick={() => void loadBookings()}>
-                  Muat ulang
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setFilter("pending")}
+                className="font-medium underline hover:text-[#9a3412]"
+              >
+                Tampilkan Hanya Menunggu
+              </button>
             </div>
-            <LoadingMessage loading={loading} />
-            {!loading && visibleBookings.length === 0 ? (
-              <p className="m-0 rounded-lg bg-[#f9f9f9] p-4 text-sm text-[#52525b]" role="status">
-                Belum ada reservasi untuk filter ini.
-              </p>
-            ) : null}
+          ) : null}
+
+          {loading ? (
+            <BentoCard>
+              <p className="m-0 text-center text-xs text-[#71717a]">Memuat data booking…</p>
+            </BentoCard>
+          ) : visibleBookings.length === 0 ? (
+            <EmptyState
+              icon="calendar_month"
+              title="Belum ada reservasi"
+              description="Tidak ditemukan data reservasi konsultasi yang sesuai dengan filter yang dipilih."
+            />
+          ) : (
             <div className="grid gap-3">
-              {visibleBookings.map((booking) => (
-                <article key={booking.id} className="grid gap-3 rounded-xl border border-[#e4e4e7] p-4 lg:grid-cols-[minmax(0,1fr)_minmax(260px,360px)]">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h3 className="m-0 text-sm font-semibold text-[#18181a]">{booking.name}</h3>
-                      <span className="rounded-full bg-[#f4f4f5] px-2 py-1 text-[11px] font-medium text-[#52525b]">
-                        {bookingStatusLabel[booking.status]}
-                      </span>
-                      <span className="text-xs text-[#71717a]">{booking.reference}</span>
-                    </div>
-                    <dl className="mt-3 grid gap-x-5 gap-y-2 text-sm sm:grid-cols-2">
-                      <div><dt className="text-xs text-[#71717a]">Jadwal</dt><dd className="m-0 text-[#27272a]">{dateTime(booking.slotStart)}</dd></div>
-                      <div><dt className="text-xs text-[#71717a]">Mode konsultasi</dt><dd className="m-0 text-[#27272a]">{booking.consultationMode === "google_meet" ? "Google Meet" : booking.consultationMode === "whatsapp_call" ? "WhatsApp Call" : "Tatap muka"}</dd></div>
-                      <div><dt className="text-xs text-[#71717a]">WhatsApp</dt><dd className="m-0">{phoneUrl(booking.whatsapp) ? <a className="font-medium text-[#454a10] underline" href={phoneUrl(booking.whatsapp)!} target="_blank" rel="noreferrer">{booking.whatsapp}</a> : booking.whatsapp}</dd></div>
-                      {booking.meetingUrl ? <div><dt className="text-xs text-[#71717a]">Link meeting</dt><dd className="m-0 break-all"><a className="text-[#454a10] underline" href={booking.meetingUrl} target="_blank" rel="noreferrer">Buka Google Meet</a></dd></div> : null}
-                    </dl>
-                    {whatsappLinks[booking.id] ? (
-                      <a className="mt-3 inline-flex text-sm font-semibold text-[#454a10] underline" href={whatsappLinks[booking.id]} target="_blank" rel="noreferrer">
-                        Buka pesan konfirmasi WhatsApp
-                      </a>
-                    ) : null}
-                  </div>
-                  {booking.status === "pending" ? (
-                    <div className="flex flex-col justify-end gap-2">
-                      {booking.consultationMode === "google_meet" ? (
-                        <label className="grid gap-1 text-xs font-medium text-[#52525b]">
-                          Link Google Meet
-                          <input className={inputClass} type="url" inputMode="url" placeholder="https://meet.google.com/..." value={meetingUrls[booking.id] ?? ""} onChange={(event) => setMeetingUrls((current) => ({ ...current, [booking.id]: event.target.value }))} />
-                        </label>
+              {visibleBookings.map((booking) => {
+                const isPending = booking.status === "pending";
+                const isConfirmed = booking.status === "confirmed";
+                const statusVariant = isPending
+                  ? "warning"
+                  : isConfirmed
+                  ? "success"
+                  : booking.status === "cancelled"
+                  ? "danger"
+                  : "neutral";
+
+                return (
+                  <BentoCard key={booking.id} className="p-4 sm:p-5">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="m-0 text-sm font-semibold text-[#18181a]">
+                            {booking.name}
+                          </h3>
+                          <Chip variant={statusVariant} size="sm">
+                            {bookingStatusLabel[booking.status]}
+                          </Chip>
+                          <span className="text-[11px] text-[#71717a] font-mono">
+                            {booking.reference}
+                          </span>
+                        </div>
+
+                        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs text-[#52525b]">
+                          <div className="flex items-center gap-1.5">
+                            <span className="symbol text-base text-[#71717a]">schedule</span>
+                            <span>{dateTime(booking.slotStart)}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="symbol text-base text-[#71717a]">videocam</span>
+                            <span>
+                              {booking.consultationMode === "google_meet"
+                                ? "Google Meet"
+                                : booking.consultationMode === "whatsapp_call"
+                                ? "WhatsApp Call"
+                                : "Tatap Muka"}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="symbol text-base text-[#71717a]">chat</span>
+                            {phoneUrl(booking.whatsapp) ? (
+                              <a
+                                href={phoneUrl(booking.whatsapp)!}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-[#18181a] font-medium underline"
+                              >
+                                {booking.whatsapp}
+                              </a>
+                            ) : (
+                              booking.whatsapp
+                            )}
+                          </div>
+                        </div>
+
+                        {booking.meetingUrl ? (
+                          <div className="mt-2 text-xs">
+                            <a
+                              href={booking.meetingUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 text-[#454a10] font-medium underline"
+                            >
+                              <span className="symbol text-sm">open_in_new</span>
+                              Buka Link Google Meet
+                            </a>
+                          </div>
+                        ) : null}
+
+                        {whatsappLinks[booking.id] ? (
+                          <div className="mt-3">
+                            <a
+                              href={whatsappLinks[booking.id]}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-[8px] bg-[#e2e89d] px-3 py-1.5 text-xs font-semibold text-[#454a10] hover:bg-[#d2d88f] transition-colors"
+                            >
+                              <span className="symbol text-base">send</span>
+                              Buka Pesan Konfirmasi WhatsApp
+                            </a>
+                          </div>
+                        ) : null}
+                      </div>
+
+                      {isPending ? (
+                        <div className="flex flex-col gap-2 min-w-[280px]">
+                          {booking.consultationMode === "google_meet" ? (
+                            <input
+                              className={inputClass}
+                              type="url"
+                              placeholder="https://meet.google.com/..."
+                              value={meetingUrls[booking.id] ?? ""}
+                              onChange={(e) =>
+                                setMeetingUrls((curr) => ({
+                                  ...curr,
+                                  [booking.id]: e.target.value,
+                                }))
+                              }
+                            />
+                          ) : null}
+                          <ToolbarButton
+                            variant="dark"
+                            icon="task_alt"
+                            disabled={busyId === booking.id}
+                            onClick={() => void confirm(booking)}
+                          >
+                            {busyId === booking.id
+                              ? "Mengonfirmasi…"
+                              : "Konfirmasi & Kirim WA"}
+                          </ToolbarButton>
+                        </div>
                       ) : null}
-                      <button type="button" className={buttonClass} disabled={busyId === booking.id} onClick={() => void confirm(booking)}>
-                        {busyId === booking.id ? "Mengonfirmasi…" : "Konfirmasi & siapkan WhatsApp"}
-                      </button>
                     </div>
-                  ) : null}
-                </article>
-              ))}
+                  </BentoCard>
+                );
+              })}
             </div>
-          </Panel>
-        </>
+          )}
+        </div>
       ) : tab === "weekly" ? (
         <WeeklySchedulePanel />
       ) : (
         <BlockedDatesPanel />
       )}
-    </PageFrame>
+    </AdminFrame>
   );
 }
 
@@ -364,10 +423,14 @@ type ScheduleData = {
 };
 
 function useScheduleData() {
-  const [data, setData] = useState<ScheduleData>({ availabilityRules: [], blockedDates: [] });
+  const [data, setData] = useState<ScheduleData>({
+    availabilityRules: [],
+    blockedDates: [],
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
+
   const refresh = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -384,6 +447,7 @@ function useScheduleData() {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
     let active = true;
     async function loadInitialSchedule() {
@@ -403,11 +467,13 @@ function useScheduleData() {
       active = false;
     };
   }, []);
+
   return { data, loading, error, setError, status, setStatus, refresh };
 }
 
 function WeeklySchedulePanel() {
-  const { data, loading, error, setError, status, setStatus, refresh } = useScheduleData();
+  const { data, loading, error, setError, status, setStatus, refresh } =
+    useScheduleData();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [weekday, setWeekday] = useState(1);
   const [startTime, setStartTime] = useState("09:00");
@@ -447,7 +513,7 @@ function WeeklySchedulePanel() {
         setError(result.message);
         return;
       }
-      setStatus("Aturan slot mingguan tersimpan.");
+      setStatus("Aturan jadwal mingguan berhasil disimpan.");
       resetForm();
       await refresh();
     } catch {
@@ -458,7 +524,7 @@ function WeeklySchedulePanel() {
   }
 
   async function remove(id: string) {
-    if (!window.confirm("Hapus aturan slot mingguan ini?")) return;
+    if (!window.confirm("Hapus aturan jadwal ini?")) return;
     setError("");
     setStatus("");
     try {
@@ -467,69 +533,159 @@ function WeeklySchedulePanel() {
         setError(result.message);
         return;
       }
-      setStatus("Aturan slot berhasil dihapus.");
+      setStatus("Aturan jadwal dihapus.");
       if (editingId === id) resetForm();
       await refresh();
     } catch {
-      setError("Aturan slot gagal dihapus.");
+      setError("Aturan jadwal gagal dihapus.");
     }
   }
 
   return (
     <>
       <Feedback error={error} status={status} />
-      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
-        <Panel>
+      <div className="grid items-start gap-5 xl:grid-cols-[1.4fr_1fr]">
+        <BentoCard>
           <div className="mb-4 flex items-center justify-between gap-3">
             <div>
-              <h2 className="m-0 text-base font-semibold">Aturan slot mingguan</h2>
-              <p className="mb-0 mt-1 text-xs text-[#71717a]">Perubahan tersinkron dengan validasi booking dan anti double-booking.</p>
+              <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                Slot Mingguan Aktif
+              </h2>
+              <p className="mt-0.5 text-xs text-[#71717a]">
+                Jam operasional reservasi konsultasi rutin setiap minggu
+              </p>
             </div>
-            <button type="button" className={secondaryButtonClass} onClick={() => void refresh()}>Muat ulang</button>
+            <ToolbarButton variant="light" icon="sync" onClick={() => void refresh()}>
+              Refresh
+            </ToolbarButton>
           </div>
-          <LoadingMessage loading={loading} />
-          {!loading && data.availabilityRules.length === 0 ? <p className="m-0 rounded-lg bg-[#f9f9f9] p-4 text-sm text-[#52525b]">Belum ada slot mingguan yang dikonfigurasi.</p> : null}
-          <div className="grid gap-2">
-            {data.availabilityRules.map((rule) => (
-              <div key={rule.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#e4e4e7] p-3">
-                <div>
-                  <p className="m-0 text-sm font-semibold">{weekdayNames[rule.weekday]} · {rule.startTime}–{rule.endTime}</p>
-                  <p className="mb-0 mt-1 text-xs text-[#71717a]">{rule.isActive ? "Aktif" : "Nonaktif"}</p>
+
+          {loading ? (
+            <p className="text-xs text-[#71717a]">Memuat slot mingguan…</p>
+          ) : data.availabilityRules.length === 0 ? (
+            <EmptyState
+              icon="calendar_today"
+              title="Belum ada slot mingguan"
+              description="Tambahkan jam operasional mingguan lewat formulir di samping."
+            />
+          ) : (
+            <div className="grid gap-2">
+              {data.availabilityRules.map((rule) => (
+                <div
+                  key={rule.id}
+                  className="flex items-center justify-between gap-3 rounded-[12px] border border-[#eaeaea] p-3.5 bg-[#fafafa] hover:bg-white transition-colors"
+                >
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-[#18181a]">
+                        {weekdayNames[rule.weekday]}
+                      </span>
+                      <Chip variant={rule.isActive ? "success" : "neutral"} size="sm">
+                        {rule.isActive ? "Aktif" : "Nonaktif"}
+                      </Chip>
+                    </div>
+                    <div className="mt-1 text-xs text-[#71717a]">
+                      {rule.startTime} – {rule.endTime} WIB
+                    </div>
+                  </div>
+                  <div className="flex gap-1.5">
+                    <ToolbarButton variant="light" onClick={() => edit(rule)}>
+                      Edit
+                    </ToolbarButton>
+                    <ToolbarButton
+                      variant="danger"
+                      onClick={() => void remove(rule.id)}
+                    >
+                      Hapus
+                    </ToolbarButton>
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <button type="button" className={secondaryButtonClass} onClick={() => edit(rule)}>Edit</button>
-                  <button type="button" className={secondaryButtonClass} onClick={() => void remove(rule.id)}>Hapus</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Panel>
-        <Panel>
-          <h2 className="mb-4 mt-0 text-base font-semibold">{editingId ? "Ubah aturan" : "Tambah slot mingguan"}</h2>
-          <form className="grid gap-3" onSubmit={(event) => void save(event)}>
-            <label className="grid gap-1.5 text-sm font-medium">Hari
-              <select className={inputClass} value={weekday} onChange={(event) => setWeekday(Number(event.target.value))}>
-                {weekdayNames.map((name, index) => <option key={name} value={index}>{name}</option>)}
+              ))}
+            </div>
+          )}
+        </BentoCard>
+
+        <BentoCard>
+          <h2 className="mb-4 mt-0 text-base font-semibold text-[#18181a]">
+            {editingId ? "Ubah Slot Mingguan" : "Tambah Slot Mingguan"}
+          </h2>
+          <form className="grid gap-3.5" onSubmit={(e) => void save(e)}>
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              Hari
+              <select
+                className={inputClass}
+                value={weekday}
+                onChange={(e) => setWeekday(Number(e.target.value))}
+              >
+                {weekdayNames.map((name, idx) => (
+                  <option key={idx} value={idx}>
+                    {name}
+                  </option>
+                ))}
               </select>
             </label>
+
             <div className="grid grid-cols-2 gap-3">
-              <label className="grid gap-1.5 text-sm font-medium">Mulai<input className={inputClass} type="time" required value={startTime} onChange={(event) => setStartTime(event.target.value)} /></label>
-              <label className="grid gap-1.5 text-sm font-medium">Selesai<input className={inputClass} type="time" required value={endTime} onChange={(event) => setEndTime(event.target.value)} /></label>
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Jam Mulai
+                <input
+                  className={inputClass}
+                  type="time"
+                  required
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                />
+              </label>
+              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                Jam Selesai
+                <input
+                  className={inputClass}
+                  type="time"
+                  required
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                />
+              </label>
             </div>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={isActive} onChange={(event) => setIsActive(event.target.checked)} />Aktif untuk booking publik</label>
-            <div className="flex flex-wrap gap-2">
-              <button type="submit" className={buttonClass} disabled={saving}>{saving ? "Menyimpan…" : editingId ? "Simpan perubahan" : "Tambah slot"}</button>
-              {editingId ? <button type="button" className={secondaryButtonClass} onClick={resetForm}>Batal</button> : null}
+
+            <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+              <input
+                type="checkbox"
+                checked={isActive}
+                onChange={(e) => setIsActive(e.target.checked)}
+                className="rounded border-[#d4d4d8]"
+              />
+              Slot Aktif
+            </label>
+
+            <div className="flex gap-2 pt-2">
+              <ToolbarButton
+                variant="dark"
+                type="submit"
+                disabled={saving}
+              >
+                {saving
+                  ? "Menyimpan…"
+                  : editingId
+                  ? "Simpan Perubahan"
+                  : "Tambah Slot"}
+              </ToolbarButton>
+              {editingId ? (
+                <ToolbarButton variant="light" onClick={resetForm}>
+                  Batal
+                </ToolbarButton>
+              ) : null}
             </div>
           </form>
-        </Panel>
+        </BentoCard>
       </div>
     </>
   );
 }
 
 function BlockedDatesPanel() {
-  const { data, loading, error, setError, status, setStatus, refresh } = useScheduleData();
+  const { data, loading, error, setError, status, setStatus, refresh } =
+    useScheduleData();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [date, setDate] = useState("");
   const [allDay, setAllDay] = useState(true);
@@ -608,33 +764,147 @@ function BlockedDatesPanel() {
   return (
     <>
       <Feedback error={error} status={status} />
-      <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,420px)]">
-        <Panel>
+      <div className="grid items-start gap-5 xl:grid-cols-[1.4fr_1fr]">
+        <BentoCard>
           <div className="mb-4 flex items-center justify-between gap-3">
-            <div><h2 className="m-0 text-base font-semibold">Tanggal yang diblokir</h2><p className="mb-0 mt-1 text-xs text-[#71717a]">Blokir satu hari penuh atau rentang waktu tertentu.</p></div>
-            <button type="button" className={secondaryButtonClass} onClick={() => void refresh()}>Muat ulang</button>
+            <div>
+              <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                Tanggal yang Diblokir
+              </h2>
+              <p className="mt-0.5 text-xs text-[#71717a]">
+                Blokir satu hari penuh atau rentang jam tertentu dari kalender publik
+              </p>
+            </div>
+            <ToolbarButton variant="light" icon="sync" onClick={() => void refresh()}>
+              Refresh
+            </ToolbarButton>
           </div>
-          <LoadingMessage loading={loading} />
-          {!loading && data.blockedDates.length === 0 ? <p className="m-0 rounded-lg bg-[#f9f9f9] p-4 text-sm text-[#52525b]">Belum ada tanggal libur.</p> : null}
-          <div className="grid gap-2">
-            {data.blockedDates.map((item) => (
-              <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#e4e4e7] p-3">
-                <div><p className="m-0 text-sm font-semibold">{dateOnly(`${item.date}T12:00:00Z`)}{item.startTime ? ` · ${item.startTime}–${item.endTime}` : " · Seharian"}</p><p className="mb-0 mt-1 text-xs text-[#71717a]">{item.reason || "Tanpa keterangan"}</p></div>
-                <div className="flex gap-2"><button type="button" className={secondaryButtonClass} onClick={() => edit(item)}>Edit</button><button type="button" className={secondaryButtonClass} onClick={() => void remove(item.id)}>Hapus</button></div>
+
+          {loading ? (
+            <p className="text-xs text-[#71717a]">Memuat tanggal libur…</p>
+          ) : data.blockedDates.length === 0 ? (
+            <EmptyState
+              icon="event_busy"
+              title="Belum ada tanggal libur"
+              description="Tidak ada tanggal yang sedang diblokir untuk reservasi."
+            />
+          ) : (
+            <div className="grid gap-2">
+              {data.blockedDates.map((item) => (
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between gap-3 rounded-[12px] border border-[#eaeaea] p-3.5 bg-[#fafafa] hover:bg-white transition-colors"
+                >
+                  <div>
+                    <div className="text-xs font-semibold text-[#18181a]">
+                      {dateOnly(`${item.date}T12:00:00Z`)}
+                      {item.startTime
+                        ? ` · ${item.startTime}–${item.endTime}`
+                        : " · Seharian"}
+                    </div>
+                    <div className="mt-1 text-xs text-[#71717a]">
+                      {item.reason || "Tanpa keterangan"}
+                    </div>
+                  </div>
+                  <div className="flex gap-1.5">
+                    <ToolbarButton variant="light" onClick={() => edit(item)}>
+                      Edit
+                    </ToolbarButton>
+                    <ToolbarButton
+                      variant="danger"
+                      onClick={() => void remove(item.id)}
+                    >
+                      Hapus
+                    </ToolbarButton>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </BentoCard>
+
+        <BentoCard>
+          <h2 className="mb-4 mt-0 text-base font-semibold text-[#18181a]">
+            {editingId ? "Ubah Tanggal Libur" : "Tambah Tanggal Libur"}
+          </h2>
+          <form className="grid gap-3.5" onSubmit={(e) => void save(e)}>
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              Tanggal
+              <input
+                className={inputClass}
+                type="date"
+                required
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
+            </label>
+
+            <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+              <input
+                type="checkbox"
+                checked={allDay}
+                onChange={(e) => setAllDay(e.target.checked)}
+                className="rounded border-[#d4d4d8]"
+              />
+              Blokir Sepanjang Hari
+            </label>
+
+            {!allDay ? (
+              <div className="grid grid-cols-2 gap-3">
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Jam Mulai
+                  <input
+                    className={inputClass}
+                    type="time"
+                    required
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                  />
+                </label>
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Jam Selesai
+                  <input
+                    className={inputClass}
+                    type="time"
+                    required
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                  />
+                </label>
               </div>
-            ))}
-          </div>
-        </Panel>
-        <Panel>
-          <h2 className="mb-4 mt-0 text-base font-semibold">{editingId ? "Ubah tanggal libur" : "Tambah tanggal libur"}</h2>
-          <form className="grid gap-3" onSubmit={(event) => void save(event)}>
-            <label className="grid gap-1.5 text-sm font-medium">Tanggal<input className={inputClass} type="date" required value={date} onChange={(event) => setDate(event.target.value)} /></label>
-            <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={allDay} onChange={(event) => setAllDay(event.target.checked)} />Blokir sepanjang hari</label>
-            {!allDay ? <div className="grid grid-cols-2 gap-3"><label className="grid gap-1.5 text-sm font-medium">Mulai<input className={inputClass} type="time" required value={startTime} onChange={(event) => setStartTime(event.target.value)} /></label><label className="grid gap-1.5 text-sm font-medium">Selesai<input className={inputClass} type="time" required value={endTime} onChange={(event) => setEndTime(event.target.value)} /></label></div> : null}
-            <label className="grid gap-1.5 text-sm font-medium">Keterangan<input className={inputClass} maxLength={1000} value={reason} onChange={(event) => setReason(event.target.value)} placeholder="Contoh: cuti atau hari libur" /></label>
-            <div className="flex flex-wrap gap-2"><button type="submit" className={buttonClass} disabled={saving}>{saving ? "Menyimpan…" : editingId ? "Simpan perubahan" : "Tambah tanggal"}</button>{editingId ? <button type="button" className={secondaryButtonClass} onClick={resetForm}>Batal</button> : null}</div>
+            ) : null}
+
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              Keterangan
+              <input
+                className={inputClass}
+                maxLength={1000}
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Contoh: cuti bersama atau hari libur nasional"
+              />
+            </label>
+
+            <div className="flex gap-2 pt-2">
+              <ToolbarButton
+                variant="dark"
+                type="submit"
+                disabled={saving}
+              >
+                {saving
+                  ? "Menyimpan…"
+                  : editingId
+                  ? "Simpan Perubahan"
+                  : "Tambah Tanggal"}
+              </ToolbarButton>
+              {editingId ? (
+                <ToolbarButton variant="light" onClick={resetForm}>
+                  Batal
+                </ToolbarButton>
+              ) : null}
+            </div>
           </form>
-        </Panel>
+        </BentoCard>
       </div>
     </>
   );
@@ -643,7 +913,9 @@ function BlockedDatesPanel() {
 export function AdminInquiryPage() {
   const [items, setItems] = useState<InquiryAdminDto[]>([]);
   const [selectedId, setSelectedId] = useState("");
-  const [drafts, setDrafts] = useState<Record<string, { status: InquiryStatus; adminNotes: string }>>({});
+  const [drafts, setDrafts] = useState<
+    Record<string, { status: InquiryStatus; adminNotes: string }>
+  >({});
   const [filter, setFilter] = useState<"all" | InquiryStatus>("all");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -661,16 +933,21 @@ export function AdminInquiryPage() {
         return;
       }
       setItems(result.data);
-      setDrafts(Object.fromEntries(result.data.map((item) => [
-        item.id,
-        { status: item.status, adminNotes: item.adminNotes },
-      ])));
+      setDrafts(
+        Object.fromEntries(
+          result.data.map((item) => [
+            item.id,
+            { status: item.status, adminNotes: item.adminNotes },
+          ])
+        )
+      );
     } catch {
       setError("Daftar inquiry tidak dapat dimuat.");
     } finally {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
     let active = true;
     async function loadInitialInquiries() {
@@ -682,7 +959,14 @@ export function AdminInquiryPage() {
           return;
         }
         setItems(result.data);
-        setDrafts(Object.fromEntries(result.data.map((item) => [item.id, { status: item.status, adminNotes: item.adminNotes }])));
+        setDrafts(
+          Object.fromEntries(
+            result.data.map((item) => [
+              item.id,
+              { status: item.status, adminNotes: item.adminNotes },
+            ])
+          )
+        );
       } catch {
         if (active) setError("Daftar inquiry tidak dapat dimuat.");
       } finally {
@@ -696,16 +980,25 @@ export function AdminInquiryPage() {
   }, []);
 
   const visible = items.filter((item) => {
-    const matchesStatus = filter === "all" || (drafts[item.id]?.status ?? item.status) === filter;
+    const matchesStatus =
+      filter === "all" || (drafts[item.id]?.status ?? item.status) === filter;
     const query = search.trim().toLowerCase();
-    const matchesSearch = !query || [item.name, item.reference, item.message, item.email ?? ""].some((value) => value.toLowerCase().includes(query));
+    const matchesSearch =
+      !query ||
+      [item.name, item.reference, item.message, item.email ?? ""].some((value) =>
+        value.toLowerCase().includes(query)
+      );
     return matchesStatus && matchesSearch;
   });
+
   const selected = visible.find((item) => item.id === selectedId) ?? visible[0] ?? null;
   const newCount = items.filter((item) => item.status === "new").length;
 
   async function saveInquiry(item: InquiryAdminDto) {
-    const draft = drafts[item.id] ?? { status: item.status, adminNotes: item.adminNotes };
+    const draft = drafts[item.id] ?? {
+      status: item.status,
+      adminNotes: item.adminNotes,
+    };
     setSaving(true);
     setError("");
     setStatus("");
@@ -715,7 +1008,9 @@ export function AdminInquiryPage() {
         setError(result.message);
         return;
       }
-      setItems((current) => current.map((row) => row.id === item.id ? { ...row, ...draft } : row));
+      setItems((current) =>
+        current.map((row) => (row.id === item.id ? { ...row, ...draft } : row))
+      );
       setStatus(`Inquiry ${item.reference} berhasil diperbarui.`);
     } catch {
       setError("Inquiry gagal diperbarui.");
@@ -724,64 +1019,270 @@ export function AdminInquiryPage() {
     }
   }
 
-  const selectedDraft = selected ? drafts[selected.id] ?? { status: selected.status, adminNotes: selected.adminNotes } : null;
+  const selectedDraft = selected
+    ? drafts[selected.id] ?? {
+        status: selected.status,
+        adminNotes: selected.adminNotes,
+      }
+    : null;
   const contactLink = selected ? phoneUrl(selected.whatsapp) : null;
 
   return (
-    <PageFrame title="Inquiry & Pemesanan" description="Tindak lanjuti permintaan dari formulir publik, catat komunikasi, dan kelola status prospek.">
+    <AdminFrame
+      title="Inquiry & Pemesanan"
+      description="Tindak lanjuti prospek masuk dari formulir paket dan tombol WhatsApp resmi."
+      screenKey="cms/inquiry-pemesanan"
+      actions={
+        <ToolbarButton variant="light" icon="sync" onClick={() => void refresh()}>
+          Refresh Data
+        </ToolbarButton>
+      }
+    >
       <Feedback error={error} status={status} />
-      <Panel>
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <div><h2 className="m-0 text-base font-semibold">Pipa inquiry</h2><p className="mb-0 mt-1 text-xs text-[#71717a]">{newCount} inquiry baru · maksimal 100 data terbaru</p></div>
-          <button type="button" className={secondaryButtonClass} onClick={() => void refresh()}>Muat ulang</button>
+
+      {/* Pipeline Metrics Row */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+        <div className="rounded-[14px] border border-[#eaeaea] bg-white p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#71717a]">Total Leads</div>
+          <div className="text-2xl font-semibold text-[#18181a] mt-1">{items.length}</div>
         </div>
-        <LoadingMessage loading={loading} />
-        <div className="mb-4 grid gap-2 sm:grid-cols-[minmax(0,1fr)_220px]">
-          <input className={inputClass} type="search" placeholder="Cari nama, referensi, email, atau pesan" value={search} onChange={(event) => setSearch(event.target.value)} />
-          <select className={inputClass} aria-label="Filter status inquiry" value={filter} onChange={(event) => setFilter(event.target.value as "all" | InquiryStatus)}>
-            <option value="all">Semua status</option>{Object.entries(inquiryStatusLabel).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-          </select>
+        <div className="rounded-[14px] border border-[#ffedd5] bg-[#fff7ed] p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#c2410c]">Inquiry Baru</div>
+          <div className="text-2xl font-semibold text-[#c2410c] mt-1">{newCount}</div>
         </div>
-        {!loading && visible.length === 0 ? <p className="m-0 rounded-lg bg-[#f9f9f9] p-4 text-sm text-[#52525b]" role="status">Tidak ada inquiry yang cocok.</p> : null}
-        <div className="grid gap-3 lg:grid-cols-[minmax(260px,0.85fr)_minmax(0,1.5fr)]">
-          <div className="grid content-start gap-2">
-            {visible.map((item) => (
-              <button key={item.id} type="button" onClick={() => setSelectedId(item.id)} className={`rounded-xl border p-3 text-left ${selected?.id === item.id ? "border-[#586016] bg-[#f7f8ec]" : "border-[#e4e4e7] bg-white hover:bg-[#fafafa]"}`}>
-                <span className="flex items-center justify-between gap-2"><span className="truncate text-sm font-semibold text-[#18181a]">{item.name}</span><span className="shrink-0 text-[11px] text-[#71717a]">{inquiryStatusLabel[drafts[item.id]?.status ?? item.status]}</span></span>
-                <span className="mt-1 block text-xs text-[#52525b]">{item.reference} · {dateOnly(item.createdAt)}</span>
-                <span className="mt-2 line-clamp-2 block text-xs text-[#71717a]">{item.message}</span>
-              </button>
-            ))}
+        <div className="rounded-[14px] border border-[#eaeaea] bg-white p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#71717a]">Sudah Dihubungi</div>
+          <div className="text-2xl font-semibold text-[#18181a] mt-1">
+            {items.filter((i) => i.status === "contacted").length}
           </div>
+        </div>
+        <div className="rounded-[14px] border border-[#d6eed3] bg-[#eef8ed] p-3.5 shadow-sm">
+          <div className="text-[11px] font-medium text-[#457c1d]">Jadi Klien</div>
+          <div className="text-2xl font-semibold text-[#457c1d] mt-1">
+            {items.filter((i) => i.status === "converted").length}
+          </div>
+        </div>
+      </div>
+
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+        <div className="w-full sm:w-72">
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder="Cari nama, email, pesan..."
+          />
+        </div>
+        <TabFilter
+          tabs={[
+            { id: "all", label: "Semua", count: items.length },
+            { id: "new", label: "Baru", count: newCount },
+            {
+              id: "contacted",
+              label: "Dihubungi",
+              count: items.filter((i) => i.status === "contacted").length,
+            },
+            {
+              id: "converted",
+              label: "Klien",
+              count: items.filter((i) => i.status === "converted").length,
+            },
+            {
+              id: "dropped",
+              label: "Dibatalkan",
+              count: items.filter((i) => i.status === "dropped").length,
+            },
+          ]}
+          active={filter}
+          onChange={setFilter}
+        />
+      </div>
+
+      {loading ? (
+        <BentoCard>
+          <p className="text-center text-xs text-[#71717a]">Memuat data inquiry…</p>
+        </BentoCard>
+      ) : visible.length === 0 ? (
+        <EmptyState
+          icon="contact_mail"
+          title="Tidak ada inquiry yang cocok"
+          description="Coba ubah kata kunci pencarian atau ganti filter status."
+        />
+      ) : (
+        <div className="grid gap-5 lg:grid-cols-[1.1fr_1.4fr] items-start">
+          {/* List leads */}
+          <div className="flex flex-col gap-2.5">
+            {visible.map((item) => {
+              const isSelected = selected?.id === item.id;
+              const currentStatus = drafts[item.id]?.status ?? item.status;
+              const statusVariant =
+                currentStatus === "new"
+                  ? "warning"
+                  : currentStatus === "converted"
+                  ? "success"
+                  : currentStatus === "dropped"
+                  ? "danger"
+                  : "neutral";
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSelectedId(item.id)}
+                  className={`w-full rounded-[14px] border p-4 text-left transition-all ${
+                    isSelected
+                      ? "border-[#18181a] bg-white shadow-md ring-1 ring-[#18181a]"
+                      : "border-[#eaeaea] bg-white hover:bg-[#fafafa]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-semibold text-sm text-[#18181a] truncate">
+                      {item.name}
+                    </span>
+                    <Chip variant={statusVariant} size="sm">
+                      {inquiryStatusLabel[currentStatus]}
+                    </Chip>
+                  </div>
+                  <div className="mt-1 flex items-center gap-2 text-xs text-[#71717a]">
+                    <span className="font-mono">{item.reference}</span>
+                    <span>·</span>
+                    <span>{dateOnly(item.createdAt)}</span>
+                  </div>
+                  <p className="mt-2 text-xs text-[#52525b] line-clamp-2 m-0">
+                    {item.message}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Inspector Panel */}
           {selected && selectedDraft ? (
-            <section className="rounded-xl border border-[#e4e4e7] p-4">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div><h3 className="m-0 text-lg font-semibold">{selected.name}</h3><p className="mb-0 mt-1 text-xs text-[#71717a]">{selected.reference} · {dateTime(selected.createdAt)}</p></div>
-                <span className="rounded-full bg-[#f4f4f5] px-2 py-1 text-xs">{selected.source === "package" ? "Paket" : selected.source === "calculator" ? "Kalkulator" : "Kontak"}</span>
+            <BentoCard className="sticky top-20">
+              <div className="flex items-start justify-between gap-3 border-b border-[#eaeaea] pb-4">
+                <div>
+                  <h3 className="m-0 text-base font-semibold text-[#18181a]">
+                    {selected.name}
+                  </h3>
+                  <p className="mt-0.5 text-xs text-[#71717a]">
+                    {selected.reference} · Masuk pada {dateTime(selected.createdAt)}
+                  </p>
+                </div>
+                <Chip variant="neutral">
+                  Sumber:{" "}
+                  {selected.source === "package"
+                    ? "Paket"
+                    : selected.source === "calculator"
+                    ? "Kalkulator"
+                    : "Form Kontak"}
+                </Chip>
               </div>
-              <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-                <div><dt className="text-xs text-[#71717a]">WhatsApp</dt><dd className="m-0">{contactLink ? <a className="font-medium text-[#454a10] underline" href={contactLink} target="_blank" rel="noreferrer">{selected.whatsapp}</a> : selected.whatsapp}</dd></div>
-                <div><dt className="text-xs text-[#71717a]">Email</dt><dd className="m-0 break-all">{selected.email || "—"}</dd></div>
-                <div><dt className="text-xs text-[#71717a]">Organisasi</dt><dd className="m-0">{selected.organizationOrBusiness || "—"}</dd></div>
-                <div><dt className="text-xs text-[#71717a]">Paket</dt><dd className="m-0">{selected.packageName || "—"}</dd></div>
-                <div className="sm:col-span-2"><dt className="text-xs text-[#71717a]">Pesan</dt><dd className="m-0 whitespace-pre-wrap">{selected.message}</dd></div>
-              </dl>
-              <div className="mt-5 grid gap-3 border-t border-[#e4e4e7] pt-4">
-                <label className="grid gap-1.5 text-sm font-medium">Status
-                  <select className={inputClass} value={selectedDraft.status} onChange={(event) => setDrafts((current) => ({ ...current, [selected.id]: { ...selectedDraft, status: event.target.value as InquiryStatus } }))}>
-                    {Object.entries(inquiryStatusLabel).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="rounded-[10px] bg-[#f9f9f9] p-3">
+                  <span className="text-[11px] text-[#71717a] block mb-1">WhatsApp</span>
+                  {contactLink ? (
+                    <a
+                      href={contactLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium text-[#18181a] underline flex items-center gap-1"
+                    >
+                      <span className="symbol text-sm text-[#82b440]">chat</span>
+                      {selected.whatsapp}
+                    </a>
+                  ) : (
+                    <span>{selected.whatsapp}</span>
+                  )}
+                </div>
+
+                <div className="rounded-[10px] bg-[#f9f9f9] p-3">
+                  <span className="text-[11px] text-[#71717a] block mb-1">Email</span>
+                  <span className="font-medium text-[#18181a] break-all">
+                    {selected.email || "—"}
+                  </span>
+                </div>
+
+                <div className="rounded-[10px] bg-[#f9f9f9] p-3">
+                  <span className="text-[11px] text-[#71717a] block mb-1">Organisasi / Usaha</span>
+                  <span className="font-medium text-[#18181a]">
+                    {selected.organizationOrBusiness || "—"}
+                  </span>
+                </div>
+
+                <div className="rounded-[10px] bg-[#f9f9f9] p-3">
+                  <span className="text-[11px] text-[#71717a] block mb-1">Paket yang Diminati</span>
+                  <span className="font-medium text-[#18181a]">
+                    {selected.packageName || "—"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 rounded-[12px] border border-[#eaeaea] p-3.5 bg-[#fcfcfc]">
+                <span className="text-[11px] font-medium text-[#71717a] block mb-1">
+                  Pesan Klien
+                </span>
+                <p className="m-0 text-xs text-[#18181a] whitespace-pre-wrap leading-relaxed">
+                  {selected.message}
+                </p>
+              </div>
+
+              <div className="mt-5 border-t border-[#eaeaea] pt-4 grid gap-3.5">
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Status Tindak Lanjut
+                  <select
+                    className={inputClass}
+                    value={selectedDraft.status}
+                    onChange={(e) =>
+                      setDrafts((curr) => ({
+                        ...curr,
+                        [selected.id]: {
+                          ...selectedDraft,
+                          status: e.target.value as InquiryStatus,
+                        },
+                      }))
+                    }
+                  >
+                    {Object.entries(inquiryStatusLabel).map(([val, lbl]) => (
+                      <option key={val} value={val}>
+                        {lbl}
+                      </option>
+                    ))}
                   </select>
                 </label>
-                <label className="grid gap-1.5 text-sm font-medium">Catatan internal
-                  <textarea className={inputClass + " min-h-28 resize-y"} maxLength={5000} value={selectedDraft.adminNotes} onChange={(event) => setDrafts((current) => ({ ...current, [selected.id]: { ...selectedDraft, adminNotes: event.target.value } }))} placeholder="Catatan tindak lanjut, kebutuhan klien, atau jadwal komunikasi" />
+
+                <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+                  Catatan Internal
+                  <textarea
+                    className="min-h-24 w-full rounded-[10px] bg-[#f0f0f0] p-3 text-xs text-[#18181a] placeholder-[#71717a] outline-none border border-transparent focus:border-[#18181a] transition-all resize-y"
+                    maxLength={5000}
+                    value={selectedDraft.adminNotes}
+                    onChange={(e) =>
+                      setDrafts((curr) => ({
+                        ...curr,
+                        [selected.id]: {
+                          ...selectedDraft,
+                          adminNotes: e.target.value,
+                        },
+                      }))
+                    }
+                    placeholder="Catatan tindak lanjut, kebutuhan spesifik klien, atau hasil diskusi..."
+                  />
                 </label>
-                <button type="button" className={buttonClass} disabled={saving} onClick={() => void saveInquiry(selected)}>{saving ? "Menyimpan…" : "Simpan tindak lanjut"}</button>
+
+                <ToolbarButton
+                  variant="dark"
+                  icon="save"
+                  disabled={saving}
+                  onClick={() => void saveInquiry(selected)}
+                >
+                  {saving ? "Menyimpan…" : "Simpan Tindak Lanjut"}
+                </ToolbarButton>
               </div>
-            </section>
+            </BentoCard>
           ) : null}
         </div>
-      </Panel>
-    </PageFrame>
+      )}
+    </AdminFrame>
   );
 }
 
@@ -809,6 +1310,7 @@ export function AdminQuotePage() {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
     let active = true;
     async function loadInitialQuotes() {
@@ -834,13 +1336,22 @@ export function AdminQuotePage() {
     setError("");
     setStatus("");
     try {
-      const result = await updateQuoteStatusAction({ id: item.id, status: nextStatus });
+      const result = await updateQuoteStatusAction({
+        id: item.id,
+        status: nextStatus,
+      });
       if (!result.ok) {
         setError(result.message);
         return;
       }
-      setItems((current) => current.map((row) => row.id === item.id ? { ...row, status: nextStatus } : row));
-      setStatus(`Status quote ${item.reference} diperbarui menjadi “${quoteStatusLabel[nextStatus]}”.`);
+      setItems((current) =>
+        current.map((row) =>
+          row.id === item.id ? { ...row, status: nextStatus } : row
+        )
+      );
+      setStatus(
+        `Status quote ${item.reference} diperbarui menjadi “${quoteStatusLabel[nextStatus]}”.`
+      );
     } catch {
       setError("Status quote gagal diperbarui.");
     } finally {
@@ -852,42 +1363,183 @@ export function AdminQuotePage() {
   const newCount = items.filter((item) => item.status === "new").length;
 
   return (
-    <PageFrame title="Quote Kalkulator" description="Tinjau snapshot estimasi dari kalkulator publik dan catat tindak lanjut status penawaran.">
+    <AdminFrame
+      title="Manajemen Pengajuan Quote Kalkulator"
+      description="Tinjau snapshot estimasi dari kalkulator publik dan catat tindak lanjut status penawaran."
+      screenKey="cms/quote-kalkulator"
+      actions={
+        <ToolbarButton variant="light" icon="sync" onClick={() => void refresh()}>
+          Refresh Data
+        </ToolbarButton>
+      }
+    >
       <Feedback error={error} status={status} />
-      <Panel>
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <div><h2 className="m-0 text-base font-semibold">Riwayat estimasi</h2><p className="mb-0 mt-1 text-xs text-[#71717a]">{newCount} quote baru · maksimal 100 data terbaru</p></div>
-          <div className="flex gap-2">
-            <select className={inputClass + " w-auto min-w-40"} aria-label="Filter status quote" value={filter} onChange={(event) => setFilter(event.target.value as "all" | QuoteStatus)}><option value="all">Semua status</option>{Object.entries(quoteStatusLabel).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
-            <button type="button" className={secondaryButtonClass} onClick={() => void refresh()}>Muat ulang</button>
-          </div>
+
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-[#eaeaea] pb-4">
+        <div>
+          <h2 className="m-0 text-base font-semibold text-[#18181a]">
+            Riwayat Estimasi Kalkulator
+          </h2>
+          <p className="mt-0.5 text-xs text-[#71717a]">
+            {newCount} quote baru membutuhkan tindak lanjut · maksimal 100 data terbaru
+          </p>
         </div>
-        <LoadingMessage loading={loading} />
-        {!loading && visible.length === 0 ? <p className="m-0 rounded-lg bg-[#f9f9f9] p-4 text-sm text-[#52525b]" role="status">Belum ada quote untuk filter ini.</p> : null}
-        <div className="grid gap-3">
-          {visible.map((item) => (
-            <article key={item.id} className="rounded-xl border border-[#e4e4e7] p-4">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div><h3 className="m-0 text-sm font-semibold">{item.contactName || "Klien tanpa nama"}</h3><p className="mb-0 mt-1 text-xs text-[#71717a]">{item.reference} · {dateTime(item.createdAt)}</p></div>
-                <label className="grid gap-1 text-xs font-medium text-[#52525b]">Status
-                  <select className={inputClass + " min-w-44"} value={item.status} disabled={busyId === item.id} onChange={(event) => void updateStatus(item, event.target.value as QuoteStatus)}>
-                    {Object.entries(quoteStatusLabel).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-                  </select>
-                </label>
-              </div>
-              <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                <div className="rounded-lg bg-[#f9f9f9] p-3"><p className="m-0 text-xs text-[#71717a]">Estimasi biaya</p><p className="mb-0 mt-1 text-sm font-semibold">{currency(item.priceMin)}{item.priceMax !== item.priceMin ? ` – ${currency(item.priceMax)}` : ""}</p></div>
-                <div className="rounded-lg bg-[#f9f9f9] p-3"><p className="m-0 text-xs text-[#71717a]">Estimasi durasi</p><p className="mb-0 mt-1 text-sm font-semibold">{item.daysMin === item.daysMax ? `${item.daysMin} hari` : `${item.daysMin}–${item.daysMax} hari`}</p></div>
-                <div className="rounded-lg bg-[#f9f9f9] p-3"><p className="m-0 text-xs text-[#71717a]">WhatsApp</p><p className="mb-0 mt-1 text-sm font-semibold">{item.contactWhatsapp ? phoneUrl(item.contactWhatsapp) ? <a className="text-[#454a10] underline" href={phoneUrl(item.contactWhatsapp)!} target="_blank" rel="noreferrer">{item.contactWhatsapp}</a> : item.contactWhatsapp : "Belum diberikan"}</p></div>
-              </div>
-              <details className="mt-3 rounded-lg border border-[#e4e4e7] px-3 py-2">
-                <summary className="cursor-pointer text-sm font-medium">Rincian pilihan ({item.selection.length})</summary>
-                {item.selection.length ? <ul className="mb-1 mt-3 grid gap-1 pl-5 text-sm text-[#52525b]">{item.selection.map((selection) => <li key={selection.itemId}>{selection.label}{selection.units > 1 ? ` × ${selection.units}` : ""}</li>)}</ul> : <p className="mb-1 mt-3 text-sm text-[#71717a]">Tidak ada rincian pilihan.</p>}
-              </details>
-            </article>
-          ))}
+
+        <TabFilter
+          tabs={[
+            { id: "all", label: "Semua", count: items.length },
+            { id: "new", label: "Baru", count: newCount },
+            {
+              id: "contacted",
+              label: "Dihubungi",
+              count: items.filter((i) => i.status === "contacted").length,
+            },
+            {
+              id: "converted",
+              label: "Klien",
+              count: items.filter((i) => i.status === "converted").length,
+            },
+            {
+              id: "dropped",
+              label: "Dibatalkan",
+              count: items.filter((i) => i.status === "dropped").length,
+            },
+          ]}
+          active={filter}
+          onChange={setFilter}
+        />
+      </div>
+
+      {loading ? (
+        <BentoCard>
+          <p className="text-center text-xs text-[#71717a]">Memuat data quote…</p>
+        </BentoCard>
+      ) : visible.length === 0 ? (
+        <EmptyState
+          icon="request_quote"
+          title="Belum ada pengajuan quote"
+          description="Tidak ditemukan riwayat estimasi dari kalkulator untuk filter ini."
+        />
+      ) : (
+        <div className="grid gap-4">
+          {visible.map((item) => {
+            const isNew = item.status === "new";
+            const statusVariant = isNew
+              ? "warning"
+              : item.status === "converted"
+              ? "success"
+              : item.status === "dropped"
+              ? "danger"
+              : "neutral";
+
+            return (
+              <BentoCard key={item.id} className="p-4 sm:p-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#eaeaea] pb-3.5">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="m-0 text-sm font-semibold text-[#18181a]">
+                        {item.contactName || "Klien Tanpa Nama"}
+                      </h3>
+                      <Chip variant={statusVariant} size="sm">
+                        {quoteStatusLabel[item.status]}
+                      </Chip>
+                    </div>
+                    <div className="mt-1 text-xs text-[#71717a] font-mono">
+                      {item.reference} · Diajukan {dateTime(item.createdAt)}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[#71717a]">Ubah Status:</span>
+                    <select
+                      className="h-[34px] rounded-[10px] bg-[#f0f0f0] px-3 text-xs font-medium text-[#18181a] outline-none"
+                      value={item.status}
+                      disabled={busyId === item.id}
+                      onChange={(e) => void updateStatus(item, e.target.value as QuoteStatus)}
+                    >
+                      {Object.entries(quoteStatusLabel).map(([val, lbl]) => (
+                        <option key={val} value={val}>
+                          {lbl}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="rounded-[12px] bg-[#f9f9f9] p-3.5 border border-[#f0f0f0]">
+                    <span className="text-[11px] font-medium text-[#71717a] block mb-1">
+                      Estimasi Biaya
+                    </span>
+                    <span className="text-base font-semibold text-[#18181a]">
+                      {currency(item.priceMin)}
+                      {item.priceMax !== item.priceMin ? ` – ${currency(item.priceMax)}` : ""}
+                    </span>
+                  </div>
+
+                  <div className="rounded-[12px] bg-[#f9f9f9] p-3.5 border border-[#f0f0f0]">
+                    <span className="text-[11px] font-medium text-[#71717a] block mb-1">
+                      Estimasi Durasi
+                    </span>
+                    <span className="text-base font-semibold text-[#18181a]">
+                      {item.daysMin === item.daysMax
+                        ? `${item.daysMin} hari kerja`
+                        : `${item.daysMin}–${item.daysMax} hari kerja`}
+                    </span>
+                  </div>
+
+                  <div className="rounded-[12px] bg-[#f9f9f9] p-3.5 border border-[#f0f0f0]">
+                    <span className="text-[11px] font-medium text-[#71717a] block mb-1">
+                      Kontak WhatsApp
+                    </span>
+                    {item.contactWhatsapp ? (
+                      phoneUrl(item.contactWhatsapp) ? (
+                        <a
+                          className="font-semibold text-xs text-[#18181a] underline flex items-center gap-1 mt-0.5"
+                          href={phoneUrl(item.contactWhatsapp)!}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <span className="symbol text-sm text-[#82b440]">chat</span>
+                          {item.contactWhatsapp}
+                        </a>
+                      ) : (
+                        <span className="text-xs font-semibold text-[#18181a]">
+                          {item.contactWhatsapp}
+                        </span>
+                      )
+                    ) : (
+                      <span className="text-xs text-[#71717a]">Belum diberikan</span>
+                    )}
+                  </div>
+                </div>
+
+                <details className="mt-3.5 rounded-[10px] border border-[#eaeaea] px-3.5 py-2.5 bg-[#fcfcfc] text-xs">
+                  <summary className="cursor-pointer font-medium text-[#18181a] hover:text-[#52525b]">
+                    Rincian Pilihan Modul &amp; Fitur ({item.selection.length} item)
+                  </summary>
+                  {item.selection.length ? (
+                    <ul className="mt-3 mb-1 grid gap-1.5 pl-4 text-xs text-[#52525b]">
+                      {item.selection.map((sel) => (
+                        <li key={sel.itemId}>
+                          <span className="font-medium text-[#18181a]">{sel.label}</span>
+                          {sel.units > 1 ? (
+                            <span className="ml-1 text-[11px] text-[#71717a]">
+                              ({sel.units} unit)
+                            </span>
+                          ) : null}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="mt-2 mb-1 text-xs text-[#71717a]">Tidak ada rincian pilihan.</p>
+                  )}
+                </details>
+              </BentoCard>
+            );
+          })}
         </div>
-      </Panel>
-    </PageFrame>
+      )}
+    </AdminFrame>
   );
 }

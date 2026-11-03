@@ -91,27 +91,6 @@ textarea {
 .screen {
   min-height: 100vh;
 }
-.preview-indicator {
-  position: fixed;
-  bottom: 12px;
-  left: 12px;
-  z-index: 50;
-  padding: 6px 10px;
-  border: 1px solid #d4d4d8;
-  border-radius: 8px;
-  background: #fffffff2;
-  color: #52525b;
-  font-size: 11px;
-  box-shadow: 0 2px 6px #0001;
-}
-.preview-indicator summary {
-  cursor: pointer;
-}
-.preview-indicator p {
-  max-width: 300px;
-  margin: 8px 0;
-  line-height: 1.5;
-}
 .ui-dialog {
   width: min(540px, calc(100vw - 32px));
   max-height: 85vh;
@@ -596,10 +575,6 @@ details[open] > summary .symbol {
     height: auto !important;
     padding: 24px 16px 64px;
   }
-  .preview-indicator {
-    bottom: 6px;
-    left: 6px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -610,5 +585,36 @@ details[open] > summary .symbol {
   ::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/*
+ * Client-navigation progress bar. Purely decorative: it reacts to link clicks
+ * and writes width/opacity directly, so it never affects the HTTP status of the
+ * document. It replaces the old route-level loading.tsx skeleton, which forced
+ * streaming and turned unknown URLs into soft 404s.
+ */
+.navigation-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  pointer-events: none;
+}
+.navigation-progress > span {
+  display: block;
+  height: 100%;
+  width: 0;
+  opacity: 0;
+  background: #737b24;
+  transition:
+    width 200ms ease-out,
+    opacity 200ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .navigation-progress > span {
+    transition: none;
   }
 }

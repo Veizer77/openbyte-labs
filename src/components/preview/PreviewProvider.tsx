@@ -7,7 +7,6 @@ import {
   useRef,
   useState,
 } from "react";
-import Link from "next/link";
 
 interface PreviewActions {
   open: (label: string, onConfirm?: (value: string) => void) => void;
@@ -46,17 +45,6 @@ export function PreviewProvider({ children }: { children: React.ReactNode }) {
   return (
     <Context value={{ open, notify }}>
       {children}
-      {previewUiEnabled ? (
-        <details className="preview-indicator" data-testid="preview-indicator">
-          <summary>Preview frontend · data contoh</summary>
-          <p>
-            Tampilan disalin dari prototype. Angka, testimoni, status keamanan,
-            dan data operasional adalah contoh desain, bukan data atau klaim
-            layanan aktif. Belum tersambung ke database.
-          </p>
-          <Link href="/preview">Lihat seluruh layar</Link>
-        </details>
-      ) : null}
       {previewUiEnabled ? <dialog
         ref={dialog}
         className={`ui-dialog transition-all ${
