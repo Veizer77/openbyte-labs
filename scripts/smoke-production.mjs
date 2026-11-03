@@ -17,7 +17,8 @@ const routes = [
   ["/kebijakan-privasi", 200],
   ["/admin/login", 200],
   ["/admin", 200],
-  ["/admin/settings", 404],
+  // /admin/settings adalah rute hidup; tanpa sesi ia 307 ke /admin/login.
+  ["/admin/settings", 200],
   ["/preview", 404],
   ["/preview/cms/dashboard-cms-admin", 404],
   ["/tracking", trackingEnabled ? 200 : 404],
@@ -33,9 +34,14 @@ const routes = [
 
 for (const [route, expected] of routes) {
   const response = await fetch(new URL(route, base));
-  if (route.startsWith("/tracking") && expected === 404 && response.status === 200) {
-    // A loading boundary can flush headers before Next.js renders not-found.
-    assert.match(await response.text(), /Halaman Tidak Ditemukan atau Sesi Kedaluwarsa/);
+  // Anti soft-404: sebuah rute negatif tidak boleh dijawab 200 berisi halaman
+  // 404. Status harus benar-benar 404 sejak header pertama.
+  if (expected === 404) {
+    assert.equal(
+      response.status,
+      404,
+      `${route}: HTTP 404 diharapkan, bukan ${response.status} (soft-404)`,
+    );
   } else {
     assert.equal(response.status, expected, `${route}: HTTP ${expected} diharapkan`);
   }
