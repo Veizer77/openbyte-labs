@@ -37,7 +37,6 @@ pnpm dev --port 3001
 
 - Website: http://localhost:3001
 - Login admin: http://localhost:3001/admin/login
-- Katalog 33 layar referensi: http://localhost:3001/preview (development saja)
 
 Semua halaman publik tetap `noindex`; `/robots.txt` melarang indexing dan sitemap kosong sampai konten/domain disetujui untuk rilis. `/health` memeriksa koneksi database dan mengembalikan 503 bila tidak siap.
 
@@ -61,7 +60,7 @@ Route untuk Settings umum, Page Builder, paket/add-on, FAQ/testimoni, dashboard 
 
 ## Batas rilis
 
-- `/tracking` dan `/tracking/proyek` tersedia hanya setelah owner mengaktifkan portal. Navbar menautkan `/tracking`, tidak lagi menuju demo. Saat nonaktif, akses tracking ditutup. Katalog `/preview` tetap hanya referensi development.
+- `/tracking` dan `/tracking/proyek` tersedia hanya setelah owner mengaktifkan portal. Navbar menautkan `/tracking`, tidak lagi menuju demo. Saat nonaktif, akses tracking ditutup.
 - Kebijakan privasi dan ketentuan layanan saat ini ditandai sebagai draf dan masih memerlukan persetujuan pemilik/legal.
 - Belum selesai: persetujuan copy/klaim dan izin konten, verifikasi login/TOTP serta Turnstile pada lingkungan yang disetujui, kredensial dan verifikasi R2/hosting, backup + restore, monitoring, validasi CSP/HSTS di browser, audit aksesibilitas/performa, dan gerbang rilis PRD lainnya. Header keamanan dan workflow CI/secret scan sudah dikonfigurasi, belum menjadi bukti validasi produksi.
 - Domain, hosting komersial, deployment, migrasi produksi, dan DNS **tidak termasuk pekerjaan ini**. Jangan deploy sebelum keputusan/izin terpisah.
@@ -92,7 +91,7 @@ src/db/                   Drizzle, schema, migrasi, stores
 src/services/             Use case domain, audit, cache
 src/components/public/    Komponen publik dan katalog database
 src/components/admin/     UI admin DB untuk modul yang sudah diintegrasikan
-src/components/screens/   Layar prototype yang dipertahankan untuk preview
+src/components/screens/   Layar prototype yang dipertahankan untuk komponen tampilan
 src/fixtures/             Data referensi/fixture untuk area yang belum dimigrasi
 tests/                    Unit, integration, E2E, visual
 docs/                     Audit, prosedur operator, dan catatan implementasi

@@ -14,7 +14,7 @@ Seluruh 33 layar referensi mempunyai file React TSX tersendiri:
 | Dashboard admin custom | 16 | `src/components/screens/cms/` |
 | Dokumentasi visual | 4 | `src/components/screens/system/` |
 
-Inventaris per layar dan rutenya tersedia di `src/fixtures/screens.json`. Katalog development pada `/preview` menautkan seluruh layar tersebut. Prototype tidak diubah; `git diff --name-only -- prototype` kosong saat pemeriksaan.
+Prototype tidak diubah; `git diff --name-only -- prototype` kosong saat pemeriksaan.
 
 Tambahan yang diperlukan PRD, tetapi tidak memiliki layar referensi tersendiri:
 
@@ -53,7 +53,7 @@ Tambahan ini mengikuti permukaan, radius, tipografi, dan warna prototype. Tidak 
 | Area | Berkas/direktori |
 | --- | --- |
 | Fondasi | `package.json`, `pnpm-lock.yaml`, `next.config.ts`, `tailwind.config.ts`, `tsconfig.json` |
-| Rute | `src/app/(public)/`, `src/app/admin/`, `src/app/preview/` |
+| Rute | `src/app/(public)/`, `src/app/admin/` |
 | Tampilan referensi | `src/components/screens/` |
 | Header dan widget publik | `src/components/public/` |
 | Shell/editor admin | `src/components/admin/` |
