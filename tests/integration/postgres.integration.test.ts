@@ -207,6 +207,41 @@ describe("PostgreSQL test terisolasi", () => {
     }
   });
 
+  it("menolak booking untuk slot yang jam mulainya sudah lewat", async () => {
+    const marker = `BKG-PAST-${randomUUID()}`;
+    const past = new Date(Date.now() - 3_600_000);
+    const reason = (error: { cause?: { code?: string }; code?: string }) =>
+      error.cause?.code ?? error.code;
+    try {
+      // consent_at (submit time) is now, slot_start an hour ago: the
+      // booking_future_check constraint must reject the row.
+      expect(
+        await db
+          .insert(consultationBookings)
+          .values({
+            id: randomUUID(),
+            reference: `${marker}-past`,
+            name: "integration test",
+            whatsapp: "6281234567890",
+            organizationOrBusiness: "OpenByte Labs",
+            serviceInterest: "Website",
+            projectBrief: "integration probe",
+            consultationMode: "google_meet",
+            slotStart: past,
+            slotEnd: new Date(past.getTime() + 3_600_000),
+            status: "pending",
+            consentAt: new Date(),
+          })
+          .catch(reason),
+      ).toBe("23514");
+      expect(await count(marker)).toBe(0);
+    } finally {
+      await db.execute(
+        sql`DELETE FROM consultation_bookings WHERE reference LIKE ${`${marker}-%`}`,
+      );
+    }
+  });
+
   it("mengizinkan hanya lima permintaan form paralel pada satu hash IP", async () => {
     const key = randomBytes(32).toString("hex");
     try {

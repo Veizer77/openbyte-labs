@@ -27,10 +27,18 @@ export function proxy(request: NextRequest) {
   const imageSources = ["'self'", "blob:", "data:", r2PublicOrigin()].filter(
     (source): source is string => Boolean(source),
   );
+  // Next.js dev tools (error overlay, indicator, React DevTools) inject <style>
+  // elements at runtime, so they never carry the request nonce. A nonce in
+  // `style-src` makes browsers ignore `'unsafe-inline'`, which left the overlay
+  // unstyled and parked the indicator at the end of the document. Production
+  // never ships those styles, so it keeps the stricter nonce-only policy.
+  const styleSrc = isDev
+    ? "style-src 'self' 'unsafe-inline'"
+    : `style-src 'self' 'nonce-${nonce}'`;
   const policy = [
     "default-src 'self'",
     `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://challenges.cloudflare.com${isDev ? " 'unsafe-eval'" : ""}`,
-    `style-src 'self' 'nonce-${nonce}'`,
+    styleSrc,
     "style-src-attr 'unsafe-inline'",
     `img-src ${imageSources.join(" ")}`,
     "font-src 'self' data:",

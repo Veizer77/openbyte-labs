@@ -11,6 +11,10 @@ const config: NextConfig = {
       { source: "/booking", destination: "/konsultasi", permanent: true },
       { source: "/layanan", destination: "/paket", permanent: true },
       { source: "/tentang", destination: "/tentang-kami", permanent: true },
+      // Design route map (prototype/stitch/system/route-map-architecture.html).
+      { source: "/admin/proyek", destination: "/admin/proyek-klien", permanent: true },
+      { source: "/admin/paket", destination: "/admin/packages", permanent: true },
+      { source: "/admin/staf", destination: "/admin/users", permanent: true },
     ];
   },
   async headers() {
@@ -39,7 +43,6 @@ const config: NextConfig = {
       { source: "/tracking/:path*", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }, { key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       { source: "/admin/:path*", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }, { key: "X-Robots-Tag", value: "noindex, nofollow" }] },
       { source: "/api/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
-      { source: "/preview/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] },
     ];
   },
 };
