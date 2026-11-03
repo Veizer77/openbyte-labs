@@ -104,6 +104,11 @@ export const consultationBookings = pgTable(
   },
   (table) => [
     check("booking_time_check", sql`${table.slotStart} < ${table.slotEnd}`),
+    // A booking may never be stored for a slot that had already started. The
+    // application clock (`consentAt` = server "now" at submit time) is the same
+    // clock `createBooking` validates against, so this adds a last-resort guard
+    // without depending on the database host's clock.
+    check("booking_future_check", sql`${table.slotStart} > ${table.consentAt}`),
     check(
       "booking_mode_check",
       sql`${table.consultationMode} IN ('google_meet', 'whatsapp_call', 'offline')`,

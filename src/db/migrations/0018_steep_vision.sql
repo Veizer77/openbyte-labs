@@ -1,0 +1,1 @@
+ALTER TABLE "consultation_bookings" ADD CONSTRAINT "booking_future_check" CHECK ("consultation_bookings"."slot_start" > "consultation_bookings"."consent_at");

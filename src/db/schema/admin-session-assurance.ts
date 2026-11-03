@@ -13,7 +13,11 @@ export const adminSessionAssurances = pgTable(
     adminProfileId: text("admin_profile_id")
       .notNull()
       .references(() => adminProfiles.id, { onDelete: "restrict" }),
-    method: text("method").$type<"totp" | "recovery_code">().notNull(),
+    // `dev_bypass` is only ever written by the development-only quick login, so
+    // the audit trail never claims a real second factor was verified.
+    method: text("method")
+      .$type<"totp" | "recovery_code" | "dev_bypass">()
+      .notNull(),
     verifiedAt: timestamp("verified_at", { withTimezone: true })
       .notNull()
       .defaultNow(),
@@ -22,7 +26,7 @@ export const adminSessionAssurances = pgTable(
   (table) => [
     check(
       "admin_session_assurance_method_check",
-      sql`${table.method} IN ('totp', 'recovery_code')`,
+      sql`${table.method} IN ('totp', 'recovery_code', 'dev_bypass')`,
     ),
     check(
       "admin_session_assurance_expiry_check",

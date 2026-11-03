@@ -100,6 +100,7 @@ export interface PreflightFacts {
   expectedMigrations: number;
   appliedMigrations: number | null;
   hasNoOverlap: boolean;
+  hasFutureGuard: boolean;
   seedMarkers: readonly string[];
   counts: Readonly<Record<string, number>>;
 }
@@ -159,6 +160,12 @@ export function summarizePreflight(
     facts.hasNoOverlap,
     "Exclusion constraint booking aktif tersedia",
     "Constraint consultation_bookings_no_overlap tidak ditemukan.",
+  );
+
+  require(
+    facts.hasFutureGuard,
+    "Constraint booking masa depan tersedia",
+    "Constraint booking_future_check tidak ditemukan; slot yang sudah lewat masih bisa tersimpan.",
   );
 
   const missingMarkers = REQUIRED_SEED_MARKERS.filter(

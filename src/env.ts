@@ -48,6 +48,8 @@ const schema = z
       .regex(/^[a-z0-9-]+$/i, "Nama header tidak valid.")
       .default("x-forwarded-for"),
     TURNSTILE_SECRET_KEY: optional(z.string().min(1)),
+    // Development-only quick login. Ignored entirely when NODE_ENV=production.
+    DEV_ADMIN_QUICK_LOGIN: optional(z.enum(["true", "false"])),
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: optional(z.string().min(1)),
     R2_ACCOUNT_ID: optional(z.string().regex(/^[a-f0-9]{32}$/i)),
     R2_ACCESS_KEY_ID: optional(z.string().min(1)),

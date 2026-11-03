@@ -127,6 +127,20 @@
       "when": 1793514433085,
       "tag": "0017_daffy_iron_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1793551733254,
+      "tag": "0018_steep_vision",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1793605659579,
+      "tag": "0019_dev_bypass_assurance",
+      "breakpoints": true
     }
   ]
 }

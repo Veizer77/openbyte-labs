@@ -1,0 +1,2 @@
+ALTER TABLE "admin_session_assurances" DROP CONSTRAINT "admin_session_assurance_method_check";--> statement-breakpoint
+ALTER TABLE "admin_session_assurances" ADD CONSTRAINT "admin_session_assurance_method_check" CHECK ("admin_session_assurances"."method" IN ('totp', 'recovery_code', 'dev_bypass'));

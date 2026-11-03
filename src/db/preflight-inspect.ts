@@ -53,6 +53,11 @@ export async function inspectDatabase(uri: string): Promise<PreflightFacts> {
       WHERE conrelid = to_regclass('public.consultation_bookings')
         AND contype = 'x' AND conname = 'consultation_bookings_no_overlap'`;
 
+    const futureGuards = await sql<{ conname: string }[]>`
+      SELECT conname FROM pg_constraint
+      WHERE conrelid = to_regclass('public.consultation_bookings')
+        AND contype = 'c' AND conname = 'booking_future_check'`;
+
     const markers = existingTables.includes("seed_state")
       ? (
           await sql<{ key: string }[]>`SELECT key FROM seed_state ORDER BY key`
@@ -79,6 +84,7 @@ export async function inspectDatabase(uri: string): Promise<PreflightFacts> {
       expectedMigrations: await expectedMigrationCount(),
       appliedMigrations,
       hasNoOverlap: constraints.length === 1,
+      hasFutureGuard: futureGuards.length === 1,
       seedMarkers: markers,
       counts,
     };

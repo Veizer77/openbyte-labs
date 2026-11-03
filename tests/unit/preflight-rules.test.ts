@@ -14,6 +14,7 @@ const facts = (overrides: Partial<PreflightFacts> = {}): PreflightFacts => ({
   expectedMigrations: 14,
   appliedMigrations: 14,
   hasNoOverlap: true,
+  hasFutureGuard: true,
   seedMarkers: ["availability-v1", "faq-v1", "calculator-v1", "packages-v1"],
   counts: {
     site_settings: 1,
@@ -56,6 +57,10 @@ describe("preflight database", () => {
   });
   it("gagal bila exclusion constraint atau seed belum ada", () => {
     expect(summarizePreflight(facts({ hasNoOverlap: false })).ok).toBe(false);
+    expect(summarizePreflight(facts({ hasFutureGuard: false })).ok).toBe(false);
+    expect(
+      summarizePreflight(facts({ hasFutureGuard: false })).lines.join("\n"),
+    ).toContain("booking_future_check");
     const report = summarizePreflight(
       facts({ seedMarkers: ["faq-v1"], counts: { ...facts().counts, faqs: 0, site_settings: 0 } }),
     );
