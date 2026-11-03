@@ -1,7 +1,7 @@
 # Transport Layer — Server Actions & Route Handlers
 
-**Dibangun:** mulai 30 Oktober 2026; direkonsiliasi 31 Oktober 2026.
-**Status:** Server Actions, route auth, dan sebagian UI telah terhubung. Belum merupakan bukti kesiapan Rilis 1 produksi.
+**Dibangun:** mulai 30 Oktober 2026; direkonsiliasi 31 Oktober 2026; diperbarui 3 November 2026 (Rilis 1).
+**Status:** Server Actions dan route auth terhubung. Rilis 1 berjalan di produksi; lihat `docs/RELEASE-1-2026-11-03.md` untuk status gate terkini.
 
 Sebelum ini service hanya berupa pustaka yang tidak bisa dipanggil aplikasi. Sekarang tersedia route Better Auth/login admin, 3 public Server Actions, dan 18 modul admin Server Action. Action admin BE-03 telah ditambahkan untuk layanan, testimoni, teknologi, add-on, kalkulator, pengguna, dan audit.
 
@@ -66,7 +66,21 @@ type ActionResult<T> =
 `src/env.ts` memvalidasi seluruh env dengan Zod, **lazy** (bukan saat import) supaya `next build` tidak butuh rahasia.
 
 Wajib: `DATABASE_URI`, `BETTER_AUTH_SECRET` (≥32), `IP_HASH_SALT` (≥32).
-Default development: `SITE_URL=http://localhost:3000`; produksi wajib menetapkan `SITE_URL` HTTPS. `BETTER_AUTH_URL`, bila diisi, harus satu origin dengan `SITE_URL`. Produksi memerlukan `TURNSTILE_SECRET_KEY` dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. Variabel `R2_*` harus lengkap atau kosong seluruhnya. `SENTRY_DSN` tetap opsional dan integrasinya belum aktif.
+Default development: `SITE_URL=http://localhost:3000`; produksi wajib menetapkan `SITE_URL` HTTPS. `BETTER_AUTH_URL`, bila diisi, harus satu origin dengan `SITE_URL`. Produksi memerlukan `TURNSTILE_SECRET_KEY` dan `NEXT_PUBLIC_TURNSTILE_SITE_KEY`. Variabel `R2_*` harus lengkap atau kosong seluruhnya. `SENTRY_DSN` tetap opsional; integrasinya aktif tetapi belum menerima DSN di produksi.
+
+### Sentry (status 3 November 2026)
+
+Integrasi sudah terpasang di kode dan siap menerima DSN:
+
+- `src/instrumentation.ts` — `register()` menginisialisasi SDK server hanya bila `NEXT_RUNTIME === "nodejs"`, `SENTRY_DSN` terisi, dan `NODE_ENV === "production"`. `onRequestError` meneruskan error request ke Sentry.
+- `src/instrumentation-client.ts` — inisialisasi klien dengan `NEXT_PUBLIC_SENTRY_DSN`, replay dan tracing dimatikan (`tracesSampleRate: 0`).
+- `src/lib/monitoring.ts` — `beforeSend` membuang `user`, `request`, `breadcrumbs`, `extra`, `contexts`, `tags`, isi variabel frame, dan menormalkan pesan menjadi "Application error". Stack trace tetap dikirim agar error bisa dilacak tanpa membocorkan data pengguna.
+
+Yang masih kurang: **kedua DSN belum dipasang** di environment production Vercel. Selama kosong, kedua entry point tidak melakukan inisialisasi apa pun (tidak ada error, tidak ada event). Untuk mengaktifkan: `npx vercel env add SENTRY_DSN production` dan `npx vercel env add NEXT_PUBLIC_SENTRY_DSN production`, lalu redeploy.
+
+### Turnstile (status 3 November 2026)
+
+Kunci produksi terpasang dan CSP membatasi `frame-src` ke hostname Turnstile pelanggan (lihat `src/proxy.ts`). Konsekuensi yang perlu diingat: **custom domain menuntut kunci Turnstile baru** karena kunci terikat hostname, sehingga pergantian domain tidak cukup dengan mengubah DNS.
 
 `src/env.ts` menolak runtime tanpa nilai wajib yang valid. Skrip migrasi/owner/seed/preflight memakai target direct terpisah dan konfirmasi operator; jangan memakai konfigurasi runtime sebagai persetujuan target tulis. Contoh variabel tersedia di `.env.example`; jangan menampilkan atau membagikan nilai secret.
 
@@ -102,23 +116,24 @@ kredensial salah        → 401 (pesan generik)
 
 | Kebutuhan | Dampak |
 |---|---|
-| Login/TOTP end-to-end pada Neon | Route aplikasi dan flow unit tersedia; kompatibilitas Better Auth/Drizzle dan seluruh langkah auth belum diuji end-to-end terhadap Neon |
+| Login/TOTP end-to-end pada Neon | Akun owner dengan TOTP aktif sudah ada di produksi dan sesi ditolak tanpa faktor kedua. Verifikasi dilakukan lewat data assurance per sesi, bukan sekadar flag pengguna. |
 | `owner:reset` | CLI break-glass tersedia, meminta target dan konfirmasi `RESET`, mengganti password, menonaktifkan 2FA, mencabut sesi, dan mengaudit; jangan jalankan tanpa target yang disetujui |
-| Integrasi UI belum menyeluruh | Form publik booking/inquiry/quote dan layar admin proyek, layanan, kategori/teknologi, media, kalkulator, booking/jadwal, inquiry, serta quote terhubung. Settings, Page Builder, paket/add-on, FAQ/testimoni, staf, audit UI, billing, dan portal tetap preview atau belum memanggil action. |
-| Health dan observability | `/health` mengecek DB. CSP/HSTS dan security headers sudah dikonfigurasi, tetapi belum divalidasi pada deployment; Sentry, uptime monitor, backup, dan uji restore belum selesai. |
-| Verifikasi layanan eksternal | Enam aset katalog dev melewati importer, staging privat, finalisasi, dan varian WebP. Turnstile belum diuji ke Cloudflare; konfigurasi R2 produksi belum diuji. |
+| Integrasi UI belum menyeluruh | Form publik booking/inquiry/quote dan layar admin proyek, layanan, kategori/teknologi, media, kalkulator, booking/jadwal, inquiry, quote, settings, dan Page Builder terhubung. Paket/add-on, FAQ/testimoni, staf, audit UI, billing, dan portal masih perlu penyelesaian. |
+| Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi. CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry belum menerima DSN; uptime monitor dan uji restore belum selesai. |
+| Verifikasi layanan eksternal | 24 objek (6 media × 4 varian WebP) terverifikasi ada di bucket R2 publik. Turnstile aktif di produksi; pengujian submission asli menunggu fase launch. |
 | Cache | Route katalog memakai `force-dynamic` dan membaca DB per request; belum memakai fetch cache bertag. Jangan mengklaim integrasi cache tag end-to-end. |
-| Status akun | Harus diverifikasi pemilik pada target yang disetujui; status akun/kredensial tidak disimpan di dokumen. Flow in-memory bukan bukti login/TOTP end-to-end. |
+| Status akun | Akun owner produksi terverifikasi lewat pembacaan database (peran, status aktif, TOTP verified, backup codes). Kredensial dan secret tidak disimpan di dokumen. |
 
 ## 8. Verifikasi
 
-Typecheck, lint, unit test, dan build pada tabel berikut dijalankan setelah perubahan readiness pada 31 Oktober 2026. Tes integrasi dan layanan eksternal tidak dijalankan ulang.
+Typecheck, lint, unit test, dan build diverifikasi ulang pada 3 November 2026 (Rilis 1). Tes integrasi dijalankan terhadap database uji terisolasi.
 
 | Pemeriksaan | Hasil |
 |---|---|
-| Unit tests | **237 lulus** di 54 berkas setelah perubahan readiness pada 31 Oktober 2026 |
-| `pnpm test:integration` | Checkpoint terdokumentasi: **7 lulus** di 3 berkas pada `openbyte_r1_test` branch dev; suite tidak dijalankan ulang dalam pembaruan dokumen ini |
-| `pnpm typecheck` | Lulus pada verifikasi saat ini |
-| `pnpm lint` | Lulus tanpa error atau warning setelah perubahan readiness pada 31 Oktober 2026 |
-| `pnpm audit --prod` | Tidak ada advisory dikenal setelah override terarah `esbuild` ke `0.25.12`; `@esbuild-kit` tetap deprecated |
-| `pnpm build` | Lulus pada Next.js 16.4.3 setelah perubahan readiness pada 31 Oktober 2026 |
+| Unit tests | **344 lulus** di 72 berkas (3 Nov 2026) |
+| `pnpm test:integration` | **17 lulus** di 5 berkas terhadap `openbyte_labs_r1_test` |
+| `pnpm typecheck` | Lulus |
+| `pnpm lint` | 0 error, 8 warning (variabel tak terpakai) |
+| `pnpm db:preflight --allow-production` | Lulus 12/12 pemeriksaan pada `main.openbyte_labs` |
+| `pnpm build` | Lulus pada Next.js 16.4.3 |
+| Smoke produksi | 21 dari 23 rute sesuai harapan; 2 sisanya menunggu paket & layanan diaktifkan |
