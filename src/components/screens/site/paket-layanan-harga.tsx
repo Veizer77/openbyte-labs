@@ -460,8 +460,7 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {starter?.features[0] ??
-                          "Landing page / profil instansi hingga 5 halaman modular"}
+                        {starter?.features[0] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -493,8 +492,7 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {starter?.features[1] ??
-                          "Desain responsif mobile-first & ultra-fast Core Web Vitals"}
+                        {starter?.features[1] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -526,8 +524,7 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {starter?.features[2] ??
-                          "Integrasi tombol interaktif WhatsApp Direct order router"}
+                        {starter?.features[2] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -558,8 +555,7 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {starter?.features[3] ??
-                          "SEO on-page dasar (Schema JSON-LD, OpenGraph, Sitemap)"}
+                        {starter?.features[3] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -591,8 +587,7 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {starter?.features[4] ??
-                          "Setup domain, DNS management, & SSL Cloudflare"}
+                        {starter?.features[4] ?? "—"}
                       </div>
                     </div>
                   </div>
@@ -853,8 +848,7 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {mobile?.features[0] ??
-                          "Aplikasi Android native-feel dibangun dengan Flutter & Dart"}
+                        {mobile?.features[0] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -886,8 +880,7 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {mobile?.features[1] ??
-                          "Arsitektur offline-first berbasis local database SQLite / Hive"}
+                        {mobile?.features[1] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -918,8 +911,7 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {mobile?.features[2] ??
-                          "Akses hardware teruji: Geolocation GPS & integrasi modul kamera"}
+                        {mobile?.features[2] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -950,43 +942,42 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {mobile?.features[3] ??
-                          "Integrasi REST API backend, token refresh, & data sync queue"}
+                        {mobile?.features[3] ?? "—"}
                       </div>
                     </div>
                     <div
                       className={"box-border w-full h-[4px] shrink-0"}
                       data-pencil-name={"spacer"}
                     ></div>
-                    <div
-                      className={"box-border w-full h-[36px] shrink-0 relative"}
-                      data-pencil-name={"div"}
-                    >
+                    {mobile?.features[4] ? (
                       <div
-                        className={
-                          "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
+                        className={"box-border w-full h-[36px] shrink-0 relative"}
+                        data-pencil-name={"div"}
                       >
-                        {"check_circle"}
+                        <div
+                          className={
+                            "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
+                          }
+                          data-pencil-name={"check_circle"}
+                          data-text="true"
+                          aria-hidden="true"
+                        >
+                          {"check_circle"}
+                        </div>
+                        <div
+                          className={
+                            "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
+                          }
+                          data-pencil-name={
+                            "Build APK produksi tersign & panduan pub"
+                          }
+                          data-text="true"
+                          data-responsive="fixed"
+                        >
+                          {mobile.features[4]}
+                        </div>
                       </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
-                        }
-                        data-pencil-name={
-                          "Build APK produksi tersign & panduan pub"
-                        }
-                        data-text="true"
-                        data-responsive="fixed"
-                      >
-                        {
-                          "Build APK produksi tersign & panduan publish Google Play Store"
-                        }
-                      </div>
-                    </div>
+                    ) : null}
                   </div>
                 </div>
                 <div
@@ -1274,8 +1265,7 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {informasi?.features[0] ??
-                          "Database relasional terintegrasi ACID (PostgreSQL / Supabase)"}
+                        {informasi?.features[0] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -1306,8 +1296,7 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {informasi?.features[1] ??
-                          "Manajemen otentikasi multi-role RBAC (SuperAdmin, Staff, Client)"}
+                        {informasi?.features[1] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -1339,8 +1328,7 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {informasi?.features[2] ??
-                          "Dashboard admin analitik komprehensif & KPI metrik visual"}
+                        {informasi?.features[2] ?? "—"}
                       </div>
                     </div>
                     <div
@@ -1372,44 +1360,43 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {informasi?.features[3] ??
-                          "Engine ekspor laporan PDF terstruktur & spreadsheet Excel"}
+                        {informasi?.features[3] ?? "—"}
                       </div>
                     </div>
                     <div
                       className={"box-border w-full h-[4px] shrink-0"}
                       data-pencil-name={"spacer"}
                     ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
+                    {informasi?.features[4] ? (
                       <div
                         className={
-                          "text-[16px]/[24px] box-border text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
                         }
-                        data-pencil-name={"verified"}
-                        data-text="true"
-                        aria-hidden="true"
+                        data-pencil-name={"div"}
                       >
-                        {"verified"}
+                        <div
+                          className={
+                            "text-[16px]/[24px] box-border text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          }
+                          data-pencil-name={"verified"}
+                          data-text="true"
+                          aria-hidden="true"
+                        >
+                          {"verified"}
+                        </div>
+                        <div
+                          className={
+                            "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={
+                            "Audit trail log aktivitas user & mitigas"
+                          }
+                          data-text="true"
+                        >
+                          {informasi.features[4]}
+                        </div>
                       </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Audit trail log aktivitas user & mitigas"
-                        }
-                        data-text="true"
-                      >
-                        {
-                          "Audit trail log aktivitas user & mitigasi data rollback"
-                        }
-                      </div>
-                    </div>
+                    ) : null}
                   </div>
                 </div>
                 <div

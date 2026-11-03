@@ -44,4 +44,35 @@ describe("halaman /paket terikat ke data paket", () => {
     expect(source).toMatch(/starter\?\.includedRevisions/);
     expect(source).toMatch(/starter\?\.features\[0\]/);
   });
+
+  it("mengikat seluruh slot fitur tanpa menyisakan spesifikasi karangan", () => {
+    // Setiap slot fitur yang tampil harus berasal dari katalog. Bila salah satu
+    // kembali menjadi literal, halaman akan menampilkan spesifikasi yang tidak
+    // pernah disetujui pemilik dan tidak bisa diperbaiki lewat admin panel.
+    for (const pkg of ["starter", "mobile", "informasi"]) {
+      for (let i = 0; i < 5; i++) {
+        expect(source).toMatch(
+          new RegExp(`\\{${pkg}\\?\\.features\\[${i}\\]`),
+        );
+      }
+    }
+    // Teks fitur lama dari prototype tidak boleh hidup lagi di dalam JSX.
+    const stale = [
+      "Build APK produksi tersign & panduan publish Google Play Store",
+      "Audit trail log aktivitas user & mitigasi data rollback",
+      "Setup domain, DNS management, & SSL Cloudflare",
+      "Desain responsif mobile-first & ultra-fast Core Web Vitals",
+      "Integrasi tombol interaktif WhatsApp Direct order router",
+      "SEO on-page dasar (Schema JSON-LD, OpenGraph, Sitemap)",
+    ];
+    for (const text of stale) expect(source).not.toContain(text);
+  });
+
+  it("menyembunyikan baris fitur yang tidak diisi agar tidak ada centang kosong", () => {
+    // Layout memakai tinggi tetap; menampilkan penanda kosong menyisakan ikon
+    // centang tanpa isi. Baris tanpa fitur harus tidak dirender sama sekali.
+    expect(source).toMatch(/\{mobile\?\.features\[4\] \? \(/);
+    expect(source).toMatch(/\{informasi\?\.features\[4\] \? \(/);
+    expect(source).toContain(") : null}");
+  });
 });
