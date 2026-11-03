@@ -281,7 +281,7 @@ export default function SitePaketLayananHarga({
                       >
                         {starter
                           ? `Estimasi ${starter.estimatedDays} Hari`
-                          : "Estimasi 7 Hari"}
+                          : "Estimasi —"}
                       </div>
                     </div>
                   </div>
@@ -669,7 +669,7 @@ export default function SitePaketLayananHarga({
                       >
                         {mobile
                           ? `Estimasi ${mobile.estimatedDays} Hari`
-                          : "Estimasi 30 Hari"}
+                          : "Estimasi —"}
                       </div>
                     </div>
                   </div>
@@ -1081,7 +1081,7 @@ export default function SitePaketLayananHarga({
                       >
                         {informasi
                           ? `Estimasi ${informasi.estimatedDays} Hari`
-                          : "Estimasi 21 Hari"}
+                          : "Estimasi —"}
                       </div>
                     </div>
                   </div>
@@ -1193,7 +1193,7 @@ export default function SitePaketLayananHarga({
                       >
                         {typeof informasi?.includedRevisions === "number"
                           ? `${informasi.includedRevisions}x Sesi Penuh`
-                          : "3x Sesi Penuh"}
+                          : "—"}
                       </div>
                     </div>
                     <div

@@ -75,4 +75,17 @@ describe("halaman /paket terikat ke data paket", () => {
     expect(source).toMatch(/\{informasi\?\.features\[4\] \? \(/);
     expect(source).toContain(") : null}");
   });
+
+  it("tidak mengarang angka saat paket tidak tersedia", () => {
+    // Bila paket nonaktif, katalog kosong. Menampilkan estimasi atau kuota
+    // revisi karangan membuat halaman tampak berisi padahal datanya tidak ada.
+    // Atribut data-pencil-name sengaja diabaikan: itu metadata desain, bukan
+    // teks yang dirender.
+    const rendered = source.replace(/data-pencil-name=\{[^}]*\}/g, "");
+    expect(rendered).not.toMatch(/"Estimasi 7 Hari"/);
+    expect(rendered).not.toMatch(/"Estimasi 30 Hari"/);
+    expect(rendered).not.toMatch(/"Estimasi 21 Hari"/);
+    expect(rendered).not.toMatch(/"3x Sesi Penuh"/);
+    expect(source).toMatch(/: "Estimasi —"/);
+  });
 });
