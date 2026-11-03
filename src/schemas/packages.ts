@@ -33,6 +33,7 @@ function validatePackage(
   if ((value.discountPrice === null) !== (value.discountEndsAt === null))
     ctx.addIssue({
       code: "custom",
+      path: value.discountPrice === null ? ["discountPrice"] : ["discountEndsAt"],
       message: "Harga dan akhir diskon harus diisi bersama.",
     });
   if (value.discountPrice !== null && value.discountPrice > value.price)
@@ -47,6 +48,7 @@ function validatePackage(
   ) {
     ctx.addIssue({
       code: "custom",
+      path: !value.features.length ? ["features"] : ["name"],
       message: "Paket aktif harus lengkap dan tidak boleh berisi [ISI].",
     });
   }
@@ -54,10 +56,22 @@ function validatePackage(
 export const packageInputSchema = z
   .object({
     ...fields,
-    discountEndsAt: z.iso
-      .datetime({ offset: true })
-      .nullable()
-      .transform((value) => (value ? new Date(value) : null)),
+    discountEndsAt: z
+      .preprocess(
+        (val) => (val === "" || val === undefined ? null : val),
+        z
+          .union([
+            z.date(),
+            z.string().refine((val) => !isNaN(Date.parse(val)), {
+              message: "Format tanggal tidak valid.",
+            }),
+          ])
+          .nullable(),
+      )
+      .transform((value) => {
+        if (!value) return null;
+        return value instanceof Date ? value : new Date(value);
+      }),
   })
   .strict()
   .superRefine(validatePackage);

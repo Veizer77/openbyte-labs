@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
+import { z } from "zod";
 import {
   deleteFaqAction,
   listFaqsAction,
@@ -245,6 +246,49 @@ function faqRichText(value: string): RichText {
 const inputClass =
   "h-[38px] w-full rounded-[10px] bg-[#f0f0f0] px-3 text-xs text-[#18181a] placeholder-[#71717a] outline-none border border-transparent focus:border-[#18181a] transition-all";
 
+function formatFieldErrorMessage(key: string, message: string): string {
+  const lower = message.toLowerCase();
+  if (
+    key === "categoryId" &&
+    (lower.includes("uuid") ||
+      lower.includes("required") ||
+      lower.includes("expected string") ||
+      lower.includes("invalid"))
+  ) {
+    return "Pilih kategori produk terlebih dahulu.";
+  }
+  if (
+    key === "name" &&
+    (lower.includes("too short") ||
+      lower.includes("expected string") ||
+      lower.includes("min") ||
+      lower.includes("invalid"))
+  ) {
+    return "Nama wajib diisi.";
+  }
+  if (
+    key === "slug" &&
+    (lower.includes("regex") ||
+      lower.includes("invalid") ||
+      lower.includes("pattern"))
+  ) {
+    return "Format slug URL hanya boleh berupa huruf kecil, angka, dan tanda hubung (-).";
+  }
+  if (
+    key === "discountEndsAt" &&
+    (lower.includes("date") ||
+      lower.includes("string") ||
+      lower.includes("datetime") ||
+      lower.includes("invalid"))
+  ) {
+    return "Format tanggal berakhir diskon tidak valid.";
+  }
+  if (key === "revisionPolicy" && lower.includes("json")) {
+    return "Format JSON kebijakan revisi tidak valid.";
+  }
+  return message;
+}
+
 export function AdminContentCollectionsPage({
   kind,
 }: {
@@ -254,6 +298,7 @@ export function AdminContentCollectionsPage({
   const [categories, setCategories] = useState<CategoryRecord[]>([]);
   const [selected, setSelected] = useState<CmsRecord | null>(null);
   const [form, setForm] = useState<FormData>(() => blankForm(kind));
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -361,11 +406,33 @@ export function AdminContentCollectionsPage({
     };
   }, [kind, meta.title]);
 
+  function clearFieldError(key: string) {
+    setFieldErrors((curr) => {
+      if (
+        !curr[key] &&
+        !(
+          (key === "discountPrice" || key === "discountEndsAt") &&
+          (curr["discountPrice"] || curr["discountEndsAt"])
+        )
+      ) {
+        return curr;
+      }
+      const next = { ...curr };
+      delete next[key];
+      if (key === "discountPrice" || key === "discountEndsAt") {
+        if (next["discountPrice"]?.includes("bersama")) delete next["discountPrice"];
+        if (next["discountEndsAt"]?.includes("bersama")) delete next["discountEndsAt"];
+      }
+      return next;
+    });
+  }
+
   function startNew() {
     setSelected(null);
     setForm(blankForm(kind));
     setError("");
     setStatus("");
+    setFieldErrors({});
   }
 
   function edit(record: CmsRecord) {
@@ -373,6 +440,7 @@ export function AdminContentCollectionsPage({
     setForm(formFromRecord(kind, record));
     setError("");
     setStatus("");
+    setFieldErrors({});
   }
 
   function makeInput(): unknown {
@@ -403,7 +471,19 @@ export function AdminContentCollectionsPage({
     if (kind === "packages") {
       let revisionPolicy: unknown = null;
       const text = String(form.revisionPolicy ?? "").trim();
-      if (text) revisionPolicy = JSON.parse(text) as unknown;
+      if (text) {
+        try {
+          revisionPolicy = JSON.parse(text) as unknown;
+        } catch {
+          throw new z.ZodError([
+            {
+              code: "custom",
+              path: ["revisionPolicy"],
+              message: "Format JSON kebijakan revisi tidak valid.",
+            },
+          ]);
+        }
+      }
       const discountEndsAt = String(form.discountEndsAt ?? "").trim();
       return packageInputSchema.parse({
         categoryId: form.categoryId,
@@ -441,24 +521,58 @@ export function AdminContentCollectionsPage({
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy) return;
+    setFieldErrors({});
+    setError("");
+    setStatus("");
+
     let value: unknown;
     try {
       value = makeInput();
     } catch (cause) {
-      const first =
-        cause && typeof cause === "object" && "issues" in cause
-          ? (cause as { issues?: Array<{ message?: string }> }).issues?.[0]
-              ?.message
-          : undefined;
-      setError(
-        first ?? (cause instanceof Error ? cause.message : "Periksa kembali data.")
-      );
-      setStatus("");
+      if (cause && typeof cause === "object" && "issues" in cause) {
+        const issues = (
+          cause as {
+            issues: Array<{
+              path?: (string | number)[];
+              message?: string;
+              code?: string;
+            }>;
+          }
+        ).issues;
+        const newFieldErrors: Record<string, string> = {};
+        const errorList: string[] = [];
+
+        for (const issue of issues) {
+          const fieldKey = issue.path?.[0] ? String(issue.path[0]) : "";
+          const fieldDef = fields[kind].find((f) => f.key === fieldKey);
+          const fieldLabel = fieldDef?.label ?? fieldKey;
+          const msg = formatFieldErrorMessage(fieldKey, issue.message ?? "Data tidak valid");
+
+          if (fieldKey) {
+            if (!newFieldErrors[fieldKey]) {
+              newFieldErrors[fieldKey] = msg;
+            }
+          }
+
+          const formattedMessage = fieldLabel ? `${fieldLabel}: ${msg}` : msg;
+          if (!errorList.includes(formattedMessage)) {
+            errorList.push(formattedMessage);
+          }
+        }
+
+        setFieldErrors(newFieldErrors);
+        setError(
+          errorList.length > 0
+            ? errorList.join(" • ")
+            : "Terdapat data yang tidak valid. Periksa kembali isian formulir."
+        );
+        return;
+      }
+      setError(cause instanceof Error ? cause.message : "Periksa kembali data.");
       return;
     }
+
     setBusy(true);
-    setError("");
-    setStatus("");
     try {
       const input = { id: selected?.id ?? null, value };
       const result =
@@ -470,10 +584,35 @@ export function AdminContentCollectionsPage({
           ? await savePackageAction(input)
           : await saveServiceAddonAction(input);
       if (!result.ok) {
-        setError(result.message);
+        if (result.fieldErrors && Object.keys(result.fieldErrors).length > 0) {
+          const mappedErrors: Record<string, string> = {};
+          const errorList: string[] = [];
+          for (const [key, rawMsg] of Object.entries(result.fieldErrors)) {
+            const fieldDef = fields[kind].find((f) => f.key === key);
+            const label = fieldDef?.label ?? key;
+            const msg = formatFieldErrorMessage(key, rawMsg);
+            mappedErrors[key] = msg;
+            errorList.push(`${label}: ${msg}`);
+          }
+          setFieldErrors(mappedErrors);
+          setError(errorList.join(" • "));
+        } else {
+          const msg = result.message;
+          const lower = msg.toLowerCase();
+          if (lower.includes("kategori")) {
+            setFieldErrors({ categoryId: msg });
+            setError(`Kategori Produk: ${msg}`);
+          } else if (lower.includes("diskon")) {
+            setFieldErrors({ discountEndsAt: msg, discountPrice: msg });
+            setError(`Diskon: ${msg}`);
+          } else {
+            setError(msg);
+          }
+        }
         return;
       }
       setStatus(`${meta.title} berhasil disimpan ke database.`);
+      setFieldErrors({});
       await load();
       setSelected(null);
       setForm(blankForm(kind));
@@ -536,22 +675,31 @@ export function AdminContentCollectionsPage({
 
   function renderField(field: Field): ReactNode {
     const value = form[field.key] ?? "";
+    const fieldError = fieldErrors[field.key];
+    const hasError = Boolean(fieldError);
+
     if (field.type === "checkbox")
       return (
-        <label
-          key={field.key}
-          className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer sm:col-span-2 pt-1"
-        >
-          <input
-            type="checkbox"
-            checked={value === true}
-            onChange={(e) =>
-              setForm((curr) => ({ ...curr, [field.key]: e.target.checked }))
-            }
-            className="rounded border-[#d4d4d8]"
-          />
-          {field.label}
-        </label>
+        <div key={field.key} className="sm:col-span-2 pt-1">
+          <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+            <input
+              type="checkbox"
+              checked={value === true}
+              onChange={(e) => {
+                setForm((curr) => ({ ...curr, [field.key]: e.target.checked }));
+                clearFieldError(field.key);
+              }}
+              className="rounded border-[#d4d4d8]"
+            />
+            <span className={hasError ? "text-red-700 font-semibold" : ""}>{field.label}</span>
+          </label>
+          {hasError ? (
+            <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-red-600">
+              <span className="symbol text-xs">error</span>
+              <span>{fieldError}</span>
+            </p>
+          ) : null}
+        </div>
       );
     if (field.type === "select") {
       const options =
@@ -562,15 +710,25 @@ export function AdminContentCollectionsPage({
             }))
           : field.options ?? [];
       return (
-        <label key={field.key} className="grid gap-1 text-xs font-medium text-[#52525b]">
-          {field.label}
+        <label key={field.key} className={`grid gap-1 text-xs font-medium ${hasError ? "text-red-700" : "text-[#52525b]"}`}>
+          <div className="flex items-center justify-between">
+            <span>{field.label}</span>
+            {hasError ? (
+              <span className="text-[10px] font-semibold text-red-600 uppercase tracking-wider">Periksa Kolom</span>
+            ) : null}
+          </div>
           <select
             required
             value={String(value)}
-            onChange={(e) =>
-              setForm((curr) => ({ ...curr, [field.key]: e.target.value }))
-            }
-            className={inputClass}
+            onChange={(e) => {
+              setForm((curr) => ({ ...curr, [field.key]: e.target.value }));
+              clearFieldError(field.key);
+            }}
+            className={`${inputClass} ${
+              hasError
+                ? "!border-red-500 !bg-red-50/40 text-red-950 focus:!border-red-600 focus:ring-1 focus:ring-red-500"
+                : ""
+            }`}
           >
             <option value="">Pilih…</option>
             {options.map((opt) => (
@@ -579,6 +737,12 @@ export function AdminContentCollectionsPage({
               </option>
             ))}
           </select>
+          {hasError ? (
+            <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-red-600">
+              <span className="symbol text-xs">error</span>
+              <span>{fieldError}</span>
+            </p>
+          ) : null}
         </label>
       );
     }
@@ -586,9 +750,14 @@ export function AdminContentCollectionsPage({
       return (
         <label
           key={field.key}
-          className="grid gap-1 text-xs font-medium text-[#52525b] sm:col-span-2"
+          className={`grid gap-1 text-xs font-medium sm:col-span-2 ${hasError ? "text-red-700" : "text-[#52525b]"}`}
         >
-          {field.label}
+          <div className="flex items-center justify-between">
+            <span>{field.label}</span>
+            {hasError ? (
+              <span className="text-[10px] font-semibold text-red-600 uppercase tracking-wider">Periksa Kolom</span>
+            ) : null}
+          </div>
           <textarea
             rows={
               field.key === "quote" ||
@@ -598,16 +767,32 @@ export function AdminContentCollectionsPage({
                 : 3
             }
             value={String(value)}
-            onChange={(e) =>
-              setForm((curr) => ({ ...curr, [field.key]: e.target.value }))
-            }
-            className="w-full rounded-[10px] bg-[#f0f0f0] p-3 text-xs text-[#18181a] outline-none border border-transparent focus:border-[#18181a] resize-y"
+            onChange={(e) => {
+              setForm((curr) => ({ ...curr, [field.key]: e.target.value }));
+              clearFieldError(field.key);
+            }}
+            className={`w-full rounded-[10px] p-3 text-xs outline-none border resize-y transition-all ${
+              hasError
+                ? "border-red-500 bg-red-50/40 text-red-950 focus:border-red-600 focus:ring-1 focus:ring-red-500"
+                : "border-transparent bg-[#f0f0f0] text-[#18181a] focus:border-[#18181a]"
+            }`}
           />
+          {hasError ? (
+            <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-red-600">
+              <span className="symbol text-xs">error</span>
+              <span>{fieldError}</span>
+            </p>
+          ) : null}
         </label>
       );
     return (
-      <label key={field.key} className="grid gap-1 text-xs font-medium text-[#52525b]">
-        {field.label}
+      <label key={field.key} className={`grid gap-1 text-xs font-medium ${hasError ? "text-red-700" : "text-[#52525b]"}`}>
+        <div className="flex items-center justify-between">
+          <span>{field.label}</span>
+          {hasError ? (
+            <span className="text-[10px] font-semibold text-red-600 uppercase tracking-wider">Periksa Kolom</span>
+          ) : null}
+        </div>
         <input
           type={
             field.type === "number"
@@ -622,11 +807,22 @@ export function AdminContentCollectionsPage({
             !["discountPrice", "extraRevisionPrice"].includes(field.key)
           }
           value={String(value)}
-          onChange={(e) =>
-            setForm((curr) => ({ ...curr, [field.key]: e.target.value }))
-          }
-          className={inputClass}
+          onChange={(e) => {
+            setForm((curr) => ({ ...curr, [field.key]: e.target.value }));
+            clearFieldError(field.key);
+          }}
+          className={`${inputClass} ${
+            hasError
+              ? "!border-red-500 !bg-red-50/40 text-red-950 focus:!border-red-600 focus:ring-1 focus:ring-red-500"
+              : ""
+          }`}
         />
+        {hasError ? (
+          <p className="mt-1 flex items-center gap-1 text-[11px] font-medium text-red-600">
+            <span className="symbol text-xs">error</span>
+            <span>{fieldError}</span>
+          </p>
+        ) : null}
       </label>
     );
   }
@@ -653,9 +849,26 @@ export function AdminContentCollectionsPage({
       }
     >
       {error ? (
-        <div className="mb-4 rounded-[12px] border border-red-200 bg-red-50 p-3.5 text-xs text-red-800 flex items-center gap-2">
-          <span className="symbol text-base">error</span>
-          <span>{error}</span>
+        <div className="mb-4 rounded-[12px] border border-red-200 bg-red-50 p-3.5 text-xs text-red-800">
+          <div className="flex items-start gap-2">
+            <span className="symbol text-base shrink-0 mt-0.5">error</span>
+            <div className="flex-1 space-y-1">
+              <p className="font-semibold text-red-900 m-0">
+                Terjadi kesalahan input data:
+              </p>
+              <div className="text-red-800">
+                {error.includes(" • ") ? (
+                  <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                    {error.split(" • ").map((err, idx) => (
+                      <li key={idx}>{err}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="m-0 mt-0.5">{error}</p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       ) : null}
       {status ? (

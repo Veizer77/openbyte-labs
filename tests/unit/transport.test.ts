@@ -202,6 +202,9 @@ describe("pemetaan galat action", () => {
       ok: false,
       code: "input_tidak_valid",
       message: "Nama minimal 2 karakter.",
+      fieldErrors: {
+        name: "Nama minimal 2 karakter.",
+      },
     });
   });
 });

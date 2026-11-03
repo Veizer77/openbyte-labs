@@ -29,6 +29,7 @@ export type ActionFailure = {
   ok: false;
   code: ActionErrorCode;
   message: string;
+  fieldErrors?: Record<string, string>;
 };
 
 export type ActionResult<T> = { ok: true; data: T } | ActionFailure;
@@ -39,8 +40,19 @@ export function ok<T>(data: T): ActionResult<T> {
   return { ok: true, data };
 }
 
-export function fail(code: ActionErrorCode, message: string): ActionFailure {
-  return { ok: false, code, message };
+export function fail(
+  code: ActionErrorCode,
+  message: string,
+  fieldErrors?: Record<string, string>,
+): ActionFailure {
+  return {
+    ok: false,
+    code,
+    message,
+    ...(fieldErrors && Object.keys(fieldErrors).length > 0
+      ? { fieldErrors }
+      : {}),
+  };
 }
 
 /**
@@ -50,9 +62,17 @@ export function fail(code: ActionErrorCode, message: string): ActionFailure {
  */
 export function toFailure(error: unknown): ActionFailure {
   if (error instanceof ZodError) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of error.issues) {
+      const field = issue.path[0];
+      if (typeof field === "string" && !fieldErrors[field]) {
+        fieldErrors[field] = issue.message;
+      }
+    }
     return fail(
       "input_tidak_valid",
       error.issues[0]?.message ?? "Data yang dikirim tidak valid.",
+      fieldErrors,
     );
   }
   if (error instanceof AccessDeniedError) {

@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import type { AdminPrincipal } from "@/access/rules";
+import { packageInputSchema } from "@/schemas/packages";
 import {
   listPublicPackages,
   savePackage,
@@ -149,5 +150,52 @@ describe("paket layanan", () => {
     ).resolves.toBeUndefined();
     expect(ctx.audit).toHaveBeenCalledWith(editor.id, "delete", id);
     expect(ctx.audit).toHaveBeenCalledWith(editor.id, "restore", id);
+  });
+  it("menerima discountEndsAt berupa Date, string ISO, string datetime-local, dan memetakan field error", () => {
+    const fromDate = packageInputSchema.parse({
+      ...input,
+      discountEndsAt: new Date("2026-11-01T00:00:00Z"),
+    });
+    expect(fromDate.discountEndsAt).toBeInstanceOf(Date);
+
+    const fromIso = packageInputSchema.parse({
+      ...input,
+      discountEndsAt: "2026-11-01T00:00:00Z",
+    });
+    expect(fromIso.discountEndsAt).toBeInstanceOf(Date);
+
+    const fromLocal = packageInputSchema.parse({
+      ...input,
+      discountEndsAt: "2026-11-04T12:00",
+    });
+    expect(fromLocal.discountEndsAt).toBeInstanceOf(Date);
+
+    const fromNull = packageInputSchema.parse({
+      ...input,
+      discountPrice: null,
+      discountEndsAt: null,
+    });
+    expect(fromNull.discountEndsAt).toBeNull();
+
+    // Pastikan error memiliki path field yang tepat
+    const invalidDiscount = packageInputSchema.safeParse({
+      ...input,
+      discountPrice: 500_000,
+      discountEndsAt: null,
+    });
+    expect(invalidDiscount.success).toBe(false);
+    if (!invalidDiscount.success) {
+      expect(invalidDiscount.error.issues[0]?.path).toEqual(["discountEndsAt"]);
+    }
+
+    const invalidPrice = packageInputSchema.safeParse({
+      ...input,
+      discountPrice: 2_000_000,
+      price: 1_000_000,
+    });
+    expect(invalidPrice.success).toBe(false);
+    if (!invalidPrice.success) {
+      expect(invalidPrice.error.issues[0]?.path).toEqual(["discountPrice"]);
+    }
   });
 });

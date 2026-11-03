@@ -9,7 +9,14 @@ import {
 } from "@/components/preview/Controls";
 import type { PublicCatalog } from "@/lib/server/public-catalog";
 import { normalizeWhatsapp } from "@/lib/whatsapp";
+import { rupiah } from "@/lib/format";
 
+/**
+ * Halaman ini tetap memakai tata letak hasil porting prototype, tetapi seluruh
+ * isi kartu (nama, harga, estimasi, revisi, fitur, CTA) dibaca dari database.
+ * Tanpa ini, perubahan paket di admin panel tidak pernah muncul di halaman
+ * publik: harga dan tautan CTA tertinggal sebagai teks statis.
+ */
 export default function SitePaketLayananHarga({
   catalog,
 }: {
@@ -20,6 +27,36 @@ export default function SitePaketLayananHarga({
   const whatsappUrl = whatsappDigits
     ? `https://wa.me/${whatsappDigits}?text=${encodeURIComponent("Halo OpenByte Labs, saya ingin mendiskusikan paket layanan.")}`
     : "/konsultasi";
+
+  const packages = catalog?.packages ?? [];
+  const packageBySlug = (slug: string) =>
+    packages.find((item) => item.slug === slug);
+  const starter = packageBySlug("starter-umkm");
+  const mobile = packageBySlug("mobile-application");
+  const informasi = packageBySlug("sistem-informasi");
+  const jumlahRevisi = (value: number | undefined) =>
+    typeof value === "number" ? `${value}x` : "—";
+  const hargaRevisi = (value: number | null | undefined) =>
+    typeof value === "number" ? `${rupiah(value)}/sesi` : "—";
+  const labelCta = (pkg: { ctaLabel: string; name: string } | undefined, fallback: string) =>
+    pkg?.ctaLabel?.trim() ? pkg.ctaLabel : fallback;
+  /** Kartu menampilkan "Rp" terpisah dari angkanya, jadi hanya digit yang diisi. */
+  const angkaRupiah = (value: number | undefined) =>
+    typeof value === "number" ? new Intl.NumberFormat("id-ID").format(value) : "—";
+  const labelBilling = (
+    pkg:
+      | { billingType: string; price: number; effectivePrice: number }
+      | undefined,
+  ) => {
+    if (!pkg) return "Investasi awal • One-time payment";
+    if (pkg.billingType === "subscription_yearly") return "Langganan tahunan";
+    if (pkg.billingType === "custom") return "Sesuai ruang lingkup";
+    // Tata letak tidak punya slot harga coret, jadi harga normal ditulis di
+    // keterangan agar angka diskon tidak tampil tanpa pembanding.
+    if (pkg.effectivePrice < pkg.price)
+      return `Harga normal ${rupiah(pkg.price)}`;
+    return "Investasi awal • One-time payment";
+  };
 
   return (
     <ScreenState screen={"site/paket-layanan-harga"}>
@@ -242,7 +279,9 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {"Estimasi 7 Hari"}
+                        {starter
+                          ? `Estimasi ${starter.estimatedDays} Hari`
+                          : "Estimasi 7 Hari"}
                       </div>
                     </div>
                   </div>
@@ -260,7 +299,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Starter UMKM & Bisnis"}
                       data-text="true"
                     >
-                      {"Starter UMKM & Bisnis"}
+                      {starter?.name ?? "Starter UMKM & Bisnis"}
                     </div>
                     <div
                       className={
@@ -272,7 +311,9 @@ export default function SitePaketLayananHarga({
                       data-text="true"
                     >
                       {
-                        "Landing page konversi tinggi dengan arsitektur modern & loading sub-detik."
+                        starter?.targetMarket?.trim()
+                          ? starter.targetMarket
+                          : "Landing page konversi tinggi dengan arsitektur modern & loading sub-detik."
                       }
                     </div>
                   </div>
@@ -304,7 +345,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"1.000.000"}
                         data-text="true"
                       >
-                        {"1.000.000"}
+                        {angkaRupiah(starter?.effectivePrice)}
                       </div>
                     </div>
                     <div
@@ -314,7 +355,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Investasi awal • One-time payment"}
                       data-text="true"
                     >
-                      {"Investasi awal • One-time payment"}
+                      {labelBilling(starter)}
                     </div>
                   </div>
                   <div
@@ -346,7 +387,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"2x Sesi"}
                         data-text="true"
                       >
-                        {"2x Sesi"}
+                        {jumlahRevisi(starter?.includedRevisions)}
                       </div>
                     </div>
                     <div
@@ -371,7 +412,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"Rp 100.000/sesi"}
                         data-text="true"
                       >
-                        {"Rp 100.000/sesi"}
+                        {hargaRevisi(starter?.extraRevisionPrice)}
                       </div>
                     </div>
                   </div>
@@ -419,9 +460,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {
-                          "Landing page / profil instansi hingga 5 halaman modular"
-                        }
+                        {starter?.features[0] ??
+                          "Landing page / profil instansi hingga 5 halaman modular"}
                       </div>
                     </div>
                     <div
@@ -453,9 +493,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {
-                          "Desain responsif mobile-first & ultra-fast Core Web Vitals"
-                        }
+                        {starter?.features[1] ??
+                          "Desain responsif mobile-first & ultra-fast Core Web Vitals"}
                       </div>
                     </div>
                     <div
@@ -487,9 +526,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {
-                          "Integrasi tombol interaktif WhatsApp Direct order router"
-                        }
+                        {starter?.features[2] ??
+                          "Integrasi tombol interaktif WhatsApp Direct order router"}
                       </div>
                     </div>
                     <div
@@ -520,9 +558,8 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {
-                          "SEO on-page dasar (Schema JSON-LD, OpenGraph, Sitemap)"
-                        }
+                        {starter?.features[3] ??
+                          "SEO on-page dasar (Schema JSON-LD, OpenGraph, Sitemap)"}
                       </div>
                     </div>
                     <div
@@ -554,7 +591,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {"Setup domain, DNS management, & SSL Cloudflare"}
+                        {starter?.features[4] ??
+                          "Setup domain, DNS management, & SSL Cloudflare"}
                       </div>
                     </div>
                   </div>
@@ -567,7 +605,7 @@ export default function SitePaketLayananHarga({
                   data-section-padding="true"
                 >
                   <Link
-                    href={"/pesan?paket=starter-umkm"}
+                    href={`/pesan?paket=${encodeURIComponent(starter?.slug ?? "starter-umkm")}`}
                     className={
                       "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
@@ -580,7 +618,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Pilih Paket Starter"}
                       data-text="true"
                     >
-                      {"Pilih Paket Starter"}
+                      {labelCta(starter, "Pilih Paket Starter")}
                     </div>
                     <div
                       className={
@@ -634,7 +672,9 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {"Estimasi 30 Hari"}
+                        {mobile
+                          ? `Estimasi ${mobile.estimatedDays} Hari`
+                          : "Estimasi 30 Hari"}
                       </div>
                     </div>
                   </div>
@@ -652,7 +692,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Mobile Application Flutter"}
                       data-text="true"
                     >
-                      {"Mobile Application Flutter"}
+                      {mobile?.name ?? "Mobile Application Flutter"}
                     </div>
                     <div
                       className={
@@ -664,7 +704,9 @@ export default function SitePaketLayananHarga({
                       data-text="true"
                     >
                       {
-                        "Aplikasi ponsel berperforma 60fps dengan kemampuan sinkronisasi offline-first."
+                        mobile?.targetMarket?.trim()
+                          ? mobile.targetMarket
+                          : "Aplikasi ponsel berperforma 60fps dengan kemampuan sinkronisasi offline-first."
                       }
                     </div>
                   </div>
@@ -696,7 +738,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"4.500.000"}
                         data-text="true"
                       >
-                        {"4.500.000"}
+                        {angkaRupiah(mobile?.effectivePrice)}
                       </div>
                     </div>
                     <div
@@ -706,7 +748,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Siap rilis produksi Android"}
                       data-text="true"
                     >
-                      {"Siap rilis produksi Android"}
+                      {labelBilling(mobile)}
                     </div>
                   </div>
                   <div
@@ -738,7 +780,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"4x Sesi"}
                         data-text="true"
                       >
-                        {"4x Sesi"}
+                        {jumlahRevisi(mobile?.includedRevisions)}
                       </div>
                     </div>
                     <div
@@ -763,7 +805,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"Rp 300.000/sesi"}
                         data-text="true"
                       >
-                        {"Rp 300.000/sesi"}
+                        {hargaRevisi(mobile?.extraRevisionPrice)}
                       </div>
                     </div>
                   </div>
@@ -811,9 +853,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {
-                          "Aplikasi Android native-feel dibangun dengan Flutter & Dart"
-                        }
+                        {mobile?.features[0] ??
+                          "Aplikasi Android native-feel dibangun dengan Flutter & Dart"}
                       </div>
                     </div>
                     <div
@@ -845,9 +886,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {
-                          "Arsitektur offline-first berbasis local database SQLite / Hive"
-                        }
+                        {mobile?.features[1] ??
+                          "Arsitektur offline-first berbasis local database SQLite / Hive"}
                       </div>
                     </div>
                     <div
@@ -878,9 +918,8 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {
-                          "Akses hardware teruji: Geolocation GPS & integrasi modul kamera"
-                        }
+                        {mobile?.features[2] ??
+                          "Akses hardware teruji: Geolocation GPS & integrasi modul kamera"}
                       </div>
                     </div>
                     <div
@@ -911,9 +950,8 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {
-                          "Integrasi REST API backend, token refresh, & data sync queue"
-                        }
+                        {mobile?.features[3] ??
+                          "Integrasi REST API backend, token refresh, & data sync queue"}
                       </div>
                     </div>
                     <div
@@ -959,7 +997,7 @@ export default function SitePaketLayananHarga({
                   data-section-padding="true"
                 >
                   <Link
-                    href={"/pesan?paket=mobile-flutter"}
+                    href={`/pesan?paket=${encodeURIComponent(mobile?.slug ?? "mobile-application")}`}
                     className={
                       "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
@@ -972,7 +1010,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Pilih Paket Mobile App"}
                       data-text="true"
                     >
-                      {"Pilih Paket Mobile App"}
+                      {labelCta(mobile, "Pilih Paket Mobile App")}
                     </div>
                     <div
                       className={
@@ -1050,7 +1088,9 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {"Estimasi 21 Hari"}
+                        {informasi
+                          ? `Estimasi ${informasi.estimatedDays} Hari`
+                          : "Estimasi 21 Hari"}
                       </div>
                     </div>
                   </div>
@@ -1068,7 +1108,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Sistem Informasi / Instansi"}
                       data-text="true"
                     >
-                      {"Sistem Informasi / Instansi"}
+                      {informasi?.name ?? "Sistem Informasi / Instansi"}
                     </div>
                     <div
                       className={
@@ -1080,7 +1120,9 @@ export default function SitePaketLayananHarga({
                       data-text="true"
                     >
                       {
-                        "Solusi operasional otomatis, basis data relasional stabil, dan kontrol akses berjenjang."
+                        informasi?.targetMarket?.trim()
+                          ? informasi.targetMarket
+                          : "Solusi operasional otomatis, basis data relasional stabil, dan kontrol akses berjenjang."
                       }
                     </div>
                   </div>
@@ -1112,7 +1154,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"3.500.000"}
                         data-text="true"
                       >
-                        {"3.500.000"}
+                        {angkaRupiah(informasi?.effectivePrice)}
                       </div>
                     </div>
                     <div
@@ -1124,7 +1166,9 @@ export default function SitePaketLayananHarga({
                       }
                       data-text="true"
                     >
-                      {"Direkomendasikan untuk Efisiensi Bisnis"}
+                      {informasi?.isPopular
+                        ? "Direkomendasikan untuk Efisiensi Bisnis"
+                        : labelBilling(informasi)}
                     </div>
                   </div>
                   <div
@@ -1156,7 +1200,9 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"3x Sesi Penuh"}
                         data-text="true"
                       >
-                        {"3x Sesi Penuh"}
+                        {typeof informasi?.includedRevisions === "number"
+                          ? `${informasi.includedRevisions}x Sesi Penuh`
+                          : "3x Sesi Penuh"}
                       </div>
                     </div>
                     <div
@@ -1181,7 +1227,7 @@ export default function SitePaketLayananHarga({
                         data-pencil-name={"Rp 250.000/sesi"}
                         data-text="true"
                       >
-                        {"Rp 250.000/sesi"}
+                        {hargaRevisi(informasi?.extraRevisionPrice)}
                       </div>
                     </div>
                   </div>
@@ -1228,9 +1274,8 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {
-                          "Database relasional terintegrasi ACID (PostgreSQL / Supabase)"
-                        }
+                        {informasi?.features[0] ??
+                          "Database relasional terintegrasi ACID (PostgreSQL / Supabase)"}
                       </div>
                     </div>
                     <div
@@ -1261,9 +1306,8 @@ export default function SitePaketLayananHarga({
                         data-text="true"
                         data-responsive="fixed"
                       >
-                        {
-                          "Manajemen otentikasi multi-role RBAC (SuperAdmin, Staff, Client)"
-                        }
+                        {informasi?.features[1] ??
+                          "Manajemen otentikasi multi-role RBAC (SuperAdmin, Staff, Client)"}
                       </div>
                     </div>
                     <div
@@ -1295,9 +1339,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {
-                          "Dashboard admin analitik komprehensif & KPI metrik visual"
-                        }
+                        {informasi?.features[2] ??
+                          "Dashboard admin analitik komprehensif & KPI metrik visual"}
                       </div>
                     </div>
                     <div
@@ -1329,9 +1372,8 @@ export default function SitePaketLayananHarga({
                         }
                         data-text="true"
                       >
-                        {
-                          "Engine ekspor laporan PDF terstruktur & spreadsheet Excel"
-                        }
+                        {informasi?.features[3] ??
+                          "Engine ekspor laporan PDF terstruktur & spreadsheet Excel"}
                       </div>
                     </div>
                     <div
@@ -1378,7 +1420,7 @@ export default function SitePaketLayananHarga({
                   data-section-padding="true"
                 >
                   <Link
-                    href={"/pesan?paket=sistem-informasi"}
+                    href={`/pesan?paket=${encodeURIComponent(informasi?.slug ?? "sistem-informasi")}`}
                     className={
                       "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
                     }
@@ -1392,7 +1434,7 @@ export default function SitePaketLayananHarga({
                       data-pencil-name={"Pilih Paket Sistem Informasi"}
                       data-text="true"
                     >
-                      {"Pilih Paket Sistem Informasi"}
+                      {labelCta(informasi, "Pilih Paket Sistem Informasi")}
                     </div>
                     <div
                       className={
