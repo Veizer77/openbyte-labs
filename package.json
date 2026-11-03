@@ -27,6 +27,7 @@
     "db:backup": "node --conditions=react-server --import tsx scripts/backup.ts",
     "db:restore:drill": "node --conditions=react-server --import tsx scripts/restore-drill.ts",
     "db:seed:foundation": "node --conditions=react-server --import tsx scripts/seed-foundation.ts",
+    "db:sync:content": "node --conditions=react-server --import tsx scripts/sync-release-content.ts",
     "owner:create": "node --conditions=react-server --import tsx scripts/create-owner.ts",
     "prototype:import": "node scripts/import-prototype.mjs",
     "check:portability": "node scripts/check-portability.mjs",
