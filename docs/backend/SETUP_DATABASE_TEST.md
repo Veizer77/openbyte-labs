@@ -2,6 +2,12 @@
 
 Panduan ini hanya menyiapkan **target uji**. Tidak ada migrasi otomatis, tidak ada kredensial yang ditulis ke repo, dan tidak ada perintah di sini yang boleh dijalankan terhadap database produksi.
 
+> **Status setelah Rilis 1 (4 November 2026):** branch `dev` memuat beberapa
+> database legacy yang **bukan** target aplikasi. Daftar lengkapnya ada di
+> `docs/RELEASE-1-2026-11-03.md` §1.3. Yang paling berbahaya: `openbyte_labs`
+> ada di **dua** branch dengan isi berbeda — selalu periksa branch, bukan hanya
+> nama database.
+
 ## 1. Buat branch Neon khusus test
 
 Pilih salah satu, keduanya menghasilkan PostgreSQL terpisah dari branch `main`/produksi:
@@ -63,7 +69,7 @@ pnpm test:integration
 ## 3. Urutan perintah (manual, satu per satu)
 
 ```powershell
-pnpm db:migrate           # menjalankan 0000–0015 lewat koneksi langsung
+pnpm db:migrate           # menjalankan seluruh migrasi (20/20) lewat koneksi langsung
 pnpm db:preflight         # verifikasi read-only: tabel, migrasi, constraint, seed
 pnpm db:seed:foundation   # Settings, jadwal, FAQ, kalkulator, paket
 pnpm db:preflight         # harus lulus sebelum tes integrasi
@@ -82,8 +88,8 @@ Gunakan koneksi direct dan `DATABASE_PREFLIGHT_TARGET` yang telah disetujui. Ope
 
 `pnpm db:preflight` memeriksa:
 
-- seluruh tabel di `EXPECTED_TABLES` hasil migrasi `0000`–`0015` ada;
-- `drizzle.__drizzle_migrations` berisi tepat 16 baris;
+- seluruh tabel di `EXPECTED_TABLES` hasil migrasi ada;
+- `drizzle.__drizzle_migrations` berisi jumlah baris yang sama dengan jumlah berkas jurnal migrasi (saat Rilis 1: **20**);
 - constraint `consultation_bookings_no_overlap` bertipe exclusion ada;
 - marker `availability-v1`, `faq-v1`, `calculator-v1`, `packages-v1` ada;
 - Settings berisi satu baris dan tabel seed terisi;

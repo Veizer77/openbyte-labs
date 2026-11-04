@@ -2,6 +2,11 @@ import assert from "node:assert/strict";
 
 const base = process.env.SMOKE_BASE_URL ?? "http://localhost:3002";
 const trackingEnabled = process.env.SMOKE_TRACKING_ENABLED === "true";
+// Saat indexing publik menyala (S7), header `x-robots-tag: noindex` hanya
+// dipertahankan pada rute yang memang tidak boleh diindeks.
+const indexingEnabled = process.env.SMOKE_INDEXING_ENABLED === "true";
+const alwaysNoindex = (route) =>
+  /^\/(admin|tracking|api)(\/|$)/.test(route);
 const routes = [
   ["/", 200],
   ["/proyek", 200],
@@ -50,7 +55,11 @@ for (const [route, expected] of routes) {
     assert.match(await response.text(), /Verifikasi &amp; Buka Dasbor Proyek/);
     assert.match(response.headers.get("cache-control") ?? "", /no-store/);
   }
-  assert.match(response.headers.get("x-robots-tag") ?? "", /noindex/);
+  // Saat indexing mati, seluruh respons wajib noindex. Saat indexing menyala,
+  // hanya rute privat (/admin, /tracking, /api) yang tetap noindex.
+  if (!indexingEnabled || alwaysNoindex(route)) {
+    assert.match(response.headers.get("x-robots-tag") ?? "", /noindex/);
+  }
   assert.equal(response.headers.get("x-content-type-options"), "nosniff");
   assert.match(response.headers.get("content-security-policy") ?? "", /default-src 'self'/);
   assert.match(response.headers.get("strict-transport-security") ?? "", /max-age=31536000/);
