@@ -503,8 +503,13 @@ export function ContactForm({
         )}
       </button>
 
-      <p className="text-[11px] text-[#52525b] text-center w-full m-0">
-        Pemberitahuan privasi dan kontrol keamanan perlu diverifikasi sebelum formulir digunakan untuk produksi.
+      <p className="flex items-center justify-center gap-2 text-[11px] leading-[14px] font-medium tracking-[0.22px] text-[#52525b] text-center w-full m-0">
+        <span className="symbol text-base text-[#82b440]" aria-hidden="true">
+          check_circle
+        </span>
+        {kind === "booking"
+          ? "Setelah pengajuan, sistem menerbitkan nomor referensi unik dan tautan otomatis untuk ditambahkan ke Google Calendar."
+          : "Setelah pengajuan, sistem menerbitkan nomor referensi unik yang dapat Anda simpan sebagai bukti permintaan."}
       </p>
     </form>
   );

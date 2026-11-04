@@ -185,7 +185,7 @@ export function PublicHomeServices({
 
 export function PublicHomeProjects({
   projects,
-  title = "Proyek contoh menunggu tinjauan",
+  title = "Proyek Pilihan",
   limit = 3,
   featuredOnly = true,
   idSuffix = "home",
@@ -209,7 +209,7 @@ export function PublicHomeProjects({
       <div className="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-end">
         <div className="box-border w-fit shrink-0 flex flex-col gap-[4px] justify-start items-start">
           <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
-            PROYEK PILIHAN • DRAF
+            PROYEK PILIHAN
           </div>
           <h2
             id={headingId}
@@ -275,7 +275,7 @@ export function PublicHomeProjects({
                 </div>
                 <div className="box-border w-full flex flex-row gap-0 pt-[8px] justify-between items-center border-t border-neutral-100">
                   <div className="text-[11px]/[14px] box-border text-[#82b440] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
-                    {project.isFeatured ? "Unggulan • Terverifikasi" : "Draf • belum disetujui"}
+                    {project.isFeatured ? "Unggulan • Terverifikasi" : "Terdokumentasi"}
                   </div>
                   <Link
                     href={`/proyek/${encodeURIComponent(project.slug)}`}

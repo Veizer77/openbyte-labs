@@ -178,8 +178,8 @@ export function PrivacyPage({
               </div>
             ) : (
               <>
-                <div className="rounded-[12px] border border-amber-300 bg-amber-50 p-4 text-xs sm:text-sm leading-6 text-amber-950">
-                  Draf untuk ditinjau dan disetujui sebelum penggunaan produksi. Rincian pengendali data, dasar hukum, penyedia pemroses, dan jadwal retensi dikonfirmasi oleh pemilik sebelum peluncuran resmi.
+                <div className="rounded-[12px] border border-neutral-200 bg-[#f0f0f0] p-4 text-xs sm:text-sm leading-6 text-[#52525b]">
+                  Ringkasan kebijakan privasi ini menjelaskan data yang kami kumpulkan melalui formulir publik dan cara kami menggunakannya. Rincian pengendali data, dasar hukum pemrosesan, penyedia pemroses, dan jadwal retensi diatur dalam perjanjian kerja sama.
                 </div>
 
                 <div className="p-6 sm:p-8 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-6 text-sm leading-7 text-[#52525b]">
@@ -268,8 +268,8 @@ export function TermsPage({ settings }: { settings?: PublicSiteSettings }) {
           </aside>
 
           <div className="lg:col-span-8 flex flex-col gap-6">
-            <div className="rounded-[12px] border border-amber-300 bg-amber-50 p-4 text-xs sm:text-sm leading-6 text-amber-950">
-              Draf informasi umum untuk ditinjau. Ketentuan spesifik seperti jadwal pencairan, milestone, dan kuota revisi final dicantumkan dalam Surat Perjanjian Kerja (SPK) resmi sebelum eksekusi proyek dimulai.
+            <div className="rounded-[12px] border border-neutral-200 bg-[#f0f0f0] p-4 text-xs sm:text-sm leading-6 text-[#52525b]">
+              Ketentuan spesifik seperti jadwal pencairan, milestone, dan kuota revisi final dicantumkan dalam Surat Perjanjian Kerja (SPK) resmi sebelum eksekusi proyek dimulai.
             </div>
 
             <div className="p-6 sm:p-8 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-6 text-sm leading-7 text-[#52525b]">
