@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs/config";
 import { publicIndexingEnabled } from "./src/lib/indexing";
 
-const config: NextConfig = {
+const nextConfig: NextConfig = {
   distDir: process.env.NEXT_OUTPUT_DIR || ".next",
   poweredByHeader: false,
   redirects() {
@@ -47,4 +48,29 @@ const config: NextConfig = {
   },
 };
 
-export default config;
+/**
+ * Source map upload is opt-in: it only runs when the build has a Sentry auth
+ * token plus the organization and project slugs. CI builds have none of them,
+ * so the wrapper is skipped and the build stays a plain `next build`.
+ * `org`/`project` are slugs (not secrets); `SENTRY_AUTH_TOKEN` is read from the
+ * environment by the Sentry build plugin and never written into this file.
+ */
+const sentryOrg = process.env.SENTRY_ORG?.trim();
+const sentryProject = process.env.SENTRY_PROJECT?.trim();
+const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN?.trim();
+
+export default sentryAuthToken && sentryOrg && sentryProject
+  ? withSentryConfig(nextConfig, {
+      org: sentryOrg,
+      project: sentryProject,
+      telemetry: false,
+      widenClientFileUpload: true,
+      // Source maps are deleted from the build output right after the upload
+      // attempt, so they are never served from the deployment. A failed upload
+      // therefore costs symbolication, not confidentiality.
+      sourcemaps: { deleteSourcemapsAfterUpload: true },
+      // Navigation tracing is disabled (tracesSampleRate: 0), so the router
+      // transition hook is intentionally not exported.
+      suppressOnRouterTransitionStartWarning: true,
+    })
+  : nextConfig;

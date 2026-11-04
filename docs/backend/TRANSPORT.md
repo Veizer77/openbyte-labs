@@ -1,4 +1,4 @@
-# Transport Layer — Server Actions & Route Handlers
+﻿# Transport Layer — Server Actions & Route Handlers
 
 **Dibangun:** mulai 30 Oktober 2026; direkonsiliasi 31 Oktober 2026; diperbarui 4 November 2026 (Rilis 1 final).
 **Status:** Server Actions dan route auth terhubung. Rilis 1 berjalan di produksi dengan Sentry aktif dan indexing menyala; lihat `docs/RELEASE-1-2026-11-03.md` untuk status gate terkini.
@@ -78,7 +78,15 @@ Integrasi terpasang dan **menerima event** di produksi:
 - `src/instrumentation-client.ts` — inisialisasi klien dengan `NEXT_PUBLIC_SENTRY_DSN`, replay dan tracing dimatikan (`tracesSampleRate: 0`).
 - `src/lib/monitoring.ts` — `beforeSend` membuang `user`, `request`, `breadcrumbs`, `extra`, `contexts`, `tags`, isi variabel frame, dan menormalkan pesan menjadi "Application error". Stack trace tetap dikirim agar error bisa dilacak tanpa membocorkan data pengguna.
 
-Bukti: DSN valid, endpoint ingest merespons `401` tanpa auth (hidup), DSN ter-embed di chunk client produksi, dan event uji diterima dengan HTTP 200 + event id. `SENTRY_AUTH_TOKEN` belum dipasang sehingga source map tidak ter-upload dan stack trace di dashboard masih ter-minify — tidak menghalangi rilis.
+Bukti: DSN valid, endpoint ingest merespons `401` tanpa auth (hidup), DSN ter-embed di chunk client produksi, dan event uji diterima dengan HTTP 200 + event id.
+
+**Source map (build-time).** Upload artifact diaktifkan lewat `withSentryConfig` di `next.config.ts`. Pembungkus itu **opsional dan bergerbang**: hanya dipakai bila `SENTRY_ORG`, `SENTRY_PROJECT`, dan `SENTRY_AUTH_TOKEN` semuanya terisi. Tanpa ketiganya (mis. job `quality` di CI yang hanya menjalankan `pnpm build`), konfigurasi keluar apa adanya sebagai `next build` biasa tanpa menghubungi Sentry.
+
+- `org`/`project` adalah **slug, bukan secret**; `SENTRY_AUTH_TOKEN` dibaca build plugin langsung dari environment dan tidak pernah ditulis di `next.config.ts`.
+- `widenClientFileUpload: true` ikut meng-upload chunk framework/Next internal, bukan hanya chunk aplikasi.
+- `deleteSourcemapsAfterUpload: true` menghapus `.map` dari output setelah percobaan upload, sehingga source map tidak pernah ikut tersaji dari deployment. Konsekuensinya kegagalan upload hanya menghilangkan symbolication, bukan membocorkan kode.
+- `telemetry: false` mematikan telemetri build SDK; `suppressOnRouterTransitionStartWarning: true` karena navigasi tracing memang dimatikan (`tracesSampleRate: 0`).
+- Build lokal dengan token dummy membuktikan wiring-nya jalan (plugin memanggil Sentry dan gagal `401`), dan `tests/unit/sentry-build-wiring.test.ts` menjaga agar gerbang token tidak hilang dan token tidak pernah masuk ke berkas konfigurasi.
 
 ### Turnstile (status 4 November 2026)
 
@@ -125,8 +133,8 @@ kredensial salah        → 401 (pesan generik)
 | Login/TOTP end-to-end pada Neon | Akun owner dengan TOTP aktif sudah ada di produksi dan sesi ditolak tanpa faktor kedua. Verifikasi dilakukan lewat data assurance per sesi, bukan sekadar flag pengguna. |
 | `owner:reset` | CLI break-glass tersedia, meminta target dan konfirmasi `RESET`, mengganti password, menonaktifkan 2FA, mencabut sesi, dan mengaudit; jangan jalankan tanpa target yang disetujui |
 | Integrasi UI belum menyeluruh | Form publik booking/inquiry/quote dan layar admin proyek, layanan, kategori/teknologi, media, kalkulator, booking/jadwal, inquiry, quote, settings, dan Page Builder terhubung. Paket/add-on, FAQ/testimoni, staf, audit UI, billing, dan portal masih perlu penyelesaian. |
-| Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi (endpoint pooler). CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry menerima event; uptime monitor dan uji restore belum selesai. |
-| Verifikasi layanan eksternal | 9 objek media terdaftar di database dan merujuk bucket R2 publik. Turnstile aktif di produksi; pengujian submission asli masih menunggu tindakan manusia karena challenge Cloudflare tidak dapat diselesaikan browser otomatis. |
+| Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi (endpoint pooler). CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry menerima event dan source map di-upload saat build (bergerbang token); uptime monitor dan uji restore belum selesai. |
+| Verifikasi layanan eksternal | 9 objek media terdaftar di database dan merujuk bucket R2 publik. Turnstile aktif di produksi dan submission asli sudah diuji manusia 3/3 (`INQ-2611-V23Y`, `QTE-2611-RSC6`, `BKG-2611-Q76A`). |
 | Cache | Route katalog memakai `force-dynamic` dan membaca DB per request; belum memakai fetch cache bertag. Jangan mengklaim integrasi cache tag end-to-end. |
 | Status akun | Akun owner produksi terverifikasi lewat pembacaan database (peran, status aktif, TOTP verified, backup codes). Kredensial dan secret tidak disimpan di dokumen. |
 
@@ -136,10 +144,10 @@ Typecheck, lint, unit test, dan build diverifikasi ulang pada 3 November 2026 (R
 
 | Pemeriksaan | Hasil |
 |---|---|
-| Unit tests | **355 lulus** di 74 berkas (4 Nov 2026) |
+| Unit tests | **366 lulus** di 77 berkas (4 Nov 2026) |
 | `pnpm test:integration` | **17 lulus** di 5 berkas terhadap database uji terisolasi |
 | `pnpm typecheck` | Lulus |
-| `pnpm lint` | 0 error, 8 warning (variabel tak terpakai) |
+| `pnpm lint` | 0 error, 9 warning (variabel tak terpakai, 1 `<img>`) |
 | `pnpm db:preflight --allow-production` | Lulus 12/12 pemeriksaan pada `main.openbyte_labs` |
 | `pnpm build` | Lulus pada Next.js 16.4.3 |
 | Smoke produksi | **26 dari 26** rute sesuai harapan (`SMOKE_INDEXING_ENABLED=true`, `SMOKE_TRACKING_ENABLED=false`) |
