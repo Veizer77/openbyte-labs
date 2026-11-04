@@ -14,7 +14,9 @@ export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!publicIndexingEnabled()) return [];
   const origin = publicSiteOrigin()!;
-  const paths = new Set(["/", "/proyek", "/paket", "/blog", "/kalkulator", "/tentang-kami", "/kebijakan-privasi", "/ketentuan-layanan"]);
+  const paths = new Set(["/", "/proyek", "/paket", "/kalkulator", "/tentang-kami", "/kebijakan-privasi", "/ketentuan-layanan"]);
+  // Catatan: "/blog" sengaja tidak dimasukkan. Modul editorial belum ada,
+  // jadi halaman itu hanya berisi keadaan kosong dan tidak layak diindeks.
   const store = createPublicProjectStore(getDb(), getEnv().R2_PUBLIC_BASE_URL);
   for (let offset = 0; ; offset += 100) {
     const batch = await listPublicProjects(store, { limit: 100, offset });

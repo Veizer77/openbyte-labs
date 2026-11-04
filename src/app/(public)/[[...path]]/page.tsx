@@ -101,6 +101,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         : settings?.seo.defaultTitle ?? "Halaman tidak ditemukan");
   const description = page?.metaDescription ?? projectDescription ?? settings?.seo.defaultDescription;
   const ogImage = page?.ogImageUrl ?? projectOgImage ?? settings?.seo.defaultOgImageUrl;
+  // /blog belum punya modul editorial sehingga isinya selalu keadaan kosong.
+  // Jangan pernah diindeks walau indexing publik sudah dinyalakan.
+  const indexingAllowed = publicIndexingEnabled() && path !== "blog";
   return {
     title: { absolute: title },
     description,
@@ -112,7 +115,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: ogImage ? [ogImage] : undefined,
       type: "website",
     },
-    robots: { index: publicIndexingEnabled(), follow: publicIndexingEnabled() },
+    robots: { index: indexingAllowed, follow: indexingAllowed },
   };
 }
 
