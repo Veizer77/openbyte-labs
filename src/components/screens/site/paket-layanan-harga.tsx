@@ -12,6 +12,48 @@ import { normalizeWhatsapp } from "@/lib/whatsapp";
 import { rupiah } from "@/lib/format";
 
 /**
+ * Satu baris spesifikasi: ikon di kiri, teks di kanan.
+ *
+ * Prototype memakai dua bentuk baris berbeda — sebagian `h-[26px]` dengan
+ * `items-center` dan `whitespace-nowrap`, sebagian lagi `h-[36px]` dengan
+ * posisi absolut. Karena teksnya kini berasal dari database (panjangnya
+ * bervariasi), bentuk campuran itu menghasilkan jarak yang tidak konsisten:
+ * tinggi baris 26px vs 36px, ikon meleset +3px atau −2px terhadap teks, dan
+ * teks panjang terpotong karena `nowrap`.
+ *
+ * Satu bentuk untuk semua baris: tinggi mengikuti isi, ikon sejajar di baris
+ * pertama teks, dan teks boleh membungkus. Jarak antar baris diatur oleh
+ * `gap` pada daftar induk, bukan oleh spacer manual.
+ */
+function PackageFeatureRow({
+  icon,
+  text,
+  tone,
+}: {
+  icon: "check_circle" | "verified";
+  text: string;
+  tone: "light" | "dark";
+}) {
+  const iconColor = tone === "dark" ? "text-[#e2e89d]" : "text-[#82b440]";
+  const textColor = tone === "dark" ? "text-[#ffffff]" : "text-[#18181a]";
+  return (
+    <li className="box-border w-full flex flex-row gap-[10px] justify-start items-start">
+      <span
+        className={`${iconColor} box-border shrink-0 w-[24px] text-[16px]/[24px] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left symbol`}
+        aria-hidden="true"
+      >
+        {icon}
+      </span>
+      <span
+        className={`${textColor} box-border [flex:1_1_0] min-w-0 text-[13px]/[18px] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left break-words`}
+      >
+        {text}
+      </span>
+    </li>
+  );
+}
+
+/**
  * Halaman ini tetap memakai tata letak hasil porting prototype, tetapi seluruh
  * isi kartu (nama, harga, estimasi, revisi, fitur, CTA) dibaca dari database.
  * Tanpa ini, perubahan paket di admin panel tidak pernah muncul di halaman
@@ -57,6 +99,9 @@ export default function SitePaketLayananHarga({
       return `Harga normal ${rupiah(pkg.price)}`;
     return "Investasi awal • One-time payment";
   };
+  /** Baris fitur kosong tidak dirender supaya tidak ada centang tanpa isi. */
+  const isiFitur = (feature: string | null | undefined): feature is string =>
+    typeof feature === "string" && feature.trim() !== "";
 
   return (
     <ScreenState screen={"site/paket-layanan-harga"}>
@@ -435,161 +480,16 @@ export default function SitePaketLayananHarga({
                       className={"box-border w-full h-[8px] shrink-0"}
                       data-pencil-name={"spacer"}
                     ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Landing page / profil instansi hingga 5 "
-                        }
-                        data-text="true"
-                      >
-                        {starter?.features[0] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Desain responsif mobile-first & ultra-fa"
-                        }
-                        data-text="true"
-                      >
-                        {starter?.features[1] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Integrasi tombol interaktif WhatsApp Dir"
-                        }
-                        data-text="true"
-                      >
-                        {starter?.features[2] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={"box-border w-full h-[36px] shrink-0 relative"}
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
-                        }
-                        data-pencil-name={
-                          "SEO on-page dasar (Schema JSON-LD, OpenG"
-                        }
-                        data-text="true"
-                        data-responsive="fixed"
-                      >
-                        {starter?.features[3] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Setup domain, DNS management, & SSL Clou"
-                        }
-                        data-text="true"
-                      >
-                        {starter?.features[4] ?? "—"}
-                      </div>
-                    </div>
+                    <ul className="box-border w-full m-0 p-0 list-none flex flex-col gap-[6px] justify-start items-start">
+                      {(starter?.features ?? []).filter(isiFitur).map((feature, index) => (
+                        <PackageFeatureRow
+                          key={`${feature}-${index}`}
+                          icon="check_circle"
+                          text={feature}
+                          tone="light"
+                        />
+                      ))}
+                    </ul>
                   </div>
                 </div>
                 <div
@@ -823,161 +723,16 @@ export default function SitePaketLayananHarga({
                       className={"box-border w-full h-[8px] shrink-0"}
                       data-pencil-name={"spacer"}
                     ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Aplikasi Android native-feel dibangun de"
-                        }
-                        data-text="true"
-                      >
-                        {mobile?.features[0] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Arsitektur offline-first berbasis local "
-                        }
-                        data-text="true"
-                      >
-                        {mobile?.features[1] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={"box-border w-full h-[36px] shrink-0 relative"}
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
-                        }
-                        data-pencil-name={
-                          "Akses hardware teruji: Geolocation GPS &"
-                        }
-                        data-text="true"
-                        data-responsive="fixed"
-                      >
-                        {mobile?.features[2] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={"box-border w-full h-[36px] shrink-0 relative"}
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
-                        }
-                        data-pencil-name={"check_circle"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"check_circle"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
-                        }
-                        data-pencil-name={
-                          "Integrasi REST API backend, token refres"
-                        }
-                        data-text="true"
-                        data-responsive="fixed"
-                      >
-                        {mobile?.features[3] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    {mobile?.features[4] ? (
-                      <div
-                        className={"box-border w-full h-[36px] shrink-0 relative"}
-                        data-pencil-name={"div"}
-                      >
-                        <div
-                          className={
-                            "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
-                          }
-                          data-pencil-name={"check_circle"}
-                          data-text="true"
-                          aria-hidden="true"
-                        >
-                          {"check_circle"}
-                        </div>
-                        <div
-                          className={
-                            "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
-                          }
-                          data-pencil-name={
-                            "Build APK produksi tersign & panduan pub"
-                          }
-                          data-text="true"
-                          data-responsive="fixed"
-                        >
-                          {mobile.features[4]}
-                        </div>
-                      </div>
-                    ) : null}
+                    <ul className="box-border w-full m-0 p-0 list-none flex flex-col gap-[6px] justify-start items-start">
+                      {(mobile?.features ?? []).filter(isiFitur).map((feature, index) => (
+                        <PackageFeatureRow
+                          key={`${feature}-${index}`}
+                          icon="check_circle"
+                          text={feature}
+                          tone="light"
+                        />
+                      ))}
+                    </ul>
                   </div>
                 </div>
                 <div
@@ -1241,162 +996,16 @@ export default function SitePaketLayananHarga({
                       className={"box-border w-full h-[8px] shrink-0"}
                       data-pencil-name={"spacer"}
                     ></div>
-                    <div
-                      className={"box-border w-full h-[36px] shrink-0 relative"}
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
-                        }
-                        data-pencil-name={"verified"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"verified"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
-                        }
-                        data-pencil-name={
-                          "Database relasional terintegrasi ACID (P"
-                        }
-                        data-text="true"
-                        data-responsive="fixed"
-                      >
-                        {informasi?.features[0] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={"box-border w-full h-[36px] shrink-0 relative"}
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border absolute left-0 top-[2px] text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] [z-index:0] symbol"
-                        }
-                        data-pencil-name={"verified"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"verified"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[calc(100%-26px)] h-[36px] absolute left-[26px] top-0 text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [z-index:1]"
-                        }
-                        data-pencil-name={
-                          "Manajemen otentikasi multi-role RBAC (Su"
-                        }
-                        data-text="true"
-                        data-responsive="fixed"
-                      >
-                        {informasi?.features[1] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"verified"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"verified"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Dashboard admin analitik komprehensif & "
-                        }
-                        data-text="true"
-                      >
-                        {informasi?.features[2] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    <div
-                      className={
-                        "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[24px] box-border text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                        }
-                        data-pencil-name={"verified"}
-                        data-text="true"
-                        aria-hidden="true"
-                      >
-                        {"verified"}
-                      </div>
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={
-                          "Engine ekspor laporan PDF terstruktur & "
-                        }
-                        data-text="true"
-                      >
-                        {informasi?.features[3] ?? "—"}
-                      </div>
-                    </div>
-                    <div
-                      className={"box-border w-full h-[4px] shrink-0"}
-                      data-pencil-name={"spacer"}
-                    ></div>
-                    {informasi?.features[4] ? (
-                      <div
-                        className={
-                          "box-border w-full h-[26px] shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                        }
-                        data-pencil-name={"div"}
-                      >
-                        <div
-                          className={
-                            "text-[16px]/[24px] box-border text-[#e2e89d] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                          }
-                          data-pencil-name={"verified"}
-                          data-text="true"
-                          aria-hidden="true"
-                        >
-                          {"verified"}
-                        </div>
-                        <div
-                          className={
-                            "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                          }
-                          data-pencil-name={
-                            "Audit trail log aktivitas user & mitigas"
-                          }
-                          data-text="true"
-                        >
-                          {informasi.features[4]}
-                        </div>
-                      </div>
-                    ) : null}
+                    <ul className="box-border w-full m-0 p-0 list-none flex flex-col gap-[6px] justify-start items-start">
+                      {(informasi?.features ?? []).filter(isiFitur).map((feature, index) => (
+                        <PackageFeatureRow
+                          key={`${feature}-${index}`}
+                          icon="verified"
+                          text={feature}
+                          tone="dark"
+                        />
+                      ))}
+                    </ul>
                   </div>
                 </div>
                 <div
