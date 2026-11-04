@@ -88,6 +88,16 @@ Bukti: DSN valid, endpoint ingest merespons `401` tanpa auth (hidup), DSN ter-em
 - `telemetry: false` mematikan telemetri build SDK; `suppressOnRouterTransitionStartWarning: true` karena navigasi tracing memang dimatikan (`tracesSampleRate: 0`).
 - Build lokal dengan token dummy membuktikan wiring-nya jalan (plugin memanggil Sentry dan gagal `401`), dan `tests/unit/sentry-build-wiring.test.ts` menjaga agar gerbang token tidak hilang dan token tidak pernah masuk ke berkas konfigurasi.
 
+**Bukti produksi (4 November 2026).** Deploy `dpl_3m4h5NvzQEFPX4hgz7yBEj97r4xp` (`openbyte-labs-liwm0mbok-...`) mencetak di build log:
+
+```text
+[@sentry/nextjs - After Production Compile] Info: Successfully uploaded source maps to Sentry
+```
+
+Verifikasi pendukung pada deploy yang sama: `/`, `/paket`, `/proyek`, `/robots.txt`, `/sitemap.xml` = 200, `/health` = `{"status":"ok","database":"connected"}`, dan setiap `/_next/static/**.js.map` menjawab **403** (source map tidak tersaji dari deployment). Dua run CI terakhir (`41869544947`, `41870222429`) tetap `success`, membuktikan gerbang no-op saat token tidak ada.
+
+Catatan: `SENTRY_ORG` dan `SENTRY_PROJECT` diisi dengan **ID numerik** dari DSN (`o4512366287454208` → `4512366287454208`, project `4512370815401984`), bukan slug. Sentry menerima keduanya sebagai identitas organisasi/proyek, sehingga tidak perlu slug tekstual. Keduanya bukan secret, tetapi tetap disimpan sebagai env terenkripsi Vercel.
+
 ### Turnstile (status 4 November 2026)
 
 Kunci produksi terpasang dan berpasangan benar (`siteverify` dengan token dummy → `invalid-input-response`, artinya secret dikenali). CSP membatasi `script-src`/`frame-src`/`connect-src` ke hostname Turnstile pelanggan (lihat `src/proxy.ts`).
