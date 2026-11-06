@@ -28,6 +28,33 @@ jobs:
         run: |
           sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
           sudo apt-get install -y postgresql-client-17
+      - name: Verify backup configuration shape
+        run: |
+          node -e '
+          const u = process.env.BACKUP_DATABASE_URL || "";
+          const target = (process.env.BACKUP_DATABASE_TARGET || "").trim();
+          let host = "(unparsed)", db = "(unparsed)";
+          try { const p = new URL(u); host = p.host.toLowerCase(); db = decodeURIComponent(p.pathname.slice(1)); } catch {}
+          console.log("url_present:", u.length > 0);
+          console.log("url_protocol_ok:", /^postgres(ql)?:\/\//.test(u));
+          console.log("url_host:", host);
+          console.log("url_db:", db);
+          console.log("target_matches_url:", host + "/" + db === target);
+          console.log("enc_key_length:", (process.env.BACKUP_ENCRYPTION_KEY || "").length);
+          console.log("enc_key_ok:", (process.env.BACKUP_ENCRYPTION_KEY || "").length >= 32);
+          console.log("account_hex32:", /^[a-f0-9]{32}$/i.test(process.env.BACKUP_R2_ACCOUNT_ID || ""));
+          console.log("bucket_shape_ok:", /^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/.test(process.env.BACKUP_R2_BUCKET || ""));
+          console.log("access_key_present:", !!(process.env.BACKUP_R2_ACCESS_KEY_ID || ""));
+          console.log("secret_key_present:", !!(process.env.BACKUP_R2_SECRET_ACCESS_KEY || ""));
+          '
+        env:
+          BACKUP_DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+          BACKUP_DATABASE_TARGET: ${{ secrets.BACKUP_DATABASE_TARGET }}
+          BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
+          BACKUP_R2_ACCOUNT_ID: ${{ secrets.BACKUP_R2_ACCOUNT_ID }}
+          BACKUP_R2_BUCKET: ${{ secrets.BACKUP_R2_BUCKET }}
+          BACKUP_R2_ACCESS_KEY_ID: ${{ secrets.BACKUP_R2_ACCESS_KEY_ID }}
+          BACKUP_R2_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_R2_SECRET_ACCESS_KEY }}
       - run: pnpm db:backup
         env:
           PG_DUMP_BIN: /usr/lib/postgresql/17/bin/pg_dump
