@@ -25,6 +25,7 @@
     "db:migrate:test": "node --conditions=react-server --import tsx scripts/migrate-test.ts",
     "db:status": "node --conditions=react-server --import tsx scripts/db-status.ts",
     "db:backup": "node --conditions=react-server --import tsx scripts/backup.ts",
+    "db:fetch-backup": "node --conditions=react-server --import tsx scripts/fetch-backup.ts",
     "db:restore:drill": "node --conditions=react-server --import tsx scripts/restore-drill.ts",
     "db:seed:foundation": "node --conditions=react-server --import tsx scripts/seed-foundation.ts",
     "db:sync:content": "node --conditions=react-server --import tsx scripts/sync-release-content.ts",

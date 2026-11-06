@@ -1,0 +1,99 @@
+name: Restore drill
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: database-restore-drill
+  cancel-in-progress: false
+
+jobs:
+  drill:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    environment: backup
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: openbyte_labs_restore_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d openbyte_labs_restore_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      RESTORE_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/openbyte_labs_restore_test?sslmode=disable
+      RESTORE_DATABASE_TARGET: localhost:5432/openbyte_labs_restore_test
+      RESTORE_WRITE_CONFIRM: I_CONFIRM_ISOLATED_TEST_DATABASE
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install PostgreSQL 17 client
+        run: |
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y postgresql-client-17
+      - name: Confirm target database is empty
+        run: |
+          total=$(psql "$RESTORE_DATABASE_URL" -tAc "SELECT count(*) FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog','information_schema') AND table_type='BASE TABLE'")
+          echo "tables_before_restore: $total"
+          if [ "$total" != "0" ]; then
+            echo "Restore target is not empty; refusing to continue."
+            exit 1
+          fi
+      - name: Download latest encrypted backup from R2
+        id: fetch
+        env:
+          BACKUP_R2_ACCOUNT_ID: ${{ secrets.BACKUP_R2_ACCOUNT_ID }}
+          BACKUP_R2_BUCKET: ${{ secrets.BACKUP_R2_BUCKET }}
+          BACKUP_R2_ACCESS_KEY_ID: ${{ secrets.BACKUP_R2_ACCESS_KEY_ID }}
+          BACKUP_R2_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_R2_SECRET_ACCESS_KEY }}
+        run: |
+          set -euo pipefail
+          path=$(pnpm --silent db:fetch-backup | tail -n 1)
+          if [ -z "$path" ] || [ ! -f "$path" ]; then
+            echo "Encrypted backup was not downloaded."
+            exit 1
+          fi
+          echo "downloaded_bytes: $(wc -c < "$path")"
+          magic=$(head -c 8 "$path")
+          if [ "$magic" != "OBLBKP01" ]; then
+            echo "Downloaded object is not an encrypted backup envelope."
+            exit 1
+          fi
+          echo "envelope_magic_ok: true"
+          echo "file=$path" >> "$GITHUB_OUTPUT"
+      - name: Decrypt and restore into the empty test database
+        env:
+          PG_RESTORE_BIN: /usr/lib/postgresql/17/bin/pg_restore
+          BACKUP_ENCRYPTION_KEY: ${{ secrets.BACKUP_ENCRYPTION_KEY }}
+        run: |
+          pnpm db:restore:drill -- --file="${{ steps.fetch.outputs.file }}" --confirm-keyword=RESTORE-EMPTY-TEST
+      - name: Verify restored schema and data
+        run: |
+          set -euo pipefail
+          echo "tables_after_restore: $(psql "$RESTORE_DATABASE_URL" -tAc "SELECT count(*) FROM information_schema.tables WHERE table_schema NOT IN ('pg_catalog','information_schema') AND table_type='BASE TABLE'")"
+          echo "migrations: $(psql "$RESTORE_DATABASE_URL" -tAc 'SELECT count(*) FROM drizzle.__drizzle_migrations')"
+          echo "inquiries: $(psql "$RESTORE_DATABASE_URL" -tAc 'SELECT count(*) FROM public.inquiries')"
+          echo "quote_requests: $(psql "$RESTORE_DATABASE_URL" -tAc 'SELECT count(*) FROM public.quote_requests')"
+          echo "consultation_bookings: $(psql "$RESTORE_DATABASE_URL" -tAc 'SELECT count(*) FROM public.consultation_bookings')"
+          echo "media: $(psql "$RESTORE_DATABASE_URL" -tAc 'SELECT count(*) FROM public.media')"
+          echo "booking_exclusion_constraint: $(psql "$RESTORE_DATABASE_URL" -tAc "SELECT count(*) FROM pg_constraint WHERE conrelid=to_regclass('public.consultation_bookings') AND conname='consultation_bookings_no_overlap' AND contype='x'")"
+      - name: Remove decrypted temporary files
+        if: always()
+        run: rm -rf "${RUNNER_TEMP}/openbyte-restore-download"
