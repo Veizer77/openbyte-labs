@@ -82,7 +82,7 @@ Bukti: DSN valid, endpoint ingest merespons `401` tanpa auth (hidup), DSN ter-em
 
 **Source map (build-time).** Upload artifact diaktifkan lewat `withSentryConfig` di `next.config.ts`. Pembungkus itu **opsional dan bergerbang**: hanya dipakai bila `SENTRY_ORG`, `SENTRY_PROJECT`, dan `SENTRY_AUTH_TOKEN` semuanya terisi. Tanpa ketiganya (mis. job `quality` di CI yang hanya menjalankan `pnpm build`), konfigurasi keluar apa adanya sebagai `next build` biasa tanpa menghubungi Sentry.
 
-- `org`/`project` adalah **slug, bukan secret**; `SENTRY_AUTH_TOKEN` dibaca build plugin langsung dari environment dan tidak pernah ditulis di `next.config.ts`.
+- `org`/`project` **bukan secret**; nilainya diisi dari environment, dan `SENTRY_AUTH_TOKEN` dibaca build plugin langsung dari environment serta tidak pernah ditulis di `next.config.ts`.
 - `widenClientFileUpload: true` ikut meng-upload chunk framework/Next internal, bukan hanya chunk aplikasi.
 - `deleteSourcemapsAfterUpload: true` menghapus `.map` dari output setelah percobaan upload, sehingga source map tidak pernah ikut tersaji dari deployment. Konsekuensinya kegagalan upload hanya menghilangkan symbolication, bukan membocorkan kode.
 - `telemetry: false` mematikan telemetri build SDK; `suppressOnRouterTransitionStartWarning: true` karena navigasi tracing memang dimatikan (`tracesSampleRate: 0`).
@@ -97,6 +97,34 @@ Bukti: DSN valid, endpoint ingest merespons `401` tanpa auth (hidup), DSN ter-em
 Verifikasi pendukung pada deploy yang sama: `/`, `/paket`, `/proyek`, `/robots.txt`, `/sitemap.xml` = 200, `/health` = `{"status":"ok","database":"connected"}`, dan setiap `/_next/static/**.js.map` menjawab **403** (source map tidak tersaji dari deployment). Dua run CI terakhir (`41869544947`, `41870222429`) tetap `success`, membuktikan gerbang no-op saat token tidak ada.
 
 Catatan: `SENTRY_ORG` dan `SENTRY_PROJECT` diisi dengan **ID numerik** dari DSN (`o4512366287454208` → `4512366287454208`, project `4512370815401984`), bukan slug. Sentry menerima keduanya sebagai identitas organisasi/proyek, sehingga tidak perlu slug tekstual. Keduanya bukan secret, tetapi tetap disimpan sebagai env terenkripsi Vercel.
+
+**Audit issue Sentry (6 November 2026).** Tiga issue muncul di dashboard dan sudah
+didiagnosis, bukan dibiarkan:
+
+| Issue | Level | Event | Kesimpulan |
+|---|---|---|---|
+| `OPENBYTE-LABS-1` | Info | 1 | Event verifikasi koneksi (`release-1-verification`) |
+| `OPENBYTE-LABS-2` | Error | 1 | Unhandled SSR, kelompok sama dengan #3 |
+| `OPENBYTE-LABS-3` | Error | 11 | Unhandled SSR dari mesin lokal pemilik |
+
+`OPENBYTE-LABS-3` **bukan error produksi**. Buktinya: `server: WIN-HRI5K8PH2V3`
+(nama mesin Windows), path stack trace
+`C:\FLUTTER PROJEK\gabut\OpenByteLabs\.next\server\chunks\ssr\` (disk lokal, bukan
+`/var/task` container Vercel), 11 event dalam 20 detik (`03:04:30Z`–`03:04:50Z`),
+tanpa browser/user agent/session/request path, dan pemilik mengonfirmasi sedang
+menjalankan smoke test UI lokal pada jam itu.
+
+Pesan `Unexpected application error (details withheld)` berasal dari
+`sanitizeMonitoringEvent` di `src/lib/monitoring.ts`, bukan dari Next.js. Source
+map tidak terbaca karena build lokal tidak memakai `SENTRY_AUTH_TOKEN`; build
+Vercel sendiri tetap mengunggah source map.
+
+Verifikasi bahwa kelas error yang sama tidak terjadi di produksi: `GET /health`
+→ `200`, `GET /path-yang-tidak-ada-xyz-12345` → `404`,
+`GET /proyek/slug-tidak-ada-xyz-999` → `404`,
+`GET /paket/slug-tidak-ada-xyz-888` → `404`. Catch-all route memakai `notFound()`
+sehingga path tak dikenal menghasilkan 404, bukan 500. Log produksi `--level
+error` (100 baris terakhir) mengembalikan nol baris.
 
 ### Turnstile (status 4 November 2026)
 
@@ -143,7 +171,7 @@ kredensial salah        → 401 (pesan generik)
 | Login/TOTP end-to-end pada Neon | Akun owner dengan TOTP aktif sudah ada di produksi dan sesi ditolak tanpa faktor kedua. Verifikasi dilakukan lewat data assurance per sesi, bukan sekadar flag pengguna. |
 | `owner:reset` | CLI break-glass tersedia, meminta target dan konfirmasi `RESET`, mengganti password, menonaktifkan 2FA, mencabut sesi, dan mengaudit; jangan jalankan tanpa target yang disetujui |
 | Integrasi UI belum menyeluruh | Form publik booking/inquiry/quote dan layar admin proyek, layanan, kategori/teknologi, media, kalkulator, booking/jadwal, inquiry, quote, settings, dan Page Builder terhubung. Paket/add-on, FAQ/testimoni, staf, audit UI, billing, dan portal masih perlu penyelesaian. |
-| Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi (endpoint pooler). CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry menerima event dan source map di-upload saat build (bergerbang token). Monitoring 24 jam pasca-launch sudah dinilai: 5 deployment `Ready`, nol error/fatal runtime di Vercel, 42 operasi Neon `failures_count: 0`, dan nol login admin gagal. Dashboard Sentry belum diaudit agen (tidak ada konektor; token ter-redact). Uptime monitor dan uji restore belum selesai. |
+| Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi (endpoint pooler). CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry menerima event dan source map di-upload saat build (bergerbang token). Monitoring 24 jam pasca-launch dinilai penuh: 5 deployment `Ready`, nol error/fatal runtime di Vercel, 53 operasi Neon `failures_count: 0`, nol login admin gagal, dan catch-all route menjawab 404 (bukan 500) untuk path tak dikenal. Issue Sentry `OPENBYTE-LABS-2`/`-3` terdiagnosis berasal dari smoke test di mesin Windows lokal pemilik, bukan produksi. Uptime monitor eksternal belum dipasang; uji restore sudah lulus. |
 | Verifikasi layanan eksternal | 9 objek media terdaftar di database dan merujuk bucket R2 publik. Turnstile aktif di produksi dan submission asli sudah diuji manusia 3/3 (`INQ-2611-V23Y`, `QTE-2611-RSC6`, `BKG-2611-Q76A`). |
 | Cache | Route katalog memakai `force-dynamic` dan membaca DB per request; belum memakai fetch cache bertag. Jangan mengklaim integrasi cache tag end-to-end. |
 | Status akun | Akun owner produksi terverifikasi lewat pembacaan database (peran, status aktif, TOTP verified, backup codes). Kredensial dan secret tidak disimpan di dokumen. |
