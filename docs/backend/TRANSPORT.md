@@ -136,6 +136,38 @@ Uji otomatis membuktikan lapisan anti-spam menolak 4/4 percobaan (token palsu da
 
 `src/env.ts` menolak runtime tanpa nilai wajib yang valid. Skrip migrasi/owner/seed/preflight memakai target direct terpisah dan konfirmasi operator; jangan memakai konfigurasi runtime sebagai persetujuan target tulis. Contoh variabel tersedia di `.env.example`; jangan menampilkan atau membagikan nilai secret.
 
+### Alamat klien dan rate limit (status 7 November 2026)
+
+Rate limit form publik dan login admin bergantung pada satu asumsi: alamat yang
+dibaca benar-benar ditetapkan proxy, bukan dikirim klien.
+
+`TRUSTED_IP_HEADER` di produksi disimpan sebagai environment **sensitif**, sehingga
+`vercel env pull` mengembalikan penanda `SENSITIVE` dan nilainya tidak dapat
+diverifikasi dari CLI. Karena itu `clientIpHash` di `src/security/client-ip.ts`
+tidak lagi bergantung pada satu header saja:
+
+1. header yang dinamai `TRUSTED_IP_HEADER` dibaca lebih dulu;
+2. bila kosong atau tidak ada, pembacaan berlanjut ke
+   `x-vercel-forwarded-for`, lalu `x-real-ip`, lalu `x-forwarded-for`;
+3. alamat paling kiri diambil, port dan bracket IPv6 dibuang, lalu di-hash
+   dengan `IP_HASH_SALT`;
+4. bila keempat header tidak ada, permintaan ditolak dengan
+   `Alamat klien tidak tersedia` alih-alih memakai alamat palsu.
+
+Menurut dokumentasi Vercel (*Request headers*), Vercel menimpa `X-Forwarded-For`
+dan tidak meneruskan IP eksternal, sehingga nilai paling kiri tidak dapat
+dipalsukan klien pada deployment Vercel. `x-vercel-forwarded-for` identik tetapi
+tidak dapat ditimpa proxy tambahan di atas Vercel, jadi ia dicoba lebih dulu.
+
+Konsekuensi yang perlu diketahui: bila `TRUSTED_IP_HEADER` di produksi ternyata
+diisi nama header yang tidak pernah dikirim Vercel, sistem tetap berfungsi lewat
+fallback dan tidak pernah memakai nilai kosong. Untuk mengubah nilainya secara
+sengaja, lakukan dari dashboard Vercel lalu redeploy; jangan menebak nilai lama
+karena nilainya tidak dapat dibaca.
+
+Tes penjaga: `tests/unit/client-ip.test.ts` (10 tes) mengunci urutan fallback,
+normalisasi port/IPv6, dan penolakan saat header tidak tersedia.
+
 ## 6. Cara Menguji Manual
 
 ```bash
