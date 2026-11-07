@@ -203,10 +203,27 @@ kredensial salah        → 401 (pesan generik)
 | Login/TOTP end-to-end pada Neon | Akun owner dengan TOTP aktif sudah ada di produksi dan sesi ditolak tanpa faktor kedua. Verifikasi dilakukan lewat data assurance per sesi, bukan sekadar flag pengguna. |
 | `owner:reset` | CLI break-glass tersedia, meminta target dan konfirmasi `RESET`, mengganti password, menonaktifkan 2FA, mencabut sesi, dan mengaudit; jangan jalankan tanpa target yang disetujui |
 | Integrasi UI belum menyeluruh | Form publik booking/inquiry/quote dan layar admin proyek, layanan, kategori/teknologi, media, kalkulator, booking/jadwal, inquiry, quote, settings, dan Page Builder terhubung. Paket/add-on, FAQ/testimoni, staf, audit UI, billing, dan portal masih perlu penyelesaian. |
-| Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi (endpoint pooler). CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry menerima event dan source map di-upload saat build (bergerbang token). Monitoring 24 jam pasca-launch dinilai penuh: 5 deployment `Ready`, nol error/fatal runtime di Vercel, 53 operasi Neon `failures_count: 0`, nol login admin gagal, dan catch-all route menjawab 404 (bukan 500) untuk path tak dikenal. Issue Sentry `OPENBYTE-LABS-2`/`-3` terdiagnosis berasal dari smoke test di mesin Windows lokal pemilik, bukan produksi. Uptime monitor eksternal belum dipasang; uji restore sudah lulus. |
+| Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi (endpoint pooler). CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry menerima event dan source map di-upload saat build (bergerbang token). Monitoring 24 jam pasca-launch dinilai penuh: 5 deployment `Ready`, nol error/fatal runtime di Vercel, 53 operasi Neon `failures_count: 0`, nol login admin gagal, dan catch-all route menjawab 404 (bukan 500) untuk path tak dikenal. Issue Sentry `OPENBYTE-LABS-2`/`-3` terdiagnosis berasal dari smoke test di mesin Windows lokal pemilik, bukan produksi. Uptime monitor dipasang di GitHub Actions (`.github/workflows/uptime.yml`, lihat di bawah); uji restore sudah lulus. |
 | Verifikasi layanan eksternal | 9 objek media terdaftar di database dan merujuk bucket R2 publik. Turnstile aktif di produksi dan submission asli sudah diuji manusia 3/3 (`INQ-2611-V23Y`, `QTE-2611-RSC6`, `BKG-2611-Q76A`). |
 | Cache | Route katalog memakai `force-dynamic` dan membaca DB per request; belum memakai fetch cache bertag. Jangan mengklaim integrasi cache tag end-to-end. |
 | Status akun | Akun owner produksi terverifikasi lewat pembacaan database (peran, status aktif, TOTP verified, backup codes). Kredensial dan secret tidak disimpan di dokumen. |
+
+### Uptime monitor (status 7 November 2026)
+
+`.github/workflows/uptime.yml` menjalankan dua pemeriksaan dengan interval berbeda.
+Pemisahan ini disengaja: PRD 6.7 memperingatkan bahwa memeriksa `/health` terlalu
+sering membuat Neon tidak pernah suspend dan menghabiskan jatah compute gratis.
+
+| Pemeriksaan | Interval | Target | Menyentuh DB |
+|---|---|---|---|
+| Halaman statis | tiap 15 menit (`7,22,37,52 * * * *`) | `/robots.txt` harus `200` | tidak |
+| Kesiapan aplikasi | tiap 6 jam (`23 */6 * * *`) | `/health` harus `status: ok` + `database: connected` | ya, satu query |
+
+Bila pemeriksaan terjadwal gagal, job `report` membuka issue berlabel `uptime`
+(atau menambah komentar pada issue terbuka yang sama) berisi tautan run dan waktu
+kegagalan. Tidak ada layanan berbayar yang dipakai; label dibuat otomatis bila
+belum ada. Pemicu manual tersedia lewat `workflow_dispatch` dengan pilihan
+`both`, `static`, atau `health`.
 
 ## 8. Verifikasi
 

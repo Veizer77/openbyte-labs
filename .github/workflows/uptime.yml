@@ -1,0 +1,90 @@
+name: Uptime monitor
+
+# Dua interval sengaja dipisah:
+# - Halaman statis tiap 15 menit: membuktikan situs hidup tanpa menyentuh database.
+# - /health tiap 6 jam: menyentuh database, jadi intervalnya jarang supaya Neon
+#   tetap bisa suspend dan jatah compute gratis tidak habis (PRD 6.7).
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Pemeriksaan yang dijalankan"
+        type: choice
+        options: [both, static, health]
+        default: both
+  schedule:
+    - cron: "7,22,37,52 * * * *"
+    - cron: "23 */6 * * *"
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: uptime-monitor
+  cancel-in-progress: false
+
+env:
+  SITE: https://openbyte-labs.vercel.app
+
+jobs:
+  static-page:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      && (inputs.mode == 'both' || inputs.mode == 'static')
+      || github.event_name == 'schedule'
+      && github.event.schedule == '7,22,37,52 * * * *'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Fetch a static page that never touches the database
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 --retry 2 --retry-delay 3 "$SITE/robots.txt")
+          echo "robots_status: $code"
+          if [ "$code" != "200" ]; then
+            echo "Situs tidak menjawab 200 untuk halaman statis."
+            exit 1
+          fi
+
+  health:
+    if: >-
+      github.event_name == 'workflow_dispatch'
+      && (inputs.mode == 'both' || inputs.mode == 'health')
+      || github.event_name == 'schedule'
+      && github.event.schedule == '23 */6 * * *'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check application and database health
+        run: |
+          set -euo pipefail
+          body=$(curl -sS --max-time 25 --retry 2 --retry-delay 5 "$SITE/health")
+          echo "health_body: $body"
+          echo "$body" | grep -q '"status":"ok"' || { echo "Status aplikasi bukan ok."; exit 1; }
+          echo "$body" | grep -q '"database":"connected"' || { echo "Database tidak terhubung."; exit 1; }
+
+  report:
+    needs: [static-page, health]
+    if: failure() && github.event_name == 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Open or update the uptime incident issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          title="Uptime check gagal"
+          gh label create uptime --color B60205 --description "Pemeriksaan uptime otomatis" --force >/dev/null 2>&1 || true
+          existing=$(gh issue list --state open --label uptime --limit 1 --json number --jq '.[0].number // empty')
+          body=$(printf 'Pemeriksaan uptime otomatis gagal.\n\nRun: %s\nWaktu: %s\n\nPeriksa `/health`, log runtime Vercel, dan operasi Neon sebelum menutup issue ini.\n' "$RUN_URL" "$(date -u +%Y-%m-%dT%H:%M:%SZ)")
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "$body"
+            echo "Komentar ditambahkan ke issue #$existing"
+          else
+            gh issue create --title "$title" --label uptime --body "$body"
+            echo "Issue baru dibuat"
+          fi
