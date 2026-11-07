@@ -44,7 +44,41 @@
 - Maksimal 5 lampiran, masing-masing 5 MB. Format: JPEG, PNG, WebP, PDF, ZIP. Nama tidak boleh mengandung path/control character. Server memeriksa ukuran, MIME, dan signature isi, lalu menulis ulang byte terverifikasi ke key berbeda sebelum menandainya final. URL unggah lama tidak dapat menimpa key final.
 - Semua akses download memeriksa relasi proyek serta visibilitas komentar/dokumen/pembayaran. URL download berlaku 60 detik, memaksa attachment/octet-stream, dan tidak memakai base URL bucket publik.
 - URL unggah berlaku 5 menit. Upload yang ditinggalkan perlu dibersihkan operator dengan mencocokkan metadata yang belum terverifikasi dan prefix `tracking/<id-proyek>/pending/`. Jangan menganggap prefix lifecycle mendukung wildcard; tidak ada lifecycle atau bucket yang dibuat otomatis.
-- Bila konfigurasi privat belum aman, portal tanpa lampiran tetap berfungsi dan unggah/unduh ditolak dengan pesan jelas. Integrasi S3 diuji dengan mock; transfer ke bucket R2 nyata masih memerlukan konfigurasi dan pengujian operator.
+- Bila konfigurasi privat belum aman, portal tanpa lampiran tetap berfungsi dan unggah/unduh ditolak dengan pesan jelas. Integrasi S3 diuji dengan mock; transfer ke bucket R2 nyata dibuktikan lewat smoke test di bawah.
+
+### Smoke test bucket privat (status 7 November 2026)
+
+`scripts/r2-private-smoke.ts` menguji bucket privat **sungguhan**, bukan mock.
+Jalankan dengan kredensial R2 di environment lokal:
+
+```powershell
+node --conditions=react-server --import tsx scripts/r2-private-smoke.ts
+```
+
+Sembilan pemeriksaan, semuanya lulus pada 7 November 2026 terhadap
+`openbytelabs-staging`:
+
+| Pemeriksaan | Hasil |
+|---|---|
+| URL unggah presigned dibuat (HTTPS, 300 detik) | lulus |
+| Unggah lewat URL presigned | `200` |
+| Ukuran objek tersimpan cocok | 68 byte |
+| Magic bytes PNG utuh | header valid |
+| **Akses tanpa tanda tangan ditolak** | `400` |
+| Bucket privat tidak dilayani `.r2.dev` | tidak konklusif dari mesin ini (host diblokir jaringan lokal); bucket privat memang tanpa r2.dev |
+| Unduh lewat URL bertanda tangan (60 detik) | `200`, 68 byte |
+| Tanda tangan terikat ke kunci persis | isi objek benar, bukan objek lain |
+| Pembersihan objek uji | tidak ada objek tersisa |
+
+Skrip menolak berjalan bila `R2_BUCKET_STAGING` sama dengan `R2_BUCKET_PUBLIC`.
+Pembersihan dilakukan lewat prefiks `tracking/<runId>/`, sehingga kegagalan di
+tengah pengujian tidak meninggalkan objek. Status bucket diverifikasi terpisah:
+`tracking/` berisi 0 objek setelah pengujian.
+
+Catatan jujur: pemeriksaan `.r2.dev` tidak dapat dibuktikan dari mesin ini karena
+`*.r2.dev` diblokir penyedia jaringan lokal. Yang membuktikan privasi adalah
+penolakan akses tanpa tanda tangan (`400`) dan konfigurasi bucket tanpa domain
+r2.dev, bukan hasil pemeriksaan host tersebut.
 
 ## Pengujian
 
