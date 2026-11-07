@@ -17,6 +17,7 @@ import {
   listClientProjects,
   readAdminClientProject,
   mutateAdminClientProject,
+  convertLeadToClientProject,
 } from "@/services/tracking";
 import { updateSettingsSection } from "@/services/site-settings";
 import { invalidateSettingsCache } from "@/services/settings-cache";
@@ -67,8 +68,29 @@ export async function createClientProjectAction(input: unknown) {
     return failure(error);
   }
 }
-export async function updateClientProjectAction(id: string, input: unknown) {
+/**
+ * Konversi satu lead menjadi proyek klien tanpa mengetik ulang data klien.
+ *
+ * Identitas (nama, WhatsApp, email) dibaca ulang dari baris lead di server,
+ * jadi tidak ada jalur bagi browser untuk mengirim identitas palsu.
+ */
+export async function convertLeadAction(input: unknown) {
   try {
+    const principal = await requireAdmin();
+    const result = await convertLeadToClientProject(
+      createTrackingStore(getDb()),
+      principal,
+      input,
+    );
+    revalidatePath("/admin/proyek-klien");
+    revalidatePath("/admin/inquiry");
+    revalidatePath("/admin/quote");
+    return ok(result);
+  } catch (error) {
+    return failure(error);
+  }
+}
+export async function updateClientProjectAction(id: string, input: unknown) {  try {
     const principal = await requireAdmin();
     const result = await mutateAdminClientProject(
       createTrackingStore(getDb()),

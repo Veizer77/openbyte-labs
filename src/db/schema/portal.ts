@@ -16,7 +16,8 @@ import {
 import type { RichText } from "@/schemas/rich-text";
 import { adminProfiles } from "./admin-profile";
 import { projects } from "./content";
-import { categories, servicePackages } from "./packages";
+import { categories, servicePackages, inquiries } from "./packages";
+import { quoteRequests } from "./calculator";
 
 /**
  * Rilis 2 — Portal klien (PRD 3.6-3.8). The tables are defined now so the whole
@@ -139,6 +140,18 @@ export const clientProjects = pgTable(
     startDate: date("start_date", { mode: "string" }),
     targetCompletionDate: date("target_completion_date", { mode: "string" }),
     internalNotes: text("internal_notes").notNull().default(""),
+    /**
+     * Asal-usul konversi (Rilis 2). Salah satu inquiry atau quote, tidak
+     * keduanya. Unique index mencegah satu lead dikonversi dua kali walau
+     * tombol ditekan berulang atau dua admin mengklik bersamaan.
+     */
+    sourceInquiryId: uuid("source_inquiry_id").references(() => inquiries.id, {
+      onDelete: "set null",
+    }),
+    sourceQuoteRequestId: uuid("source_quote_request_id").references(
+      () => quoteRequests.id,
+      { onDelete: "set null" },
+    ),
     archivedAt: timestamp("archived_at", { withTimezone: true }),
     deletedAt: timestamp("deleted_at", { withTimezone: true }),
     /** Derived columns: only ever written by services inside one transaction. */
@@ -185,6 +198,16 @@ export const clientProjects = pgTable(
       sql`jsonb_typeof(${table.clientVisibility}) = 'object'`,
     ),
     index("client_projects_archived_idx").on(table.archivedAt, table.deletedAt),
+    uniqueIndex("client_projects_source_inquiry_unique").on(
+      table.sourceInquiryId,
+    ),
+    uniqueIndex("client_projects_source_quote_unique").on(
+      table.sourceQuoteRequestId,
+    ),
+    check(
+      "client_projects_single_source_check",
+      sql`${table.sourceInquiryId} IS NULL OR ${table.sourceQuoteRequestId} IS NULL`,
+    ),
   ],
 );
 

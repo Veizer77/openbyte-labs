@@ -4,7 +4,8 @@ import type { Database } from "./connection";
 import { siteSettings } from "./schema/settings";
 import { rateLimits } from "./schema/rate-limits";
 import { auditLogs } from "./schema/audit";
-import { categories, servicePackages } from "./schema/packages";
+import { categories, servicePackages, inquiries } from "./schema/packages";
+import { quoteRequests } from "./schema/calculator";
 import {
   clientProjects,
   stepTemplates,
@@ -23,6 +24,7 @@ import {
 import { settingsSchemas } from "@/schemas/site-settings";
 import {
   clientProjectInput,
+  leadConversionSchema,
   adminMutationSchema,
   clientMutationSchema,
   type UploadInput,
@@ -628,11 +630,186 @@ export function createTrackingStore(db: Database) {
         );
       });
     },
+    /**
+     * Konversi lead menjadi proyek klien dalam satu transaksi.
+     *
+     * Semua langkah (baca lead, buat proyek, buat 6 tahap, tandai lead
+     * `converted`, tulis audit) berada di transaksi yang sama. Bila salah satu
+     * gagal, tidak ada proyek setengah jadi dan lead tidak berubah status.
+     *
+     * Idempotensi dijaga dua lapis: unique index pada `source_inquiry_id` /
+     * `source_quote_request_id`, dan pemeriksaan awal yang mengembalikan proyek
+     * yang sudah ada alih-alih membuat duplikat.
+     */
+    async convertLead(input: unknown, actorId: string) {
+      const value = leadConversionSchema.parse(input);
+      const pin = generateTrackingPin();
+      const accessPinHash = await hashTrackingPin(pin);
+      return db.transaction(async (tx) => {
+        const config = await settings(tx);
+        let included = 0;
+        let extra: number | null = null;
+        let revisionPolicy = config.revisionPolicy;
+        let clientName: string;
+        let clientWhatsapp: string;
+        let clientEmail: string | null = null;
+        let sourceLabel: string;
+
+        if (value.source === "inquiry") {
+          const [row] = await tx
+            .select()
+            .from(inquiries)
+            .where(eq(inquiries.id, value.sourceId))
+            .for("update");
+          if (!row) throw new TrackingError("Inquiry tidak ditemukan.");
+          clientName = row.name;
+          clientWhatsapp = row.whatsapp;
+          clientEmail = row.email;
+          sourceLabel = `inquiry ${row.reference}`;
+        } else {
+          const [row] = await tx
+            .select()
+            .from(quoteRequests)
+            .where(eq(quoteRequests.id, value.sourceId))
+            .for("update");
+          if (!row) throw new TrackingError("Permintaan estimasi tidak ditemukan.");
+          if (!row.contactName || !row.contactWhatsapp)
+            throw new TrackingError(
+              "Estimasi ini tidak memuat nama dan WhatsApp, lengkapi lewat inquiry.",
+            );
+          clientName = row.contactName;
+          clientWhatsapp = row.contactWhatsapp;
+          sourceLabel = `estimasi ${row.reference}`;
+        }
+
+        const existing = await tx
+          .select({ id: clientProjects.id, trackingCode: clientProjects.trackingCode })
+          .from(clientProjects)
+          .where(
+            value.source === "inquiry"
+              ? eq(clientProjects.sourceInquiryId, value.sourceId)
+              : eq(clientProjects.sourceQuoteRequestId, value.sourceId),
+          )
+          .limit(1);
+        const linked = existing[0];
+        if (linked)
+          throw new TrackingError(
+            `Lead ini sudah dikonversi menjadi proyek ${linked.trackingCode}.`,
+          );
+
+        if (value.servicePackageId) {
+          const [pack] = await tx
+            .select()
+            .from(servicePackages)
+            .where(
+              and(
+                eq(servicePackages.id, value.servicePackageId),
+                isNull(servicePackages.deletedAt),
+              ),
+            );
+          if (!pack) throw new TrackingError("Paket tidak tersedia.");
+          included = pack.includedRevisions;
+          extra = pack.extraRevisionPrice;
+          revisionPolicy = pack.revisionPolicy ?? revisionPolicy;
+        }
+
+        let created: typeof clientProjects.$inferSelect | undefined;
+        for (let attempt = 0; attempt < 5; attempt++) {
+          const [p] = await tx
+            .insert(clientProjects)
+            .values({
+              clientName,
+              clientWhatsapp,
+              clientEmail,
+              projectTitle: value.projectTitle,
+              totalCost: value.totalCost,
+              revisionsIncluded: included,
+              extraRevisionPrice: extra,
+              revisionPolicySnapshot: revisionPolicy,
+              categoryId: value.categoryId,
+              servicePackageId: value.servicePackageId,
+              startDate: value.startDate || null,
+              targetCompletionDate: value.targetCompletionDate || null,
+              internalNotes: value.internalNotes,
+              clientVisibility: {
+                staging: false,
+                production: false,
+                github: false,
+                payments: false,
+                documents: false,
+                timeline: false,
+              },
+              balance: value.totalCost,
+              trackingCode: generateTrackingCode(),
+              accessPinHash,
+              sourceInquiryId: value.source === "inquiry" ? value.sourceId : null,
+              sourceQuoteRequestId:
+                value.source === "quote" ? value.sourceId : null,
+            })
+            .onConflictDoNothing({ target: clientProjects.trackingCode })
+            .returning();
+          if (!p) continue;
+          created = p;
+          break;
+        }
+        if (!created)
+          throw new TrackingError("Kode proyek belum berhasil dibuat. Coba kembali.");
+
+        const templates = await tx
+          .select()
+          .from(stepTemplates)
+          .orderBy(asc(stepTemplates.stepNumber));
+        for (let i = 0; i < 6; i++) {
+          const template = templates.find((t) => t.stepNumber === i + 1);
+          const [step] = await tx
+            .insert(projectSteps)
+            .values({
+              clientProjectId: created.id,
+              stepNumber: i + 1,
+              title: template?.title ?? defaultSteps[i],
+              description: template?.description ?? "",
+              sortOrder: i,
+            })
+            .returning();
+          if (template?.defaultMilestones.length && step)
+            await tx.insert(projectMilestones).values(
+              template.defaultMilestones.map((title, sortOrder) => ({
+                projectStepId: step.id,
+                title,
+                sortOrder,
+              })),
+            );
+        }
+
+        if (value.source === "inquiry") {
+          await tx
+            .update(inquiries)
+            .set({ status: "converted", updatedAt: new Date() })
+            .where(eq(inquiries.id, value.sourceId));
+        } else {
+          await tx
+            .update(quoteRequests)
+            .set({ status: "converted", updatedAt: new Date() })
+            .where(eq(quoteRequests.id, value.sourceId));
+        }
+
+        await audit(tx, actorId, created.id, "create");
+        await tx.insert(auditLogs).values({
+          actorId,
+          actorType: "admin",
+          action: "update",
+          collection: value.source === "inquiry" ? "inquiries" : "quotes",
+          docId: value.sourceId,
+          summary: `Menandai ${sourceLabel} sebagai terkonversi ke proyek ${created.trackingCode}`,
+        });
+
+        return { project: toAdminProject(created), pin };
+      });
+    },
     async adminMutate(id: string, input: unknown, actorId: string) {
       const value = adminMutationSchema.parse(input);
       const pin = value.kind === "pin" ? generateTrackingPin() : undefined;
-      const pinHash = pin ? await hashTrackingPin(pin) : undefined;
-      return db.transaction(async (tx) => {
+      const pinHash = pin ? await hashTrackingPin(pin) : undefined;      return db.transaction(async (tx) => {
         const p = await project(tx, id);
         const now = new Date();
         if (value.kind === "update") {

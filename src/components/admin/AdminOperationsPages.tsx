@@ -25,6 +25,7 @@ import type { BookingAdminDto } from "@/services/booking-admin";
 import type { InquiryAdminDto } from "@/services/inquiry-admin";
 import type { QuoteAdminDto } from "@/services/quote-admin";
 import { BentoCard, Chip, EmptyState, SearchField, TabFilter, ToolbarButton } from "./AdminUi";
+import { LeadConversionPanel } from "./LeadConversionPanel";
 
 type BookingStatus = BookingAdminDto["status"];
 type InquiryStatus = InquiryAdminDto["status"];
@@ -1278,6 +1279,30 @@ export function AdminInquiryPage() {
                   {saving ? "Menyimpan…" : "Simpan Tindak Lanjut"}
                 </ToolbarButton>
               </div>
+
+              <LeadConversionPanel
+                source="inquiry"
+                sourceId={selected.id}
+                suggestedTitle={
+                  selected.packageName
+                    ? `${selected.packageName} — ${selected.organizationOrBusiness || selected.name}`
+                    : `Proyek ${selected.organizationOrBusiness || selected.name}`
+                }
+                suggestedCost={selected.packagePrice}
+                disabled={selectedDraft.status === "converted"}
+                onConverted={(message) => {
+                  setStatus(message);
+                  setDrafts((curr) => ({
+                    ...curr,
+                    [selected.id]: { ...selectedDraft, status: "converted" },
+                  }));
+                  setItems((curr) =>
+                    curr.map((row) =>
+                      row.id === selected.id ? { ...row, status: "converted" } : row
+                    )
+                  );
+                }}
+              />
             </BentoCard>
           ) : null}
         </div>
@@ -1535,6 +1560,26 @@ export function AdminQuotePage() {
                     <p className="mt-2 mb-1 text-xs text-[#71717a]">Tidak ada rincian pilihan.</p>
                   )}
                 </details>
+
+                <LeadConversionPanel
+                  source="quote"
+                  sourceId={item.id}
+                  suggestedTitle={
+                    item.contactName
+                      ? `Proyek ${item.contactName}`
+                      : "Proyek Baru dari Estimasi Kalkulator"
+                  }
+                  suggestedCost={null}
+                  disabled={item.status === "converted"}
+                  onConverted={(message) => {
+                    setStatus(message);
+                    setItems((curr) =>
+                      curr.map((row) =>
+                        row.id === item.id ? { ...row, status: "converted" } : row
+                      )
+                    );
+                  }}
+                />
               </BentoCard>
             );
           })}

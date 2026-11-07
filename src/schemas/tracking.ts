@@ -86,6 +86,33 @@ export const clientProjectInput = z
       v.targetCompletionDate >= v.startDate,
     "Target selesai tidak boleh sebelum mulai.",
   );
+/**
+ * Konversi lead menjadi proyek klien. Admin hanya memilih sumber dan mengisi
+ * hal yang memang belum diketahui lead (judul proyek, nilai kontrak, tanggal).
+ * Identitas klien tidak diterima dari input: nilainya selalu dibaca ulang dari
+ * baris inquiry/quote di server, sehingga tidak bisa dipalsukan dari browser.
+ */
+export const leadConversionSchema = z
+  .object({
+    source: z.enum(["inquiry", "quote"]),
+    sourceId: id,
+    projectTitle: text,
+    totalCost: money,
+    categoryId: id.nullable().default(null),
+    servicePackageId: id.nullable().default(null),
+    startDate: date.default(""),
+    targetCompletionDate: date.default(""),
+    internalNotes: z.string().max(20_000).default(""),
+  })
+  .strict()
+  .refine(
+    (v) =>
+      !v.startDate ||
+      !v.targetCompletionDate ||
+      v.targetCompletionDate >= v.startDate,
+    "Target selesai tidak boleh sebelum mulai.",
+  );
+
 export const clientMutationSchema = z.discriminatedUnion("kind", [
   z
     .object({

@@ -2,7 +2,7 @@ import "server-only";
 import { z } from "zod";
 import { authorize, type AdminPrincipal } from "@/access/rules";
 import type { TrackingStore } from "@/db/tracking-store";
-import { trackingLoginSchema } from "@/schemas/tracking";
+import { trackingLoginSchema, leadConversionSchema } from "@/schemas/tracking";
 import type { TrackingSession } from "@/lib/tracking/security";
 import { TrackingError } from "@/lib/tracking/errors";
 
@@ -54,6 +54,30 @@ export async function mutateAdminClientProject(
 ) {
   authorize(principal, "client-projects", "update");
   return store.adminMutate(z.uuid().parse(id), input, principal.id);
+}
+
+/**
+ * Konversi satu lead (inquiry atau quote) menjadi proyek klien dalam satu
+ * transaksi.
+ *
+ * Kenapa dipisah dari `createClientProject`: admin tidak boleh mengetik ulang
+ * nama, WhatsApp, dan harga dari layar lain. Penyalinan manual adalah sumber
+ * salah ketik nomor WhatsApp yang membuat klien tidak bisa login, dan sumber
+ * harga proyek yang berbeda dari yang sudah dijanjikan ke klien.
+ *
+ * Sumbernya hanya boleh satu: inquiry ATAU quote. Keduanya bisa ada di satu
+ * inquiry (inquiry dari kalkulator menyimpan `quoteRequestId`), jadi inquiry
+ * diutamakan karena memuat identitas yang sudah diisi klien.
+ */
+export async function convertLeadToClientProject(
+  store: TrackingStore,
+  principal: AdminPrincipal | null,
+  input: unknown,
+) {
+  authorize(principal, "client-projects", "create");
+  authorize(principal, "inquiries", "update");
+  const value = leadConversionSchema.parse(input);
+  return store.convertLead(value, principal.id);
 }
 export async function mutateClientPortal(
   store: TrackingStore,
