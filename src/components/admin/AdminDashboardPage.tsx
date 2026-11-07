@@ -191,7 +191,50 @@ export function AdminDashboardPage() {
 
           {/* Main Content Grid */}
           {ops ? (
-            <div className="grid grid-cols-1 xl:grid-cols-[1.55fr_1fr] gap-6 items-start">
+            <>
+              {ops.needsAction.length > 0 ? (
+                <BentoCard>
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                    <div>
+                      <h2 className="m-0 text-base font-semibold text-[#18181a]">
+                        Perlu Tindakan
+                      </h2>
+                      <p className="m-0 mt-0.5 text-xs text-[#71717a]">
+                        {ops.needsAction.length} hal menunggu, diurutkan dari yang paling lama.
+                      </p>
+                    </div>
+                    <Chip variant="warning" size="sm">
+                      {ops.needsAction.length}
+                    </Chip>
+                  </div>
+                  <ul className="m-0 grid list-none gap-2 p-0">
+                    {ops.needsAction.map((item) => (
+                      <li key={`${item.kind}-${item.id}`}>
+                        <a
+                          href={item.href}
+                          className="flex flex-wrap items-center justify-between gap-2 rounded-[10px] border border-[#eaeaea] bg-[#fcfcfc] px-3 py-2.5 text-xs no-underline transition-colors hover:border-[#18181a]"
+                        >
+                          <span className="min-w-0">
+                            <span className="block font-semibold text-[#18181a]">
+                              {item.label}
+                            </span>
+                            <span className="block text-[11px] text-[#71717a]">
+                              {item.detail}
+                            </span>
+                          </span>
+                          <span className="shrink-0 text-[11px] font-medium text-[#52525b]">
+                            {item.ageDays > 0
+                              ? `${item.ageDays} hari`
+                              : "baru"}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </BentoCard>
+              ) : null}
+
+              <div className="grid grid-cols-1 xl:grid-cols-[1.55fr_1fr] gap-6 items-start">
               {/* Left Column: Proyek Klien & Permintaan Revisi */}
               <div className="flex flex-col gap-6">
                 {/* Proyek & Klien Aktif Table Bento */}
@@ -546,9 +589,10 @@ export function AdminDashboardPage() {
                       <span className="text-[10px] text-[#71717a]">Role &amp; 2FA</span>
                     </Link>
                   </div>
-                </BentoCard>
+                  </BentoCard>
+                </div>
               </div>
-            </div>
+            </>
           ) : (
             /* Editor view when ops is null */
             <BentoCard>

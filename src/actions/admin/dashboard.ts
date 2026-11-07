@@ -13,6 +13,7 @@ import {
   revisionRequests,
 } from "@/db/schema/portal";
 import { ok, toFailure, type ActionResult } from "../result";
+import { wibMonthRange, wibDateKey, daysBetween } from "@/lib/format/business-time";
 
 export type AdminDashboardData = {
   content: {
@@ -66,6 +67,15 @@ export type AdminDashboardData = {
       totalCost: number;
       balance: number;
     }>;
+    /** Hal yang menunggu tindakan admin, dengan alasan yang bisa ditindak. */
+    needsAction: Array<{
+      id: string;
+      kind: "inquiry" | "quote" | "revision" | "overdue";
+      label: string;
+      detail: string;
+      ageDays: number;
+      href: string;
+    }>;
   };
 };
 
@@ -95,8 +105,10 @@ export async function readAdminDashboardAction(): Promise<
     if (principal.role !== "owner") return ok({ content, operations: null });
 
     const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const { start: monthStart, end: nextMonth } = wibMonthRange(now);
+    // Lead dianggap terlantar setelah 2 hari tanpa tindakan.
+    const staleCutoff = new Date(now.getTime() - 2 * 24 * 60 * 60 * 1000);
+    const todayWib = wibDateKey(now);
     const [
       bookingsThisMonth,
       newInquiries,
@@ -109,6 +121,9 @@ export async function readAdminDashboardAction(): Promise<
       latestQuotes,
       revisions,
       latestProjects,
+      staleInquiries,
+      staleQuotes,
+      overdueProjects,
     ] = await Promise.all([
       db
         .select({ value: count() })
@@ -208,7 +223,99 @@ export async function readAdminDashboardAction(): Promise<
         .where(and(isNull(clientProjects.archivedAt), isNull(clientProjects.deletedAt)))
         .orderBy(desc(clientProjects.createdAt))
         .limit(5),
+      // Lead baru yang belum disentuh lebih dari 2 hari.
+      db
+        .select({
+          id: inquiries.id,
+          reference: inquiries.reference,
+          name: inquiries.name,
+          createdAt: inquiries.createdAt,
+        })
+        .from(inquiries)
+        .where(
+          and(
+            eq(inquiries.status, "new"),
+            isNull(inquiries.archivedAt),
+            lt(inquiries.createdAt, staleCutoff),
+          ),
+        )
+        .orderBy(inquiries.createdAt)
+        .limit(10),
+      // Estimasi kalkulator yang belum ditindak lebih dari 2 hari.
+      db
+        .select({
+          id: quoteRequests.id,
+          reference: quoteRequests.reference,
+          createdAt: quoteRequests.createdAt,
+        })
+        .from(quoteRequests)
+        .where(
+          and(
+            eq(quoteRequests.status, "new"),
+            isNull(quoteRequests.archivedAt),
+            lt(quoteRequests.createdAt, staleCutoff),
+          ),
+        )
+        .orderBy(quoteRequests.createdAt)
+        .limit(10),
+      // Proyek aktif yang melewati target selesai.
+      db
+        .select({
+          id: clientProjects.id,
+          projectTitle: clientProjects.projectTitle,
+          clientName: clientProjects.clientName,
+          targetCompletionDate: clientProjects.targetCompletionDate,
+        })
+        .from(clientProjects)
+        .where(
+          and(
+            isNull(clientProjects.archivedAt),
+            isNull(clientProjects.deletedAt),
+            lt(clientProjects.targetCompletionDate, todayWib),
+          ),
+        )
+        .orderBy(clientProjects.targetCompletionDate)
+        .limit(10),
     ]);
+
+    const needsAction: NonNullable<AdminDashboardData["operations"]>["needsAction"] = [
+      ...staleInquiries.map((row) => ({
+        id: row.id,
+        kind: "inquiry" as const,
+        label: `Inquiry ${row.reference} belum ditindak`,
+        detail: row.name,
+        ageDays: daysBetween(row.createdAt, now),
+        href: "/admin/inquiry",
+      })),
+      ...staleQuotes.map((row) => ({
+        id: row.id,
+        kind: "quote" as const,
+        label: `Estimasi ${row.reference} belum ditindak`,
+        detail: "Belum dihubungi sejak masuk",
+        ageDays: daysBetween(row.createdAt, now),
+        href: "/admin/quote",
+      })),
+      ...revisions.map((row) => ({
+        id: row.id,
+        kind: "revision" as const,
+        label: `Revisi menunggu: ${row.title}`,
+        detail: row.projectTitle,
+        ageDays: daysBetween(row.submittedAt, now),
+        href: "/admin/proyek-klien",
+      })),
+      ...overdueProjects.map((row) => ({
+        id: row.id,
+        kind: "overdue" as const,
+        label: `Proyek melewati target: ${row.projectTitle}`,
+        detail: row.clientName,
+        ageDays: row.targetCompletionDate
+          ? -daysBetween(new Date(`${row.targetCompletionDate}T00:00:00Z`), now)
+          : 0,
+        href: "/admin/proyek-klien",
+      })),
+    ]
+      .sort((a, b) => b.ageDays - a.ageDays)
+      .slice(0, 8);
 
     return ok({
       content,
@@ -224,6 +331,7 @@ export async function readAdminDashboardAction(): Promise<
         latestQuotes,
         revisions,
         latestProjects,
+        needsAction,
       },
     });
   } catch (error) {
