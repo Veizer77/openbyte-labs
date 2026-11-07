@@ -118,7 +118,7 @@ export function CalculatorProvider({
   const [units, updateUnits] = useState(0);
   const [name, setName] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
-  const [consent, setConsent] = useState(true);
+  const [consent, setConsent] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [turnstileResetKey, setTurnstileResetKey] = useState(0);
   const getItem = (id: string) => resolveConfiguredItem(config, id);
@@ -460,6 +460,9 @@ export function CalculatorContact(props: Props) {
     setName,
     whatsapp,
     setWhatsapp,
+    consent,
+    setConsent,
+    consentText,
     setTurnstileToken,
     turnstileResetKey,
   } = useCalculator();
@@ -513,6 +516,23 @@ export function CalculatorContact(props: Props) {
         </div>
       </div>
 
+      <div className="box-border w-full h-fit shrink-0 flex flex-row gap-2 items-start pt-1">
+        <input
+          id="calc-consent"
+          type="checkbox"
+          checked={consent}
+          onChange={(event) => setConsent(event.target.checked)}
+          required
+          className="mt-[2px] h-4 w-4 shrink-0 accent-[#e2e89d] cursor-pointer"
+        />
+        <label
+          htmlFor="calc-consent"
+          className="text-[11px]/[16px] text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left cursor-pointer"
+        >
+          {consentText}
+        </label>
+      </div>
+
       {turnstileSiteKey ? (
         <div className="w-full pt-1">
           <TurnstileWidget
@@ -539,6 +559,7 @@ export function CalculatorSend({
     minimumPrice,
     name,
     whatsapp,
+    consent,
     turnstileToken,
     setTurnstileToken,
     resetTurnstile,
@@ -560,6 +581,14 @@ export function CalculatorSend({
     const normalizedNumber = cleanWhatsapp ? normalizeWhatsapp(cleanWhatsapp) : null;
     if (cleanWhatsapp && !normalizedNumber) {
       const errMsg = "Mohon masukkan nomor WhatsApp yang valid (contoh: 0812xxxxxxx).";
+      setSubmission({ configKey: currentConfigKey, error: errMsg });
+      notify(errMsg);
+      return;
+    }
+
+    if (!consent) {
+      const errMsg =
+        "Centang persetujuan pemrosesan data sebelum mengirim estimasi.";
       setSubmission({ configKey: currentConfigKey, error: errMsg });
       notify(errMsg);
       return;
@@ -594,7 +623,7 @@ export function CalculatorSend({
         selection,
         contactName: name.trim() || undefined,
         contactWhatsapp: normalizedNumber ?? undefined,
-        consent: true,
+        consent,
         turnstileToken,
         honeypot: "",
       });

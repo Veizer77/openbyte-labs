@@ -316,21 +316,27 @@ export function ProjectDetail({
                         trending_up
                       </span>
                       <span className="text-[11px] font-bold tracking-[0.55px] uppercase">
-                        HASIL &amp; METRIK DAMPAK
+                        RINGKASAN PROYEK
                       </span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
                       <div className="p-3 bg-[#242427] rounded-[12px] flex flex-col">
-                        <span className="text-xs text-[#a8a8ad]">Akurasi Data</span>
-                        <span className="text-xl font-bold text-[#82b440] mt-1">100% Valid</span>
+                        <span className="text-xs text-[#a8a8ad]">Tahun Rilis</span>
+                        <span className="text-xl font-bold text-[#82b440] mt-1">
+                          {project.year ?? "—"}
+                        </span>
                       </div>
                       <div className="p-3 bg-[#242427] rounded-[12px] flex flex-col">
-                        <span className="text-xs text-[#a8a8ad]">Kecepatan Proses</span>
-                        <span className="text-xl font-bold text-white mt-1">&lt; 1 Detik</span>
+                        <span className="text-xs text-[#a8a8ad]">Kategori</span>
+                        <span className="text-xl font-bold text-white mt-1">
+                          {project.categories.length > 0 ? project.categories.join(", ") : "—"}
+                        </span>
                       </div>
                       <div className="p-3 bg-[#242427] rounded-[12px] flex flex-col">
-                        <span className="text-xs text-[#a8a8ad]">Uptime Operasional</span>
-                        <span className="text-xl font-bold text-[#e2e89d] mt-1">99.9%</span>
+                        <span className="text-xs text-[#a8a8ad]">Teknologi</span>
+                        <span className="text-xl font-bold text-[#e2e89d] mt-1">
+                          {project.technologies.length > 0 ? project.technologies.join(", ") : "—"}
+                        </span>
                       </div>
                     </div>
                   </div>
