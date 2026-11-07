@@ -986,6 +986,7 @@ export function AdminTrackingPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [status, setStatus] = useState("");
+  const [portfolioNameConsent, setPortfolioNameConsent] = useState(false);
   const [credentials, setCredentials] = useState<{
     code: string;
     pin: string;
@@ -1378,6 +1379,16 @@ export function AdminTrackingPage() {
                       {detail.project.archivedAt ? "Pulihkan" : "Arsipkan"}
                     </ToolbarButton>
 
+                    <label className="flex items-center gap-2 text-[11px] text-[#52525b] cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={portfolioNameConsent}
+                        onChange={(e) => setPortfolioNameConsent(e.target.checked)}
+                        className="h-3.5 w-3.5 accent-[#18181a] cursor-pointer"
+                      />
+                      Klien mengizinkan nama publikasi
+                    </label>
+
                     <ToolbarButton
                       variant="light"
                       disabled={busy || detail.project.currentStep !== 6}
@@ -1389,7 +1400,9 @@ export function AdminTrackingPage() {
                       onClick={async () => {
                         if (
                           !window.confirm(
-                            "Buat draft portofolio tanpa nama atau data identitas klien? Draft tetap perlu dilengkapi gambar dan konten sebelum diterbitkan."
+                            portfolioNameConsent
+                              ? `Buat draft portofolio DENGAN nama klien "${detail.project.clientName}"? Pastikan klien sudah memberi izin publikasi.`
+                              : "Buat draft portofolio anonim (tanpa nama klien)? Kategori dan tahun proyek tetap disalin. Draft perlu dilengkapi gambar dan konten sebelum diterbitkan."
                           )
                         )
                           return;
@@ -1399,7 +1412,8 @@ export function AdminTrackingPage() {
                         try {
                           const result =
                             await convertClientProjectToPortfolioAction(
-                              detail.project.id
+                              detail.project.id,
+                              portfolioNameConsent
                             );
                           if (!result.ok) setError(result.message);
                           else

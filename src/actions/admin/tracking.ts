@@ -8,7 +8,7 @@ import { authorize } from "@/access/rules";
 import { getDb } from "@/db";
 import { auditLogs } from "@/db/schema/audit";
 import { clientProjects, projectApprovals, projectSteps } from "@/db/schema/portal";
-import { projects as showcaseProjects } from "@/db/schema/content";
+import { projects as showcaseProjects, projectCategories } from "@/db/schema/content";
 import { randomUUID } from "node:crypto";
 import { createTrackingStore } from "@/db/tracking-store";
 import { createSettingsStore } from "@/db/site-settings-store";
@@ -26,6 +26,7 @@ import { ok } from "../result";
 import {
   createAnonymousPortfolioDraft,
   isPortfolioConversionReady,
+  portfolioYearFrom,
 } from "@/lib/tracking/portfolio";
 export async function listClientProjectsAction() {
   try {
@@ -125,8 +126,17 @@ export async function toggleTrackingAction(enabled: boolean) {
   }
 }
 
-/** Creates an unpublished portfolio shell without copying client-identifying data. */
-export async function convertClientProjectToPortfolioAction(id: string) {
+/**
+ * Membuat draft portofolio dari proyek klien.
+ *
+ * `includeClientName` adalah izin eksplisit. Tanpa izin, draf tetap anonim
+ * walaupun proyek sumber punya nama klien. Konten privat proyek klien (ringkasan,
+ * blok, gambar, tautan) tidak pernah disalin; admin mengisinya sendiri.
+ */
+export async function convertClientProjectToPortfolioAction(
+  id: string,
+  includeClientName = false,
+) {
   try {
     const principal = await requireAdmin();
     authorize(principal, "client-projects", "update");
@@ -169,13 +179,31 @@ export async function convertClientProjectToPortfolioAction(id: string) {
 
       const now = new Date();
       const slug = `portfolio-${randomUUID()}`;
+      const year = portfolioYearFrom(
+        clientProject.startDate,
+        clientProject.targetCompletionDate,
+        now.getFullYear(),
+      );
       const [showcase] = await tx
         .insert(showcaseProjects)
         .values({
-          ...createAnonymousPortfolioDraft(slug, now.getFullYear()),
+          ...createAnonymousPortfolioDraft(slug, year, {
+            clientName: clientProject.clientName,
+            includeClientName: Boolean(includeClientName),
+            categoryIds: clientProject.categoryId ? [clientProject.categoryId] : [],
+            year,
+          }),
         })
         .returning({ id: showcaseProjects.id, slug: showcaseProjects.slug });
       if (!showcase) throw new Error("Draft portofolio tidak dapat dibuat.");
+
+      // Kategori disalin karena itu atribut publik proyek, bukan identitas klien.
+      if (clientProject.categoryId)
+        await tx.insert(projectCategories).values({
+          projectId: showcase.id,
+          categoryId: clientProject.categoryId,
+        });
+
       await tx
         .update(clientProjects)
         .set({ projectId: showcase.id, updatedAt: now })
@@ -186,7 +214,9 @@ export async function convertClientProjectToPortfolioAction(id: string) {
         action: "create",
         collection: "projects",
         docId: showcase.id,
-        summary: "Membuat shell draft portofolio anonim dari proyek klien",
+        summary: includeClientName
+          ? "Membuat draft portofolio dari proyek klien dengan izin nama klien"
+          : "Membuat draft portofolio anonim dari proyek klien",
       });
       await tx.insert(auditLogs).values({
         actorId: principal.id,
