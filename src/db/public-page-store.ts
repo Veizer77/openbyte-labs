@@ -23,7 +23,7 @@ const pageFields = {
 
 export function createPublicPageStore(db: Database): PublicPageStore {
   const publication = db.selectDistinctOn([contentVersions.docId], { docId: contentVersions.docId, snapshot: contentVersions.snapshot }).from(contentVersions)
-    .where(and(eq(contentVersions.collection, "pages"), eq(contentVersions.changeType, "publish"), sql`(${contentVersions.snapshot}->>'publishedAt')::timestamptz <= statement_timestamp()`))
+    .where(and(eq(contentVersions.collection, "pages"), eq(contentVersions.changeType, "publish"), sql`(${contentVersions.snapshot}->>'publishedAt')::timestamptz <= statement_timestamp() + interval '5 seconds'`))
     .orderBy(asc(contentVersions.docId), desc(contentVersions.version)).as("page_publication");
   return {
     async findBySlug(slug, includeDraft) {

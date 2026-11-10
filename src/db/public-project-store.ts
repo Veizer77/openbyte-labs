@@ -83,14 +83,14 @@ export function createPublicProjectStore(
   }).from(contentVersions).where(and(
     eq(contentVersions.collection, "projects"),
     eq(contentVersions.changeType, "publish"),
-    sql`(${contentVersions.snapshot}->>'publishedAt')::timestamptz <= statement_timestamp()`,
+    sql`(${contentVersions.snapshot}->>'publishedAt')::timestamptz <= statement_timestamp() + interval '5 seconds'`,
   )).orderBy(asc(contentVersions.docId), desc(contentVersions.version)).as("publication");
   const fields = { ...projectFields, snapshot: publication.snapshot };
   const coverId = sql`coalesce((${publication.snapshot}->>'featuredImageId')::uuid, ${projects.featuredImageId})`;
   const effectiveSlug = sql<string>`coalesce(${publication.snapshot}->>'slug', ${projects.slug})`;
   const publishedProjectFilter = and(
     eq(projects.publicationEnabled, true),
-    sql`(${publication.docId} IS NOT NULL OR (${projects.status} = 'published' AND ${projects.publishedAt} <= statement_timestamp()))`,
+    sql`(${publication.docId} IS NOT NULL OR (${projects.status} = 'published' AND ${projects.publishedAt} <= statement_timestamp() + interval '5 seconds'))`,
     isNull(projects.deletedAt),
     isNotNull(media.finalizedAt),
     isNull(media.deletedAt),
