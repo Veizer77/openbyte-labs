@@ -2,6 +2,22 @@
 
 Lingkungan checkpoint frontend awal: Windows, Node.js 26.8.2, pnpm 12.3.4, Chrome desktop. Tanggal: 28 Oktober 2026. Hasil browser/smoke di bawah adalah bukti historis untuk state saat itu, bukan verifikasi penuh integrasi database 31 Oktober.
 
+## Pembaruan 10 November 2026 (verifikasi ulang)
+
+Angka di bawah bagian ini adalah **snapshot lama** (237/54, 36/3, 107 E2E) dan tidak lagi mewakili codebase. Hasil yang dijalankan ulang pada worktree utama:
+
+| Pemeriksaan | Hasil |
+|---|---|
+| `pnpm typecheck` | Lulus, 0 error |
+| `pnpm lint` | 0 error / 8 warning (`no-unused-vars`) |
+| `pnpm test` | **439 lulus / 85 berkas** |
+| `pnpm test:integration` | Tidak dijalankan ulang (butuh database uji terisolasi) |
+| `pnpm build` | Tidak dapat diselesaikan pada sesi ini karena guard penghapusan massal lingkungan saat Next membersihkan `.next/trace-build`; bukan error kompilasi. Build terakhir yang terdokumentasi lulus pada 7 November 2026 |
+
+Perbaikan yang membuat suite kembali hijau: harness `tests/unit/load-local-env.test.ts` kini memakai namespace import + fallback `default` (Node 22 + tsx menyajikan `.ts` dari `eval` ESM sebagai CJS), `vitest.config.ts` membatasi `maxWorkers: 4`, dan dua tes berat diberi timeout eksplisit. Sebelumnya 4 tes gagal karena named import, lalu 2 tes gagal karena timeout 5 detik akibat 85 worker paralel.
+
+Status produksi terbaru: Rilis 1 live, portal tracking aktif sejak 10 November 2026. `scripts/smoke-production.mjs` mendeteksi status portal otomatis dari `/tracking`, sehingga `pnpm test:production` tidak lagi memerlukan `SMOKE_TRACKING_ENABLED` untuk target produksi (tetap set `SMOKE_INDEXING_ENABLED=true`).
+
 ## Pembaruan 31 Oktober 2026
 
 | Pemeriksaan | Hasil terakhir |

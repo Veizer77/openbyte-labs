@@ -59,6 +59,15 @@ jobs:
           BACKUP_R2_BUCKET: ${{ secrets.BACKUP_R2_BUCKET }}
           BACKUP_R2_ACCESS_KEY_ID: ${{ secrets.BACKUP_R2_ACCESS_KEY_ID }}
           BACKUP_R2_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_R2_SECRET_ACCESS_KEY }}
+      - name: Verify backup database credential
+        run: |
+          if ! /usr/lib/postgresql/17/bin/psql "$BACKUP_DATABASE_URL" -c 'SELECT 1' >/dev/null 2>&1; then
+            echo "::error::Autentikasi backup gagal. Perbarui secrets.BACKUP_DATABASE_URL (environment backup) setelah rotasi password role database. Kredensial tidak dicetak."
+            exit 1
+          fi
+          echo "backup_db_auth: ok"
+        env:
+          BACKUP_DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
       - run: pnpm db:backup
         env:
           PG_DUMP_BIN: /usr/lib/postgresql/17/bin/pg_dump

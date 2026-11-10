@@ -3,6 +3,7 @@
 **Pembaruan audit:** 31 Oktober 2026  
 **Acuan:** [`PRD_v1_6_2.md`](../PRD_v1_6_2.md), dokumen PRD bernama v1.6.2 tetapi isinya menyatakan spesifikasi versi 1.5.2.  
 **Status:** audit kerja Rilis 1; bukan persetujuan rilis produksi.
+**Catatan 10 November 2026:** matriks di bawah adalah **snapshot bersejarah** 31 Oktober 2026 dan sudah kedaluwarsa; lihat addendum di akhir berkas dan `docs/RELEASE-2-2026-11-07.md`.
 
 > Audit 29 Oktober di bawah nama file ini sudah kedaluwarsa. Kode, database dev, media, transport, dan sejumlah layar telah berubah. Angka/temuan lama seperti “tidak ada jalur DB”, “admin belum ada”, “media belum ada”, dan skor 0–52% tidak berlaku lagi.
 
@@ -104,3 +105,21 @@ Snapshot matriks di atas bertanggal 31 Oktober. Status lokal setelah pekerjaan C
 - `pnpm typecheck`, `pnpm lint`, `pnpm test` (298 unit test/63 berkas), dan `pnpm build` lulus pada 1 November. Integrasi PostgreSQL dan browser smoke tidak dijalankan ulang untuk perubahan ini.
 - `pnpm db:generate` membuat `src/db/migrations/0016_dark_surge.sql` secara offline. Migrasi belum diterapkan ke database mana pun. Tidak ada perubahan data aplikasi, aktivasi portal, deployment, atau perubahan DNS.
 - Percobaan menjalankan `pnpm dev` kedua mendeteksi proses Next yang sudah aktif pada port 3000; proses yang sudah ada menjawab HTTP 200 dan tidak dihentikan. Ini menjelaskan `ELIFECYCLE` reproduksi lokal sebagai konflik instance/lock, bukan error kompilasi aplikasi. Cek dan tutup hanya instance yang dipastikan milik operator sebelum mencoba ulang.
+
+## Addendum status — 10 November 2026
+
+Audit 31 Oktober beserta matriks §2 di atas **sudah kedaluwarsa** dan jangan
+dipakai untuk menilai status proyek. Rujukan resmi adalah
+[`RELEASE-1-2026-11-03.md`](RELEASE-1-2026-11-03.md) dan
+[`RELEASE-2-2026-11-07.md`](RELEASE-2-2026-11-07.md).
+
+- Rilis 1 live di produksi dengan seluruh gate G1–G7 lulus: indexing aktif,
+  Sentry menerima event, backup harian terenkripsi, dan restore drill lulus.
+- Rilis 2: Wave A/B selesai, migrasi 0020 terpasang di produksi (**21 migrasi**),
+  portal tracking aktif sejak 10 November 2026, seluruh gate R2-G1…R2-G6 lulus.
+- Temuan lama yang tertutup: backup/restore, monitoring, verifikasi Turnstile,
+  persetujuan kalkulator, metrik proyek fiktif, dan seluruh modul admin yang dulu
+  tercatat "belum dibuka" (kini 22 rute aktif).
+- Yang masih terbuka tercatat pada `RELEASE-2` §5.2: secret backup GitHub, uji
+  alur klien nyata, rotasi `BETTER_AUTH_SECRET`, LCP/a11y, cache tag, dan modul
+  editorial.

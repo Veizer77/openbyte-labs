@@ -196,13 +196,13 @@ kredensial salah        → 401 (pesan generik)
 6 percobaan berturut    → 401 semua, 1 kunci terkunci di rate_limits
 ```
 
-## 7. Yang Belum
+## 7. Batas bukti dan catatan terbuka
 
 | Kebutuhan | Dampak |
 |---|---|
 | Login/TOTP end-to-end pada Neon | Akun owner dengan TOTP aktif sudah ada di produksi dan sesi ditolak tanpa faktor kedua. Verifikasi dilakukan lewat data assurance per sesi, bukan sekadar flag pengguna. |
 | `owner:reset` | CLI break-glass tersedia, meminta target dan konfirmasi `RESET`, mengganti password, menonaktifkan 2FA, mencabut sesi, dan mengaudit; jangan jalankan tanpa target yang disetujui |
-| Integrasi UI belum menyeluruh | Form publik booking/inquiry/quote dan layar admin proyek, layanan, kategori/teknologi, media, kalkulator, booking/jadwal, inquiry, quote, settings, dan Page Builder terhubung. Paket/add-on, FAQ/testimoni, staf, audit UI, billing, dan portal masih perlu penyelesaian. |
+| Integrasi UI | ✅ Seluruh **22 rute** pada `liveRoutes` (`src/app/admin/[[...path]]/page.tsx`) memakai Server Actions: konten, CMS (settings/pages/FAQ/testimoni/paket/add-on/kalkulator), operasional (booking/inquiry/quote/proyek-klien/template/invoice/berkas), dan sistem (users/audit-logs). Portal `/tracking` aktif di produksi sejak 10 November 2026. |
 | Health dan observability | `/health` mengecek DB dan mengembalikan 200 di produksi (endpoint pooler). CSP/HSTS dan security headers aktif dan tervalidasi pada deployment. Sentry menerima event dan source map di-upload saat build (bergerbang token). Monitoring 24 jam pasca-launch dinilai penuh: 5 deployment `Ready`, nol error/fatal runtime di Vercel, 53 operasi Neon `failures_count: 0`, nol login admin gagal, dan catch-all route menjawab 404 (bukan 500) untuk path tak dikenal. Issue Sentry `OPENBYTE-LABS-2`/`-3` terdiagnosis berasal dari smoke test di mesin Windows lokal pemilik, bukan produksi. Uptime monitor dipasang di GitHub Actions (`.github/workflows/uptime.yml`, lihat di bawah); uji restore sudah lulus. |
 | Verifikasi layanan eksternal | 9 objek media terdaftar di database dan merujuk bucket R2 publik. Turnstile aktif di produksi dan submission asli sudah diuji manusia 3/3 (`INQ-2611-V23Y`, `QTE-2611-RSC6`, `BKG-2611-Q76A`). |
 | Cache | Route katalog memakai `force-dynamic` dan membaca DB per request; belum memakai fetch cache bertag. Jangan mengklaim integrasi cache tag end-to-end. |

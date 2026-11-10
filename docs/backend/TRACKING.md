@@ -97,6 +97,14 @@ Smoke browser menjalankan server development tersendiri di `127.0.0.1:3102` deng
 
 ## Status verifikasi
 
+**Status produksi 10 November 2026:** portal **aktif** (`trackingEnabled = true`);
+`/tracking` menjawab 200 dan `/tracking/proyek` 307 ke halaman login. Sesi
+memakai kunci turunan `BETTER_AUTH_SECRET`, jadi `TRACKING_SESSION_SECRET` tidak
+dipakai kode dan tidak perlu diisi. Untuk smoke produksi, biarkan
+`SMOKE_TRACKING_ENABLED` kosong agar status portal terdeteksi otomatis. Belum ada
+bukti proyek klien nyata maupun uji alur penuh dari perangkat klien; lihat
+`docs/RELEASE-2-2026-11-07.md` §4 dan §5.2.
+
 - Verifikasi portal terdahulu: pemeriksaan baca-saja menemukan tabel portal yang digunakan pada target aplikasi/test, dan smoke browser memakai database test terisolasi. Aktivasi untuk penggunaan nyata tetap dilakukan owner dari panel admin.
 - Pada 1 November 2026, perubahan CMS lokal lulus `pnpm typecheck`, `pnpm test` (298 unit test/63 berkas), `pnpm lint`, dan `pnpm build`. Tes integrasi database dan smoke browser tidak dijalankan ulang untuk perubahan CMS/invoice/template/konversi ini.
 - `pnpm db:generate` membuat migrasi `0016_dark_surge.sql` secara offline untuk tabel invoice dan relasi ledger. Migrasi tersebut belum ditinjau/diterapkan ke database aplikasi atau test pada pekerjaan ini.

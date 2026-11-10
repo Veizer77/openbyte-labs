@@ -4,6 +4,8 @@
 **Acuan:** `PRD_v1_6_2.md` (isi PRD versi 1.5.2)  
 **Lingkup:** backend, integrasi database, media, dan layar aplikasi yang sudah memakai data nyata. Ini bukan persetujuan rilis produksi.
 
+> **Catatan 10 November 2026:** dokumen ini **snapshot bersejarah** per 31 Oktober 2026. Seluruh temuan "belum siap produksi" di bawah sudah tertutup oleh Rilis 1 (gate G1–G7 lulus) dan Rilis 2. Gunakan `docs/RELEASE-1-2026-11-03.md` dan `docs/RELEASE-2-2026-11-07.md` sebagai rujukan status terkini.
+
 > Persentase 52–62% pada checkpoint 30 Oktober sudah kedaluwarsa: pada saat itu transport/UI belum selengkap kondisi sekarang. Persentase tunggal juga menyamarkan perbedaan antara kode tersedia, UI benar-benar terhubung, data dev terverifikasi, dan operasi produksi. Audit ini memakai status dan gerbang yang eksplisit.
 
 ## Ringkasan

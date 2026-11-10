@@ -1,7 +1,34 @@
 import assert from "node:assert/strict";
 
 const base = process.env.SMOKE_BASE_URL ?? "http://localhost:3002";
-const trackingEnabled = process.env.SMOKE_TRACKING_ENABLED === "true";
+// Portal bisa aktif di produksi dan nonaktif pada build lokal. Deteksi keadaan
+// target satu kali di awal. Nilai eksplisit tetap dihormati, tetapi ketidaksesuaian
+// ditolak dengan pesan yang bisa langsung ditindaklanjuti operator.
+const trackingSetting = process.env.SMOKE_TRACKING_ENABLED;
+if (trackingSetting !== undefined && !["true", "false"].includes(trackingSetting)) {
+  throw new Error("SMOKE_TRACKING_ENABLED harus bernilai true atau false.");
+}
+let trackingProbe;
+try {
+  trackingProbe = await fetch(new URL("/tracking", base));
+} catch (error) {
+  throw new Error(
+    `Tidak dapat menghubungi ${base}. Jalankan server hasil build atau set SMOKE_BASE_URL ke target yang benar.`,
+    { cause: error },
+  );
+}
+if (![200, 404].includes(trackingProbe.status)) {
+  throw new Error(`/tracking menjawab HTTP ${trackingProbe.status}; status portal tidak dapat ditentukan.`);
+}
+const trackingEnabled = trackingProbe.status === 200;
+if (trackingSetting !== undefined && (trackingSetting === "true") !== trackingEnabled) {
+  throw new Error(
+    `SMOKE_TRACKING_ENABLED=${trackingSetting} tidak sesuai target ${base} ` +
+      `(portal ${trackingEnabled ? "aktif" : "nonaktif"}). ` +
+      `Set SMOKE_TRACKING_ENABLED=${trackingEnabled} atau hapus variabelnya agar dideteksi otomatis.`,
+  );
+}
+console.log(`Portal tracking: ${trackingEnabled ? "aktif" : "nonaktif"} (HTTP ${trackingProbe.status}).`);
 // Saat indexing publik menyala (S7), header `x-robots-tag: noindex` hanya
 // dipertahankan pada rute yang memang tidak boleh diindeks.
 const indexingEnabled = process.env.SMOKE_INDEXING_ENABLED === "true";

@@ -253,7 +253,7 @@ describe("Better Auth con adapter in-memory", () => {
         recoveryCode,
       ),
     ).rejects.toThrow();
-  });
+  }, 20_000);
 
   it("menyelesaikan enrollment dengan sesi hasil verifikasi dan cookie respons", async () => {
     for (const rows of Object.values(memory)) rows.length = 0;

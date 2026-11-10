@@ -1,24 +1,24 @@
 # OpenByte Labs
 
-Satu aplikasi Next.js untuk situs publik dan dashboard admin custom. Acuan produk: [`PRD_v1_6_2.md`](PRD_v1_6_2.md) (dokumen ini menetapkan PRD versi 1.5.2).
+Satu aplikasi Next.js untuk situs publik, dashboard admin custom, dan portal klien. Acuan produk: [`PRD_v1_6_2.md`](PRD_v1_6_2.md) (berkas bernama v1.6.2, isinya menyatakan spesifikasi versi 1.5.2).
 
 ## Status saat ini
 
-**Lingkungan pengembangan sudah tersambung ke Neon dev dan R2, tetapi Rilis 1 belum siap produksi.** Jangan menganggap halaman yang masih diberi label preview sebagai data tersimpan.
+**Rilis 1 live di produksi sejak 3–4 November 2026; portal klien (Rilis 2) diaktifkan 10 November 2026.** Produksi berjalan di `https://openbyte-labs.vercel.app` dan di-deploy otomatis dari branch `main` (GitHub → Vercel). Rilis 1 ditutup pada tag `release-1` dengan seluruh gate G1–G7 lulus; Rilis 2 telah menyelesaikan Wave A, B, dan C dengan gate R2-G1…R2-G6 lulus. Bukti: [`docs/RELEASE-1-2026-11-03.md`](docs/RELEASE-1-2026-11-03.md) dan [`docs/RELEASE-2-2026-11-07.md`](docs/RELEASE-2-2026-11-07.md).
 
 | Area | Yang sudah bekerja | Batas saat ini |
 |---|---|---|
-| Database dev | Database non-produksi sudah dimigrasi dan di-seed | Identitas target disimpan pada konfigurasi operator lokal; jangan arahkan tes tulis ke database bersama atau produksi |
-| Katalog publik | Beranda memuat Settings, layanan, proyek, dan FAQ; `/proyek`, detail proyek, dan `/paket` membaca data database | Copy katalog yang sudah tersimpan belum disahkan untuk produksi; FAQ/paket lama di database tidak diubah pada pekerjaan ini; `noindex` tetap aktif |
-| Konten dev | 6 proyek (3 unggulan), 4 layanan, 9 FAQ aktif, dan 6 aset media final | Tidak ada testimoni yang dibuat; dua kandidat testimoni dan empat kandidat FAQ tetap ditahan |
-| Form publik | Ketersediaan dan pengajuan booking, inquiry, serta quote memakai Server Actions dan validasi server | Hanya data sungguhan dari pengunjung boleh dibuat; verifikasi Turnstile eksternal belum disahkan untuk produksi |
-| Admin | UI DB untuk proyek, layanan, kategori/teknologi, media, kalkulator, booking/jadwal, inquiry, dan quote | Route yang belum terhubung ditutup; bootstrap owner dan login produksi perlu target serta verifikasi pemilik |
-| Media | Upload staging privat, validasi server, finalisasi, dan varian WebP; enam aset dev sudah final | Konfigurasi R2 produksi dan kesiapan operasional belum menjadi gerbang rilis |
-| Portal klien | `/admin/proyek-klien`, login kode/PIN, sesi proyek, progres, pembayaran, dokumen, revisi, komentar, dan persetujuan memakai database | Owner mengaktifkan portal melalui panel admin; unggah privat memerlukan bucket R2 terpisah dan CORS yang benar. Lihat `docs/backend/TRACKING.md` |
+| Database produksi | Neon branch `main` / `openbyte_labs`, **21 migrasi** terterap, runtime memakai endpoint pooler | Migrasi/seed/backup memakai koneksi direct dengan konfirmasi target; jangan arahkan tes tulis ke produksi |
+| Katalog publik | Beranda, `/proyek`, detail proyek, `/paket`, `/layanan/*` membaca database; indexing aktif | `/blog` sengaja `noindex` karena modul editorial belum ada; persetujuan copy/klaim dan izin konten masih perlu dituntaskan |
+| Form publik | Booking, inquiry, quote lewat Server Actions, Turnstile, dan rate limit; tiga submission asli pemilik terverifikasi | Tidak ada submission publik dalam jendela monitoring 24 jam — kestabilan terbukti, bukan beban |
+| Admin | **22 rute aktif** memakai actions/domain database; 9 di antaranya khusus owner dengan MFA | `/admin/*` selalu `noindex`; tidak ada endpoint CRUD generik |
+| Media | Upload staging privat, finalisasi, varian WebP di R2; bucket backup terenkripsi terpisah | Bucket privat dokumen klien perlu diverifikasi terpisah; host `r2.dev` bermasalah pada sebagian jaringan ISP |
+| Portal klien | `/tracking` aktif, login kode/PIN, progres, pembayaran, dokumen, revisi, diskusi, dan persetujuan memakai database | Belum terdokumentasi proyek klien nyata maupun uji alur penuh dari perangkat klien |
+| Operasional | Sentry + source map, uptime monitor 15 menit/6 jam, backup harian terenkripsi, restore drill lulus | Secret `BACKUP_DATABASE_URL` di GitHub perlu diperbarui setelah rotasi password role DB; rotasi `BETTER_AUTH_SECRET` masih ditunda |
 
-Tidak ada transaksi, booking, inquiry, quote, akun, atau testimoni palsu yang ditambahkan. Konten katalog yang tampil di development bukan bukti persetujuan untuk produksi. Copy default FAQ/paket pada source sudah dirapikan; record yang sudah tersimpan di database dev tidak ditulis ulang dan masih perlu ditinjau. Jangan menjalankan ulang seed atau importer secara manual tanpa meninjau target dan diff.
+Tidak ada transaksi, booking, inquiry, quote, akun, atau testimoni palsu yang ditambahkan. Data katalog yang tampil di development bukan bukti persetujuan konten produksi. Jangan menjalankan ulang seed atau importer secara manual tanpa meninjau target dan diff.
 
-Status rinci, gap PRD, dan bukti terbaru: [`docs/AUDIT_PRD_v1_6_2.md`](docs/AUDIT_PRD_v1_6_2.md), [`docs/AUDIT_BACKEND_2026-10-30.md`](docs/AUDIT_BACKEND_2026-10-30.md), dan [`docs/backend/FONDASI.md`](docs/backend/FONDASI.md).
+Status rinci, gap PRD, dan bukti terbaru: [`docs/RELEASE-1-2026-11-03.md`](docs/RELEASE-1-2026-11-03.md), [`docs/RELEASE-2-2026-11-07.md`](docs/RELEASE-2-2026-11-07.md), [`docs/AUDIT_PRD_v1_6_2.md`](docs/AUDIT_PRD_v1_6_2.md), dan [`docs/backend/FONDASI.md`](docs/backend/FONDASI.md). Audit 31 Oktober 2026 dan `docs/AUDIT_BACKEND_2026-10-30.md` adalah **snapshot lama**, bukan status terkini.
 
 ## Prasyarat lokal
 
@@ -38,7 +38,7 @@ pnpm dev --port 3001
 - Website: http://localhost:3001
 - Login admin: http://localhost:3001/admin/login
 
-Semua halaman publik tetap `noindex`; `/robots.txt` melarang indexing dan sitemap kosong sampai konten/domain disetujui untuk rilis. `/health` memeriksa koneksi database dan mengembalikan 503 bila tidak siap.
+Indexing publik dikunci oleh `PUBLIC_INDEXING_ENABLED`: saat `true` (produksi) `/robots.txt` mengizinkan perayapan dengan `Disallow` untuk `/admin`, `/tracking`, `/api`, `/pesan`, `/konsultasi`, dan sitemap berisi URL nyata; saat `false` seluruh situs `disallow`. `/blog` selalu `noindex`. `/health` menjalankan `SELECT 1` dan mengembalikan 503 bila database tidak siap.
 
 ## Membuat owner dev
 
@@ -46,25 +46,24 @@ Bootstrap owner memerlukan target database direct yang disetujui, konfirmasi `CR
 
 ## Cakupan admin
 
-UI yang telah memakai actions/domain database:
+Seluruh rute pada `liveRoutes` (`src/app/admin/[[...path]]/page.tsx`) memakai Server Actions dan domain database:
 
-- `/admin/showcase` — proyek, draft/publish, trash/restore, versi, relasi media/kategori/teknologi.
-- `/admin/layanan`, `/admin/kategori` — layanan, kategori, dan teknologi.
-- `/admin/media` — upload dan finalisasi aset R2.
-- `/admin/kalkulator` — konfigurasi kalkulator.
-- `/admin/booking` — booking, jadwal, dan tanggal terblokir.
-- `/admin/inquiry`, `/admin/quotes` — daftar dan tindak lanjut.
-- `/admin/proyek-klien` — proyek klien, kode/PIN, aktivasi portal, tahapan, pembayaran, dokumen, revisi, diskusi, dan bukti persetujuan; khusus owner yang sudah MFA.
+- **Konten:** `/admin/showcase` (proyek, draft/publish, trash/restore, versi), `/admin/layanan`, `/admin/kategori`, `/admin/teknologi`, `/admin/media`.
+- **CMS:** `/admin/dashboard`, `/admin/settings`, `/admin/pages` (Page Builder), `/admin/faqs`, `/admin/testimonials`, `/admin/packages`, `/admin/addons`, `/admin/kalkulator`.
+- **Operasional:** `/admin/booking`, `/admin/inquiry`, `/admin/quotes`, `/admin/proyek-klien`, `/admin/template-tahap`, `/admin/invoice`, `/admin/berkas`.
+- **Sistem (owner):** `/admin/users`, `/admin/audit-logs`, serta `proyek-klien`, `booking`, `inquiry`, `quotes`, `template-tahap`, `invoice`, `berkas`.
 
-Route untuk Settings umum, Page Builder, paket/add-on, FAQ/testimoni, dashboard ringkasan, staf, audit-log UI, dan invoice belum dibuka sebagai modul admin aktif. Aksi server yang tersedia bukan bukti bahwa setiap layar sudah memakai alur database.
+Rute di luar daftar itu mengembalikan 404. Menyembunyikan menu bukan mekanisme otorisasi; setiap action memanggil `requireAdmin()` dan `authorize()`.
 
 ## Batas rilis
 
-- `/tracking` dan `/tracking/proyek` tersedia hanya setelah owner mengaktifkan portal. Navbar menautkan `/tracking`, tidak lagi menuju demo. Saat nonaktif, akses tracking ditutup.
-- Kebijakan privasi dan ketentuan layanan saat ini ditandai sebagai draf dan masih memerlukan persetujuan pemilik/legal.
-- Belum selesai: persetujuan copy/klaim dan izin konten, verifikasi login/TOTP serta Turnstile pada lingkungan yang disetujui, kredensial dan verifikasi R2/hosting, backup + restore, monitoring, validasi CSP/HSTS di browser, audit aksesibilitas/performa, dan gerbang rilis PRD lainnya. Header keamanan dan workflow CI/secret scan sudah dikonfigurasi, belum menjadi bukti validasi produksi.
-- Domain, hosting komersial, deployment, migrasi produksi, dan DNS **tidak termasuk pekerjaan ini**. Jangan deploy sebelum keputusan/izin terpisah.
-- Working tree memuat pekerjaan yang belum di-commit. Jangan reset/revert atau menganggap seluruhnya sebagai file sementara.
+- Portal `/tracking` **sudah aktif** di produksi (`tracking.trackingEnabled = true`, 10 November 2026). Saat nonaktif, gerbang pada fase `generateMetadata` mengembalikan 404 nyata dan tautan navbar disembunyikan.
+- Deploy kode **hanya** lewat push ke `main`. `npx vercel --prod` tidak dipakai; `npx vercel redeploy` hanya untuk menerapkan perubahan environment variable.
+- Teks final kebijakan privasi/ketentuan layanan, persetujuan klaim, dan izin konten masih memerlukan keputusan pemilik/legal.
+- Rotasi password role database produksi sudah dilakukan 10 November 2026. **Rotasi `BETTER_AUTH_SECRET` masih ditunda** atas keputusan pemilik; secret itu juga menjadi dasar kunci sesi tracking.
+- Yang belum terbukti: pembaruan `BACKUP_DATABASE_URL` pada GitHub environment `backup`, proyek klien nyata + uji alur portal dari perangkat klien, LCP ≤ 1,8 detik, audit aksesibilitas/performa formal, cache tag, modul editorial/blog, dan paginasi lanjut UI portal.
+- Custom domain ditolak pemilik; produksi memakai domain Vercel. Perlu dicatat bahwa PRD awalnya mewajibkan domain dan hosting komersial sebelum Rilis 1.
+- **Working tree memuat pekerjaan pemilik yang belum di-commit** (perubahan UI, `SplashScreen`, dan berkas terkait). Jangan reset/revert, jangan anggap sebagai file sementara, dan jangan menyertakannya ke commit tanpa izin. Karena deploy hanya dari `main`, perubahan tersebut belum ada di produksi.
 
 ## Pengujian
 
@@ -79,7 +78,9 @@ pnpm check:portability
 pnpm build
 ```
 
-`pnpm test:integration` menulis dan membersihkan data pada database test terisolasi. Sebelum menjalankannya, ikuti [`docs/backend/SETUP_DATABASE_TEST.md`](docs/backend/SETUP_DATABASE_TEST.md); jangan gunakan database dev atau produksi sebagai target tes tulis. `pnpm test:production` adalah smoke test lokal terhadap hasil build, bukan deployment.
+`pnpm test:integration` menulis dan membersihkan data pada database test terisolasi. Ikuti [`docs/backend/SETUP_DATABASE_TEST.md`](docs/backend/SETUP_DATABASE_TEST.md); jangan gunakan database dev atau produksi sebagai target tes tulis. Job `integration` pada `.github/workflows/ci.yml` tersedia lewat `workflow_dispatch` dengan layanan `postgres:17`; job itu tidak memblokir CI wajib dan masih perlu diverifikasi pada runner GitHub.
+
+`pnpm test:production` adalah smoke HTTP terhadap target `SMOKE_BASE_URL` (bukan deployment). Status portal kini **dideteksi otomatis** dari `/tracking`; `SMOKE_TRACKING_ENABLED` opsional dan hanya untuk mengunci ekspektasi. `SMOKE_INDEXING_ENABLED=true` diperlukan saat menarget produksi yang sudah mengizinkan indexing.
 
 ## Struktur utama
 
@@ -92,7 +93,7 @@ src/services/             Use case domain, audit, cache
 src/components/public/    Komponen publik dan katalog database
 src/components/admin/     UI admin DB untuk modul yang sudah diintegrasikan
 src/components/screens/   Layar prototype yang dipertahankan untuk komponen tampilan
-src/fixtures/             Data referensi/fixture untuk area yang belum dimigrasi
+src/fixtures/             Data referensi/fixture (hanya dipakai seed, bukan runtime)
 tests/                    Unit, integration, E2E, visual
 docs/                     Audit, prosedur operator, dan catatan implementasi
 ```

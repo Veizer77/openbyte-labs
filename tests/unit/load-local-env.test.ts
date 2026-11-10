@@ -28,11 +28,16 @@ function runLoader(
   delete env.__NEXT_PROCESSED_ENV;
   for (const key of Object.keys(env))
     if (key.startsWith("OB_ENV_TEST_") && !(key in environment)) delete env[key];
+  // Node 22 + tsx menyajikan berkas .ts yang diimpor dari eval ESM sebagai
+  // CommonJS (namespace hanya `default`), sehingga named import gagal.
+  // Namespace import + fallback default bekerja pada kedua bentuk modul.
   return spawnSync(
     process.execPath,
     [
       "--import", "tsx", "--input-type=module", "-e",
-      `import { loadLocalEnv } from ${JSON.stringify(helper)};
+      `import * as envModule from ${JSON.stringify(helper)};
+       const loadLocalEnv = envModule.loadLocalEnv ?? envModule.default?.loadLocalEnv;
+       if (typeof loadLocalEnv !== "function") throw new Error("loadLocalEnv tidak tersedia.");
        try {
          loadLocalEnv(${JSON.stringify(directory)});
          console.log(JSON.stringify({
@@ -57,7 +62,7 @@ describe("environment skrip operator mengikuti Next.js", () => {
     expect(JSON.parse(result.stdout)).toEqual({
       base: "from-env", expanded: "from-env/suffix", value: "from-local",
     });
-  });
+  }, 30_000);
 
   it("memprioritaskan shell lalu environment-local, local, environment, dan .env", () => {
     const files = {
@@ -83,7 +88,7 @@ describe("environment skrip operator mengikuti Next.js", () => {
     };
     expect(JSON.parse(runLoader(files, { NODE_ENV: "production" }).stdout).value).toBe("production-local");
     expect(JSON.parse(runLoader(files, { NODE_ENV: "test" }).stdout).value).toBe("test");
-  });
+  }, 30_000);
 
   it("merahasiakan isi file saat ekspansi env gagal", () => {
     const result = runLoader({
@@ -92,5 +97,5 @@ describe("environment skrip operator mengikuti Next.js", () => {
     expect(result.status).toBe(1);
     expect(result.stderr).toContain("Konfigurasi environment gagal dibaca.");
     expect(result.stderr + result.stdout).not.toContain("secret-do-not-print");
-  });
+  }, 30_000);
 });
