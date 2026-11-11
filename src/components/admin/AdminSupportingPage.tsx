@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from "react";
 import { AdminFrame } from "./AdminFrame";
-import { BentoCard, Chip, EmptyState, ToolbarButton } from "./AdminUi";
+import { BentoCard, Chip, ToolbarButton } from "./AdminUi";
 import {
   listCalculatorConfigAction,
   saveCalculatorConfigAction,

@@ -58,37 +58,6 @@ const isDataRow = (node) =>
   (/\[border-width:/.test(cls(node)) &&
     Number(cls(node).match(/\bw-\[([\d.]+)px\]/)?.[1] ?? 0) > 1000);
 
-const routes = {
-  "site/beranda": "/",
-  "site/daftar-portofolio": "/proyek",
-  "site/detail-proyek-sinduksadati": "/proyek/sinduksadati",
-  "site/paket-layanan-harga": "/paket",
-  "site/detail-layanan": "/layanan/sistem-informasi",
-  "site/kalkulator-estimasi-biaya": "/kalkulator",
-  "site/booking-konsultasi": "/konsultasi",
-  "site/tentang-kami": "/tentang-kami",
-  "site/ketentuan-layanan": "/ketentuan-layanan",
-  "site/blog": "/blog",
-  "site/otentikasi-tracking-klien": "/tracking",
-  "site/portal-pelacakan-proyek-klien": "/tracking/proyek",
-  "site/404": "/404",
-  "cms/login-admin": "/admin/login",
-  "cms/dashboard-cms-admin": "/admin",
-  "cms/proyek-showcase": "/admin/showcase",
-  "cms/proyek-klien-tracking": "/admin/proyek",
-  "cms/booking-konsultasi": "/admin/booking",
-  "cms/site-settings": "/admin/settings",
-  "cms/layanan-bento": "/admin/layanan",
-  "cms/inquiry-pemesanan": "/admin/inquiry",
-  "cms/quote-kalkulator": "/admin/quotes",
-  "cms/paket-layanan-addon": "/admin/paket",
-  "cms/kategori-teknologi": "/admin/kategori",
-  "cms/template-tahap": "/admin/tahap",
-  "cms/testimoni-faq": "/admin/faq",
-  "cms/invoice-penagihan": "/admin/invoice",
-  "cms/manajemen-staf": "/admin/staf",
-  "cms/log-aktivitas-2fa": "/admin/audit-logs",
-};
 const navRoutes = {
   Beranda: "/",
   "Beranda Agensi": "/",

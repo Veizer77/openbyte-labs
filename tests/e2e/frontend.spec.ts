@@ -4,9 +4,10 @@ async function expectRenderedNotFound(response: {
   status: () => number;
   text: () => Promise<string>;
 }) {
-  // Next.js may preserve HTTP 200 after streaming has begun; the not-found UI
-  // remains the authoritative behavior in that case.
-  expect([200, 404]).toContain(response.status());
+  // Smoke produksi menolak soft-404, jadi E2E memakai standar yang sama:
+  // status harus benar-benar 404. Diverifikasi pada runtime lokal (:3000)
+  // dan produksi (26/26 smoke pada 11 November 2026).
+  expect(response.status()).toBe(404);
   expect(await response.text()).toContain(
     "Halaman Tidak Ditemukan atau Sesi Kedaluwarsa",
   );

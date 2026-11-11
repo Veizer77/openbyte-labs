@@ -14,7 +14,7 @@ Satu aplikasi Next.js untuk situs publik, dashboard admin custom, dan portal kli
 | Admin | **22 rute aktif** memakai actions/domain database; 9 di antaranya khusus owner dengan MFA | `/admin/*` selalu `noindex`; tidak ada endpoint CRUD generik |
 | Media | Upload staging privat, finalisasi, varian WebP di R2; bucket backup terenkripsi terpisah | Bucket privat dokumen klien perlu diverifikasi terpisah; host `r2.dev` bermasalah pada sebagian jaringan ISP |
 | Portal klien | `/tracking` aktif, login kode/PIN, progres, pembayaran, dokumen, revisi, diskusi, dan persetujuan memakai database | Belum terdokumentasi proyek klien nyata maupun uji alur penuh dari perangkat klien |
-| Operasional | Sentry + source map, uptime monitor 15 menit/6 jam, backup harian terenkripsi, restore drill lulus | Secret `BACKUP_DATABASE_URL` di GitHub perlu diperbarui setelah rotasi password role DB; rotasi `BETTER_AUTH_SECRET` masih ditunda |
+| Operasional | Sentry + source map, uptime monitor 15 menit/6 jam, restore drill lulus | **Backup harian gagal sejak 11 Nov 2026** karena `BACKUP_DATABASE_URL` belum dirotasi (lihat `RELEASE-2` §5.2); rotasi `BETTER_AUTH_SECRET` ditunda pemilik |
 
 Tidak ada transaksi, booking, inquiry, quote, akun, atau testimoni palsu yang ditambahkan. Data katalog yang tampil di development bukan bukti persetujuan konten produksi. Jangan menjalankan ulang seed atau importer secara manual tanpa meninjau target dan diff.
 
@@ -61,7 +61,7 @@ Rute di luar daftar itu mengembalikan 404. Menyembunyikan menu bukan mekanisme o
 - Deploy kode **hanya** lewat push ke `main`. `npx vercel --prod` tidak dipakai; `npx vercel redeploy` hanya untuk menerapkan perubahan environment variable.
 - Teks final kebijakan privasi/ketentuan layanan, persetujuan klaim, dan izin konten masih memerlukan keputusan pemilik/legal.
 - Rotasi password role database produksi sudah dilakukan 10 November 2026. **Rotasi `BETTER_AUTH_SECRET` masih ditunda** atas keputusan pemilik; secret itu juga menjadi dasar kunci sesi tracking.
-- Yang belum terbukti: pembaruan `BACKUP_DATABASE_URL` pada GitHub environment `backup`, proyek klien nyata + uji alur portal dari perangkat klien, LCP ≤ 1,8 detik, audit aksesibilitas/performa formal, cache tag, modul editorial/blog, dan paginasi lanjut UI portal.
+- Yang belum terbukti: pulihnya backup harian setelah secret diperbarui, proyek klien nyata + uji alur portal dari perangkat klien, LCP ≤ 1,8 detik, audit aksesibilitas/performa formal, cache tag, modul editorial/blog, dan paginasi lanjut UI portal.
 - Custom domain ditolak pemilik; produksi memakai domain Vercel. Perlu dicatat bahwa PRD awalnya mewajibkan domain dan hosting komersial sebelum Rilis 1.
 - **Working tree memuat pekerjaan pemilik yang belum di-commit** (perubahan UI, `SplashScreen`, dan berkas terkait). Jangan reset/revert, jangan anggap sebagai file sementara, dan jangan menyertakannya ke commit tanpa izin. Karena deploy hanya dari `main`, perubahan tersebut belum ada di produksi.
 

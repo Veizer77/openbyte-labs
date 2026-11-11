@@ -3,7 +3,6 @@ import postgres from "postgres";
 import { validateBootstrapTarget } from "@/auth/bootstrap-target";
 import { hasOperatorConfirmation } from "./lib/operator-confirmation";
 import { OperatorInputError } from "./lib/operator-error";
-import { loadLocalEnv } from "./lib/load-local-env";
 
 /**
  * Copies release content from the development database to the production one.

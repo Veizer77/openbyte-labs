@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import {
   listAdminProjectsAction,
@@ -106,7 +105,6 @@ export function AdminProjectsPage() {
   const [mediaQuery, setMediaQuery] = useState("");
   const [isMediaPickerOpen, setIsMediaPickerOpen] = useState(false);
   const [isLoadingMedia, setIsLoadingMedia] = useState(false);
-  const [hasMoreMedia, setHasMoreMedia] = useState(false);
   const [mediaError, setMediaError] = useState("");
   const editorForm = useRef<HTMLFormElement>(null);
   const [dragging, setDragging] = useState<number | null>(null);
@@ -260,7 +258,6 @@ export function AdminProjectsPage() {
       }
       const assets = z.array(mediaAssetSchema).parse(result.data);
       setMediaAssets((current) => (append ? [...current, ...assets] : assets));
-      setHasMoreMedia(assets.length === 30);
     } catch {
       setMediaError("Daftar media tidak dapat dimuat.");
     } finally {
