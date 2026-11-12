@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { PreviewProvider } from "@/components/preview/PreviewProvider";
 import { NavigationProgress } from "@/components/public/NavigationProgress";
+import { SplashScreen } from "@/components/public/SplashScreen";
 import "./globals.css";
 import { publicIndexingEnabled, publicSiteOrigin } from "@/lib/indexing";
 
@@ -43,6 +44,7 @@ export default function RootLayout({
         <a className="skip-link" href="#konten">
           Lewati ke konten
         </a>
+        <SplashScreen />
         <NavigationProgress />
         <PreviewProvider>{children}</PreviewProvider>
       </body>

@@ -2,6 +2,14 @@ import "server-only";
 import { createDatabase } from "./connection";
 import { getEnv } from "@/env";
 
+/** Relational helpers for the Digital Store tables (Rilis 3). */
+export {
+  digitalCoupons,
+  digitalOrders,
+  digitalProducts,
+  digitalReviews,
+} from "./schema/store";
+
 type Connection = ReturnType<typeof createDatabase>;
 
 /**

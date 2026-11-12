@@ -148,6 +148,20 @@
       "when": 1794048511005,
       "tag": "0020_modern_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1794391018379,
+      "tag": "0021_smooth_rocket_raccoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1794407690864,
+      "tag": "0022_loud_hardball",
+      "breakpoints": true
     }
   ]
 }

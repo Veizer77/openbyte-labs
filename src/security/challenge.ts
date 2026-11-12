@@ -6,7 +6,8 @@ export type ChallengeAction =
   | "inquiry"
   | "booking"
   | "calculator"
-  | "tracking";
+  | "tracking"
+  | "store_checkout";
 
 /**
  * Single anti-spam gate for every public form. Without a configured secret the

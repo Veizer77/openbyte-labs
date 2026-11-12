@@ -64,6 +64,11 @@ export const EXPECTED_TABLES = [
   "revision_requests",
   "project_comments",
   "project_approvals",
+  // Digital Store (Rilis 3)
+  "digital_products",
+  "digital_orders",
+  "digital_coupons",
+  "digital_reviews",
 ] as const;
 
 export const COUNTED_TABLES = [

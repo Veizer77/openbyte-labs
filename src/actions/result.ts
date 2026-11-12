@@ -7,6 +7,7 @@ import { QuoteSubmissionError } from "@/services/create-quote";
 import { MediaServiceError } from "@/services/media-errors";
 import { SettingsCacheInvalidationError } from "@/services/site-settings";
 import { InvoiceError } from "@/lib/invoices/errors";
+import { StoreLicenseError } from "@/lib/store/errors";
 
 export type ActionErrorCode =
   | "input_tidak_valid"
@@ -92,6 +93,9 @@ export function toFailure(error: unknown): ActionFailure {
   }
   if (error instanceof InvoiceError) {
     return fail("input_tidak_valid", error.message);
+  }
+  if (error instanceof StoreLicenseError) {
+    return fail(error.code, error.message);
   }
   if (error instanceof MediaServiceError) {
     return fail(error.code, error.message);
