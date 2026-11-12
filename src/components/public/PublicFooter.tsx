@@ -73,10 +73,7 @@ export function PublicFooter({
               data-pencil-name={"div"}
             >
               <ReferenceImage
-                src={
-                  settings?.general.logoUrl ??
-                  "/brand/openbyte-labs-square-icon-1-1-logo-only.svg"
-                }
+                src={"/brand/openbyte-labs-square-icon-1-1-logo-only.svg"}
                 alt={brandName}
                 contain={true}
                 className={
