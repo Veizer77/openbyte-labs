@@ -18,6 +18,7 @@ type UserForm = {
   password: string;
   role: "owner" | "editor";
   isActive: boolean;
+  resetTwoFactor: boolean;
 };
 const newUser = (): UserForm => ({
   name: "",
@@ -25,6 +26,7 @@ const newUser = (): UserForm => ({
   password: "",
   role: "editor",
   isActive: true,
+  resetTwoFactor: false,
 });
 
 function dateTime(value: Date | string) {
@@ -106,6 +108,7 @@ export function AdminUsersPage() {
       password: "",
       role: user.role,
       isActive: user.isActive,
+      resetTwoFactor: false,
     });
     setError("");
     setStatus("");
@@ -133,6 +136,8 @@ export function AdminUsersPage() {
               email: form.email,
               role: form.role,
               isActive: form.isActive,
+              ...(form.password.trim() ? { password: form.password } : {}),
+              ...(form.resetTwoFactor ? { resetTwoFactor: true } : {}),
             },
           })
         : await createAdminUserAction({
@@ -356,24 +361,27 @@ export function AdminUsersPage() {
               />
             </label>
 
-            {!editing ? (
-              <label className="grid gap-1 text-xs font-medium text-[#52525b]">
-                Password Awal (minimal 12 karakter)
-                <input
-                  required
-                  type="password"
-                  minLength={12}
-                  maxLength={128}
-                  autoComplete="new-password"
-                  value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  className={inputClass}
-                />
-                <span className="text-[11px] text-[#71717a]">
-                  Password sementara untuk aktivasi awal pengguna.
-                </span>
-              </label>
-            ) : null}
+            <label className="grid gap-1 text-xs font-medium text-[#52525b]">
+              {editing
+                ? "Reset Password (opsional, minimal 12 karakter)"
+                : "Password Awal (minimal 12 karakter)"}
+              <input
+                required={!editing}
+                type="password"
+                minLength={12}
+                maxLength={128}
+                autoComplete="new-password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                className={inputClass}
+                placeholder={editing ? "Kosongkan bila tidak ingin mengubah password" : ""}
+              />
+              <span className="text-[11px] text-[#71717a]">
+                {editing
+                  ? "Isi hanya jika pengguna lupa password dan perlu direset oleh Owner."
+                  : "Password sementara untuk aktivasi awal pengguna."}
+              </span>
+            </label>
 
             <label className="grid gap-1 text-xs font-medium text-[#52525b]">
               Hak Akses (Role)
@@ -390,17 +398,32 @@ export function AdminUsersPage() {
             </label>
 
             {editing ? (
-              <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer pt-1">
-                <input
-                  type="checkbox"
-                  checked={form.isActive}
-                  onChange={(e) =>
-                    setForm({ ...form, isActive: e.target.checked })
-                  }
-                  className="rounded border-[#d4d4d8]"
-                />
-                Akun Aktif (Dapat Login)
-              </label>
+              <div className="grid gap-2 pt-1">
+                <label className="flex items-center gap-2 text-xs font-medium text-[#18181a] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.isActive}
+                    onChange={(e) =>
+                      setForm({ ...form, isActive: e.target.checked })
+                    }
+                    className="rounded border-[#d4d4d8]"
+                  />
+                  Akun Aktif (Dapat Login)
+                </label>
+                {editing.twoFactorEnabled ? (
+                  <label className="flex items-center gap-2 text-xs font-medium text-[#b45309] cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.resetTwoFactor}
+                      onChange={(e) =>
+                        setForm({ ...form, resetTwoFactor: e.target.checked })
+                      }
+                      className="rounded border-[#d4d4d8]"
+                    />
+                    Reset MFA 2FA (Wajib daftar ulang TOTP saat login berikutnya)
+                  </label>
+                ) : null}
+              </div>
             ) : null}
 
             <div className="pt-2">

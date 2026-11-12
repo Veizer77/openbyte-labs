@@ -9,6 +9,7 @@ const fallbackNavigation = [
   { label: "Beranda", target: "/" },
   { label: "Proyek Portofolio", target: "/proyek" },
   { label: "Paket Layanan", target: "/paket" },
+  { label: "Store", target: "/store" },
   { label: "Kalkulator Estimasi", target: "/kalkulator" },
 ];
 
@@ -28,7 +29,13 @@ export function PublicFooter({
     : null;
   const footerText = settings?.navigation.footerText.trim() ||
     `© ${new Date().getFullYear()} ${brandName}.`;
-  const menuItems = (settings?.navigation.menuItems ?? (preview ? fallbackNavigation : []))
+  const navigationItems = [
+    ...(settings?.navigation.menuItems ?? (preview ? fallbackNavigation : [])),
+  ];
+  if (!navigationItems.some((item) => item.target === "/store")) {
+    navigationItems.push({ label: "Store", target: "/store" });
+  }
+  const menuItems = navigationItems
     .filter((item) => isPublicNavigationTarget(item.target, settings?.trackingEnabled ?? false))
     .slice(0, 8);
 
@@ -66,7 +73,9 @@ export function PublicFooter({
               data-pencil-name={"div"}
             >
               <ReferenceImage
-                src={settings?.general.logoUrl ?? "/images/5f9e6a2ac345b8dc.png"}
+                src={
+                  settings?.general.logoUrl ?? "/images/5f9e6a2ac345b8dc.png"
+                }
                 alt={brandName}
                 contain={true}
                 className={

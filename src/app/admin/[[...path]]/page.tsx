@@ -23,6 +23,7 @@ import { AdminUsersPage, AdminAuditLogsPage } from "@/components/admin/AdminSyst
 import { AdminStepTemplatesPage } from "@/components/admin/AdminStepTemplatesPage";
 import { AdminInvoicesPage } from "@/components/admin/AdminInvoicesPage";
 import { AdminPrivateFilesPage } from "@/components/admin/AdminPrivateFilesPage";
+import { AdminStorePage } from "@/components/admin/AdminStorePage";
 
 const liveRoutes = new Set([
   "dashboard",
@@ -47,6 +48,7 @@ const liveRoutes = new Set([
   "teknologi",
   "media",
   "kalkulator",
+  "store",
 ]);
 const ownerRoutes = new Set([
   "proyek-klien",
@@ -95,6 +97,7 @@ export default async function AdminPage({
     return <AdminSupportingPage kind="kalkulator" />;
   if (path === "layanan") return <AdminServicesPage />;
   if (path === "showcase") return <AdminProjectsPage />;
+  if (path === "store") return <AdminStorePage />;
   if (path === "booking") return <AdminBookingPage />;
   if (path === "inquiry") return <AdminInquiryPage />;
   if (path === "quotes") return <AdminQuotePage />;

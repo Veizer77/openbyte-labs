@@ -74,14 +74,24 @@ export const mediaUploadGrantSchema = z
   })
   .strict();
 
+export const publicMediaUrlSchema = z
+  .string()
+  .refine(
+    (val) =>
+      val.startsWith("/") ||
+      (z.url().safeParse(val).success &&
+        (val.startsWith("http://") || val.startsWith("https://"))),
+    "URL media harus berupa path relatif (/...) atau URL http/https yang valid.",
+  );
+
 export const mediaAssetSchema = mediaRecordSchema
   .extend({
     urls: z
       .object({
-        thumb: z.url(),
-        card: z.url(),
-        hero: z.url(),
-        og: z.url(),
+        thumb: publicMediaUrlSchema,
+        card: publicMediaUrlSchema,
+        hero: publicMediaUrlSchema,
+        og: publicMediaUrlSchema,
       })
       .strict(),
   })

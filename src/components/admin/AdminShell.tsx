@@ -21,6 +21,7 @@ export const adminNavigation = [
       ["web", "Halaman", "/admin/pages"],
       ["grid_view", "Layanan", "/admin/layanan"],
       ["view_carousel", "Proyek Showcase", "/admin/showcase"],
+      ["storefront", "Digital Store", "/admin/store"],
       ["folder", "Kategori & Teknologi", "/admin/kategori"],
       ["sell", "Paket", "/admin/packages"],
       ["extension", "Add-on", "/admin/addons"],

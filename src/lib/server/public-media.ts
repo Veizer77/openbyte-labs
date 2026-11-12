@@ -9,11 +9,16 @@ export type { PublicMediaAsset } from "@/schemas/media";
 
 /** Build an encoded URL without exposing an R2 object key as a browser prop. */
 export function publicMediaUrl(baseUrl: string, key: string): string {
-  const base = baseUrl.replace(/\/+$/, "");
   const encodedKey = key
     .split("/")
     .map((segment) => encodeURIComponent(segment))
     .join("/");
+  // When baseUrl points to r2.dev (which is intercepted/blocked by Indonesian ISPs)
+  // route through the same-origin media proxy endpoint.
+  if (baseUrl.includes(".r2.dev")) {
+    return `/api/media/${encodedKey}`;
+  }
+  const base = baseUrl.replace(/\/+$/, "");
   return `${base}/${encodedKey}`;
 }
 

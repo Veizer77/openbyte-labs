@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getAdminPrincipal } from "@/auth/session";
 import { getDb } from "@/db";
 import { createProjectStore } from "@/db/project-store";
-import { listAdminProjects } from "@/services/projects";
+import { readAdminProject } from "@/services/projects";
 import { getPublicSiteSettings } from "@/lib/server/public-site";
 import { getPublicMediaAssets } from "@/lib/server/public-media";
 import { ProjectDetail } from "@/components/public/ProjectDetail";
@@ -20,13 +20,12 @@ export default async function ProjectPreview({ params }: { params: Promise<{ id:
   const { id } = await params;
   if (!z.uuid().safeParse(id).success) notFound();
   const db = getDb();
-  const [records, settings, categories, technologies] = await Promise.all([
-    listAdminProjects(createProjectStore(db), principal, { limit: 100, offset: 0 }),
+  const [project, settings, categories, technologies] = await Promise.all([
+    readAdminProject(createProjectStore(db), principal, id),
     getPublicSiteSettings(),
     listCategories(createCategoryStore(db), principal, { limit: 100, offset: 0 }),
     listAdminTechnologies(createTechnologyStore(db), principal, { limit: 100, offset: 0 }),
   ]);
-  const project = records.find((item) => item.id === id);
   if (!project) notFound();
   const ids = [project.featuredImageId, project.ogImageId, ...project.gallery.map((image) => image.mediaId)];
   for (const block of project.contentBlocks) {

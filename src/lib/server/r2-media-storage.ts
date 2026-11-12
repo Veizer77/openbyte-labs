@@ -168,10 +168,49 @@ export function createR2MediaStorage(
       await client.send(new DeleteObjectCommand({ Bucket: bucket, Key: key }));
     },
     publicUrl(key) {
-      return `${config.publicBaseUrl}/${key
+      const encodedKey = key
         .split("/")
         .map((segment) => encodeURIComponent(segment))
-        .join("/")}`;
+        .join("/");
+      if (config.publicBaseUrl.includes(".r2.dev")) {
+        return `/api/media/${encodedKey}`;
+      }
+      return `${config.publicBaseUrl}/${encodedKey}`;
     },
   };
+}
+
+export async function getPublicMediaObject(key: string): Promise<{
+  body: Uint8Array;
+  contentType: string;
+  contentLength: number;
+  etag?: string;
+} | null> {
+  const config = getR2Configuration();
+  const client = getClient(config);
+  try {
+    const result = await client.send(
+      new GetObjectCommand({ Bucket: config.publicBucket, Key: key }),
+    );
+    if (!result.Body) return null;
+    const body = await result.Body.transformToByteArray();
+    return {
+      body,
+      contentType: result.ContentType || "image/webp",
+      contentLength: result.ContentLength ?? body.byteLength,
+      etag: result.ETag,
+    };
+  } catch (error: unknown) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      (("name" in error && error.name === "NoSuchKey") ||
+        ("$metadata" in error &&
+          (error as { $metadata?: { httpStatusCode?: number } }).$metadata
+            ?.httpStatusCode === 404))
+    ) {
+      return null;
+    }
+    throw error;
+  }
 }

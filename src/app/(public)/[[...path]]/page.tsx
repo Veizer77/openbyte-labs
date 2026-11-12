@@ -19,6 +19,14 @@ import { PublicBlog } from "@/components/public/PublicBlog";
 import { PublicServiceDetail } from "@/components/public/PublicServiceDetail";
 import { findServiceBySlug } from "@/lib/service-slug";
 import { publicIndexingEnabled } from "@/lib/indexing";
+import { OrganizationJsonLd, ProjectJsonLd, StoreProductJsonLd } from "@/components/public/JsonLd";
+import { PublicStoreCatalog } from "@/components/public/PublicStoreCatalog";
+import { PublicStoreDetail } from "@/components/public/PublicStoreDetail";
+import { PublicStoreAccess } from "@/components/public/PublicStoreAccess";
+import {
+  getPublicStoreCatalog,
+  getPublicStoreProduct,
+} from "@/lib/server/public-store";
 
 const routes: Record<string, { key: ScreenKey; title: string }> = {
   "": { key: "site/beranda", title: "Website, Aplikasi & Sistem Informasi" },
@@ -89,21 +97,69 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       // Metadata stays generic when the service catalog is unavailable.
     }
   }
+  let storeTitle: string | undefined;
+  let storeDescription: string | undefined;
+  let storeOgImage: string | undefined;
+  // Produk yang benar-benar tidak ada harus berhenti di sini: rute `store/[slug]`
+  // apa pun akan lolos regex, jadi tanpa penanda ini slug palsu tetap dianggap
+  // "dikenal" dan bisa diindeks sebagai halaman kosong.
+  let storeProductMissing = false;
+  const isStoreListing = path === "store" || path === "store/akses";
+  // `/store/akses` adalah halaman form PIN, bukan detail produk: jangan pernah
+  // dianggap slug produk walau bentuk path-nya sama.
+  const isStoreDetail =
+    path !== "store/akses" && /^store\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(path);
+  const isStoreRoute = isStoreListing || isStoreDetail;
+  if (isStoreRoute) {
+    storeTitle = "Digital Store — Source Code & Template UI/UX";
+    storeDescription =
+      "Katalog source code proyek & template UI/UX HTML siap produksi dengan lisensi terenkripsi.";
+    if (isStoreDetail) {
+      try {
+        const data = await getPublicStoreProduct(path.slice("store/".length));
+        if (data) {
+          storeTitle = data.product.title;
+          storeDescription = data.product.tagline || storeDescription;
+          storeOgImage = data.product.thumbnail?.url;
+        } else {
+          storeProductMissing = true;
+          storeTitle = undefined;
+          storeDescription = undefined;
+        }
+      } catch {
+        // Metadata stays generic when the store catalogue is unavailable.
+      }
+    }
+  }
+  const knownRoute =
+    Boolean(page) ||
+    Boolean(projectTitle) ||
+    Object.hasOwn(routes, path) ||
+    path === "pesan" ||
+    path === "kebijakan-privasi" ||
+    (isStoreRoute && !storeProductMissing);
   const title =
     page?.metaTitle ??
     page?.title ??
     routes[path]?.title ??
     projectTitle ??
+    storeTitle ??
     (path === "pesan"
       ? "Pemesanan Paket"
       : path === "kebijakan-privasi"
         ? "Kebijakan Privasi"
         : settings?.seo.defaultTitle ?? "Halaman tidak ditemukan");
-  const description = page?.metaDescription ?? projectDescription ?? settings?.seo.defaultDescription;
-  const ogImage = page?.ogImageUrl ?? projectOgImage ?? settings?.seo.defaultOgImageUrl;
+  const description = page?.metaDescription ?? projectDescription ?? storeDescription ?? settings?.seo.defaultDescription;
+  const ogImage =
+    page?.ogImageUrl ?? projectOgImage ?? storeOgImage ?? settings?.seo.defaultOgImageUrl;
   // /blog belum punya modul editorial sehingga isinya selalu keadaan kosong.
   // Jangan pernah diindeks walau indexing publik sudah dinyalakan.
-  const indexingAllowed = publicIndexingEnabled() && path !== "blog";
+  // /store/akses memuat form PIN lisensi sehingga selalu noindex.
+  const indexingAllowed =
+    publicIndexingEnabled() &&
+    path !== "blog" &&
+    knownRoute &&
+    path !== "store/akses";
   return {
     title: { absolute: title },
     description,
@@ -123,12 +179,25 @@ export const dynamic = "force-dynamic";
 
 export default async function PublicPage({ params }: Props) {
   const path = (await params).path?.join("/") ?? "";
-  if (path === "" || ["tentang-kami", "ketentuan-layanan", "kebijakan-privasi"].includes(path)) {
+  if (path === "kebijakan-privasi") {
+    let settings: PublicSiteSettings | undefined;
+    try {
+      settings = await getPublicSiteSettings();
+    } catch {
+      settings = undefined;
+    }
+    if (settings?.legal.privacyPolicy?.blocks.length) {
+      return <PrivacyPage settings={settings} />;
+    }
+    const page = await getPublicPageView("kebijakan-privasi");
+    if (page) return <PublicPageBuilder page={page} catalog={await getPublicCatalog()} />;
+    return <PrivacyPage settings={settings} />;
+  }
+  if (path === "" || ["tentang-kami", "ketentuan-layanan"].includes(path)) {
     const page = await getPublicPageView(path === "" ? "home" : path === "tentang-kami" ? "tentang" : path);
     if (page) return <PublicPageBuilder page={page} catalog={await getPublicCatalog()} />;
   }
   if (
-    path === "kebijakan-privasi" ||
     path === "ketentuan-layanan" ||
     path === "tentang-kami"
   ) {
@@ -138,7 +207,6 @@ export default async function PublicPage({ params }: Props) {
     } catch {
       settings = undefined;
     }
-    if (path === "kebijakan-privasi") return <PrivacyPage settings={settings} />;
     if (path === "ketentuan-layanan") return <TermsPage settings={settings} />;
     return <AboutPage settings={settings} />;
   }
@@ -159,7 +227,12 @@ export default async function PublicPage({ params }: Props) {
   if (path === "") {
     const catalog = await getPublicCatalog();
     const { default: Home } = await screenLoaders["site/beranda"]();
-    return <Home catalog={catalog} />;
+    return (
+      <>
+        <OrganizationJsonLd settings={catalog.settings} />
+        <Home catalog={catalog} />
+      </>
+    );
   }
 
   if (path === "proyek") {
@@ -187,7 +260,43 @@ export default async function PublicPage({ params }: Props) {
     const slug = path.slice("proyek/".length);
     const data = await getPublicProject(slug);
     if (!data?.project) notFound();
-    return <ProjectDetail project={data.project} settings={data.settings} media={data.media} related={data.related} />;
+    return (
+      <>
+        <ProjectJsonLd project={data.project} settings={data.settings} />
+        <ProjectDetail project={data.project} settings={data.settings} media={data.media} related={data.related} />
+      </>
+    );
+  }
+
+  if (path === "store") {
+    const { products, settings } = await getPublicStoreCatalog();
+    return <PublicStoreCatalog products={products} settings={settings} />;
+  }
+
+  if (path === "store/akses") {
+    let settings: PublicSiteSettings | undefined;
+    try {
+      settings = await getPublicSiteSettings();
+    } catch {
+      settings = undefined;
+    }
+    return <PublicStoreAccess settings={settings} />;
+  }
+
+  if (/^store\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(path)) {
+    const data = await getPublicStoreProduct(path.slice("store/".length));
+    if (!data) notFound();
+    return (
+      <>
+        <StoreProductJsonLd product={data.product} settings={data.settings} />
+        <PublicStoreDetail
+          product={data.product}
+          settings={data.settings}
+          reviews={data.reviews}
+          related={data.related}
+        />
+      </>
+    );
   }
 
   if (/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(path)) {
