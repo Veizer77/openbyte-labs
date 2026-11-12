@@ -74,7 +74,8 @@ export function PublicFooter({
             >
               <ReferenceImage
                 src={
-                  settings?.general.logoUrl ?? "/images/5f9e6a2ac345b8dc.png"
+                  settings?.general.logoUrl ??
+                  "/brand/openbyte-labs-square-icon-1-1-logo-only.svg"
                 }
                 alt={brandName}
                 contain={true}
