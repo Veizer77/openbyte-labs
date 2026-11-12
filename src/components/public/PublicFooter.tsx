@@ -74,7 +74,7 @@ export function PublicFooter({
             >
               <ReferenceImage
                 src={
-                  settings?.general.logoUrl ?? "/images/logo-only.png"
+                  settings?.general.logoUrl ?? "/images/5f9e6a2ac345b8dc.png"
                 }
                 alt={brandName}
                 contain={true}
