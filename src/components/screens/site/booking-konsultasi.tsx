@@ -22,7 +22,7 @@ export default async function SiteBookingKonsultasi() {
       <BookingProvider initialNow={new Date().toISOString()}>
         <div
           className={
-            "box-border w-full min-h-screen flex flex-col gap-0 justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen"
+            "box-border w-full min-h-screen flex flex-col gap-0 justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen has-editorial-hero"
           }
           data-pencil-name={"Public / 06 - Booking Konsultasi"}
           data-screen={"site/booking-konsultasi"}
@@ -32,222 +32,57 @@ export default async function SiteBookingKonsultasi() {
           <PublicHeader settings={settings} />
           <main
             className={
-              "box-border w-full flex-1 flex flex-col gap-0 pt-[72px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
+              "box-border w-full flex-1 flex flex-col gap-0 pt-[104px] lg:pt-[68px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
             }
             data-pencil-name={"main"}
           >
+            {/* Architectural Header Band */}
+            <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+              <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col lg:flex-row gap-8 justify-between items-start lg:items-end">
+                <div className="max-w-3xl flex flex-col gap-3">
+                  <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+                    <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+                    <span>Penjadwalan Konsultasi Teknis · WIB (UTC+7)</span>
+                  </div>
+                  <h1
+                    className="text-[32px]/[1.14] sm:text-[42px]/[1.1] lg:text-[48px]/[1.08] text-[#18181a] font-semibold tracking-[-0.03em] m-0"
+                    data-heading="true"
+                  >
+                    Jadwalkan Sesi Konsultasi Teknis
+                  </h1>
+                  <p className="text-[15px]/[1.65] sm:text-[16px]/[1.65] text-[#52525b] font-normal m-0 max-w-2xl">
+                    Diskusikan kebutuhan arsitektur sistem, kelayakan teknologi, dan ruang lingkup pengerjaan proyek bersama tim engineer kami.
+                  </p>
+                </div>
+
+                {/* Honest Operational Schedule Ledger */}
+                <dl className="m-0 grid grid-cols-2 gap-px bg-[#eaeaea] border border-[#eaeaea] rounded-[12px] overflow-hidden shrink-0 w-full sm:w-auto">
+                  <div className="bg-white px-5 py-3.5 flex flex-col gap-0.5">
+                    <dt className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#52525b]">
+                      Hari Operasional
+                    </dt>
+                    <dd className="m-0 text-[15px] font-semibold text-[#18181a]">
+                      Senin s.d. Jumat
+                    </dd>
+                  </div>
+                  <div className="bg-white px-5 py-3.5 flex flex-col gap-0.5">
+                    <dt className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#52525b]">
+                      Durasi Sesi
+                    </dt>
+                    <dd className="m-0 text-[15px] font-semibold text-[#454a10] tabular-nums">
+                      60 Menit · WIB
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </section>
+
             <div
               className={
-                "box-border w-full max-w-[1440px] 2xl:max-w-[1600px] h-fit shrink-0 flex flex-col gap-[32px] px-4 sm:px-6 lg:px-8 justify-start items-stretch"
+                "box-border w-full max-w-[1440px] 2xl:max-w-[1600px] h-fit shrink-0 flex flex-col gap-[32px] px-4 sm:px-6 lg:px-8 pt-8 justify-start items-stretch"
               }
               data-pencil-name={"div"}
             >
-              <div
-                className={
-                  "box-border w-full h-fit shrink-0 flex flex-col gap-[8px] justify-start items-start"
-                }
-                data-pencil-name={"div"}
-              >
-                <div
-                  className={
-                    "box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-start items-center"
-                  }
-                  data-pencil-name={"div"}
-                >
-                  <div
-                    className={
-                      "box-border w-[188.38px] shrink-0 h-[22px] flex flex-row gap-[6px] p-[4px_10px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]"
-                    }
-                    data-pencil-name={"span"}
-                    data-responsive="fixed"
-                  >
-                    <div
-                      className={
-                        "box-border w-[6px] shrink-0 h-[6px] opacity-[0.73] bg-[#82b440] rounded-[50%]"
-                      }
-                      data-pencil-name={"span"}
-                    ></div>
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"PRD 8.3 Guaranteed SLA"}
-                      data-text="true"
-                    >
-                      {"PRD 8.3 Guaranteed SLA"}
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-[201.53px] shrink-0 h-[22px] flex flex-row gap-[4px] p-[4px_10px] justify-start items-center bg-[#e1e89c80] rounded-[9999px]"
-                    }
-                    data-pencil-name={"span"}
-                    data-responsive="fixed"
-                  >
-                    <div
-                      className={
-                        "text-[13px]/[13px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                      }
-                      data-pencil-name={"bolt"}
-                      data-text="true"
-                      aria-hidden="true"
-                    >
-                      {"bolt"}
-                    </div>
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"Real-time Sync (WIB / UTC+7)"}
-                      data-text="true"
-                    >
-                      {"Real-time Sync (WIB / UTC+7)"}
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className={
-                    "box-border w-full h-fit shrink-0 flex flex-row gap-[20px] justify-between items-end"
-                  }
-                  data-pencil-name={"div"}
-                  data-responsive="row"
-                  data-section-padding="true"
-                >
-                  <div
-                    className={
-                      "box-border w-[768px] shrink-0 h-fit flex flex-col gap-[8px] justify-start items-start"
-                    }
-                    data-pencil-name={"div"}
-                    data-responsive="fixed"
-                  >
-                    <h1
-                      className={
-                        "text-[28px]/[35px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.7px] text-left [white-space:nowrap] m-0"
-                      }
-                      data-pencil-name={"Jadwalkan Sesi Konsultasi Teknis"}
-                      data-text="true"
-                      data-heading="true"
-                    >
-                      {"Jadwalkan Sesi Konsultasi Teknis"}
-                    </h1>
-                    <div
-                      className={
-                        "text-[14px]/[20px] box-border w-full h-[40px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
-                      }
-                      data-pencil-name={
-                        "Diskusikan arsitektur sistem, kelayakan teknologi, dan roadmap digital Anda bersama Senior System Specialist."
-                      }
-                      data-text="true"
-                    >
-                      {
-                        "Diskusikan arsitektur sistem, kelayakan teknologi, dan roadmap digital Anda bersama Senior System Specialist."
-                      }
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] p-[8px] justify-start items-center bg-[#f0f0f0] rounded-[12px]"
-                    }
-                    data-pencil-name={"div"}
-                  >
-                    <div
-                      className={
-                        "box-border w-[85.45px] shrink-0 h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[10px] justify-start items-start bg-[#ffffff] rounded-[8px]"
-                      }
-                      data-pencil-name={"div"}
-                      data-responsive="fixed"
-                    >
-                      <div
-                        className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
-                        }
-                        data-pencil-name={"SLOT AKTIF"}
-                        data-text="true"
-                      >
-                        {"SLOT AKTIF"}
-                      </div>
-                      <div
-                        className={
-                          "box-border w-full h-fit shrink-0 flex flex-col gap-0 justify-start items-center"
-                        }
-                      >
-                        <div
-                          className={
-                            "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-center [white-space:nowrap]"
-                          }
-                          data-pencil-name={"16"}
-                          data-text="true"
-                        >
-                          {"16"}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[70px] shrink-0 h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[10px] justify-start items-start bg-[#ffffff] rounded-[8px]"
-                      }
-                      data-pencil-name={"div"}
-                    >
-                      <div
-                        className={
-                          "text-[11px]/[14px] box-border w-full text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-center"
-                        }
-                        data-pencil-name={"TERISI"}
-                        data-text="true"
-                      >
-                        {"TERISI"}
-                      </div>
-                      <div
-                        className={
-                          "box-border w-full h-fit shrink-0 flex flex-col gap-0 justify-start items-center"
-                        }
-                      >
-                        <div
-                          className={
-                            "text-[16px]/[20px] box-border text-[#f97316] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-center [white-space:nowrap]"
-                          }
-                          data-pencil-name={"4"}
-                          data-text="true"
-                        >
-                          {"4"}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[80.19px] shrink-0 h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[10px] justify-start items-start bg-[#ffffff] rounded-[8px]"
-                      }
-                      data-pencil-name={"div"}
-                      data-responsive="fixed"
-                    >
-                      <div
-                        className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-center [white-space:nowrap]"
-                        }
-                        data-pencil-name={"RESPONSE"}
-                        data-text="true"
-                      >
-                        {"RESPONSE"}
-                      </div>
-                      <div
-                        className={
-                          "box-border w-full h-fit shrink-0 flex flex-col gap-0 justify-start items-center"
-                        }
-                      >
-                        <div
-                          className={
-                            "text-[16px]/[20px] box-border text-[#82b440] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-center [white-space:nowrap]"
-                          }
-                          data-pencil-name={"< 1 Jam"}
-                          data-text="true"
-                        >
-                          {"< 1 Jam"}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
               <div
                 className={
                   "box-border w-full h-fit shrink-0 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative"
@@ -281,14 +116,12 @@ export default async function SiteBookingKonsultasi() {
                     "box-border w-full lg:col-span-7 h-fit flex flex-col gap-[20px] justify-start items-start"
                   }
                   data-pencil-name={"div"}
-                  data-section-padding="true"
                 >
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] flex flex-col gap-[8px] p-[20px] justify-start items-start bg-[#18181a] rounded-[16px] overflow-hidden relative"
+                      "box-border w-full h-fit shrink-0 flex flex-col gap-[8px] p-6 sm:p-7 justify-start items-start bg-[#18181a] border border-[#2e2e32] rounded-[16px] overflow-hidden relative shadow-[0px_4px_16px_#0000001a]"
                     }
                     data-pencil-name={"div"}
-                    data-section-padding="true"
                   >
                     <div
                       className={
@@ -423,18 +256,14 @@ export default async function SiteBookingKonsultasi() {
                   </div>
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-col gap-0 p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                      "box-border w-full h-fit shrink-0 flex flex-col gap-0 p-6 sm:p-8 justify-start items-start bg-[#ffffff] border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_3px_#0000000d]"
                     }
                     data-pencil-name={"div"}
-                    data-section-padding="true"
                   >
                     <ContactForm
                       kind="booking"
                       consentText={settings?.legal.consentText}
-                      className={
-                        "box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start"
-                      }
-                      data-pencil-name={"form"}
+                      className="w-full flex flex-col gap-5"
                     />
                   </div>
                 </div>

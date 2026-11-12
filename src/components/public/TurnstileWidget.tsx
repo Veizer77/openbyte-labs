@@ -68,7 +68,7 @@ export function TurnstileWidget({
   resetKey,
   theme = "light",
 }: {
-  action: "inquiry" | "booking" | "calculator";
+  action: "inquiry" | "booking" | "calculator" | "store_checkout";
   onTokenChange: (token: string) => void;
   resetKey: number;
   theme?: "light" | "dark";

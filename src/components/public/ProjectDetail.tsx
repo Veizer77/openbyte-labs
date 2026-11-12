@@ -22,79 +22,99 @@ export function ProjectDetail({
   const liveLink = project.links.find((l) => l.type === "demo")?.url;
 
   return (
-    <div className="box-border w-full min-h-screen flex flex-col justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen">
+    <div className="box-border w-full min-h-screen flex flex-col justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen has-editorial-hero">
       <PublicHeader settings={settings} />
       <main
         id="konten"
-        className="box-border w-full flex-1 flex flex-col pt-[64px] pb-16 justify-start items-stretch bg-[#ffffff] relative"
+        className="box-border w-full flex-1 flex flex-col pt-[104px] lg:pt-[68px] pb-16 justify-start items-stretch bg-[#ffffff] relative"
       >
-        {/* Breadcrumb Navigation Bar */}
-        <div className="box-border w-full bg-[#f0f0f0] border-b border-neutral-200/80 py-2.5">
-          <div className="box-border w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center text-xs">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[#52525b]">
-              <Link href="/" className="hover:text-[#18181a] no-underline text-[#52525b]">
+        {/* Architectural Breadcrumb Bar */}
+        <div className="w-full bg-[#f0f0f0]/75 border-b border-[#eaeaea] py-3">
+          <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center text-[12px]">
+            <nav
+              aria-label="Breadcrumb"
+              className="flex items-center gap-2 text-[#52525b] min-w-0"
+            >
+              <Link
+                href="/"
+                className="hover:text-[#18181a] no-underline text-[#52525b] shrink-0"
+              >
                 Beranda
               </Link>
-              <span className="text-[#a8a8ad]">/</span>
-              <Link href="/proyek" className="hover:text-[#18181a] no-underline text-[#52525b]">
+              <span className="text-[#a8a8ad]" aria-hidden="true">
+                /
+              </span>
+              <Link
+                href="/proyek"
+                className="hover:text-[#18181a] no-underline text-[#52525b] shrink-0"
+              >
                 Portofolio
               </Link>
-              <span className="text-[#a8a8ad]">/</span>
-              <span className="text-[#18181a] font-medium truncate max-w-[240px] sm:max-w-none">
+              <span className="text-[#a8a8ad]" aria-hidden="true">
+                /
+              </span>
+              <span className="text-[#18181a] font-semibold truncate">
                 {project.title}
               </span>
             </nav>
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-[#82b440]" />
-              <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
-                STUDI KASUS ARSITEKTUR
+            <div className="hidden sm:flex items-center gap-2 shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#82b440]" />
+              <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#52525b]">
+                Studi Kasus Sistem
               </span>
             </div>
           </div>
         </div>
 
-        {/* Content Container */}
-        <div className="box-border w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
-          {/* Header Title & Actions Row */}
-          <section className="flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-end">
-            <div className="flex flex-col gap-2 max-w-3xl">
+        {/* Executive Case-Study Header */}
+        <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+          <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col lg:flex-row gap-8 justify-between items-start lg:items-end">
+            <div className="flex flex-col gap-3 max-w-3xl">
               <div className="flex flex-wrap gap-2 items-center">
                 {project.categories.map((category) => (
                   <span
                     key={category}
-                    className="px-2.5 py-1 bg-[#e2e89d] text-[#1b1d00] text-[11px] font-semibold tracking-[0.22px] rounded-full"
+                    className="px-2.5 py-1 bg-[#e2e89d] text-[#1b1d00] text-[11px] font-semibold rounded-[6px]"
                   >
                     {category}
                   </span>
                 ))}
-                <span className="px-2.5 py-1 bg-[#f0f0f0] text-[#52525b] text-[11px] font-medium tracking-[0.22px] rounded-full">
-                  {project.clientName ? `Klien: ${project.clientName}` : "Sektor Publik / Komersial"}
-                </span>
-                <span className="px-2.5 py-1 bg-[#f0f0f0] text-[#82b440] text-[11px] font-medium tracking-[0.22px] rounded-full">
-                  Status: Terverifikasi
-                </span>
+                {project.clientName ? (
+                  <span className="px-2.5 py-1 bg-[#f0f0f0] border border-[#eaeaea] text-[#52525b] text-[11px] font-medium rounded-[6px]">
+                    Mitra: {project.clientName}
+                  </span>
+                ) : null}
+                {project.year ? (
+                  <span className="px-2.5 py-1 bg-[#f0f0f0] border border-[#eaeaea] text-[#52525b] text-[11px] font-medium rounded-[6px] tabular-nums">
+                    Rilis {project.year}
+                  </span>
+                ) : null}
               </div>
-              <h1 className="text-[28px]/[36px] sm:text-[36px]/[44px] font-bold text-[#18181a] tracking-[-0.7px] m-0">
+
+              <h1
+                className="text-[32px]/[1.14] sm:text-[42px]/[1.1] lg:text-[46px]/[1.08] font-semibold text-[#18181a] tracking-[-0.03em] m-0"
+                data-heading="true"
+              >
                 {project.title}
               </h1>
-              <p className="text-[15px]/[24px] text-[#52525b] m-0">
+              <p className="text-[15px]/[1.65] sm:text-[16px]/[1.65] text-[#52525b] m-0">
                 {project.tagline || project.summary}
               </p>
             </div>
 
             {/* Quick Actions */}
-            <div className="flex flex-wrap gap-3 items-center">
+            <div className="flex flex-wrap gap-3 items-center shrink-0">
               {githubLink ? (
                 <a
                   href={githubLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#f0f0f0] text-[#18181a] text-[13px] font-medium rounded-[12px] no-underline hover:bg-[#e8e8e8]"
+                  className="inline-flex min-h-[46px] items-center gap-2 px-4 py-2.5 bg-white border border-[#eaeaea] text-[#18181a] text-[13px] font-semibold rounded-[10px] no-underline transition-colors hover:bg-[#f0f0f0]"
                 >
-                  <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-base symbol">
+                  <span className="symbol text-[17px]" aria-hidden="true">
                     code
                   </span>
-                  <span>Repositori GitHub</span>
+                  <span>Repositori Kode</span>
                 </a>
               ) : null}
               {liveLink ? (
@@ -102,26 +122,36 @@ export function ProjectDetail({
                   href={liveLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#18181a] text-white text-[13px] font-medium rounded-[12px] no-underline hover:opacity-90 shadow-[0px_1px_2px_#0000000d]"
+                  className="inline-flex min-h-[46px] items-center gap-2 px-5 py-2.5 bg-[#18181a] text-white text-[13px] font-semibold rounded-[10px] no-underline transition-colors hover:bg-[#242427]"
                 >
-                  <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-base text-[#82b440] symbol">
-                    play_circle
+                  <span
+                    className="symbol text-[17px] text-[#e2e89d]"
+                    aria-hidden="true"
+                  >
+                    open_in_new
                   </span>
                   <span>Kunjungi Sistem Live</span>
                 </a>
               ) : (
                 <Link
                   href="/konsultasi"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#18181a] text-white text-[13px] font-medium rounded-[12px] no-underline hover:opacity-90 shadow-[0px_1px_2px_#0000000d]"
+                  className="inline-flex min-h-[46px] items-center gap-2 px-5 py-2.5 bg-[#18181a] text-white text-[13px] font-semibold rounded-[10px] no-underline transition-colors hover:bg-[#242427]"
                 >
-                  <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-base text-[#82b440] symbol">
+                  <span
+                    className="symbol text-[17px] text-[#e2e89d]"
+                    aria-hidden="true"
+                  >
                     chat
                   </span>
                   <span>Konsultasi Proyek Serupa</span>
                 </Link>
               )}
             </div>
-          </section>
+          </div>
+        </section>
+
+        {/* Content Container */}
+        <div className="box-border w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-8">
 
           {/* Main Layout: Sidebar & Main Area */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -141,7 +171,7 @@ export function ProjectDetail({
                   <div>
                     <dt className="text-[11px] text-[#71717a]">Klien / Instansi</dt>
                     <dd className="m-0 text-sm font-semibold text-[#18181a] mt-0.5">
-                      {project.clientName ?? "Kemitraan Terverifikasi"}
+                      {project.clientName ?? "—"}
                     </dd>
                   </div>
                   <div>
@@ -154,12 +184,6 @@ export function ProjectDetail({
                     <dt className="text-[11px] text-[#71717a]">Kategori Sistem</dt>
                     <dd className="m-0 text-sm font-semibold text-[#18181a] mt-0.5">
                       {project.categories.join(", ") || "Sistem Informasi"}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-[11px] text-[#71717a]">Garansi &amp; Pemeliharaan</dt>
-                    <dd className="m-0 text-sm font-semibold text-[#82b440] mt-0.5">
-                      30 Hari Bug-Free SLA
                     </dd>
                   </div>
                 </dl>
@@ -255,9 +279,11 @@ export function ProjectDetail({
                   <span className="bg-[#18181acc] backdrop-blur px-3 py-1 rounded-[8px]">
                     {project.title} • Tangkapan Layar Resmi
                   </span>
-                  <span className="bg-[#242427] text-[#82b440] px-3 py-1 rounded-[8px] font-medium">
-                    Verified Release
-                  </span>
+                  {project.year ? (
+                    <span className="bg-[#242427] text-[#e2e89d] px-3 py-1 rounded-[8px] font-medium">
+                      Rilis {project.year}
+                    </span>
+                  ) : null}
                 </div>
               </div>
 
@@ -309,7 +335,7 @@ export function ProjectDetail({
                     </div>
                   </div>
 
-                  {/* Impact & Results */}
+                  {/* Project facts — no invented performance claims */}
                   <div className="p-6 bg-[#18181a] text-white rounded-[16px] flex flex-col gap-4">
                     <div className="flex items-center gap-2 text-[#e2e89d]">
                       <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-lg symbol">

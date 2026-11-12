@@ -8,6 +8,7 @@ export default defineConfig([
   globalIgnores([
     ".next/**",
     ".local/**",
+    "tmp/**",
     "prototype/**",
     "public/**",
     "playwright-report/**",

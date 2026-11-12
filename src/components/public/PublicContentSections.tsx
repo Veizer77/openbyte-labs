@@ -134,6 +134,16 @@ export function PublicPricingSection({
                 ) : null}
 
                 <div className="p-3 bg-[#f0f0f0] rounded-[10px] mt-2">
+                  {item.billingType !== "custom" && item.effectivePrice < item.price ? (
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs line-through text-[#71717a] font-medium">
+                        {rupiah(item.price)}
+                      </span>
+                      <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#e2e89d] text-[#18181a]">
+                        Hemat {Math.round((1 - item.effectivePrice / item.price) * 100)}%
+                      </span>
+                    </div>
+                  ) : null}
                   <span className="text-2xl font-bold text-[#18181a]">
                     {item.billingType === "custom" ? "Hubungi kami" : rupiah(item.effectivePrice)}
                   </span>

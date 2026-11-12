@@ -308,10 +308,10 @@ export function ContactForm({
 
   return (
     <form
-      {...props}
       noValidate
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-4"
+      {...props}
+      className={`flex flex-col gap-5 ${props.className ?? ""}`.trim()}
     >
       {/* Server Error Alert */}
       {serverError && (
@@ -337,7 +337,7 @@ export function ContactForm({
         aria-hidden="true"
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
         <label className="field" htmlFor="contact-name">
           NAMA LENGKAP *
           <input

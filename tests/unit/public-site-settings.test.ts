@@ -54,6 +54,24 @@ describe("public site settings projection", () => {
     expect(settings.general).not.toHaveProperty("logoId");
     expect(settings.hero).not.toHaveProperty("heroImageId");
     expect(settings.seo).not.toHaveProperty("defaultOgImageId");
+
+    // Also verify relative same-origin media paths (/api/media/...)
+    const relativeMedia = (id: string) => ({
+      alt: "Gambar publik",
+      urls: {
+        thumb: `/api/media/${id}/thumb.webp`,
+        card: `/api/media/${id}/card.webp`,
+        hero: `/api/media/${id}/hero.webp`,
+        og: `/api/media/${id}/og.webp`,
+      },
+    });
+    const relativeSettings = toPublicSiteSettings(
+      input,
+      new Map([[logoId, relativeMedia(logoId)], [heroId, relativeMedia(heroId)], [ogId, relativeMedia(ogId)]]),
+    );
+    expect(relativeSettings.general.logoUrl).toBe(`/api/media/${logoId}/card.webp`);
+    expect(relativeSettings.hero.heroImageUrl).toBe(`/api/media/${heroId}/hero.webp`);
+    expect(relativeSettings.seo.defaultOgImageUrl).toBe(`/api/media/${ogId}/og.webp`);
   });
 
   it("fails closed for an invalid persisted Settings document", () => {

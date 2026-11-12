@@ -1,14 +1,14 @@
 import { z } from "zod";
 import type { ServiceAddonRecord } from "@/schemas/service-addons";
 import type { TestimonialRecord } from "@/schemas/testimonials";
-import type { PublicMediaAsset } from "@/schemas/media";
+import { publicMediaUrlSchema, type PublicMediaAsset } from "@/schemas/media";
 
 export const publicTestimonialSchema = z
   .object({
     authorName: z.string(),
     authorRole: z.string(),
     quote: z.string(),
-    photoUrl: z.url().nullable(),
+    photoUrl: publicMediaUrlSchema.nullable(),
   })
   .strict();
 

@@ -5,6 +5,7 @@ import {
   type SettingsDocument,
 } from "./site-settings";
 import { richTextSchema } from "./rich-text";
+import { publicMediaUrlSchema } from "./media";
 
 export interface PublicMediaImage {
   alt: string;
@@ -18,8 +19,8 @@ export const publicSiteSettingsSchema = z
     general: z
       .object({
         brandName: z.string(),
-        logoUrl: z.url().nullable(),
-        faviconUrl: z.url().nullable(),
+        logoUrl: publicMediaUrlSchema.nullable(),
+        faviconUrl: publicMediaUrlSchema.nullable(),
         whatsappNumber: z.string(),
         contactEmail: z.union([z.email(), z.literal("")]),
         address: z.string(),
@@ -34,7 +35,7 @@ export const publicSiteSettingsSchema = z
         subheadline: z.string(),
         primaryCtaLabel: z.string(),
         secondaryCtaLabel: z.string(),
-        heroImageUrl: z.url().nullable(),
+        heroImageUrl: publicMediaUrlSchema.nullable(),
         heroImageAlt: z.string(),
         trustMetrics: z.array(
           z.object({ value: z.string(), label: z.string() }).strict(),
@@ -53,7 +54,7 @@ export const publicSiteSettingsSchema = z
       .object({
         defaultTitle: z.string(),
         defaultDescription: z.string(),
-        defaultOgImageUrl: z.url().nullable(),
+        defaultOgImageUrl: publicMediaUrlSchema.nullable(),
       })
       .strict(),
     calculator: z

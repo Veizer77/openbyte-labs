@@ -29,113 +29,126 @@ function PageBlockView({
     case "hero": {
       const image = block.heroImageId ? media.get(block.heroImageId) : undefined;
       return (
-        <section className="box-border w-full grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-          {/* Left Hero Card - Light Bento */}
-          <div className="box-border lg:col-span-7 shadow-[0px_1px_3px_#0000000d] border border-neutral-200/80 flex flex-col justify-between p-6 sm:p-8 bg-white rounded-[16px] gap-6">
-            <div className="flex flex-col gap-5">
-              <div className="w-fit flex items-center gap-2 p-[4px_12px] bg-[#f0f0f0] rounded-full">
-                <span className="w-2 h-2 rounded-full bg-[#82b440]" />
-                <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
-                  OPENBYTE • SOLUSI DIGITAL
-                </span>
+        <section className="w-full pb-12 border-b border-[#eaeaea] hero-band">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Open Canvas Hero */}
+            <div className="lg:col-span-7 flex flex-col gap-6">
+              <div className="flex items-center gap-3 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+                <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+                <span>OpenByte Labs · Solusi Digital</span>
               </div>
-              <h1 className="m-0 text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-[#18181a] leading-tight">
+
+              <h1 className="m-0 text-[36px]/[1.12] sm:text-[46px]/[1.08] lg:text-[52px]/[1.06] font-semibold tracking-[-0.035em] text-[#18181a]">
                 {block.headline}
               </h1>
+
               {block.subheadline ? (
-                <p className="m-0 text-sm sm:text-base leading-relaxed text-[#52525b]">
+                <p className="m-0 max-w-[58ch] text-[16px]/[1.65] text-[#52525b]">
                   {block.subheadline}
                 </p>
               ) : null}
-              <div className="flex flex-wrap gap-3 pt-2">
+
+              <div className="flex flex-wrap gap-3 pt-1">
                 <Link
                   href="/konsultasi"
-                  className="px-5 py-3 rounded-[12px] bg-[#18181a] text-white text-sm font-semibold no-underline hover:opacity-90 shadow-[0px_1px_2px_#0000000d] flex items-center gap-2"
+                  className="inline-flex min-h-[48px] items-center gap-2 rounded-[10px] bg-[#18181a] px-6 py-3 text-[14px] font-semibold text-white no-underline transition-colors hover:bg-[#242427]"
                 >
                   <span>{block.primaryCtaLabel || "Konsultasi"}</span>
-                  <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-base symbol">
+                  <span className="symbol text-[16px] text-[#e2e89d]" aria-hidden="true">
                     arrow_forward
                   </span>
                 </Link>
                 <Link
                   href="/paket"
-                  className="px-5 py-3 rounded-[12px] bg-white border border-neutral-200/80 text-[#18181a] text-sm font-semibold no-underline hover:bg-neutral-50"
+                  className="inline-flex min-h-[48px] items-center rounded-[10px] border border-[#eaeaea] bg-white px-5 py-3 text-[14px] font-medium text-[#18181a] no-underline transition-colors hover:bg-[#f0f0f0]"
                 >
                   {block.secondaryCtaLabel || "Lihat Layanan"}
                 </Link>
               </div>
+
+              {block.trustMetrics.length ? (
+                <dl className="m-0 grid grid-cols-2 sm:grid-cols-3 gap-6 pt-6 mt-2 border-t border-[#eaeaea]">
+                  {block.trustMetrics.map((metric, index) => (
+                    <div
+                      key={`${metric.label}-${index}`}
+                      className="flex flex-col gap-1 border-l-2 border-[#d2d88f] pl-3.5"
+                    >
+                      <dt className="text-[11px] font-medium tracking-[0.04em] uppercase text-[#52525b]">
+                        {metric.label}
+                      </dt>
+                      <dd className="m-0 text-[18px] font-semibold text-[#18181a] tabular-nums">
+                        {metric.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
             </div>
 
-            {block.trustMetrics.length ? (
-              <dl className="grid grid-cols-2 sm:grid-cols-3 gap-3 m-0 pt-4 border-t border-neutral-100">
-                {block.trustMetrics.map((metric, index) => (
-                  <div key={`${metric.label}-${index}`} className="flex flex-col p-3 bg-[#f0f0f0] rounded-[12px]">
-                    <dt className="text-[11px] text-[#52525b] font-medium tracking-[0.22px]">
-                      {metric.label}
-                    </dt>
-                    <dd className="m-0 text-base font-bold text-[#18181a] mt-0.5">
-                      {metric.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            ) : null}
-          </div>
-
-          {/* Right Hero Card - Dark Bento */}
-          <div className="box-border lg:col-span-5 shadow-[0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] flex flex-col justify-between p-6 sm:p-8 bg-[#18181a] text-white rounded-[16px] overflow-hidden gap-6">
-            {image ? (
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[12px] bg-[#242427]">
-                <Image
-                  src={image.urls.hero}
-                  alt={image.alt}
-                  fill
-                  unoptimized
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
-                />
-              </div>
-            ) : (
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center justify-between border-b border-[#242427] pb-3">
+            {/* Right Obsidian Blueprint Panel */}
+            <div className="lg:col-span-5">
+              <div className="rounded-[16px] border border-[#2e2e32] bg-[#18181a] text-white overflow-hidden">
+                <div className="flex items-center justify-between border-b border-[#2e2e32] px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-lg text-[#e2e89d] symbol">
-                      dns
+                    <span className="symbol text-[18px] text-[#e2e89d]" aria-hidden="true">
+                      architecture
                     </span>
-                    <span className="text-[11px] font-bold tracking-[0.55px] text-[#a8a8ad] uppercase">
-                      RINGKASAN SISTEM
+                    <span className="text-[11px] font-semibold tracking-[0.12em] uppercase text-[#a8a8ad]">
+                      Ringkasan Sistem
                     </span>
                   </div>
-                  <span className="px-2.5 py-0.5 bg-[#242427] text-[#82b440] text-[11px] font-medium rounded-full">
-                    Sistem Terverifikasi
+                  <span className="rounded-full bg-[#242427] px-2.5 py-1 text-[11px] font-medium text-[#82b440]">
+                    Terverifikasi
                   </span>
                 </div>
-                <div className="flex flex-col gap-1.5">
-                  <span className="text-lg font-semibold text-white tracking-[-0.2px]">
-                    Spesifikasi &amp; Ruang Lingkup
-                  </span>
-                  <p className="text-xs text-[#a8a8ad] m-0 leading-5">
-                    Kebutuhan fungsionalitas, teknologi, pengujian, dan garansi dibahas sebelum penawaran disusun.
-                  </p>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 bg-[#242427] rounded-[10px] flex flex-col">
-                    <span className="text-[10px] text-[#a8a8ad]">Arsitektur</span>
-                    <span className="text-sm font-semibold text-[#82b440] mt-0.5">Clean &amp; Modular</span>
-                  </div>
-                  <div className="p-3 bg-[#242427] rounded-[10px] flex flex-col">
-                    <span className="text-[10px] text-[#a8a8ad]">Garansi</span>
-                    <span className="text-sm font-semibold text-[#e2e89d] mt-0.5">30 Hari Bug-Free</span>
+
+                <div className="p-6 flex flex-col gap-5">
+                  {image ? (
+                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-[10px] border border-[#2e2e32] bg-[#242427]">
+                      <Image
+                        src={image.urls.hero}
+                        alt={image.alt}
+                        fill
+                        unoptimized
+                        sizes="(max-width: 1024px) 100vw, 40vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="flex flex-col gap-1.5">
+                        <span className="text-[18px] font-semibold text-white tracking-[-0.015em]">
+                          Spesifikasi &amp; Ruang Lingkup
+                        </span>
+                        <p className="m-0 text-[13px] leading-5 text-[#a8a8ad]">
+                          Kebutuhan fungsionalitas, teknologi, pengujian, dan garansi dibahas sebelum penawaran disusun.
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-2 gap-px bg-[#2e2e32] border border-[#2e2e32] rounded-[10px] overflow-hidden">
+                        <div className="p-3.5 bg-[#242427] flex flex-col gap-0.5">
+                          <span className="text-[11px] text-[#a8a8ad]">Arsitektur</span>
+                          <span className="text-[14px] font-semibold text-[#82b440]">
+                            Modular &amp; Terukur
+                          </span>
+                        </div>
+                        <div className="p-3.5 bg-[#242427] flex flex-col gap-0.5">
+                          <span className="text-[11px] text-[#a8a8ad]">Serah Terima</span>
+                          <span className="text-[14px] font-semibold text-[#e2e89d]">
+                            Dokumentasi Resmi
+                          </span>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  <div className="pt-3 border-t border-[#2e2e32] flex items-center justify-between text-[12px] text-[#a8a8ad]">
+                    <span>Cakupan dibahas per proyek</span>
+                    <span className="symbol text-[16px] text-[#82b440]" aria-hidden="true">
+                      verified
+                    </span>
                   </div>
                 </div>
               </div>
-            )}
-
-            <div className="pt-3 border-t border-[#242427] flex items-center justify-between text-xs text-[#a8a8ad]">
-              <span>Cakupan dibahas per proyek</span>
-              <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-sm text-[#82b440] symbol">
-                verified
-              </span>
             </div>
           </div>
         </section>
@@ -240,14 +253,17 @@ export function PublicPageBuilder({
   preview?: boolean;
 }) {
   return (
-    <div className="screen public-screen flex min-h-screen flex-col bg-white">
+    <div
+      className="screen public-screen has-editorial-hero flex min-h-screen flex-col bg-white"
+      data-screen="site/page"
+    >
       <PublicHeader settings={catalog.settings} />
       {preview ? (
-        <div className="mt-16 bg-amber-100 px-4 py-2 text-center text-xs font-semibold text-amber-950">
+        <div className="mt-[104px] lg:mt-[68px] bg-amber-100 px-4 py-2 text-center text-xs font-semibold text-amber-950">
           Preview konten CMS — hanya terlihat oleh admin
         </div>
       ) : null}
-      <main id="konten" className="mx-auto flex w-full max-w-[1440px] 2xl:max-w-[1600px] flex-1 flex-col gap-10 px-4 pb-16 pt-24 sm:px-6 lg:px-8">
+      <main id="konten" className={`mx-auto flex w-full max-w-[1440px] 2xl:max-w-[1600px] flex-1 flex-col gap-10 px-4 pb-16 ${preview ? "pt-10" : "pt-[120px] lg:pt-[96px]"} sm:px-6 lg:px-8`}>
         <h1 className="sr-only">{page.title}</h1>
         {page.layout.filter((block) => block.isVisible).map((block, index) => (
           <PageBlockView

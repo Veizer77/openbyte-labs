@@ -72,33 +72,34 @@ export function PublicServiceDetail({
   settings?: PublicSiteSettings;
 }) {
   return (
-    <div className="screen public-screen relative flex min-h-screen w-full flex-col items-stretch overflow-x-hidden bg-[#ffffff]">
+    <div className="screen public-screen has-editorial-hero relative flex min-h-screen w-full flex-col items-stretch overflow-x-hidden bg-[#ffffff]">
       <PublicHeader settings={settings} />
       <main
         id="konten"
-        className="relative z-0 flex w-full flex-1 flex-col items-stretch pb-16 pt-[64px]"
+        className="relative z-0 flex w-full flex-1 flex-col items-stretch pb-16 pt-[104px] lg:pt-[68px]"
       >
-        <section className="flex w-full flex-col items-center justify-center bg-[#18181A] py-14">
-          <div className="mx-auto flex w-full max-w-[1440px] flex-col items-start gap-5 px-4 sm:px-6 lg:px-8 2xl:max-w-[1600px]">
-            <div className="flex w-fit items-center gap-1.5 rounded-full bg-[#D2D88F26] px-3 py-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#D2D88F]" />
-              <span className="text-[11px] font-bold tracking-[0.5px] text-[#D2D88F]">
-                LAYANAN • OPENBYTE LABS
-              </span>
+        <section className="flex w-full flex-col items-center justify-center bg-[#18181a] border-b border-[#2e2e32] arch-grid-dark hero-band py-14 sm:py-16">
+          <div className="mx-auto flex w-full max-w-[1440px] 2xl:max-w-[1600px] flex-col items-start gap-5 px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#e2e89d]">
+              <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+              <span>Spesifikasi Layanan · OpenByte Labs</span>
             </div>
-            <h1 className="m-0 w-full text-[32px]/[40px] font-extrabold tracking-[-1px] text-[#FFFFFF] sm:text-[44px]/[51px]">
+            <h1
+              className="m-0 max-w-3xl text-[32px]/[1.14] font-semibold tracking-[-0.03em] text-[#ffffff] sm:text-[44px]/[1.1]"
+              data-heading="true"
+            >
               {service.title}
             </h1>
-            <p className="m-0 w-full text-[16px]/[26px] text-[#A1A1AA]">
+            <p className="m-0 max-w-2xl text-[15px]/[1.65] sm:text-[16px]/[1.65] text-[#a8a8ad]">
               {service.description ||
                 "Pilihan teknologi, arsitektur, kontrol keamanan, jadwal, dan hasil kerja ditentukan setelah kebutuhan proyek ditinjau dan dicantumkan dalam penawaran tertulis."}
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
                 href="/kalkulator"
-                className="flex items-center gap-2 rounded-[8px] bg-[#D2D88F] px-5 py-3 text-[13px] font-bold text-[#18181A] no-underline hover:opacity-90"
+                className="inline-flex min-h-[48px] items-center gap-2 rounded-[10px] bg-[#e2e89d] px-5 py-3 text-[13px] font-semibold text-[#18181a] no-underline transition-colors hover:bg-[#d2d88f]"
               >
-                Simulasikan di Kalkulator
+                <span>Simulasikan di Kalkulator</span>
                 <span
                   className="symbol text-[16px]"
                   aria-hidden="true"
@@ -108,7 +109,7 @@ export function PublicServiceDetail({
               </Link>
               <Link
                 href="/konsultasi"
-                className="rounded-[8px] border border-[#3F3F46] px-5 py-3 text-[13px] font-semibold text-[#FFFFFF] no-underline hover:bg-[#242427]"
+                className="inline-flex min-h-[48px] items-center rounded-[10px] border border-[#2e2e32] bg-[#242427] px-5 py-3 text-[13px] font-semibold text-[#ffffff] no-underline transition-colors hover:border-[#e2e89d]"
               >
                 Diskusikan Kebutuhan
               </Link>

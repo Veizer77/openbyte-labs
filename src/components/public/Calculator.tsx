@@ -416,6 +416,45 @@ export function CalculatorUnits(props: Props) {
   );
 }
 
+export function CalculatorExtraItems({ groupKey }: { groupKey: "platform" | "productType" | "modules" | "units" }) {
+  const { groups, items } = useCalculator();
+  const group = groups.find((g) => g.key === groupKey);
+  if (!group) return null;
+  const knownNames = new Set(Object.values(displayAliases));
+  const extraItems = items.filter(
+    (item) => item.groupId === group.id && !knownNames.has(item.label) && !(item.id in displayAliases),
+  );
+  if (extraItems.length === 0) return null;
+  return (
+    <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+      {extraItems.map((item) => (
+        <CalculatorOption
+          key={item.id}
+          itemId={item.id}
+          className="box-border w-full h-auto flex flex-row gap-3 p-4 justify-between items-center bg-[#f0f0f0] rounded-[12px] cursor-pointer"
+        >
+          <div className="flex flex-col gap-0.5 text-left">
+            <span className="text-[13px]/[18px] text-[#18181a] font-medium">
+              {item.label}
+            </span>
+          </div>
+          <div className="flex flex-col items-end shrink-0">
+            <CalculatorItemPrice
+              itemId={item.id}
+              prefix={groupKey === "modules" ? "+" : ""}
+              className="text-[11px]/[14px] text-[#18181a] font-semibold"
+            />
+            <CalculatorItemDays
+              itemId={item.id}
+              className="text-[11px]/[14px] text-[#595962] font-medium"
+            />
+          </div>
+        </CalculatorOption>
+      ))}
+    </div>
+  );
+}
+
 export function CalculatorBreakdown(props: Props) {
   const { selection, items, getItemId, showRange } = useCalculator();
   const payable = selection.filter((value) => value.itemId !== getItemId("web"));

@@ -22,7 +22,11 @@ export type Resource =
   | "blocked-dates"
   | "users"
   | "audit-logs"
-  | "client-projects";
+  | "client-projects"
+  | "digital-products"
+  | "digital-orders"
+  | "digital-coupons"
+  | "digital-reviews";
 
 export interface AdminPrincipal {
   id: string;
@@ -43,10 +47,14 @@ const contentResources: ReadonlySet<string> = new Set([
   "media",
   "calculator-groups",
   "calculator-items",
+  "digital-products",
+  "digital-reviews",
 ]);
 const ownerResources: ReadonlySet<string> = new Set([
   ...contentResources,
   "site-settings",
+  "digital-orders",
+  "digital-coupons",
   "inquiries",
   "quote-requests",
   "consultation-bookings",
@@ -89,6 +97,10 @@ const resourceActions: Record<string, readonly string[]> = {
   media: ["read", "create", "update", "delete"],
   "calculator-groups": ["read", "create", "update", "delete"],
   "calculator-items": ["read", "create", "update", "delete"],
+  "digital-products": ["read", "create", "update", "delete", "publish", "restore"],
+  "digital-orders": ["read", "create", "update", "delete"],
+  "digital-coupons": ["read", "create", "update", "delete"],
+  "digital-reviews": ["read", "update"],
   inquiries: ["read", "update"],
   "quote-requests": ["read", "update"],
   "consultation-bookings": ["read", "update"],

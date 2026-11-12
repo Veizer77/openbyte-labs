@@ -8,6 +8,7 @@ export interface BlockedDate {
   date: string;
   startTime?: string;
   endTime?: string;
+  reason?: string;
 }
 export interface ExistingBooking {
   slotStart: string;

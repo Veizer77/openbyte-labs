@@ -55,6 +55,14 @@ describe("katalog proyek publik", () => {
     expect(ctx.findPublishedBySlug).toHaveBeenCalledOnce();
   });
 
+  it("menerima URL media relatif hasil proxy /api/media", async () => {
+    const ctx = setup([{ ...project, imageUrl: "/api/media/cover.webp" }]);
+
+    await expect(listPublicProjects(ctx.store)).resolves.toEqual([
+      { ...project, imageUrl: "/api/media/cover.webp" },
+    ]);
+  });
+
   it("menolak data daftar yang melanggar kontrak publik", async () => {
     const ctx = setup([{ ...project, imageUrl: "javascript:alert(1)" }]);
 

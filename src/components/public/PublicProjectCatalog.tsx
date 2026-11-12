@@ -24,65 +24,56 @@ export function PublicProjectCatalog({
     : projects;
 
   return (
-    <div className="box-border w-full min-h-screen flex flex-col justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen">
+    <div className="box-border w-full min-h-screen flex flex-col justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen has-editorial-hero">
       <PublicHeader settings={settings} />
       <main
         id="konten"
-        className="box-border w-full flex-1 flex flex-col pt-[72px] pb-16 justify-start items-center bg-[#ffffff] relative"
+        className="box-border w-full flex-1 flex flex-col pt-[104px] lg:pt-[68px] pb-16 justify-start items-center bg-[#ffffff] relative"
       >
-        <div className="box-border w-full max-w-[1440px] 2xl:max-w-[1600px] flex flex-col gap-8 px-4 sm:px-6 lg:px-8 justify-start items-stretch">
-          {/* Header Section */}
-          <section className="box-border w-full flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-end py-4">
-            <div className="box-border w-full max-w-[768px] flex flex-col gap-1 justify-start items-start">
-              <div className="box-border w-fit flex flex-row gap-2 p-[4px_10px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]">
-                <span className="w-2 h-2 rounded-full bg-[#82b440]" />
-                <span className="text-[11px]/[14px] text-[#52525b] font-medium tracking-[0.55px]">
-                  PORTOFOLIO SISTEM &amp; REKAYASA
-                </span>
+        {/* Architectural Header Band */}
+        <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+          <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col lg:flex-row gap-8 justify-between items-start lg:items-end">
+            <div className="max-w-3xl flex flex-col gap-3">
+              <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+                <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+                <span>Arsip &amp; Portofolio Sistem</span>
               </div>
-              <h1 className="text-[28px]/[36px] sm:text-[34px]/[42px] text-[#18181a] font-semibold tracking-[-0.7px] m-0 mt-2">
+              <h1
+                className="text-[32px]/[1.14] sm:text-[42px]/[1.1] lg:text-[48px]/[1.08] text-[#18181a] font-semibold tracking-[-0.03em] m-0"
+                data-heading="true"
+              >
                 Portofolio Sistem &amp; Rekayasa Perangkat Lunak
               </h1>
-              <h2 className="sr-only">Proyek yang telah diterbitkan</h2>
-              <p className="text-[14px]/[22px] text-[#52525b] font-normal m-0 mt-1 max-w-2xl">
-                Eksplorasi kurasi arsitektur modular, platform sistem informasi instansi, aplikasi mobile, dan solusi digital performa tinggi yang dibangun dengan standar rekayasa terverifikasi.
+              {visibleProjects.length ? (
+                <h2 className="sr-only">Proyek yang telah diterbitkan</h2>
+              ) : null}
+              <p className="text-[15px]/[1.65] sm:text-[16px]/[1.65] text-[#52525b] font-normal m-0 max-w-2xl">
+                Dokumentasi sistem informasi, aplikasi web, dan solusi mobile yang telah dirancang serta diterbitkan sesuai kebutuhan operasional mitra.
               </p>
             </div>
 
-            {/* Metrics Header Cards */}
-            <div className="box-border w-fit shrink-0 flex flex-row gap-3 justify-start items-center">
-              <div className="box-border flex flex-row gap-3 p-3 justify-start items-center bg-[#f0f0f0] rounded-[12px] shadow-[0px_1px_2px_#0000000d]">
-                <div className="w-10 h-10 flex items-center justify-center bg-white rounded-[8px] text-[#18181a]">
-                  <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
-                    database
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[11px]/[14px] text-[#52525b] font-medium tracking-[0.22px]">
-                    Status Proyek
-                  </span>
-                  <span className="text-[15px]/[20px] text-[#18181a] font-semibold">
-                    Terverifikasi
-                  </span>
-                </div>
+            <dl className="m-0 grid grid-cols-2 gap-px bg-[#eaeaea] border border-[#eaeaea] rounded-[12px] overflow-hidden shrink-0 w-full sm:w-auto">
+              <div className="bg-white px-5 py-3.5 flex flex-col gap-0.5">
+                <dt className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#52525b]">
+                  Arsip Terbit
+                </dt>
+                <dd className="m-0 text-[20px] font-semibold text-[#18181a] tabular-nums">
+                  {projects.length} Proyek
+                </dd>
               </div>
-              <div className="box-border flex flex-row gap-3 p-3 justify-start items-center bg-[#f0f0f0] rounded-[12px] shadow-[0px_1px_2px_#0000000d]">
-                <div className="w-10 h-10 flex items-center justify-center bg-white rounded-[8px] text-[#18181a]">
-                  <span className="font-['Material_Symbols_Outlined',system-ui,sans-serif] text-xl symbol">
-                    verified_user
-                  </span>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[11px]/[14px] text-[#52525b] font-medium tracking-[0.22px]">
-                    Kepatuhan Arsitektur
-                  </span>
-                  <span className="text-[15px]/[20px] text-[#18181a] font-semibold">
-                    Standar Industri
-                  </span>
-                </div>
+              <div className="bg-white px-5 py-3.5 flex flex-col gap-0.5">
+                <dt className="text-[11px] font-medium uppercase tracking-[0.06em] text-[#52525b]">
+                  Dokumentasi
+                </dt>
+                <dd className="m-0 text-[15px] font-semibold text-[#454a10] pt-1">
+                  Studi Kasus Nyata
+                </dd>
               </div>
-            </div>
-          </section>
+            </dl>
+          </div>
+        </section>
+
+        <div className="box-border w-full max-w-[1440px] 2xl:max-w-[1600px] flex flex-col gap-8 px-4 sm:px-6 lg:px-8 pt-6 justify-start items-stretch">
 
           {/* Filter Bar */}
           <section className="box-border w-full flex flex-col md:flex-row gap-3 justify-between items-start md:items-center py-2">

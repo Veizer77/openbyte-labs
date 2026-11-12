@@ -76,6 +76,42 @@ export default function SitePaketLayananHarga({
   const starter = packageBySlug("starter-umkm");
   const mobile = packageBySlug("mobile-application");
   const informasi = packageBySlug("sistem-informasi");
+  const extraPackages = packages.filter(
+    (item) =>
+      item.slug !== "starter-umkm" &&
+      item.slug !== "mobile-application" &&
+      item.slug !== "sistem-informasi",
+  );
+  const isStarterPopular = Boolean(starter?.isPopular);
+  const isMobilePopular = Boolean(mobile?.isPopular);
+  const isInformasiPopular = Boolean(informasi?.isPopular);
+
+  // Penempatan posisi kartu: Paket populer ditempatkan di tengah (order-2)
+  // sesuai kaidah psikologi harga (Center-Stage Effect) agar menjadi fokus utama.
+  let starterOrder = "order-1";
+  let informasiOrder = "order-2";
+  let mobileOrder = "order-3";
+
+  if (isStarterPopular) {
+    starterOrder = "order-2";
+    informasiOrder = "order-1";
+    mobileOrder = "order-3";
+  } else if (isMobilePopular) {
+    starterOrder = "order-1";
+    mobileOrder = "order-2";
+    informasiOrder = "order-3";
+  } else {
+    starterOrder = "order-1";
+    informasiOrder = "order-2";
+    mobileOrder = "order-3";
+  }
+  const addons = catalog?.addons ?? [];
+  const labelAddonBilling = (billingType: "one_time" | "monthly" | "yearly") =>
+    billingType === "monthly"
+      ? "/ bulan"
+      : billingType === "yearly"
+        ? "/ tahun"
+        : "/ sekali bayar";
   const jumlahRevisi = (value: number | undefined) =>
     typeof value === "number" ? `${value}x` : "—";
   const hargaRevisi = (value: number | null | undefined) =>
@@ -93,10 +129,6 @@ export default function SitePaketLayananHarga({
     if (!pkg) return "Investasi awal • One-time payment";
     if (pkg.billingType === "subscription_yearly") return "Langganan tahunan";
     if (pkg.billingType === "custom") return "Sesuai ruang lingkup";
-    // Tata letak tidak punya slot harga coret, jadi harga normal ditulis di
-    // keterangan agar angka diskon tidak tampil tanpa pembanding.
-    if (pkg.effectivePrice < pkg.price)
-      return `Harga normal ${rupiah(pkg.price)}`;
     return "Investasi awal • One-time payment";
   };
   /** Baris fitur kosong tidak dirender supaya tidak ada centang tanpa isi. */
@@ -107,7 +139,7 @@ export default function SitePaketLayananHarga({
     <ScreenState screen={"site/paket-layanan-harga"}>
       <div
         className={
-          "box-border w-full min-h-screen flex flex-col gap-0 justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen"
+          "box-border w-full min-h-screen flex flex-col gap-0 justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen has-editorial-hero"
         }
         data-pencil-name={"Public / 02 - Paket Layanan & Harga"}
         data-screen={"site/paket-layanan-harga"}
@@ -117,168 +149,49 @@ export default function SitePaketLayananHarga({
         <PublicHeader settings={catalog?.settings} />
         <main
           className={
-            "box-border w-full flex-1 flex flex-col gap-0 pt-[72px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
+            "box-border w-full flex-1 flex flex-col gap-0 pt-[104px] lg:pt-[68px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
           }
           data-pencil-name={"main"}
         >
+          {/* Architectural Header Band */}
+          <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+            <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col lg:flex-row gap-8 justify-between items-start lg:items-end">
+              <div className="max-w-3xl flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+                  <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+                  <span>Struktur Investasi &amp; Cakupan Teknis</span>
+                </div>
+                <h1
+                  className="text-[32px]/[1.14] sm:text-[42px]/[1.1] lg:text-[48px]/[1.08] text-[#18181a] font-semibold tracking-[-0.03em] m-0"
+                  data-heading="true"
+                >
+                  Pilihan Paket Layanan &amp; Investasi Sistem
+                </h1>
+                <p className="text-[15px]/[1.65] sm:text-[16px]/[1.65] text-[#52525b] font-normal m-0 max-w-2xl">
+                  Setiap paket dirancang dengan batasan ruang lingkup tertulis, rincian kuota revisi, serta penyerahan kode sumber sesuai kesepakatan proyek.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <Link
+                  href="/kalkulator"
+                  className="inline-flex min-h-[46px] items-center gap-2 rounded-[10px] border border-[#eaeaea] bg-white px-4 py-2.5 text-[13px] font-semibold text-[#18181a] no-underline transition-colors hover:bg-[#f0f0f0]"
+                >
+                  <span className="symbol text-[17px]" aria-hidden="true">
+                    calculate
+                  </span>
+                  <span>Simulasi Modul Kustom</span>
+                </Link>
+              </div>
+            </div>
+          </section>
+
           <div
             className={
-              "box-border w-full max-w-[1440px] 2xl:max-w-[1600px] h-fit shrink-0 flex flex-col gap-8 px-4 sm:px-6 lg:px-8 justify-start items-stretch"
+              "box-border w-full max-w-[1440px] 2xl:max-w-[1600px] h-fit shrink-0 flex flex-col gap-8 px-4 sm:px-6 lg:px-8 pt-6 justify-start items-stretch"
             }
             data-pencil-name={"div"}
           >
-            <section
-              className={
-                "box-border w-full h-fit shrink-0 flex flex-col lg:flex-row gap-6 justify-between items-start lg:items-end py-2"
-              }
-              data-pencil-name={"section"}
-              data-responsive="row"
-            >
-              <div
-                className={
-                  "box-border w-full max-w-[672px] h-auto flex flex-col gap-[4px] justify-start items-start"
-                }
-                data-pencil-name={"div"}
-              >
-                <div
-                  className={
-                    "box-border w-fit h-fit shrink-0 flex flex-row gap-[8px] p-[4px_8px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]"
-                  }
-                  data-pencil-name={"div"}
-                >
-                  <div
-                    className={
-                      "box-border w-[8px] shrink-0 h-[8px] bg-[#82b440] rounded-[50%]"
-                    }
-                    data-pencil-name={"span"}
-                  ></div>
-                  <div
-                    className={
-                      "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
-                    }
-                    data-pencil-name={
-                      "KATALOG RESMI & PENAWARAN TERSTANDAR PRD"
-                    }
-                    data-text="true"
-                  >
-                    {"KATALOG RESMI & PENAWARAN TERSTANDAR PRD V1.1"}
-                  </div>
-                </div>
-                <h1
-                  className={
-                    "text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.7px] text-left [white-space:nowrap] m-0"
-                  }
-                  data-pencil-name={"Pilihan Paket Layanan & Investasi Sistem"}
-                  data-text="true"
-                  data-heading="true"
-                >
-                  {"Pilihan Paket Layanan & Investasi Sistem"}
-                </h1>
-                <div
-                  className={
-                    "text-[14px]/[23px] box-border w-full h-[45.5px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
-                  }
-                  data-pencil-name={"Transparansi spesifikasi teknis, jangka "}
-                  data-text="true"
-                >
-                  {
-                    "Transparansi spesifikasi teknis, jangka waktu kerja terjamin, serta kuota revisi definitif tanpa biaya tersembunyi. Didukung standar arsitektur modular, audit keamanan, dan jaminan purna jual."
-                  }
-                </div>
-              </div>
-              <div
-                className={
-                  "box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] p-[6px] justify-start items-center bg-[#f0f0f0] rounded-[12px]"
-                }
-                data-pencil-name={"div"}
-                data-responsive="row"
-              >
-                <div
-                  className={
-                    "box-border w-fit shrink-0 h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[10px] p-[8px_12px] justify-start items-center bg-[#ffffff] rounded-[8px]"
-                  }
-                  data-pencil-name={"div"}
-                >
-                  <div
-                    className={
-                      "text-[18px]/[28px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                    }
-                    data-pencil-name={"verified_user"}
-                    data-text="true"
-                    aria-hidden="true"
-                  >
-                    {"verified_user"}
-                  </div>
-                  <div
-                    className={
-                      "box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
-                    }
-                    data-pencil-name={"div"}
-                  >
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"Garansi Purna Jual"}
-                      data-text="true"
-                    >
-                      {"Garansi Purna Jual"}
-                    </div>
-                    <div
-                      className={
-                        "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"30 Hari Bug-Free"}
-                      data-text="true"
-                    >
-                      {"30 Hari Bug-Free"}
-                    </div>
-                  </div>
-                </div>
-                <div
-                  className={
-                    "box-border w-fit shrink-0 h-fit [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[10px] p-[8px_12px] justify-start items-center bg-[#ffffff] rounded-[8px]"
-                  }
-                  data-pencil-name={"div"}
-                >
-                  <div
-                    className={
-                      "text-[18px]/[28px] box-border text-[#5d6226] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                    }
-                    data-pencil-name={"contract_edit"}
-                    data-text="true"
-                    aria-hidden="true"
-                  >
-                    {"contract_edit"}
-                  </div>
-                  <div
-                    className={
-                      "box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
-                    }
-                    data-pencil-name={"div"}
-                  >
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"Legalitas Kerja"}
-                      data-text="true"
-                    >
-                      {"Legalitas Kerja"}
-                    </div>
-                    <div
-                      className={
-                        "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"SLA & SPK Resmi"}
-                      data-text="true"
-                    >
-                      {"SLA & SPK Resmi"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
             <section
               className={
                 "box-border w-full h-fit shrink-0 grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch pt-4"
@@ -287,13 +200,23 @@ export default function SitePaketLayananHarga({
             >
               <div
                 className={
-                  "box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#ffffff] rounded-[16px] order-1"
+                  isStarterPopular
+                    ? `box-border w-full h-auto [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#18181a] rounded-[16px] overflow-hidden relative ${starterOrder} lg:-translate-y-2`
+                    : `box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#ffffff] rounded-[16px] ${starterOrder}`
                 }
                 data-pencil-name={"div"}
               >
+                {isStarterPopular && (
+                  <div
+                    className={
+                      "box-border w-[224px] h-[224px] [filter:blur(32px)] absolute right-[-40px] top-[-96px] bg-[#e1e89c26] rounded-[50%] [z-index:0]"
+                    }
+                    data-pencil-name={"div"}
+                  ></div>
+                )}
                 <div
                   className={
-                    "box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start"
+                    `box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start ${isStarterPopular ? "relative [z-index:1]" : ""}`
                   }
                   data-pencil-name={"div"}
                 >
@@ -303,24 +226,58 @@ export default function SitePaketLayananHarga({
                     }
                     data-pencil-name={"div"}
                   >
+                    {isStarterPopular ? (
+                      <div
+                        className={
+                          "box-border w-[139.75px] shrink-0 h-[24px] flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
+                        }
+                        data-pencil-name={"span"}
+                        data-responsive="fixed"
+                      >
+                        <div
+                          className={
+                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          }
+                          data-pencil-name={"star"}
+                          data-text="true"
+                          aria-hidden="true"
+                        >
+                          {"star"}
+                        </div>
+                        <div
+                          className={
+                            "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.28px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"Paling Populer"}
+                          data-text="true"
+                        >
+                          {"Paling Populer"}
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className={
+                          "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                        }
+                        data-pencil-name={"TIER 01 • WEB PRESENTASI"}
+                        data-text="true"
+                      >
+                        {"TIER 01 • WEB PRESENTASI"}
+                      </div>
+                    )}
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"TIER 01 • WEB PRESENTASI"}
-                      data-text="true"
-                    >
-                      {"TIER 01 • WEB PRESENTASI"}
-                    </div>
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
+                        isStarterPopular
+                          ? "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_10px] justify-center items-start bg-[#242427] rounded-[9999px]"
+                          : "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
                       }
                       data-pencil-name={"Estimasi 7 Hari"}
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          isStarterPopular
+                            ? "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            : "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
                         }
                         data-text="true"
                       >
@@ -339,7 +296,7 @@ export default function SitePaketLayananHarga({
                   >
                     <div
                       className={
-                        "text-[20px]/[26px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap]"
+                        `text-[20px]/[26px] box-border ${isStarterPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"Starter UMKM & Bisnis"}
                       data-text="true"
@@ -348,7 +305,7 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[13px]/[18px] box-border w-full h-[36px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
+                        `text-[13px]/[18px] box-border w-full h-[36px] shrink-0 ${isStarterPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium text-left`
                       }
                       data-pencil-name={
                         "Landing page konversi tinggi dengan arsi"
@@ -364,18 +321,32 @@ export default function SitePaketLayananHarga({
                   </div>
                   <div
                     className={
-                      "box-border w-full h-[72px] shrink-0 flex flex-col gap-[4px] p-[8px_0px_0px_0px] justify-start items-start"
+                      "box-border w-full min-h-[72px] shrink-0 flex flex-col gap-[4px] p-[8px_0px_0px_0px] justify-start items-start"
                     }
                     data-pencil-name={"div"}
                     data-responsive="flow"
                   >
+                    {starter && typeof starter.price === "number" && starter.effectivePrice < starter.price && (
+                      <div className="box-border w-full flex flex-row items-center gap-[8px] mb-[2px]">
+                        <span
+                          className={`text-[13px]/[16px] line-through font-semibold tracking-tight ${
+                            isStarterPopular ? "text-[#a8a8ad]" : "text-[#71717a]"
+                          }`}
+                        >
+                          Rp {angkaRupiah(starter.price)}
+                        </span>
+                        <span className="text-[10px]/[12px] font-bold px-[6px] py-[2px] rounded-[4px] bg-[#e2e89d] text-[#18181a] uppercase tracking-wide">
+                          Hemat {Math.round((1 - starter.effectivePrice / starter.price) * 100)}%
+                        </span>
+                      </div>
+                    )}
                     <div
                       className={"box-border w-full h-[44px] shrink-0 relative"}
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "text-[12px]/[16px] box-border absolute left-0 top-[24px] text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap] [z-index:0]"
+                          `text-[12px]/[16px] box-border absolute left-0 top-[24px] ${isStarterPopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap] [z-index:0]`
                         }
                         data-pencil-name={"Rp"}
                         data-text="true"
@@ -385,7 +356,7 @@ export default function SitePaketLayananHarga({
                       </div>
                       <div
                         className={
-                          "text-[40px]/[44px] box-border absolute left-[19.31px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-1px] text-left [white-space:nowrap] [z-index:1]"
+                          `text-[40px]/[44px] box-border absolute left-[19.31px] top-0 ${isStarterPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-1px] text-left [white-space:nowrap] [z-index:1]`
                         }
                         data-pencil-name={"1.000.000"}
                         data-text="true"
@@ -395,17 +366,19 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        `text-[11px]/[14px] box-border ${isStarterPopular ? "text-[#e2e89d]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"Investasi awal • One-time payment"}
                       data-text="true"
                     >
-                      {labelBilling(starter)}
+                      {isStarterPopular
+                        ? "Direkomendasikan untuk Efisiensi Bisnis"
+                        : labelBilling(starter)}
                     </div>
                   </div>
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-start bg-[#f0f0f0] rounded-[8px]"
+                      `box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-start ${isStarterPopular ? "bg-[#242427]" : "bg-[#f0f0f0]"} rounded-[8px]`
                     }
                     data-pencil-name={"div"}
                     data-responsive="row"
@@ -418,21 +391,25 @@ export default function SitePaketLayananHarga({
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          `text-[11px]/[14px] box-border ${isStarterPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Revisi Gratis"}
                         data-text="true"
                       >
-                        {"Revisi Gratis"}
+                        {isStarterPopular ? "Kuota Revisi Gratis" : "Revisi Gratis"}
                       </div>
                       <div
                         className={
-                          "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          `text-[16px]/[20px] box-border ${isStarterPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"2x Sesi"}
                         data-text="true"
                       >
-                        {jumlahRevisi(starter?.includedRevisions)}
+                        {isStarterPopular
+                          ? (typeof starter?.includedRevisions === "number"
+                              ? `${starter.includedRevisions}x Sesi Penuh`
+                              : "—")
+                          : jumlahRevisi(starter?.includedRevisions)}
                       </div>
                     </div>
                     <div
@@ -443,16 +420,16 @@ export default function SitePaketLayananHarga({
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          `text-[11px]/[14px] box-border ${isStarterPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Ekstra Revisi"}
                         data-text="true"
                       >
-                        {"Ekstra Revisi"}
+                        {isStarterPopular ? "Biaya Ekstra Revisi" : "Ekstra Revisi"}
                       </div>
                       <div
                         className={
-                          "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          `text-[16px]/[20px] box-border ${isStarterPopular ? "text-[#e2e89d]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Rp 100.000/sesi"}
                         data-text="true"
@@ -469,7 +446,7 @@ export default function SitePaketLayananHarga({
                   >
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                        `text-[11px]/[14px] box-border ${isStarterPopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"SPESIFIKASI DELIVERABLE:"}
                       data-text="true"
@@ -484,9 +461,9 @@ export default function SitePaketLayananHarga({
                       {(starter?.features ?? []).filter(isiFitur).map((feature, index) => (
                         <PackageFeatureRow
                           key={`${feature}-${index}`}
-                          icon="check_circle"
+                          icon={isStarterPopular ? "verified" : "check_circle"}
                           text={feature}
-                          tone="light"
+                          tone={isStarterPopular ? "dark" : "light"}
                         />
                       ))}
                     </ul>
@@ -494,7 +471,7 @@ export default function SitePaketLayananHarga({
                 </div>
                 <div
                   className={
-                    "box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start"
+                    `box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start ${isStarterPopular ? "relative [z-index:2]" : ""}`
                   }
                   data-pencil-name={"div"}
                   data-section-padding="true"
@@ -502,13 +479,18 @@ export default function SitePaketLayananHarga({
                   <Link
                     href={`/pesan?paket=${encodeURIComponent(starter?.slug ?? "starter-umkm")}`}
                     className={
-                      "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                      isStarterPopular
+                        ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                        : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
                     data-pencil-name={"a"}
+                    {...(isStarterPopular ? { "data-responsive": "flow" } : {})}
                   >
                     <div
                       className={
-                        "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                        isStarterPopular
+                          ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                          : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
                       }
                       data-pencil-name={"Pilih Paket Starter"}
                       data-text="true"
@@ -517,26 +499,38 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                        isStarterPopular
+                          ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                       }
-                      data-pencil-name={"arrow_forward"}
+                      data-pencil-name={isStarterPopular ? "bolt" : "arrow_forward"}
                       data-text="true"
                       aria-hidden="true"
                     >
-                      {"arrow_forward"}
+                      {isStarterPopular ? "bolt" : "arrow_forward"}
                     </div>
                   </Link>
                 </div>
               </div>
               <div
                 className={
-                  "box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#ffffff] rounded-[16px] order-3"
+                  isMobilePopular
+                    ? `box-border w-full h-auto [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#18181a] rounded-[16px] overflow-hidden relative ${mobileOrder} lg:-translate-y-2`
+                    : `box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#ffffff] rounded-[16px] ${mobileOrder}`
                 }
                 data-pencil-name={"div"}
               >
+                {isMobilePopular && (
+                  <div
+                    className={
+                      "box-border w-[224px] h-[224px] [filter:blur(32px)] absolute right-[-40px] top-[-96px] bg-[#e1e89c26] rounded-[50%] [z-index:0]"
+                    }
+                    data-pencil-name={"div"}
+                  ></div>
+                )}
                 <div
                   className={
-                    "box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start"
+                    `box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start ${isMobilePopular ? "relative [z-index:1]" : ""}`
                   }
                   data-pencil-name={"div"}
                 >
@@ -546,24 +540,58 @@ export default function SitePaketLayananHarga({
                     }
                     data-pencil-name={"div"}
                   >
+                    {isMobilePopular ? (
+                      <div
+                        className={
+                          "box-border w-[139.75px] shrink-0 h-[24px] flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
+                        }
+                        data-pencil-name={"span"}
+                        data-responsive="fixed"
+                      >
+                        <div
+                          className={
+                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          }
+                          data-pencil-name={"star"}
+                          data-text="true"
+                          aria-hidden="true"
+                        >
+                          {"star"}
+                        </div>
+                        <div
+                          className={
+                            "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.28px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"Paling Populer"}
+                          data-text="true"
+                        >
+                          {"Paling Populer"}
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className={
+                          "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                        }
+                        data-pencil-name={"TIER 03 • MULTIPLATFORM"}
+                        data-text="true"
+                      >
+                        {"TIER 03 • MULTIPLATFORM"}
+                      </div>
+                    )}
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"TIER 03 • MULTIPLATFORM"}
-                      data-text="true"
-                    >
-                      {"TIER 03 • MULTIPLATFORM"}
-                    </div>
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
+                        isMobilePopular
+                          ? "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_10px] justify-center items-start bg-[#242427] rounded-[9999px]"
+                          : "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
                       }
                       data-pencil-name={"Estimasi 30 Hari"}
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          isMobilePopular
+                            ? "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            : "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
                         }
                         data-text="true"
                       >
@@ -582,7 +610,7 @@ export default function SitePaketLayananHarga({
                   >
                     <div
                       className={
-                        "text-[20px]/[26px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap]"
+                        `text-[20px]/[26px] box-border ${isMobilePopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"Mobile Application Flutter"}
                       data-text="true"
@@ -591,7 +619,7 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[13px]/[18px] box-border w-full h-[36px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
+                        `text-[13px]/[18px] box-border w-full h-[36px] shrink-0 ${isMobilePopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium text-left`
                       }
                       data-pencil-name={
                         "Aplikasi ponsel berperforma 60fps dengan"
@@ -607,18 +635,32 @@ export default function SitePaketLayananHarga({
                   </div>
                   <div
                     className={
-                      "box-border w-full h-[72px] shrink-0 flex flex-col gap-[4px] p-[8px_0px_0px_0px] justify-start items-start"
+                      "box-border w-full min-h-[72px] shrink-0 flex flex-col gap-[4px] p-[8px_0px_0px_0px] justify-start items-start"
                     }
                     data-pencil-name={"div"}
                     data-responsive="flow"
                   >
+                    {mobile && typeof mobile.price === "number" && mobile.effectivePrice < mobile.price && (
+                      <div className="box-border w-full flex flex-row items-center gap-[8px] mb-[2px]">
+                        <span
+                          className={`text-[13px]/[16px] line-through font-semibold tracking-tight ${
+                            isMobilePopular ? "text-[#a8a8ad]" : "text-[#71717a]"
+                          }`}
+                        >
+                          Rp {angkaRupiah(mobile.price)}
+                        </span>
+                        <span className="text-[10px]/[12px] font-bold px-[6px] py-[2px] rounded-[4px] bg-[#e2e89d] text-[#18181a] uppercase tracking-wide">
+                          Hemat {Math.round((1 - mobile.effectivePrice / mobile.price) * 100)}%
+                        </span>
+                      </div>
+                    )}
                     <div
                       className={"box-border w-full h-[44px] shrink-0 relative"}
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "text-[12px]/[16px] box-border absolute left-0 top-[24px] text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap] [z-index:0]"
+                          `text-[12px]/[16px] box-border absolute left-0 top-[24px] ${isMobilePopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap] [z-index:0]`
                         }
                         data-pencil-name={"Rp"}
                         data-text="true"
@@ -628,7 +670,7 @@ export default function SitePaketLayananHarga({
                       </div>
                       <div
                         className={
-                          "text-[40px]/[44px] box-border absolute left-[19.31px] top-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-1px] text-left [white-space:nowrap] [z-index:1]"
+                          `text-[40px]/[44px] box-border absolute left-[19.31px] top-0 ${isMobilePopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-1px] text-left [white-space:nowrap] [z-index:1]`
                         }
                         data-pencil-name={"4.500.000"}
                         data-text="true"
@@ -638,17 +680,19 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        `text-[11px]/[14px] box-border ${isMobilePopular ? "text-[#e2e89d]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"Siap rilis produksi Android"}
                       data-text="true"
                     >
-                      {labelBilling(mobile)}
+                      {isMobilePopular
+                        ? "Direkomendasikan untuk Efisiensi Bisnis"
+                        : labelBilling(mobile)}
                     </div>
                   </div>
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-start bg-[#f0f0f0] rounded-[8px]"
+                      `box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-start ${isMobilePopular ? "bg-[#242427]" : "bg-[#f0f0f0]"} rounded-[8px]`
                     }
                     data-pencil-name={"div"}
                     data-responsive="row"
@@ -661,21 +705,25 @@ export default function SitePaketLayananHarga({
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          `text-[11px]/[14px] box-border ${isMobilePopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Revisi Gratis"}
                         data-text="true"
                       >
-                        {"Revisi Gratis"}
+                        {isMobilePopular ? "Kuota Revisi Gratis" : "Revisi Gratis"}
                       </div>
                       <div
                         className={
-                          "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          `text-[16px]/[20px] box-border ${isMobilePopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"4x Sesi"}
                         data-text="true"
                       >
-                        {jumlahRevisi(mobile?.includedRevisions)}
+                        {isMobilePopular
+                          ? (typeof mobile?.includedRevisions === "number"
+                              ? `${mobile.includedRevisions}x Sesi Penuh`
+                              : "—")
+                          : jumlahRevisi(mobile?.includedRevisions)}
                       </div>
                     </div>
                     <div
@@ -686,16 +734,16 @@ export default function SitePaketLayananHarga({
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          `text-[11px]/[14px] box-border ${isMobilePopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Ekstra Revisi"}
                         data-text="true"
                       >
-                        {"Ekstra Revisi"}
+                        {isMobilePopular ? "Biaya Ekstra Revisi" : "Ekstra Revisi"}
                       </div>
                       <div
                         className={
-                          "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          `text-[16px]/[20px] box-border ${isMobilePopular ? "text-[#e2e89d]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Rp 300.000/sesi"}
                         data-text="true"
@@ -712,7 +760,7 @@ export default function SitePaketLayananHarga({
                   >
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                        `text-[11px]/[14px] box-border ${isMobilePopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"SPESIFIKASI MOBILE NATIVE:"}
                       data-text="true"
@@ -727,9 +775,9 @@ export default function SitePaketLayananHarga({
                       {(mobile?.features ?? []).filter(isiFitur).map((feature, index) => (
                         <PackageFeatureRow
                           key={`${feature}-${index}`}
-                          icon="check_circle"
+                          icon={isMobilePopular ? "verified" : "check_circle"}
                           text={feature}
-                          tone="light"
+                          tone={isMobilePopular ? "dark" : "light"}
                         />
                       ))}
                     </ul>
@@ -737,7 +785,7 @@ export default function SitePaketLayananHarga({
                 </div>
                 <div
                   className={
-                    "box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start"
+                    `box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start ${isMobilePopular ? "relative [z-index:2]" : ""}`
                   }
                   data-pencil-name={"div"}
                   data-section-padding="true"
@@ -745,13 +793,18 @@ export default function SitePaketLayananHarga({
                   <Link
                     href={`/pesan?paket=${encodeURIComponent(mobile?.slug ?? "mobile-application")}`}
                     className={
-                      "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                      isMobilePopular
+                        ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                        : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
                     data-pencil-name={"a"}
+                    {...(isMobilePopular ? { "data-responsive": "flow" } : {})}
                   >
                     <div
                       className={
-                        "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                        isMobilePopular
+                          ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                          : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
                       }
                       data-pencil-name={"Pilih Paket Mobile App"}
                       data-text="true"
@@ -760,32 +813,38 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                        isMobilePopular
+                          ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                       }
-                      data-pencil-name={"arrow_forward"}
+                      data-pencil-name={isMobilePopular ? "bolt" : "arrow_forward"}
                       data-text="true"
                       aria-hidden="true"
                     >
-                      {"arrow_forward"}
+                      {isMobilePopular ? "bolt" : "arrow_forward"}
                     </div>
                   </Link>
                 </div>
               </div>
               <div
                 className={
-                  "box-border w-full h-auto [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#18181a] rounded-[16px] overflow-hidden relative order-2 lg:-translate-y-2"
+                  isInformasiPopular
+                    ? `box-border w-full h-auto [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#18181a] rounded-[16px] overflow-hidden relative ${informasiOrder} lg:-translate-y-2`
+                    : `box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#ffffff] rounded-[16px] ${informasiOrder}`
                 }
                 data-pencil-name={"div"}
               >
+                {isInformasiPopular && (
+                  <div
+                    className={
+                      "box-border w-[224px] h-[224px] [filter:blur(32px)] absolute right-[-40px] top-[-96px] bg-[#e1e89c26] rounded-[50%] [z-index:0]"
+                    }
+                    data-pencil-name={"div"}
+                  ></div>
+                )}
                 <div
                   className={
-                    "box-border w-[224px] h-[224px] [filter:blur(32px)] absolute right-[-40px] top-[-96px] bg-[#e1e89c26] rounded-[50%] [z-index:0]"
-                  }
-                  data-pencil-name={"div"}
-                ></div>
-                <div
-                  className={
-                    "box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start relative [z-index:1]"
+                    `box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start ${isInformasiPopular ? "relative [z-index:1]" : ""}`
                   }
                   data-pencil-name={"div"}
                 >
@@ -795,42 +854,58 @@ export default function SitePaketLayananHarga({
                     }
                     data-pencil-name={"div"}
                   >
-                    <div
-                      className={
-                        "box-border w-[139.75px] shrink-0 h-[24px] flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
-                      }
-                      data-pencil-name={"span"}
-                      data-responsive="fixed"
-                    >
+                    {isInformasiPopular ? (
                       <div
                         className={
-                          "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          "box-border w-[139.75px] shrink-0 h-[24px] flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
                         }
-                        data-pencil-name={"star"}
-                        data-text="true"
-                        aria-hidden="true"
+                        data-pencil-name={"span"}
+                        data-responsive="fixed"
                       >
-                        {"star"}
+                        <div
+                          className={
+                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          }
+                          data-pencil-name={"star"}
+                          data-text="true"
+                          aria-hidden="true"
+                        >
+                          {"star"}
+                        </div>
+                        <div
+                          className={
+                            "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.28px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"Paling Populer"}
+                          data-text="true"
+                        >
+                          {"Paling Populer"}
+                        </div>
                       </div>
+                    ) : (
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.28px] text-left [white-space:nowrap]"
+                          "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
                         }
-                        data-pencil-name={"Paling Populer"}
+                        data-pencil-name={"TIER 02 • SISTEM INFORMASI"}
                         data-text="true"
                       >
-                        {"Paling Populer"}
+                        {"TIER 02 • SISTEM INFORMASI"}
                       </div>
-                    </div>
+                    )}
                     <div
                       className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_10px] justify-center items-start bg-[#242427] rounded-[9999px]"
+                        isInformasiPopular
+                          ? "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_10px] justify-center items-start bg-[#242427] rounded-[9999px]"
+                          : "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
                       }
                       data-pencil-name={"Estimasi 21 Hari"}
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          isInformasiPopular
+                            ? "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            : "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
                         }
                         data-text="true"
                       >
@@ -849,7 +924,7 @@ export default function SitePaketLayananHarga({
                   >
                     <div
                       className={
-                        "text-[20px]/[26px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap]"
+                        `text-[20px]/[26px] box-border ${isInformasiPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"Sistem Informasi / Instansi"}
                       data-text="true"
@@ -858,7 +933,7 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[13px]/[18px] box-border w-full h-[36px] shrink-0 text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
+                        `text-[13px]/[18px] box-border w-full h-[36px] shrink-0 ${isInformasiPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium text-left`
                       }
                       data-pencil-name={
                         "Solusi operasional otomatis, basis data "
@@ -874,18 +949,32 @@ export default function SitePaketLayananHarga({
                   </div>
                   <div
                     className={
-                      "box-border w-full h-[72px] shrink-0 flex flex-col gap-[4px] p-[8px_0px_0px_0px] justify-start items-start"
+                      "box-border w-full min-h-[72px] shrink-0 flex flex-col gap-[4px] p-[8px_0px_0px_0px] justify-start items-start"
                     }
                     data-pencil-name={"div"}
                     data-responsive="flow"
                   >
+                    {informasi && typeof informasi.price === "number" && informasi.effectivePrice < informasi.price && (
+                      <div className="box-border w-full flex flex-row items-center gap-[8px] mb-[2px]">
+                        <span
+                          className={`text-[13px]/[16px] line-through font-semibold tracking-tight ${
+                            isInformasiPopular ? "text-[#a8a8ad]" : "text-[#71717a]"
+                          }`}
+                        >
+                          Rp {angkaRupiah(informasi.price)}
+                        </span>
+                        <span className="text-[10px]/[12px] font-bold px-[6px] py-[2px] rounded-[4px] bg-[#e2e89d] text-[#18181a] uppercase tracking-wide">
+                          Hemat {Math.round((1 - informasi.effectivePrice / informasi.price) * 100)}%
+                        </span>
+                      </div>
+                    )}
                     <div
                       className={"box-border w-full h-[44px] shrink-0 relative"}
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "text-[12px]/[16px] box-border absolute left-0 top-[24px] text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap] [z-index:0]"
+                          `text-[12px]/[16px] box-border absolute left-0 top-[24px] ${isInformasiPopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap] [z-index:0]`
                         }
                         data-pencil-name={"Rp"}
                         data-text="true"
@@ -895,7 +984,7 @@ export default function SitePaketLayananHarga({
                       </div>
                       <div
                         className={
-                          "text-[40px]/[44px] box-border absolute left-[19.31px] top-0 text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-1px] text-left [white-space:nowrap] [z-index:1]"
+                          `text-[40px]/[44px] box-border absolute left-[19.31px] top-0 ${isInformasiPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-1px] text-left [white-space:nowrap] [z-index:1]`
                         }
                         data-pencil-name={"3.500.000"}
                         data-text="true"
@@ -905,21 +994,21 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        `text-[11px]/[14px] box-border ${isInformasiPopular ? "text-[#e2e89d]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={
                         "Direkomendasikan untuk Efisiensi Bisnis"
                       }
                       data-text="true"
                     >
-                      {informasi?.isPopular
+                      {isInformasiPopular
                         ? "Direkomendasikan untuk Efisiensi Bisnis"
                         : labelBilling(informasi)}
                     </div>
                   </div>
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-start bg-[#242427] rounded-[8px]"
+                      `box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-start ${isInformasiPopular ? "bg-[#242427]" : "bg-[#f0f0f0]"} rounded-[8px]`
                     }
                     data-pencil-name={"div"}
                     data-responsive="row"
@@ -932,23 +1021,25 @@ export default function SitePaketLayananHarga({
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          `text-[11px]/[14px] box-border ${isInformasiPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Kuota Revisi Gratis"}
                         data-text="true"
                       >
-                        {"Kuota Revisi Gratis"}
+                        {isInformasiPopular ? "Kuota Revisi Gratis" : "Revisi Gratis"}
                       </div>
                       <div
                         className={
-                          "text-[16px]/[20px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          `text-[16px]/[20px] box-border ${isInformasiPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"3x Sesi Penuh"}
                         data-text="true"
                       >
-                        {typeof informasi?.includedRevisions === "number"
-                          ? `${informasi.includedRevisions}x Sesi Penuh`
-                          : "—"}
+                        {isInformasiPopular
+                          ? (typeof informasi?.includedRevisions === "number"
+                              ? `${informasi.includedRevisions}x Sesi Penuh`
+                              : "—")
+                          : jumlahRevisi(informasi?.includedRevisions)}
                       </div>
                     </div>
                     <div
@@ -959,16 +1050,16 @@ export default function SitePaketLayananHarga({
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          `text-[11px]/[14px] box-border ${isInformasiPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Biaya Ekstra Revisi"}
                         data-text="true"
                       >
-                        {"Biaya Ekstra Revisi"}
+                        {isInformasiPopular ? "Biaya Ekstra Revisi" : "Ekstra Revisi"}
                       </div>
                       <div
                         className={
-                          "text-[16px]/[20px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          `text-[16px]/[20px] box-border ${isInformasiPopular ? "text-[#e2e89d]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
                         }
                         data-pencil-name={"Rp 250.000/sesi"}
                         data-text="true"
@@ -985,7 +1076,7 @@ export default function SitePaketLayananHarga({
                   >
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                        `text-[11px]/[14px] box-border ${isInformasiPopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]`
                       }
                       data-pencil-name={"SPESIFIKASI ARSITEKTUR CORE:"}
                       data-text="true"
@@ -1000,9 +1091,9 @@ export default function SitePaketLayananHarga({
                       {(informasi?.features ?? []).filter(isiFitur).map((feature, index) => (
                         <PackageFeatureRow
                           key={`${feature}-${index}`}
-                          icon="verified"
+                          icon={isInformasiPopular ? "verified" : "check_circle"}
                           text={feature}
-                          tone="dark"
+                          tone={isInformasiPopular ? "dark" : "light"}
                         />
                       ))}
                     </ul>
@@ -1010,7 +1101,7 @@ export default function SitePaketLayananHarga({
                 </div>
                 <div
                   className={
-                    "box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start relative [z-index:2]"
+                    `box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start ${isInformasiPopular ? "relative [z-index:2]" : ""}`
                   }
                   data-pencil-name={"div"}
                   data-section-padding="true"
@@ -1018,14 +1109,18 @@ export default function SitePaketLayananHarga({
                   <Link
                     href={`/pesan?paket=${encodeURIComponent(informasi?.slug ?? "sistem-informasi")}`}
                     className={
-                      "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                      isInformasiPopular
+                        ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                        : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
                     data-pencil-name={"a"}
-                    data-responsive="flow"
+                    {...(isInformasiPopular ? { "data-responsive": "flow" } : {})}
                   >
                     <div
                       className={
-                        "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                        isInformasiPopular
+                          ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                          : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
                       }
                       data-pencil-name={"Pilih Paket Sistem Informasi"}
                       data-text="true"
@@ -1034,17 +1129,250 @@ export default function SitePaketLayananHarga({
                     </div>
                     <div
                       className={
-                        "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                        isInformasiPopular
+                          ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                       }
-                      data-pencil-name={"bolt"}
+                      data-pencil-name={isInformasiPopular ? "bolt" : "arrow_forward"}
                       data-text="true"
                       aria-hidden="true"
                     >
-                      {"bolt"}
+                      {isInformasiPopular ? "bolt" : "arrow_forward"}
                     </div>
                   </Link>
                 </div>
               </div>
+              {extraPackages.map((pkg, idx) => {
+                const isPkgPopular = Boolean(pkg.isPopular);
+                return (
+                  <div
+                    key={pkg.slug}
+                    className={
+                      isPkgPopular
+                        ? "box-border w-full h-auto [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#18181a] rounded-[16px] overflow-hidden relative order-4 lg:-translate-y-2"
+                        : "box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[24px] justify-between items-start bg-[#ffffff] rounded-[16px] order-4"
+                    }
+                  >
+                    {isPkgPopular && (
+                      <div
+                        className={
+                          "box-border w-[224px] h-[224px] [filter:blur(32px)] absolute right-[-40px] top-[-96px] bg-[#e1e89c26] rounded-[50%] [z-index:0]"
+                        }
+                        data-pencil-name={"div"}
+                      ></div>
+                    )}
+                    <div
+                      className={
+                        `box-border w-full h-fit shrink-0 flex flex-col gap-[12px] justify-start items-start ${isPkgPopular ? "relative [z-index:1]" : ""}`
+                      }
+                    >
+                      <div className="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center">
+                        {isPkgPopular ? (
+                          <div
+                            className={
+                              "box-border w-[139.75px] shrink-0 h-[24px] flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
+                            }
+                            data-pencil-name={"span"}
+                            data-responsive="fixed"
+                          >
+                            <div
+                              className={
+                                "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                              }
+                              data-pencil-name={"star"}
+                              data-text="true"
+                              aria-hidden="true"
+                            >
+                              {"star"}
+                            </div>
+                            <div
+                              className={
+                                "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.28px] text-left [white-space:nowrap]"
+                              }
+                              data-pencil-name={"Paling Populer"}
+                              data-text="true"
+                            >
+                              {"Paling Populer"}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+                            {`TIER 0${idx + 4} • PAKET LAYANAN`}
+                          </div>
+                        )}
+                        <div
+                          className={
+                            isPkgPopular
+                              ? "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_10px] justify-center items-start bg-[#242427] rounded-[9999px]"
+                              : "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[2px_8px] justify-center items-start bg-[#f0f0f0] rounded-[9999px]"
+                          }
+                        >
+                          <div
+                            className={
+                              isPkgPopular
+                                ? "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                : "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            }
+                          >
+                            {`Estimasi ${pkg.estimatedDays} Hari`}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="box-border w-full h-[66px] shrink-0 flex flex-col gap-[4px] justify-start items-start">
+                        <div
+                          className={
+                            `text-[20px]/[26px] box-border ${isPkgPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap]`
+                          }
+                        >
+                          {pkg.name}
+                        </div>
+                        <div
+                          className={
+                            `text-[13px]/[18px] box-border w-full h-[36px] shrink-0 ${isPkgPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium text-left`
+                          }
+                        >
+                          {pkg.targetMarket?.trim() || "Solusi perangkat lunak kustom terukur."}
+                        </div>
+                      </div>
+                      <div className="box-border w-full min-h-[72px] shrink-0 flex flex-col gap-[4px] p-[8px_0px_0px_0px] justify-start items-start">
+                        {typeof pkg.price === "number" && pkg.effectivePrice < pkg.price && (
+                          <div className="box-border w-full flex flex-row items-center gap-[8px] mb-[2px]">
+                            <span
+                              className={`text-[13px]/[16px] line-through font-semibold tracking-tight ${
+                                isPkgPopular ? "text-[#a8a8ad]" : "text-[#71717a]"
+                              }`}
+                            >
+                              Rp {angkaRupiah(pkg.price)}
+                            </span>
+                            <span className="text-[10px]/[12px] font-bold px-[6px] py-[2px] rounded-[4px] bg-[#e2e89d] text-[#18181a] uppercase tracking-wide">
+                              Hemat {Math.round((1 - pkg.effectivePrice / pkg.price) * 100)}%
+                            </span>
+                          </div>
+                        )}
+                        <div className="box-border w-full h-[44px] shrink-0 relative">
+                          <div
+                            className={
+                              `text-[12px]/[16px] box-border absolute left-0 top-[24px] ${isPkgPopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap] [z-index:0]`
+                            }
+                          >
+                            {"Rp"}
+                          </div>
+                          <div
+                            className={
+                              `text-[40px]/[44px] box-border absolute left-[19.31px] top-0 ${isPkgPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-1px] text-left [white-space:nowrap] [z-index:1]`
+                            }
+                          >
+                            {angkaRupiah(pkg.effectivePrice)}
+                          </div>
+                        </div>
+                        <div
+                          className={
+                            `text-[11px]/[14px] box-border ${isPkgPopular ? "text-[#e2e89d]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
+                          }
+                        >
+                          {isPkgPopular ? "Direkomendasikan untuk Efisiensi Bisnis" : labelBilling(pkg)}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          `box-border w-full h-fit shrink-0 flex flex-row gap-[8px] p-[8px] justify-start items-start ${isPkgPopular ? "bg-[#242427]" : "bg-[#f0f0f0]"} rounded-[8px]`
+                        }
+                      >
+                        <div className="box-border [flex:1_1_0] h-[34px] flex flex-col gap-0 justify-start items-start">
+                          <div
+                            className={
+                              `text-[11px]/[14px] box-border ${isPkgPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
+                            }
+                          >
+                            {isPkgPopular ? "Kuota Revisi Gratis" : "Revisi Gratis"}
+                          </div>
+                          <div
+                            className={
+                              `text-[16px]/[20px] box-border ${isPkgPopular ? "text-[#ffffff]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
+                            }
+                          >
+                            {isPkgPopular
+                              ? (typeof pkg.includedRevisions === "number"
+                                  ? `${pkg.includedRevisions}x Sesi Penuh`
+                                  : "—")
+                              : jumlahRevisi(pkg.includedRevisions)}
+                          </div>
+                        </div>
+                        <div className="box-border [flex:1_1_0] h-[34px] flex flex-col gap-0 justify-start items-start">
+                          <div
+                            className={
+                              `text-[11px]/[14px] box-border ${isPkgPopular ? "text-[#a8a8ad]" : "text-[#52525b]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]`
+                            }
+                          >
+                            {isPkgPopular ? "Biaya Ekstra Revisi" : "Ekstra Revisi"}
+                          </div>
+                          <div
+                            className={
+                              `text-[16px]/[20px] box-border ${isPkgPopular ? "text-[#e2e89d]" : "text-[#18181a]"} font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]`
+                            }
+                          >
+                            {hargaRevisi(pkg.extraRevisionPrice)}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[8px_0px_0px_0px] justify-start items-start">
+                        <div
+                          className={
+                            `text-[11px]/[14px] box-border ${isPkgPopular ? "text-[#a8a8ad]" : "text-[#595962]"} font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]`
+                          }
+                        >
+                          {"SPESIFIKASI DELIVERABLE:"}
+                        </div>
+                        <div className="box-border w-full h-[8px] shrink-0" />
+                        <ul className="box-border w-full m-0 p-0 list-none flex flex-col gap-[6px] justify-start items-start">
+                          {(pkg.features ?? []).filter(isiFitur).map((feature, index) => (
+                            <PackageFeatureRow
+                              key={`${feature}-${index}`}
+                              icon={isPkgPopular ? "verified" : "check_circle"}
+                              text={feature}
+                              tone={isPkgPopular ? "dark" : "light"}
+                            />
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        `box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start ${isPkgPopular ? "relative [z-index:2]" : ""}`
+                      }
+                    >
+                      <Link
+                        href={`/pesan?paket=${encodeURIComponent(pkg.slug)}`}
+                        className={
+                          isPkgPopular
+                            ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                            : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                        }
+                      >
+                        <div
+                          className={
+                            isPkgPopular
+                              ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                              : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                          }
+                        >
+                          {labelCta(pkg, `Pilih ${pkg.name}`)}
+                        </div>
+                        <div
+                          className={
+                            isPkgPopular
+                              ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                              : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          }
+                          aria-hidden="true"
+                        >
+                          {isPkgPopular ? "bolt" : "arrow_forward"}
+                        </div>
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
             </section>
             <section
               className={
@@ -1119,7 +1447,7 @@ export default function SitePaketLayananHarga({
                 >
                   <div
                     className={
-                      "text-[24px]/[32px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                      "text-[24px]/[32px] box-border text-[#5d6226] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                     }
                     data-pencil-name={"security"}
                     data-text="true"
@@ -1214,7 +1542,7 @@ export default function SitePaketLayananHarga({
             </section>
             <section
               className={
-                "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[12px] overflow-hidden"
+                "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
               }
               data-pencil-name={"section"}
               data-section-padding="true"
@@ -1222,14 +1550,14 @@ export default function SitePaketLayananHarga({
             >
               <div
                 className={
-                  "box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-center"
+                  "box-border w-full h-fit shrink-0 flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between items-start sm:items-end"
                 }
                 data-pencil-name={"div"}
                 data-responsive="row"
               >
                 <div
                   className={
-                    "box-border w-fit shrink-0 h-[54px] flex flex-col gap-[4px] justify-start items-start"
+                    "box-border w-fit shrink-0 flex flex-col gap-[4px] justify-start items-start"
                   }
                   data-pencil-name={"div"}
                   data-responsive="flow"
@@ -1256,128 +1584,183 @@ export default function SitePaketLayananHarga({
                 </div>
                 <div
                   className={
-                    "text-[13px]/[18px] box-border w-[384px] shrink-0 h-[36px] text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
+                    "text-[13px]/[18px] box-border max-w-[420px] text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
                   }
                   data-pencil-name={"Tingkatkan kapabilitas sistem Anda sesua"}
                   data-text="true"
-                  data-responsive="fixed"
                 >
                   {
                     "Tingkatkan kapabilitas sistem Anda sesuai kebutuhan operasional dan ketersediaan sumber daya internal."
                   }
                 </div>
               </div>
-              <div
-                className={
-                  "box-border w-fit h-fit shrink-0 flex flex-col gap-0 justify-start items-start overflow-hidden"
-                }
-                data-pencil-name={"table"}
-                role="table"
-              >
+
+              <div className="box-border w-full overflow-x-auto">
                 <div
                   className={
-                    "box-border w-fit h-fit shrink-0 flex flex-row gap-0 justify-start items-start bg-[#f0f0f0]"
+                    "box-border w-full min-w-[760px] flex flex-col gap-0 justify-start items-start"
                   }
-                  data-pencil-name={"tr"}
+                  data-pencil-name={"table"}
+                  role="table"
                 >
                   <div
                     className={
-                      "box-border w-[268.58px] shrink-0 h-fit flex flex-col gap-0 p-[14px_12px] justify-center items-start rounded-[8px_0px_0px_8px]"
-                    }
-                    data-pencil-name={"LAYANAN TAMBAHAN"}
-                  >
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
-                      }
-                      data-text="true"
-                    >
-                      {"LAYANAN TAMBAHAN"}
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-[821.69px] shrink-0 h-fit flex flex-col gap-0 p-[14px_12px] justify-center items-start"
-                    }
-                    data-pencil-name={"CAKUPAN TEKNIS & DESKRIPSI PEKERJAAN"}
-                  >
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
-                      }
-                      data-text="true"
-                    >
-                      {"CAKUPAN TEKNIS & DESKRIPSI PEKERJAAN"}
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-[122.3px] shrink-0 h-fit flex flex-col gap-0 p-[14px_12px] justify-center items-start"
-                    }
-                    data-pencil-name={"INVESTASI"}
-                  >
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
-                      }
-                      data-text="true"
-                    >
-                      {"INVESTASI"}
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-[131.44px] shrink-0 h-fit flex flex-col gap-0 p-[14px_12px] justify-center items-end rounded-[0px_8px_8px_0px]"
-                    }
-                    data-pencil-name={"TINDAKAN"}
-                  >
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-right [white-space:nowrap]"
-                      }
-                      data-text="true"
-                    >
-                      {"TINDAKAN"}
-                    </div>
-                  </div>
-                </div>
-                <DataRows
-                  texts={[
-                    "build    Maintenance Bulanan      Pemantauan proaktif, penanganan bug fixing operasional, automated database backup berkala, dan update library minor.     Rp 150.000   / bulan      Pilih Add-on   add",
-                    "workspace_premium     Maintenance Tahunan    Hemat 17%        Semua fitur paket bulanan ditambah jalur prioritas penanganan insiden 24/7, review keamanan per kuartal, dan alokasi resource siaga.     Rp 1.500.000   / tahun      Pilih Add-on   add",
-                    "cast_for_education    Pelatihan Admin & Operator      Sesi pelatihan interaktif komprehensif selama 2 jam (Google Meet/Zoom), simulasi skenario riil, panduan booklet PDF, & rekaman video.     Rp 250.000   / sesi transfer ilmu      Pilih Add-on   add",
-                    "dns    Setup Domain & Cloud Server      Penyusunan arsitektur Docker containerized pada cloud provider (Render / VPS Ubuntu), konfigurasi SSL/TLS, edge caching, & Cloudflare firewall.     Rp 200.000   / instalasi setup      Pilih Add-on   add",
-                  ]}
-                  className={
-                    "box-border w-fit h-fit shrink-0 flex flex-col gap-0 justify-start items-start"
-                  }
-                  data-pencil-name={"tbody"}
-                >
-                  <div
-                    className={
-                      "box-border w-fit h-fit shrink-0 flex flex-row gap-0 justify-start items-start"
+                      "box-border w-full flex flex-row gap-0 justify-start items-center bg-[#f0f0f0] rounded-[8px]"
                     }
                     data-pencil-name={"tr"}
                   >
                     <div
                       className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[22px_12px_22.5px_12px] justify-start items-start"
+                        "box-border w-[240px] sm:w-[260px] shrink-0 h-fit flex flex-col gap-0 p-[12px_16px] justify-center items-start rounded-[8px_0px_0px_8px]"
                       }
-                      data-pencil-name={"td"}
+                      data-pencil-name={"LAYANAN TAMBAHAN"}
                     >
                       <div
                         className={
-                          "box-border w-[244.58px] h-fit shrink-0 flex flex-row gap-[10px] justify-start items-center"
+                          "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
                         }
-                        data-pencil-name={"div"}
+                        data-text="true"
+                      >
+                        {"LAYANAN TAMBAHAN"}
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        "box-border flex-1 min-w-[280px] h-fit flex flex-col gap-0 p-[12px_16px] justify-center items-start"
+                      }
+                      data-pencil-name={"CAKUPAN TEKNIS & DESKRIPSI PEKERJAAN"}
+                    >
+                      <div
+                        className={
+                          "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                        }
+                        data-text="true"
+                      >
+                        {"CAKUPAN TEKNIS & DESKRIPSI PEKERJAAN"}
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        "box-border w-[130px] sm:w-[140px] shrink-0 h-fit flex flex-col gap-0 p-[12px_16px] justify-center items-start"
+                      }
+                      data-pencil-name={"INVESTASI"}
+                    >
+                      <div
+                        className={
+                          "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-left [white-space:nowrap]"
+                        }
+                        data-text="true"
+                      >
+                        {"INVESTASI"}
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        "box-border w-[120px] sm:w-[130px] shrink-0 h-fit flex flex-col gap-0 p-[12px_16px] justify-center items-end rounded-[0px_8px_8px_0px]"
+                      }
+                      data-pencil-name={"TINDAKAN"}
+                    >
+                      <div
+                        className={
+                          "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[0.55px] text-right [white-space:nowrap]"
+                        }
+                        data-text="true"
+                      >
+                        {"TINDAKAN"}
+                      </div>
+                    </div>
+                  </div>
+                  {addons.length > 0 ? (
+                    <div
+                      className="box-border w-full flex flex-col gap-0 justify-start items-start"
+                      data-pencil-name="tbody"
+                    >
+                      {addons.map((addon, idx) => (
+                        <div
+                          key={`${addon.name}-${idx}`}
+                          className={`box-border w-full flex flex-row gap-0 justify-start items-center ${idx < addons.length - 1 ? "border-b border-[#f0f0f0]" : ""} py-1`}
+                        >
+                          <div className="box-border w-[240px] sm:w-[260px] shrink-0 h-fit flex flex-row gap-[10px] p-[16px_12px] justify-start items-center">
+                            <div className="box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[6px]">
+                              <span
+                                className="text-[16px]/[24px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                                aria-hidden="true"
+                              >
+                                {addon.billingType === "yearly"
+                                  ? "workspace_premium"
+                                  : addon.billingType === "monthly"
+                                    ? "build"
+                                    : "dns"}
+                              </span>
+                            </div>
+                            <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left">
+                              {addon.name}
+                            </span>
+                          </div>
+                          <div className="box-border flex-1 min-w-[280px] h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start">
+                            <p className="text-[13px]/[18px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left m-0">
+                              {addon.description}
+                            </p>
+                          </div>
+                          <div className="box-border w-[130px] sm:w-[140px] shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start">
+                            <div className="text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]">
+                              {rupiah(addon.price)}
+                            </div>
+                            <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+                              {labelAddonBilling(addon.billingType)}
+                            </div>
+                          </div>
+                          <div className="box-border w-[120px] sm:w-[130px] shrink-0 h-fit flex flex-row p-[16px_12px] justify-end items-center">
+                            <Link
+                              href="/pesan"
+                              className="box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-center items-center bg-[#f0f0f0] hover:bg-[#e4e4e7] rounded-[8px] transition-colors"
+                            >
+                              <span className="text-[12px]/[16px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right [white-space:nowrap]">
+                                {"Pilih Add-on"}
+                              </span>
+                              <span
+                                className="text-[14px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                                aria-hidden="true"
+                              >
+                                {"add"}
+                              </span>
+                            </Link>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                  <DataRows
+                    texts={[
+                      "build    Maintenance Bulanan      Pemantauan proaktif, penanganan bug fixing operasional, automated database backup berkala, dan update library minor.     Rp 150.000   / bulan      Pilih Add-on   add",
+                      "workspace_premium     Maintenance Tahunan    Hemat 17%        Semua fitur paket bulanan ditambah jalur prioritas penanganan insiden 24/7, review keamanan per kuartal, dan alokasi resource siaga.     Rp 1.500.000   / tahun      Pilih Add-on   add",
+                      "cast_for_education    Pelatihan Admin & Operator      Sesi pelatihan interaktif komprehensif selama 2 jam (Google Meet/Zoom), simulasi skenario riil, panduan booklet PDF, & rekaman video.     Rp 250.000   / sesi transfer ilmu      Pilih Add-on   add",
+                      "dns    Setup Domain & Cloud Server      Penyusunan arsitektur Docker containerized pada cloud provider (Render / VPS Ubuntu), konfigurasi SSL/TLS, edge caching, & Cloudflare firewall.     Rp 200.000   / instalasi setup      Pilih Add-on   add",
+                    ]}
+                    className={
+                      "box-border w-full flex flex-col gap-0 justify-start items-start"
+                    }
+                    data-pencil-name={"tbody"}
+                  >
+                    <div
+                      className={
+                        "box-border w-full flex flex-row gap-0 justify-start items-center border-b border-[#f0f0f0] py-1"
+                      }
+                      data-pencil-name={"tr"}
+                    >
+                      <div
+                        className={
+                          "box-border w-[240px] sm:w-[260px] shrink-0 h-fit flex flex-row gap-[10px] p-[16px_12px] justify-start items-center"
+                        }
+                        data-pencil-name={"td"}
                       >
                         <div
                           className={
-                            "box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[4px]"
+                            "box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[6px]"
                           }
                           data-pencil-name={"div"}
                         >
-                          <div
+                          <span
                             className={
                               "text-[16px]/[24px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                             }
@@ -1386,9 +1769,9 @@ export default function SitePaketLayananHarga({
                             aria-hidden="true"
                           >
                             {"build"}
-                          </div>
+                          </span>
                         </div>
-                        <div
+                        <span
                           className={
                             "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
                           }
@@ -1396,113 +1779,106 @@ export default function SitePaketLayananHarga({
                           data-text="true"
                         >
                           {"Maintenance Bulanan"}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[821.69px] shrink-0 h-[76.5px] flex flex-col gap-0 p-[16px_12px] justify-center items-start"
-                      }
-                      data-pencil-name={
-                        "Pemantauan proaktif, penanganan bug fixi"
-                      }
-                    >
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
-                        }
-                        data-text="true"
-                      >
-                        {
-                          "Pemantauan proaktif, penanganan bug fixing operasional, automated database backup berkala, dan update library minor."
-                        }
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[122.3px] shrink-0 h-fit flex flex-col gap-0 p-[21px_12px_21.5px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={"Rp 150.000"}
-                        data-text="true"
-                      >
-                        {"Rp 150.000"}
+                        </span>
                       </div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          "box-border flex-1 min-w-[280px] h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
                         }
-                        data-pencil-name={"/ bulan"}
-                        data-text="true"
-                      >
-                        {"/ bulan"}
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <UiAction
-                        label={"Pilih Add-on"}
-                        className={
-                          "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
+                        data-pencil-name={
+                          "Pemantauan proaktif, penanganan bug fixi"
                         }
-                        data-pencil-name={"a"}
                       >
-                        <div
+                        <p
                           className={
-                            "text-[12px]/[16px] box-border w-[65.44px] shrink-0 h-[32px] text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right"
+                            "text-[13px]/[18px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left m-0"
                           }
-                          data-pencil-name={"Pilih Add-on"}
                           data-text="true"
                         >
-                          {"Pilih Add-on"}
-                        </div>
-                        <div
-                          className={
-                            "text-[12px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                          {
+                            "Pemantauan proaktif, penanganan bug fixing operasional, automated database backup berkala, dan update library minor."
                           }
-                          data-pencil-name={"add"}
-                          data-text="true"
-                          aria-hidden="true"
-                        >
-                          {"add"}
-                        </div>
-                      </UiAction>
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-fit h-fit shrink-0 flex flex-row gap-0 p-[1px_0px_0px_0px] justify-start items-start [border-width:1px_0px_0px_0px] [border-style:solid] [border-color:#f0f0f0]"
-                    }
-                    data-pencil-name={"tr"}
-                  >
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[25px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
+                        </p>
+                      </div>
                       <div
                         className={
-                          "box-border w-fit h-fit shrink-0 flex flex-row gap-[10px] justify-start items-center"
+                          "box-border w-[130px] sm:w-[140px] shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
                         }
-                        data-pencil-name={"div"}
+                        data-pencil-name={"td"}
                       >
                         <div
                           className={
-                            "box-border w-[29.63px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[4px]"
+                            "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"Rp 150.000"}
+                          data-text="true"
+                        >
+                          {"Rp 150.000"}
+                        </div>
+                        <div
+                          className={
+                            "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"/ bulan"}
+                          data-text="true"
+                        >
+                          {"/ bulan"}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          "box-border w-[120px] sm:w-[130px] shrink-0 h-fit flex flex-row p-[16px_12px] justify-end items-center"
+                        }
+                        data-pencil-name={"td"}
+                      >
+                        <UiAction
+                          label={"Pilih Add-on"}
+                          className={
+                            "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-center items-center bg-[#f0f0f0] hover:bg-[#e4e4e7] rounded-[8px] transition-colors"
+                          }
+                          data-pencil-name={"a"}
+                        >
+                          <span
+                            className={
+                              "text-[12px]/[16px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right [white-space:nowrap]"
+                            }
+                            data-pencil-name={"Pilih Add-on"}
+                            data-text="true"
+                          >
+                            {"Pilih Add-on"}
+                          </span>
+                          <span
+                            className={
+                              "text-[14px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                            }
+                            data-pencil-name={"add"}
+                            data-text="true"
+                            aria-hidden="true"
+                          >
+                            {"add"}
+                          </span>
+                        </UiAction>
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        "box-border w-full flex flex-row gap-0 justify-start items-center border-b border-[#f0f0f0] py-1"
+                      }
+                      data-pencil-name={"tr"}
+                    >
+                      <div
+                        className={
+                          "box-border w-[240px] sm:w-[260px] shrink-0 h-fit flex flex-row gap-[10px] p-[16px_12px] justify-start items-center"
+                        }
+                        data-pencil-name={"td"}
+                      >
+                        <div
+                          className={
+                            "box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[6px]"
                           }
                           data-pencil-name={"div"}
                         >
-                          <div
+                          <span
                             className={
                               "text-[16px]/[24px] box-border text-[#5d6226] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                             }
@@ -1511,15 +1887,10 @@ export default function SitePaketLayananHarga({
                             aria-hidden="true"
                           >
                             {"workspace_premium"}
-                          </div>
+                          </span>
                         </div>
-                        <div
-                          className={
-                            "box-border w-fit shrink-0 h-fit flex flex-col gap-[2px] p-[0px_65.68px_0px_0px] justify-start items-start"
-                          }
-                          data-pencil-name={"div"}
-                        >
-                          <div
+                        <div className="flex flex-col gap-1 items-start">
+                          <span
                             className={
                               "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
                             }
@@ -1527,129 +1898,110 @@ export default function SitePaketLayananHarga({
                             data-text="true"
                           >
                             {"Maintenance Tahunan"}
-                          </div>
-                          <div
+                          </span>
+                          <span className="inline-flex items-center px-1.5 py-0.5 bg-[#e2e89d] rounded text-[10px] font-bold text-[#1b1d00]">
+                            {"Hemat 17%"}
+                          </span>
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          "box-border flex-1 min-w-[280px] h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
+                        }
+                        data-pencil-name={
+                          "Semua fitur paket bulanan ditambah jalur"
+                        }
+                      >
+                        <p
+                          className={
+                            "text-[13px]/[18px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left m-0"
+                          }
+                          data-text="true"
+                        >
+                          {
+                            "Semua fitur paket bulanan ditambah jalur prioritas penanganan insiden 24/7, review keamanan per kuartal, dan alokasi resource siaga."
+                          }
+                        </p>
+                      </div>
+                      <div
+                        className={
+                          "box-border w-[130px] sm:w-[140px] shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
+                        }
+                        data-pencil-name={"td"}
+                      >
+                        <div
+                          className={
+                            "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"Rp 1.500.000"}
+                          data-text="true"
+                        >
+                          {"Rp 1.500.000"}
+                        </div>
+                        <div
+                          className={
+                            "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"/ tahun"}
+                          data-text="true"
+                        >
+                          {"/ tahun"}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          "box-border w-[120px] sm:w-[130px] shrink-0 h-fit flex flex-row p-[16px_12px] justify-end items-center"
+                        }
+                        data-pencil-name={"td"}
+                      >
+                        <UiAction
+                          label={"Pilih Add-on"}
+                          className={
+                            "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-center items-center bg-[#f0f0f0] hover:bg-[#e4e4e7] rounded-[8px] transition-colors"
+                          }
+                          data-pencil-name={"a"}
+                        >
+                          <span
                             className={
-                              "box-border w-fit h-[18px] shrink-0 flex flex-col gap-0 p-[0px_8px_0px_16px] justify-center items-start bg-[#e2e89d] rounded-[4px]"
+                              "text-[12px]/[16px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right [white-space:nowrap]"
                             }
-                            data-pencil-name={"Hemat 17%"}
+                            data-pencil-name={"Pilih Add-on"}
+                            data-text="true"
                           >
-                            <div
-                              className={
-                                "text-[10px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
-                              }
-                              data-text="true"
-                            >
-                              {"Hemat 17%"}
-                            </div>
-                          </div>
-                        </div>
+                            {"Pilih Add-on"}
+                          </span>
+                          <span
+                            className={
+                              "text-[14px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                            }
+                            data-pencil-name={"add"}
+                            data-text="true"
+                            aria-hidden="true"
+                          >
+                            {"add"}
+                          </span>
+                        </UiAction>
                       </div>
                     </div>
                     <div
                       className={
-                        "box-border w-[821.69px] shrink-0 h-[87px] flex flex-col gap-0 p-[16px_12px] justify-center items-start"
+                        "box-border w-full flex flex-row gap-0 justify-start items-center border-b border-[#f0f0f0] py-1"
                       }
-                      data-pencil-name={
-                        "Semua fitur paket bulanan ditambah jalur"
-                      }
+                      data-pencil-name={"tr"}
                     >
                       <div
                         className={
-                          "text-[13px]/[18px] box-border w-[797.69px] text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
+                          "box-border w-[240px] sm:w-[260px] shrink-0 h-fit flex flex-row gap-[10px] p-[16px_12px] justify-start items-center"
                         }
-                        data-text="true"
-                      >
-                        {
-                          "Semua fitur paket bulanan ditambah jalur prioritas penanganan insiden 24/7, review keamanan per kuartal, dan alokasi resource siaga."
-                        }
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[122.3px] shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[20px] box-border w-[77.08px] text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left"
-                        }
-                        data-pencil-name={"Rp 1.500.000"}
-                        data-text="true"
-                      >
-                        {"Rp 1.500.000"}
-                      </div>
-                      <div
-                        className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={"/ tahun"}
-                        data-text="true"
-                      >
-                        {"/ tahun"}
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[21.5px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <UiAction
-                        label={"Pilih Add-on"}
-                        className={
-                          "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
-                        }
-                        data-pencil-name={"a"}
+                        data-pencil-name={"td"}
                       >
                         <div
                           className={
-                            "text-[12px]/[16px] box-border w-[65.44px] shrink-0 h-[32px] text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right"
-                          }
-                          data-pencil-name={"Pilih Add-on"}
-                          data-text="true"
-                        >
-                          {"Pilih Add-on"}
-                        </div>
-                        <div
-                          className={
-                            "text-[12px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
-                          }
-                          data-pencil-name={"add"}
-                          data-text="true"
-                          aria-hidden="true"
-                        >
-                          {"add"}
-                        </div>
-                      </UiAction>
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-fit h-fit shrink-0 flex flex-row gap-0 p-[1px_0px_0px_0px] justify-start items-start [border-width:1px_0px_0px_0px] [border-style:solid] [border-color:#f0f0f0]"
-                    }
-                    data-pencil-name={"tr"}
-                  >
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[24.5px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <div
-                        className={
-                          "box-border w-[244.58px] h-fit shrink-0 flex flex-row gap-[10px] justify-start items-center"
-                        }
-                        data-pencil-name={"div"}
-                      >
-                        <div
-                          className={
-                            "box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[4px]"
+                            "box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[6px]"
                           }
                           data-pencil-name={"div"}
                         >
-                          <div
+                          <span
                             className={
                               "text-[16px]/[24px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                             }
@@ -1658,9 +2010,9 @@ export default function SitePaketLayananHarga({
                             aria-hidden="true"
                           >
                             {"cast_for_education"}
-                          </div>
+                          </span>
                         </div>
-                        <div
+                        <span
                           className={
                             "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
                           }
@@ -1668,113 +2020,106 @@ export default function SitePaketLayananHarga({
                           data-text="true"
                         >
                           {"Pelatihan Admin & Operator"}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[821.69px] shrink-0 h-[81px] flex flex-col gap-0 p-[16px_12px] justify-center items-start"
-                      }
-                      data-pencil-name={
-                        "Sesi pelatihan interaktif komprehensif s"
-                      }
-                    >
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[797.69px] text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
-                        }
-                        data-text="true"
-                      >
-                        {
-                          "Sesi pelatihan interaktif komprehensif selama 2 jam (Google Meet/Zoom), simulasi skenario riil, panduan booklet PDF, & rekaman video."
-                        }
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[122.3px] shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={"Rp 250.000"}
-                        data-text="true"
-                      >
-                        {"Rp 250.000"}
+                        </span>
                       </div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border w-full h-[28px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
+                          "box-border flex-1 min-w-[280px] h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
                         }
-                        data-pencil-name={"/ sesi transfer ilmu"}
-                        data-text="true"
-                      >
-                        {"/ sesi transfer ilmu"}
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-[81px] flex flex-col gap-0 p-[16px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <UiAction
-                        label={"Pilih Add-on"}
-                        className={
-                          "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
+                        data-pencil-name={
+                          "Sesi pelatihan interaktif komprehensif s"
                         }
-                        data-pencil-name={"a"}
                       >
-                        <div
+                        <p
                           className={
-                            "text-[12px]/[16px] box-border w-[65.44px] shrink-0 h-[32px] text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right"
+                            "text-[13px]/[18px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left m-0"
                           }
-                          data-pencil-name={"Pilih Add-on"}
                           data-text="true"
                         >
-                          {"Pilih Add-on"}
-                        </div>
-                        <div
-                          className={
-                            "text-[12px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                          {
+                            "Sesi pelatihan interaktif komprehensif selama 2 jam (Google Meet/Zoom), simulasi skenario riil, panduan booklet PDF, & rekaman video."
                           }
-                          data-pencil-name={"add"}
-                          data-text="true"
-                          aria-hidden="true"
-                        >
-                          {"add"}
-                        </div>
-                      </UiAction>
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-fit h-fit shrink-0 flex flex-row gap-0 p-[1px_0px_0px_0px] justify-start items-start [border-width:1px_0px_0px_0px] [border-style:solid] [border-color:#f0f0f0]"
-                    }
-                    data-pencil-name={"tr"}
-                  >
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[22.5px_12px_22px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
+                        </p>
+                      </div>
                       <div
                         className={
-                          "box-border w-[244.58px] h-fit shrink-0 flex flex-row gap-[10px] justify-start items-center"
+                          "box-border w-[130px] sm:w-[140px] shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
                         }
-                        data-pencil-name={"div"}
+                        data-pencil-name={"td"}
                       >
                         <div
                           className={
-                            "box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[4px]"
+                            "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"Rp 250.000"}
+                          data-text="true"
+                        >
+                          {"Rp 250.000"}
+                        </div>
+                        <div
+                          className={
+                            "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          }
+                          data-pencil-name={"/ sesi transfer ilmu"}
+                          data-text="true"
+                        >
+                          {"/ sesi transfer ilmu"}
+                        </div>
+                      </div>
+                      <div
+                        className={
+                          "box-border w-[120px] sm:w-[130px] shrink-0 h-fit flex flex-row p-[16px_12px] justify-end items-center"
+                        }
+                        data-pencil-name={"td"}
+                      >
+                        <UiAction
+                          label={"Pilih Add-on"}
+                          className={
+                            "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-center items-center bg-[#f0f0f0] hover:bg-[#e4e4e7] rounded-[8px] transition-colors"
+                          }
+                          data-pencil-name={"a"}
+                        >
+                          <span
+                            className={
+                              "text-[12px]/[16px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right [white-space:nowrap]"
+                            }
+                            data-pencil-name={"Pilih Add-on"}
+                            data-text="true"
+                          >
+                            {"Pilih Add-on"}
+                          </span>
+                          <span
+                            className={
+                              "text-[14px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                            }
+                            data-pencil-name={"add"}
+                            data-text="true"
+                            aria-hidden="true"
+                          >
+                            {"add"}
+                          </span>
+                        </UiAction>
+                      </div>
+                    </div>
+                    <div
+                      className={
+                        "box-border w-full flex flex-row gap-0 justify-start items-center py-1"
+                      }
+                      data-pencil-name={"tr"}
+                    >
+                      <div
+                        className={
+                          "box-border w-[240px] sm:w-[260px] shrink-0 h-fit flex flex-row gap-[10px] p-[16px_12px] justify-start items-center"
+                        }
+                        data-pencil-name={"td"}
+                      >
+                        <div
+                          className={
+                            "box-border w-[32px] shrink-0 h-[32px] flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[6px]"
                           }
                           data-pencil-name={"div"}
                         >
-                          <div
+                          <span
                             className={
                               "text-[16px]/[24px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                             }
@@ -1783,9 +2128,9 @@ export default function SitePaketLayananHarga({
                             aria-hidden="true"
                           >
                             {"dns"}
-                          </div>
+                          </span>
                         </div>
-                        <div
+                        <span
                           className={
                             "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
                           }
@@ -1793,89 +2138,90 @@ export default function SitePaketLayananHarga({
                           data-text="true"
                         >
                           {"Setup Domain & Cloud Server"}
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[821.69px] shrink-0 h-[76.5px] flex flex-col gap-0 p-[16px_12px] justify-center items-start"
-                      }
-                      data-pencil-name={
-                        "Penyusunan arsitektur Docker containeriz"
-                      }
-                    >
-                      <div
-                        className={
-                          "text-[13px]/[18px] box-border w-[797.69px] text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
-                        }
-                        data-text="true"
-                      >
-                        {
-                          "Penyusunan arsitektur Docker containerized pada cloud provider (Render / VPS Ubuntu), konfigurasi SSL/TLS, edge caching, & Cloudflare firewall."
-                        }
-                      </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-[122.3px] shrink-0 h-fit flex flex-col gap-0 p-[21.5px_12px_21px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <div
-                        className={
-                          "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
-                        }
-                        data-pencil-name={"Rp 200.000"}
-                        data-text="true"
-                      >
-                        {"Rp 200.000"}
+                        </span>
                       </div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          "box-border flex-1 min-w-[280px] h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
                         }
-                        data-pencil-name={"/ instalasi setup"}
-                        data-text="true"
+                        data-pencil-name={
+                          "Penyusunan arsitektur Docker containeriz"
+                        }
                       >
-                        {"/ instalasi setup"}
+                        <p
+                          className={
+                            "text-[13px]/[18px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left m-0"
+                          }
+                          data-text="true"
+                        >
+                          {
+                            "Penyusunan arsitektur Docker containerized pada cloud provider (Render / VPS Ubuntu), konfigurasi SSL/TLS, edge caching, & Cloudflare firewall."
+                          }
+                        </p>
                       </div>
-                    </div>
-                    <div
-                      className={
-                        "box-border w-fit shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-start items-start"
-                      }
-                      data-pencil-name={"td"}
-                    >
-                      <UiAction
-                        label={"Pilih Add-on"}
+                      <div
                         className={
-                          "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
+                          "box-border w-[130px] sm:w-[140px] shrink-0 h-fit flex flex-col gap-0 p-[16px_12px] justify-center items-start"
                         }
-                        data-pencil-name={"a"}
+                        data-pencil-name={"td"}
                       >
                         <div
                           className={
-                            "text-[12px]/[16px] box-border w-[65.44px] shrink-0 h-[32px] text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right"
+                            "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
                           }
-                          data-pencil-name={"Pilih Add-on"}
+                          data-pencil-name={"Rp 200.000"}
                           data-text="true"
                         >
-                          {"Pilih Add-on"}
+                          {"Rp 200.000"}
                         </div>
                         <div
                           className={
-                            "text-[12px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                            "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
                           }
-                          data-pencil-name={"add"}
+                          data-pencil-name={"/ instalasi setup"}
                           data-text="true"
-                          aria-hidden="true"
                         >
-                          {"add"}
+                          {"/ instalasi setup"}
                         </div>
-                      </UiAction>
+                      </div>
+                      <div
+                        className={
+                          "box-border w-[120px] sm:w-[130px] shrink-0 h-fit flex flex-row p-[16px_12px] justify-end items-center"
+                        }
+                        data-pencil-name={"td"}
+                      >
+                        <UiAction
+                          label={"Pilih Add-on"}
+                          className={
+                            "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] p-[6px_12px] justify-center items-center bg-[#f0f0f0] hover:bg-[#e4e4e7] rounded-[8px] transition-colors"
+                          }
+                          data-pencil-name={"a"}
+                        >
+                          <span
+                            className={
+                              "text-[12px]/[16px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-right [white-space:nowrap]"
+                            }
+                            data-pencil-name={"Pilih Add-on"}
+                            data-text="true"
+                          >
+                            {"Pilih Add-on"}
+                          </span>
+                          <span
+                            className={
+                              "text-[14px]/[16px] box-border text-[#18181a] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-right [white-space:nowrap] symbol"
+                            }
+                            data-pencil-name={"add"}
+                            data-text="true"
+                            aria-hidden="true"
+                          >
+                            {"add"}
+                          </span>
+                        </UiAction>
+                      </div>
                     </div>
-                  </div>
-                </DataRows>
+                  </DataRows>
+                  )}
+                </div>
               </div>
             </section>
             <section

@@ -110,6 +110,33 @@ export function createProjectStore(db: Database): ProjectStore {
         technologyIds: technologiesByProject.get(row.id) ?? [],
       }));
     },
+    async read(id) {
+      const [row] = await db
+        .select(projectFields)
+        .from(projects)
+        .where(eq(projects.id, id));
+      if (!row) return null;
+      const [categoryRows, technologyRows] = await Promise.all([
+        db
+          .select({ id: projectCategories.categoryId })
+          .from(projectCategories)
+          .where(eq(projectCategories.projectId, id))
+          .orderBy(asc(projectCategories.categoryId)),
+        db
+          .select({ id: projectTechnologies.technologyId })
+          .from(projectTechnologies)
+          .where(eq(projectTechnologies.projectId, id))
+          .orderBy(
+            asc(projectTechnologies.sortOrder),
+            asc(projectTechnologies.technologyId),
+          ),
+      ]);
+      return {
+        ...row,
+        categoryIds: categoryRows.map((item) => item.id),
+        technologyIds: technologyRows.map((item) => item.id),
+      };
+    },
     async listVersions(id, options) {
       return db
         .select({

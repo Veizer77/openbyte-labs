@@ -2,6 +2,7 @@ import "server-only";
 import { z } from "zod";
 import { projectContentBlockSchema, projectLinkSchema } from "@/schemas/blocks";
 import { projectSlugSchema } from "@/schemas/projects";
+import { publicMediaUrlSchema } from "@/schemas/media";
 
 const publicProjectSchema = z
   .object({
@@ -11,16 +12,7 @@ const publicProjectSchema = z
     summary: z.string().max(4000),
     clientName: z.string().nullable(),
     year: z.number().int().nullable(),
-    imageUrl: z
-      .url()
-      .refine((value) => {
-        try {
-          return ["https:", "http:"].includes(new URL(value).protocol);
-        } catch {
-          return false;
-        }
-      })
-      .nullable(),
+    imageUrl: publicMediaUrlSchema.nullable(),
     imageAlt: z.string().max(250),
     links: z.array(projectLinkSchema).max(30),
     categories: z.array(z.string()),

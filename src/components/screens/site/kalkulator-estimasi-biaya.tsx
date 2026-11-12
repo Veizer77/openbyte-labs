@@ -15,6 +15,7 @@ import {
   CalculatorBreakdown,
   CalculatorContact,
   CalculatorSend,
+  CalculatorExtraItems,
 } from "@/components/public/Calculator";
 export default async function SiteKalkulatorEstimasiBiaya() {
   let calculatorConfig;
@@ -52,7 +53,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
       <CalculatorProvider config={calculatorConfig}>
         <div
           className={
-            "box-border w-full min-h-screen flex flex-col gap-0 justify-start items-stretch bg-[#ffffff] overflow-x-hidden relative screen public-screen"
+            "box-border w-full min-h-screen flex flex-col gap-0 justify-start items-stretch bg-[#ffffff] overflow-x-clip relative screen public-screen has-editorial-hero"
           }
           data-pencil-name={"Public / 05 - Kalkulator Estimasi Biaya"}
           data-screen={"site/kalkulator-estimasi-biaya"}
@@ -62,169 +63,47 @@ export default async function SiteKalkulatorEstimasiBiaya() {
           <PublicHeader settings={calculatorConfig.settings} />
           <main
             className={
-              "box-border w-full h-fit shrink-0 flex flex-col gap-0 pt-[72px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
+              "box-border w-full h-fit shrink-0 flex flex-col gap-0 pt-[104px] lg:pt-[68px] pb-12 justify-start items-center bg-[#ffffff] relative [z-index:0]"
             }
             data-pencil-name={"main"}
           >
+            {/* Architectural Header Band */}
+            <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+              <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col lg:flex-row gap-8 justify-between items-start lg:items-end">
+                <div className="max-w-3xl flex flex-col gap-3">
+                  <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+                    <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+                    <span>Konfigurator Spesifikasi &amp; Anggaran</span>
+                  </div>
+                  <h1
+                    className="text-[32px]/[1.14] sm:text-[42px]/[1.1] lg:text-[48px]/[1.08] text-[#18181a] font-semibold tracking-[-0.03em] m-0"
+                    data-heading="true"
+                  >
+                    Kalkulator Estimasi Biaya Proyek
+                  </h1>
+                  <p className="text-[15px]/[1.65] sm:text-[16px]/[1.65] text-[#52525b] font-normal m-0 max-w-2xl">
+                    Susun kombinasi platform, jenis arsitektur, dan modul fungsional untuk melihat simulasi rentang investasi serta durasi pengerjaan secara langsung.
+                  </p>
+                </div>
+
+                <Link
+                  href="/paket"
+                  className="inline-flex min-h-[46px] items-center gap-2 rounded-[10px] border border-[#eaeaea] bg-white px-4 py-2.5 text-[13px] font-semibold text-[#18181a] no-underline transition-colors hover:bg-[#f0f0f0] shrink-0"
+                >
+                  <span>Bandingkan Paket Standar</span>
+                  <span className="symbol text-[16px]" aria-hidden="true">
+                    arrow_forward
+                  </span>
+                </Link>
+              </div>
+            </section>
+
             <div
               className={
-                "box-border w-full max-w-[1440px] 2xl:max-w-[1600px] h-fit shrink-0 flex flex-col gap-6 px-4 sm:px-6 lg:px-8 justify-start items-stretch"
+                "box-border w-full max-w-[1440px] 2xl:max-w-[1600px] h-fit shrink-0 flex flex-col gap-6 px-4 sm:px-6 lg:px-8 pt-8 justify-start items-stretch"
               }
               data-pencil-name={"div"}
             >
-              <div
-                className={
-                  "box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-center"
-                }
-                data-pencil-name={"div"}
-                data-responsive="row"
-              >
-                <div
-                  className={
-                    "box-border w-fit shrink-0 h-fit flex flex-row gap-[4px] justify-start items-center"
-                  }
-                  data-pencil-name={"div"}
-                >
-                  <div
-                    className={
-                      "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                    }
-                    data-pencil-name={"Sistem Rekayasa"}
-                    data-text="true"
-                  >
-                    {"Sistem Rekayasa"}
-                  </div>
-                  <div
-                    className={
-                      "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                    }
-                    data-pencil-name={"/"}
-                    data-text="true"
-                  >
-                    {"/"}
-                  </div>
-                  <div
-                    className={
-                      "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                    }
-                    data-pencil-name={"Spesifikasi Biaya & Timeline v1.1"}
-                    data-text="true"
-                  >
-                    {"Spesifikasi Biaya & Timeline v1.1"}
-                  </div>
-                </div>
-                <div
-                  className={
-                    "box-border w-fit shrink-0 h-fit flex flex-row gap-[11.99px] justify-start items-center"
-                  }
-                  data-pencil-name={"div"}
-                  data-responsive="row"
-                >
-                  <div
-                    className={
-                      "box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] p-[4px_8px] justify-start items-center bg-[#f0f0f0] rounded-[9999px]"
-                    }
-                    data-pencil-name={"div"}
-                  >
-                    <div
-                      className={
-                        "box-border w-[8px] shrink-0 h-[8px] opacity-[0.51] bg-[#82b440] rounded-[50%]"
-                      }
-                      data-pencil-name={"span"}
-                    ></div>
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={
-                        "Algoritma Penjadwalan Aktif • SLA 2026"
-                      }
-                      data-text="true"
-                    >
-                      {"Algoritma Penjadwalan Aktif • SLA 2026"}
-                    </div>
-                  </div>
-                  <div
-                    className={
-                      "box-border w-fit shrink-0 h-[20px] flex flex-row gap-[4px] justify-start items-center"
-                    }
-                    data-pencil-name={"div"}
-                  >
-                    <div
-                      className={
-                        "text-[14px]/[20px] box-border text-[#595962] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                      }
-                      data-pencil-name={"bolt"}
-                      data-text="true"
-                      aria-hidden="true"
-                    >
-                      {"bolt"}
-                    </div>
-                    <div
-                      className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-                      }
-                      data-pencil-name={"Dihitung Otomatis (Client-Side)"}
-                      data-text="true"
-                    >
-                      {"Dihitung Otomatis (Client-Side)"}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div
-                className={
-                  "box-border w-full h-[92px] shrink-0 flex flex-col gap-0 p-[2px_0px_0px_0px] justify-start items-start"
-                }
-                data-pencil-name={"div"}
-                data-responsive="flow"
-              >
-                <div
-                  className={
-                    "box-border w-fit h-fit shrink-0 flex flex-row gap-0 p-[2px_8px] justify-start items-center bg-[#e1e89c66] rounded-[4px]"
-                  }
-                  data-pencil-name={"div"}
-                >
-                  <div
-                    className={
-                      "text-[11px]/[14px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.55px] text-left [white-space:nowrap]"
-                    }
-                    data-pencil-name={"MODUL PERHITUNGAN BIAYA TRANSPARAN"}
-                    data-text="true"
-                  >
-                    {"MODUL PERHITUNGAN BIAYA TRANSPARAN"}
-                  </div>
-                </div>
-                <div
-                  className={"box-border w-full h-[8px] shrink-0"}
-                  data-pencil-name={"spacer"}
-                ></div>
-                <h1
-                  className={
-                    "text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.7px] text-left [white-space:nowrap] m-0"
-                  }
-                  data-pencil-name={"Kalkulator Estimasi Biaya & Durasi Proye"}
-                  data-text="true"
-                  data-heading="true"
-                >
-                  {"Kalkulator Estimasi Biaya & Durasi Proyek"}
-                </h1>
-                <div
-                  className={"box-border w-full h-[4px] shrink-0"}
-                  data-pencil-name={"spacer"}
-                ></div>
-                <div
-                  className={
-                    "text-[14px]/[20px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
-                  }
-                  data-pencil-name={"Simulasi interaktif kebutuhan rekayasa p"}
-                  data-text="true"
-                >
-                  {
-                    "Simulasi interaktif kebutuhan rekayasa perangkat lunak dengan kalkulasi transparan dihitung langsung oleh sistem."
-                  }
-                </div>
-              </div>
               <div
                 className={
                   "box-border w-full h-fit shrink-0 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative"
@@ -240,7 +119,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 >
                   <section
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[12px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
                     data-section-padding="true"
@@ -578,10 +457,11 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </div>
                       </CalculatorOption>
                     </div>
+                    <CalculatorExtraItems groupKey="platform" />
                   </section>
                   <section
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[12px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
                     data-section-padding="true"
@@ -996,10 +876,11 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </CalculatorOption>
                       </div>
                     </div>
+                    <CalculatorExtraItems groupKey="productType" />
                   </section>
                   <section
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[12px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
                     data-section-padding="true"
@@ -1520,10 +1401,11 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </div>
                       </CalculatorOption>
                     </div>
+                    <CalculatorExtraItems groupKey="modules" />
                   </section>
                   <section
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[12px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[12px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[12px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
                     data-section-padding="true"
@@ -1612,7 +1494,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 </div>
                 <div
                   className={
-                    "box-border w-full lg:col-span-5 self-start sticky top-[88px] flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#18181a] rounded-[22px] [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] z-10"
+                    "box-border w-full lg:col-span-5 self-start lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-104px)] lg:overflow-y-auto no-scrollbar overscroll-contain flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#18181a] rounded-[22px] [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] z-10"
                   }
                   data-pencil-name={"div"}
                   data-section-padding="true"
@@ -1880,14 +1762,14 @@ export default async function SiteKalkulatorEstimasiBiaya() {
               </div>
               <div
                 className={
-                  "box-border w-full h-fit shrink-0 flex flex-row gap-[12px] justify-start items-start"
+                  "box-border w-full h-fit shrink-0 grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch"
                 }
                 data-pencil-name={"div"}
                 data-responsive="row"
               >
                 <div
                   className={
-                    "box-border [flex:1_1_0] h-[178px] [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[12px]"
+                    "box-border w-full min-h-[178px] [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
                   data-responsive="flow"
@@ -1966,7 +1848,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 </div>
                 <div
                   className={
-                    "box-border [flex:1_1_0] h-[178px] [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[12px]"
+                    "box-border w-full min-h-[178px] [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
                   data-responsive="flow"
@@ -2045,7 +1927,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 </div>
                 <div
                   className={
-                    "box-border [flex:1_1_0] h-[178px] [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[12px]"
+                    "box-border w-full min-h-[178px] [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
                   data-responsive="flow"

@@ -1,4 +1,6 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
+import { cache } from "react";
 import { getDb } from "@/db";
 import { createCategoryStore } from "@/db/category-store";
 import { createFaqStore } from "@/db/faq-store";
@@ -33,15 +35,24 @@ function omitKeys<T extends object, K extends keyof T>(
   return result as Omit<T, K>;
 }
 
-export async function getPublicServiceList() {
-  return listPublicServices(createServiceStore(getDb()), listOptions);
-}
+const cachedPublicServiceList = unstable_cache(
+  async () => listPublicServices(createServiceStore(getDb()), listOptions),
+  ["public-service-list"],
+  { tags: ["catalog"], revalidate: 300 },
+);
 
-/**
- * Server Component loader for the first database-backed public catalog.
- * Each section is validated and projected by its domain service.
- */
-export async function getPublicCatalog() {
+export const getPublicServiceList = cache(async function getPublicServiceList() {
+  try {
+    return await cachedPublicServiceList();
+  } catch (error) {
+    if (error instanceof Error && /incrementalCache/i.test(error.message)) {
+      return listPublicServices(createServiceStore(getDb()), listOptions);
+    }
+    throw error;
+  }
+});
+
+async function loadPublicCatalog() {
   const db = getDb();
   const [settings, categories, packages, faqs, services, projects, testimonials, addons] =
     await Promise.all([
@@ -75,5 +86,42 @@ export async function getPublicCatalog() {
     addons: projectPublicServiceAddons(addons),
   };
 }
+
+const cachedPublicCatalog = unstable_cache(
+  loadPublicCatalog,
+  ["public-catalog"],
+  { tags: ["catalog", "settings", "faqs"], revalidate: 300 },
+);
+
+/**
+ * Server Component loader for the first database-backed public catalog.
+ * Each section is validated and projected by its domain service.
+ */
+export const getPublicCatalog = cache(async function getPublicCatalog() {
+  let raw: Awaited<ReturnType<typeof loadPublicCatalog>>;
+  try {
+    raw = await cachedPublicCatalog();
+  } catch (error) {
+    if (error instanceof Error && /incrementalCache/i.test(error.message)) {
+      raw = await loadPublicCatalog();
+    } else {
+      throw error;
+    }
+  }
+  const now = new Date();
+  return {
+    ...raw,
+    packages: raw.packages.map((pkg) => ({
+      ...pkg,
+      discountEndsAt: pkg.discountEndsAt ? new Date(pkg.discountEndsAt) : null,
+      effectivePrice:
+        pkg.discountPrice !== null &&
+        pkg.discountEndsAt !== null &&
+        new Date(pkg.discountEndsAt) > now
+          ? pkg.discountPrice
+          : pkg.price,
+    })),
+  };
+});
 
 export type PublicCatalog = Awaited<ReturnType<typeof getPublicCatalog>>;

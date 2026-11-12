@@ -25,6 +25,9 @@ describe("studi kasus proyek tidak mengarang metrik", () => {
     expect(source).not.toContain("< 1 Detik");
     expect(source).not.toContain("99.9%");
     expect(source).not.toContain("HASIL &amp; METRIK DAMPAK");
+    expect(source).not.toContain("Kemitraan Terverifikasi");
+    expect(source).not.toContain("30 Hari Bug-Free SLA");
+    expect(source).not.toContain("Verified Release");
   });
 
   it("menampilkan ringkasan berbasis data proyek", () => {

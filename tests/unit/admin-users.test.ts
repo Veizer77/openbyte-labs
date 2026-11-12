@@ -70,4 +70,24 @@ describe("pengguna admin", () => {
     await expect(listAdminUsers(ctx.store, owner, { limit: 20, offset: 0 })).resolves.toEqual(ctx.rows);
     expect(ctx.list).toHaveBeenCalledWith({ limit: 20, offset: 0 });
   });
+
+  it("mengizinkan owner mereset password dan 2FA staf", async () => {
+    const ctx = setup();
+    await updateAdminUser(ctx.store, owner, "profile-new", {
+      name: "Editor Satu",
+      email: "editor@example.test",
+      role: "editor",
+      isActive: true,
+      password: "new-password-12-chars",
+      resetTwoFactor: true,
+    });
+    expect(ctx.update).toHaveBeenCalledWith(
+      "profile-new",
+      userId,
+      expect.objectContaining({
+        passwordHash: "hashed:new-password-12-chars",
+        resetTwoFactor: true,
+      }),
+    );
+  });
 });

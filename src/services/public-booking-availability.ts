@@ -37,6 +37,8 @@ export interface PublicBookingAvailability {
   date: string;
   consultationModes: PublicBookingSchedule["consultationModes"];
   slots: ReturnType<typeof getSlots>;
+  isBlocked?: boolean;
+  holidayReason?: string;
 }
 
 export interface PublicBookingMonthAvailability {
@@ -45,7 +47,12 @@ export interface PublicBookingMonthAvailability {
   serverNow: string;
   maxDate: string;
   consultationModes: PublicBookingSchedule["consultationModes"];
-  days: Array<{ date: string; slots: DaySlot[] }>;
+  days: Array<{
+    date: string;
+    slots: DaySlot[];
+    isBlocked?: boolean;
+    holidayReason?: string;
+  }>;
 }
 
 export async function getPublicBookingAvailability(
@@ -57,6 +64,20 @@ export async function getPublicBookingAvailability(
   if (!Number.isFinite(now.getTime())) throw new Error("Jam server tidak valid.");
 
   const schedule = await store.readSchedule(date);
+  const dayBlocks = schedule.blocks.filter(
+    (b) => (b.date ? b.date.slice(0, 10) : "") === date,
+  );
+  const isFullDayBlock = dayBlocks.some((b) => !b.startTime && !b.endTime);
+  const dayReason =
+    dayBlocks.map((b) => b.reason).filter(Boolean).join(" • ") || undefined;
+  const daySlots = getDaySlots(
+    date,
+    now,
+    schedule.rules,
+    schedule.blocks,
+    schedule.bookings,
+    schedule.config,
+  );
   return {
     date,
     consultationModes: schedule.consultationModes,
@@ -68,6 +89,10 @@ export async function getPublicBookingAvailability(
       schedule.bookings,
       schedule.config,
     ),
+    isBlocked:
+      isFullDayBlock ||
+      (daySlots.length > 0 && daySlots.every((s) => s.isBlocked)),
+    holidayReason: dayReason,
   };
 }
 
@@ -102,17 +127,30 @@ export async function getPublicBookingMonthAvailability(
         .toISOString()
         .slice(0, 10),
       consultationModes: schedule.consultationModes,
-      days: dates.map((date) => ({
-        date,
-        slots: getDaySlots(
+      days: dates.map((date) => {
+        const dayBlocks = schedule.blocks.filter(
+    (b) => (b.date ? b.date.slice(0, 10) : "") === date,
+  );
+        const isFullDayBlock = dayBlocks.some((b) => !b.startTime && !b.endTime);
+        const dayReason =
+          dayBlocks.map((b) => b.reason).filter(Boolean).join(" • ") || undefined;
+        const slots = getDaySlots(
           date,
           now,
           schedule.rules,
           schedule.blocks,
           schedule.bookings,
           schedule.config,
-        ),
-      })),
+        );
+        return {
+          date,
+          slots,
+          isBlocked:
+            isFullDayBlock ||
+            (slots.length > 0 && slots.every((s) => s.isBlocked)),
+          holidayReason: dayReason,
+        };
+      }),
     };
   }
 
@@ -131,16 +169,27 @@ export async function getPublicBookingMonthAvailability(
     consultationModes: schedules[0]?.consultationModes ?? [],
     days: dates.map((date, index) => {
       const schedule = schedules[index];
+      const dayBlocks = schedule.blocks.filter(
+    (b) => (b.date ? b.date.slice(0, 10) : "") === date,
+  );
+      const isFullDayBlock = dayBlocks.some((b) => !b.startTime && !b.endTime);
+      const dayReason =
+        dayBlocks.map((b) => b.reason).filter(Boolean).join(" • ") || undefined;
+      const slots = getDaySlots(
+        date,
+        now,
+        schedule.rules,
+        schedule.blocks,
+        schedule.bookings,
+        schedule.config,
+      );
       return {
         date,
-        slots: getDaySlots(
-          date,
-          now,
-          schedule.rules,
-          schedule.blocks,
-          schedule.bookings,
-          schedule.config,
-        ),
+        slots,
+        isBlocked:
+          isFullDayBlock ||
+          (slots.length > 0 && slots.every((s) => s.isBlocked)),
+        holidayReason: dayReason,
       };
     }),
   };

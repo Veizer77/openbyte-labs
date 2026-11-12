@@ -9,12 +9,13 @@ import { and, eq, isNull } from "drizzle-orm";
 import { getPublicPageView } from "@/lib/server/public-pages";
 import { getPublicServiceList } from "@/lib/server/public-catalog";
 import { serviceSlug } from "@/lib/service-slug";
+import { listStoreSitemapSlugs } from "@/lib/server/public-store";
 
 export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!publicIndexingEnabled()) return [];
   const origin = publicSiteOrigin()!;
-  const paths = new Set(["/", "/proyek", "/paket", "/kalkulator", "/tentang-kami", "/kebijakan-privasi", "/ketentuan-layanan"]);
+  const paths = new Set(["/", "/proyek", "/paket", "/kalkulator", "/tentang-kami", "/kebijakan-privasi", "/ketentuan-layanan", "/store"]);
   // Catatan: "/blog" sengaja tidak dimasukkan. Modul editorial belum ada,
   // jadi halaman itu hanya berisi keadaan kosong dan tidak layak diindeks.
   const store = createPublicProjectStore(getDb(), getEnv().R2_PUBLIC_BASE_URL);
@@ -26,6 +27,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const service of await getPublicServiceList()) {
     const slug = serviceSlug(service.title);
     if (slug) paths.add(`/layanan/${slug}`);
+  }
+  for (const slug of await listStoreSitemapSlugs()) {
+    paths.add(`/store/${slug}`);
   }
   const customPages = await getDb().select({ slug: pages.slug }).from(pages).where(and(eq(pages.publicationEnabled, true), isNull(pages.deletedAt)));
   for (const item of customPages) {

@@ -3,7 +3,7 @@ import { and, asc, count, eq, ilike, ne, or, sql } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 import type { Database } from "./connection";
 import { adminProfiles } from "./schema/admin-profile";
-import { authAccount, authUser } from "./schema/admin-identity";
+import { authAccount, authTwoFactor, authUser } from "./schema/admin-identity";
 import { auditLogs } from "./schema/audit";
 import type { AdminUserStore } from "@/services/admin-users";
 
@@ -84,13 +84,27 @@ export function createAdminUserStore(db: Database): AdminUserStore {
             return row ?? null;
           },
           async update(id, authUserId, input) {
+            const now = new Date();
             const profiles = await tx.update(adminProfiles)
-              .set({ role: input.role, isActive: input.isActive, updatedAt: new Date() })
+              .set({ role: input.role, isActive: input.isActive, updatedAt: now })
               .where(eq(adminProfiles.id, id)).returning({ id: adminProfiles.id });
             if (!profiles.length) return false;
             const users = await tx.update(authUser)
-              .set({ name: input.name, email: input.email, updatedAt: new Date() })
+              .set({
+                name: input.name,
+                email: input.email,
+                ...(input.resetTwoFactor ? { twoFactorEnabled: false } : {}),
+                updatedAt: now,
+              })
               .where(eq(authUser.id, authUserId)).returning({ id: authUser.id });
+            if (input.passwordHash) {
+              await tx.update(authAccount)
+                .set({ password: input.passwordHash, updatedAt: now })
+                .where(and(eq(authAccount.userId, authUserId), eq(authAccount.providerId, "credential")));
+            }
+            if (input.resetTwoFactor) {
+              await tx.delete(authTwoFactor).where(eq(authTwoFactor.userId, authUserId));
+            }
             return users.length === 1;
           },
           async audit(actorId, action, id) {

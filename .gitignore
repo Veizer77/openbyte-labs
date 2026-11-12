@@ -45,6 +45,9 @@ next-env.d.ts
 # Local scratch space (downloaded tools, temporary clusters); never committed
 /.local/
 
+# Scratch kerja sekali pakai (aset screenshot, arsip paket, log audit)
+/tmp/
+
 /media
 
 # Playwright

@@ -112,4 +112,32 @@ describe("public booking availability", () => {
       ["11:00 - 12:00", false, true],
     ]);
   });
+
+  it("passes holiday status and CMS reason for blocked dates", async () => {
+    const base = makeStore();
+    const readMonth = vi.fn(async () => {
+      const schedule = await base.readSchedule("2026-11-02");
+      return {
+        ...schedule,
+        blocks: [
+          {
+            date: "2026-11-10",
+            reason: "Hari Pahlawan - Operasional Studio Tutup",
+          },
+        ],
+      };
+    });
+    const result = await getPublicBookingMonthAvailability(
+      { ...base, readMonth },
+      { month: "2026-11-01" },
+      fixedNow,
+    );
+    const holiday = result.days.find((day) => day.date === "2026-11-10");
+    const regular = result.days.find((day) => day.date === "2026-11-02");
+
+    expect(holiday?.isBlocked).toBe(true);
+    expect(holiday?.holidayReason).toBe("Hari Pahlawan - Operasional Studio Tutup");
+    expect(regular?.isBlocked).toBe(false);
+    expect(regular?.holidayReason).toBeUndefined();
+  });
 });

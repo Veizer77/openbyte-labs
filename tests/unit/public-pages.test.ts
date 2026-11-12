@@ -59,5 +59,7 @@ describe("public and admin page reads", () => {
   it("encodes public object path segments and preserves nested keys", () => {
     expect(publicMediaUrl("https://cdn.example.com/assets/", "media/ab c/hero.webp"))
       .toBe("https://cdn.example.com/assets/media/ab%20c/hero.webp");
+    expect(publicMediaUrl("https://pub-56e1d9e9745541f7bbe1141aa7cc3be3.r2.dev", "media/ab c/hero.webp"))
+      .toBe("/api/media/media/ab%20c/hero.webp");
   });
 });

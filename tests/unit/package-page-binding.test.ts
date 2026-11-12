@@ -99,4 +99,35 @@ describe("halaman /paket terikat ke data paket", () => {
     expect(rendered).not.toMatch(/"3x Sesi Penuh"/);
     expect(source).toMatch(/: "Estimasi —"/);
   });
+
+  it("menerapkan card hitam dan label paling populer berdasarkan isPopular dari CMS admin", () => {
+    // Card hitam dan badge Paling Populer harus terikat ke status isPopular,
+    // bukan dikunci mati pada satu paket tertentu.
+    expect(source).toContain("isStarterPopular");
+    expect(source).toContain("isMobilePopular");
+    expect(source).toContain("isInformasiPopular");
+    expect(source).toContain("isStarterPopular ?");
+    expect(source).toContain("isMobilePopular ?");
+    expect(source).toContain("isInformasiPopular ?");
+    expect(source).toMatch(/isStarterPopular\s*\?\s*[`"'][^`"']*bg-\[#18181a\]/);
+    expect(source).toMatch(/isMobilePopular\s*\?\s*[`"'][^`"']*bg-\[#18181a\]/);
+    expect(source).toMatch(/isInformasiPopular\s*\?\s*[`"'][^`"']*bg-\[#18181a\]/);
+    // Paket populer diposisikan di tengah (order-2 / Center-Stage Effect)
+    expect(source).toContain("starterOrder");
+    expect(source).toContain("informasiOrder");
+    expect(source).toContain("mobileOrder");
+  });
+
+  it("menampilkan harga normal dengan dicoret (line-through) ketika ada harga diskon", () => {
+    // Ketika ada diskon aktif, harga normal harus dicoret dengan class line-through
+    expect(source).toContain("starter.effectivePrice < starter.price");
+    expect(source).toContain("mobile.effectivePrice < mobile.price");
+    expect(source).toContain("informasi.effectivePrice < informasi.price");
+    expect(source).toContain("pkg.effectivePrice < pkg.price");
+    expect(source).toContain("line-through");
+    expect(source).toMatch(/angkaRupiah\(starter\.price\)/);
+    expect(source).toMatch(/angkaRupiah\(mobile\.price\)/);
+    expect(source).toMatch(/angkaRupiah\(informasi\.price\)/);
+    expect(source).toMatch(/angkaRupiah\(pkg\.price\)/);
+  });
 });

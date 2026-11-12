@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs/config";
 import { publicIndexingEnabled } from "./src/lib/indexing";
 
+// Next.js configuration for OpenByte Labs
 const nextConfig: NextConfig = {
   distDir: process.env.NEXT_OUTPUT_DIR || ".next",
   poweredByHeader: false,

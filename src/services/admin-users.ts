@@ -22,7 +22,7 @@ export interface AdminUserStore {
     activeOwnerCount(): Promise<number>;
     create(input: AdminUserCreateInput & { userId: string; passwordHash: string; now: Date }): Promise<string>;
     read(id: string): Promise<{ authUserId: string; role: "owner" | "editor"; isActive: boolean } | null>;
-    update(id: string, authUserId: string, input: AdminUserUpdateInput): Promise<boolean>;
+    update(id: string, authUserId: string, input: AdminUserUpdateInput & { passwordHash?: string }): Promise<boolean>;
     audit(actorId: string, action: "create" | "update", id: string): Promise<void>;
   }) => Promise<T>): Promise<T>;
 }
@@ -80,6 +80,7 @@ export async function updateAdminUser(
   authorize(principal, "users", "update");
   z.string().min(1).max(100).parse(id);
   const value = adminUserUpdateInputSchema.parse(input);
+  const passwordHash = value.password ? await hashPassword(value.password) : undefined;
   await store.transaction(async (tx) => {
     await tx.lockUsers();
     const current = await tx.read(id);
@@ -93,7 +94,7 @@ export async function updateAdminUser(
       (value.role !== "owner" || !value.isActive) &&
       await tx.activeOwnerCount() <= 1
     ) throw new Error("Owner aktif terakhir tidak dapat dinonaktifkan atau diturunkan perannya.");
-    if (!(await tx.update(id, current.authUserId, value)))
+    if (!(await tx.update(id, current.authUserId, { ...value, passwordHash })))
       throw new Error("Pengguna admin tidak ditemukan.");
     await tx.audit(principal.id, "update", id);
   });

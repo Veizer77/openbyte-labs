@@ -118,12 +118,31 @@ export function BookingProvider({
           ),
         );
         setAvailabilityState({ month, data, error: "" });
-        updateDate(openDay?.date ?? "");
-        updateSlot(
-          openDay?.slots.find((candidate) =>
+        let chosenDate = "";
+        updateDate((prevDate) => {
+          if (prevDate && prevDate.startsWith(month.slice(0, 7))) {
+            chosenDate = prevDate;
+            return prevDate;
+          }
+          chosenDate = openDay?.date ?? data.days[0]?.date ?? "";
+          return chosenDate;
+        });
+        updateSlot((prevSlot) => {
+          const targetDay = data.days.find((d) => d.date === chosenDate);
+          if (targetDay?.isBlocked) return "";
+          if (
+            prevSlot &&
+            targetDay?.slots.some(
+              (s) => s.start === prevSlot && isSlotBookable(s, serverNow.getTime()),
+            )
+          ) {
+            return prevSlot;
+          }
+          const validSlot = targetDay?.slots.find((candidate) =>
             isSlotBookable(candidate, serverNow.getTime()),
-          )?.start ?? "",
-        );
+          );
+          return validSlot?.start ?? "";
+        });
         if (data.consultationModes.length) {
           updateMode((prev) =>
             data.consultationModes.includes(prev)
@@ -150,9 +169,9 @@ export function BookingProvider({
 
   const setDate = (newDate: string) => {
     const day = availability?.days.find((candidate) => candidate.date === newDate);
-    const nextSlot = day?.slots.find((candidate) =>
-      isSlotBookable(candidate, now.getTime()),
-    );
+    const nextSlot = day?.isBlocked
+      ? undefined
+      : day?.slots.find((candidate) => isSlotBookable(candidate, now.getTime()));
     updateDate(newDate);
     updateSlot(nextSlot?.start ?? "");
   };
@@ -325,47 +344,58 @@ export function BookingCalendar(props: Props) {
         ))}
         {Array.from({ length: numberOfDays }, (_, index) => {
           const day = `${month.slice(0, 7)}-${String(index + 1).padStart(2, "0")}`;
-          const daySlots = availability?.days.find(
+          const dayEntry = availability?.days.find(
             (entry) => entry.date === day,
-          )?.slots;
-          const hasSlots = (daySlots?.length ?? 0) > 0;
+          );
+          const daySlots = dayEntry?.slots;
+          const isHoliday = dayEntry?.isBlocked || false;
+          const holidayReason = dayEntry?.holidayReason;
           const isPastDay = day < wibDay(now);
           const hasAvailableSlots =
             !loading &&
+            !isHoliday &&
             !!daySlots?.some((candidate) =>
               isSlotBookable(candidate, now.getTime()),
             );
-          const isClickable = !loading && hasSlots && !isPastDay;
+          const isClickable = !loading && !isPastDay;
           const isSelected = date === day;
           return (
             <button
               key={day}
               type="button"
               disabled={!isClickable}
-              aria-label={dateWib(`${day}T00:00:00+07:00`)}
+              aria-label={`${dateWib(`${day}T00:00:00+07:00`)}${isHoliday ? ` (Libur${holidayReason ? `: ${holidayReason}` : ""})` : ""}`}
               aria-pressed={isSelected}
               onClick={() => setDate(day)}
-              className={`box-border w-full h-[34px] flex flex-col gap-0 p-[8px] justify-center items-center rounded-[8px] transition-colors ${
+              className={`box-border w-full h-[34px] flex flex-col gap-0 p-[8px] justify-center items-center rounded-[8px] transition-colors relative ${
                 isSelected
                   ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#18181a] cursor-pointer"
-                  : hasAvailableSlots
-                    ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#ffffff] hover:bg-[#e4e4e7] cursor-pointer"
-                    : isClickable
-                      ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#f4f4f5] hover:bg-[#e4e4e7] cursor-pointer"
-                      : "bg-transparent opacity-40 cursor-not-allowed"
+                  : isHoliday
+                    ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#fff1f2] border border-[#fecdd3] hover:bg-[#ffe4e6] cursor-pointer"
+                    : hasAvailableSlots
+                      ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#ffffff] hover:bg-[#e4e4e7] cursor-pointer"
+                      : isClickable
+                        ? "[box-shadow:0px_1px_2px_#0000000d] bg-[#f4f4f5] hover:bg-[#e4e4e7] cursor-pointer"
+                        : "bg-transparent opacity-40 cursor-not-allowed"
               }`}
               data-pencil-name={String(index + 1)}
+              title={isHoliday ? (holidayReason ? `Libur: ${holidayReason}` : "Hari Libur") : undefined}
             >
               <div
-                className={`text-[13px]/[18px] box-border font-[var(--font-inter),system-ui,sans-serif] text-center [white-space:nowrap] ${
+                className={`text-[13px]/[18px] box-border font-[var(--font-inter),system-ui,sans-serif] text-center [white-space:nowrap] flex items-center justify-center gap-1 ${
                   isSelected
                     ? "text-[#ffffff] font-bold"
-                    : hasAvailableSlots
-                      ? "text-[#18181a] font-medium"
-                      : "text-[#71717a] font-medium"
+                    : isHoliday
+                      ? "text-[#be123c] font-semibold"
+                      : hasAvailableSlots
+                        ? "text-[#18181a] font-medium"
+                        : "text-[#71717a] font-medium"
                 }`}
               >
-                {index + 1}
+                <span>{index + 1}</span>
+                {isHoliday && !isSelected ? (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#e11d48] shrink-0" aria-hidden="true" />
+                ) : null}
               </div>
             </button>
           );
@@ -430,14 +460,29 @@ export function BookingCalendar(props: Props) {
           data-pencil-name="span"
         >
           <div
+            className="box-border w-[8px] shrink-0 h-[8px] bg-[#e11d48] rounded-[50%]"
+            data-pencil-name="span"
+          />
+          <div
+            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+            data-pencil-name="Hari Libur"
+          >
+            Hari Libur
+          </div>
+        </div>
+        <div
+          className="box-border w-fit shrink-0 h-[14px] flex flex-row gap-[4px] justify-start items-center"
+          data-pencil-name="span"
+        >
+          <div
             className="box-border w-[8px] shrink-0 h-[8px] bg-[#9ca3af66] rounded-[50%]"
             data-pencil-name="span"
           />
           <div
             className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
-            data-pencil-name="Akhir Pekan (Tutup)"
+            data-pencil-name="Akhir Pekan"
           >
-            Akhir Pekan (Tutup)
+            Akhir Pekan
           </div>
         </div>
       </div>
@@ -457,10 +502,18 @@ export function BookingSlots(props: Props) {
     error,
     now,
   } = useBooking()!;
+  const currentDayEntry = availability?.days.find((day) => day.date === date);
   const allSlots = useMemo(
-    () => availability?.days.find((day) => day.date === date)?.slots ?? [],
-    [availability, date],
+    () => currentDayEntry?.slots ?? [],
+    [currentDayEntry],
   );
+  const isHoliday = currentDayEntry?.isBlocked || false;
+  const holidayReason = currentDayEntry?.holidayReason;
+  const isWeekend = useMemo(() => {
+    if (!date) return false;
+    const dayOfWeek = new Date(`${date}T00:00:00Z`).getUTCDay();
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  }, [date]);
   const availableSlotsCount = allSlots.filter((s) =>
     isSlotBookable(s, now.getTime()),
   ).length;
@@ -468,12 +521,16 @@ export function BookingSlots(props: Props) {
 
   useEffect(() => {
     if (!slot) return;
+    if (isHoliday) {
+      setSlot("");
+      return;
+    }
     const selectedOption = allSlots.find((s) => s.start === slot);
     if (!selectedOption) return;
     // Drop the selection the moment it stops being bookable so the form can
     // never submit a slot the visitor can no longer honour.
     if (!isSlotBookable(selectedOption, now.getTime())) setSlot("");
-  }, [slot, allSlots, now, setSlot]);
+  }, [slot, allSlots, now, setSlot, isHoliday]);
 
   return (
     <div {...props}>
@@ -495,13 +552,15 @@ export function BookingSlots(props: Props) {
                   ? `HARI INI (${dateWib(`${date}T00:00:00+07:00`)})`
                   : dateWib(`${date}T00:00:00+07:00`)
                 : "PILIH TANGGAL"
-            }`}
+            }${isHoliday ? " (LIBUR)" : ""}`}
           </div>
           <div
             className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
             data-pencil-name="Pilih Jam Pertemuan"
           >
-            Pilih Jam Pertemuan
+            {isHoliday
+              ? "Sesi Tidak Tersedia (Hari Libur)"
+              : "Pilih Jam Pertemuan"}
           </div>
         </div>
         <div
@@ -534,6 +593,62 @@ export function BookingSlots(props: Props) {
         <div className="box-border w-full p-[16px] bg-[#fff7ed] rounded-[12px] text-center">
           <p role="alert" className="text-[13px] text-[#9a3412] m-0 font-medium">
             {error}
+          </p>
+        </div>
+      ) : isHoliday ? (
+        <div
+          role="alert"
+          className="box-border w-full p-4 sm:p-5 bg-[#fff1f2] border border-[#fecdd3] rounded-[14px] flex flex-col gap-3.5 text-left shadow-sm"
+          data-pencil-name="Holiday Alert"
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-8 h-8 rounded-full bg-[#ffe4e6] border border-[#fecdd3] flex items-center justify-center shrink-0 text-[#e11d48]">
+              <span className="material-symbols-outlined text-[18px] symbol" aria-hidden="true">
+                event_busy
+              </span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <h4 className="m-0 text-[14px] font-semibold text-[#9f1239]">
+                Hari Ini Libur (Sesi Tidak Tersedia)
+              </h4>
+              <p className="m-0 text-[12px]/[1.5] text-[#be123c]">
+                Pada tanggal ini studio tidak melayani sesi konsultasi teknis karena libur operasional. Sesi reservasi tidak dapat dibooking.
+              </p>
+            </div>
+          </div>
+
+          {holidayReason ? (
+            <div className="p-3 bg-white/95 border border-[#fda4af] rounded-[10px] flex flex-col gap-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#9f1239]">
+                Catatan dari Studio (CMS):
+              </span>
+              <p className="m-0 text-[13px] text-[#881337] font-semibold whitespace-pre-wrap">
+                {holidayReason}
+              </p>
+            </div>
+          ) : null}
+
+          <div className="flex items-center gap-2 pt-1 border-t border-[#fecdd3]/80 text-[12px] text-[#9f1239] font-medium">
+            <span className="material-symbols-outlined text-[16px] text-[#e11d48] symbol" aria-hidden="true">
+              arrow_circle_right
+            </span>
+            <span>
+              Silakan pilih tanggal lain yang bertanda hijau pada kalender untuk menentukan jam konsultasi Anda.
+            </span>
+          </div>
+        </div>
+      ) : isWeekend && allSlots.length === 0 ? (
+        <div className="box-border w-full p-4 sm:p-5 bg-[#f4f4f5] border border-[#e4e4e7] rounded-[14px] flex flex-col gap-2 text-left">
+          <div className="flex items-center gap-2.5 text-[#52525b]">
+            <span className="material-symbols-outlined text-[18px] symbol" aria-hidden="true">
+              weekend
+            </span>
+            <h4 className="m-0 text-[14px] font-semibold text-[#18181a]">
+              Operasional Akhir Pekan Tutup
+            </h4>
+          </div>
+          <p className="m-0 text-[12px]/[1.5] text-[#71717a]">
+            Sesi konsultasi reguler diselenggarakan pada hari kerja (Senin s.d. Jumat). Silakan pilih tanggal hari kerja pada kalender.
           </p>
         </div>
       ) : allSlots.length ? (
@@ -645,12 +760,12 @@ export function BookingSlots(props: Props) {
       ) : (
         <div className="box-border w-full p-[16px] bg-[#f0f0f0] rounded-[12px] text-center">
           <p role="status" className="text-[13px] text-[#52525b] m-0 font-medium">
-            Tidak ada slot jadwal yang dibuka pada hari ini. Silakan pilih hari kerja (Senin – Jumat).
+            Tidak ada slot jadwal yang dibuka pada hari ini. Silakan pilih hari kerja (Senin - Jumat).
           </p>
         </div>
       )}
 
-      {allSlots.length > 0 && availableSlotsCount === 0 && (
+      {allSlots.length > 0 && availableSlotsCount === 0 && !isHoliday && (
         <div className="box-border w-full p-[12px] bg-[#fff7ed] border border-[#ffedd5] rounded-[8px] text-left">
           <p role="status" className="text-[12px] text-[#c2410c] m-0 font-medium flex items-center gap-[6px]">
             <span className="material-symbols-outlined text-[16px] symbol">info</span>
@@ -771,8 +886,10 @@ export function BookingValue({
   ...props
 }: Props & { kind: "date" | "time" | "mode" }) {
   const { date, slot, mode, availability } = useBooking()!;
-  const slots = availability?.days.find((day) => day.date === date)?.slots ?? [];
+  const currentDay = availability?.days.find((day) => day.date === date);
+  const slots = currentDay?.slots ?? [];
   const matchingSlot = slots.find((s) => s.start === slot);
+  const isHoliday = currentDay?.isBlocked;
 
   return (
     <div {...props} aria-live="polite">
@@ -784,9 +901,11 @@ export function BookingValue({
           ? consultationModeLabels[mode]
           : matchingSlot
             ? `${matchingSlot.label} WIB`
-            : slot
-              ? `${new Intl.DateTimeFormat("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(slot)).replace(".", ":")} WIB`
-              : "Pilih jam sesi"}
+            : isHoliday
+              ? "Libur"
+              : slot
+                ? `${new Intl.DateTimeFormat("id-ID", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(slot)).replace(".", ":")} WIB`
+                : "Pilih jam sesi"}
     </div>
   );
 }

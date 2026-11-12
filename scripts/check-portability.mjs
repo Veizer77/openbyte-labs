@@ -10,7 +10,8 @@ async function scan(dir) {
         throw new Error(`Dependency di luar stack PRD: ${path}`);
       }
       const reviewedVideoRenderer = path === "src/components/public/ProjectContent.tsx";
-      if (/dangerouslySetInnerHTML/.test(source) || (/<iframe/.test(source) && !reviewedVideoRenderer)) {
+      const reviewedJsonLd = path === "src/components/public/JsonLd.tsx";
+      if ((/dangerouslySetInnerHTML/.test(source) && !reviewedJsonLd) || (/<iframe/.test(source) && !reviewedVideoRenderer)) {
         throw new Error(
           `Frontend harus berupa komponen React, bukan HTML/iframe: ${path}`,
         );

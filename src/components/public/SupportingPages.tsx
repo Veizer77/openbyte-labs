@@ -16,11 +16,11 @@ function PageFrame({
   settings?: PublicSiteSettings;
 }) {
   return (
-    <div className="box-border w-full min-h-screen flex flex-col justify-start items-stretch bg-white overflow-x-hidden relative screen public-screen">
+    <div className="box-border w-full min-h-screen flex flex-col justify-start items-stretch bg-white overflow-x-hidden relative screen public-screen has-editorial-hero">
       <PublicHeader settings={settings} />
       <main
         id="konten"
-        className="pt-[72px] pb-16 px-4 sm:px-6 lg:px-8 w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto flex-1"
+        className="pt-[104px] lg:pt-[68px] pb-16 w-full flex-1 flex flex-col items-stretch"
       >
         {children}
       </main>
@@ -49,7 +49,7 @@ export async function OrderPage({
     } catch {
       return (
         <PageFrame>
-          <div className="max-w-2xl mx-auto py-12">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
             <h1 className="text-2xl font-semibold text-[#18181a]">
               Paket belum dapat dimuat
             </h1>
@@ -70,33 +70,38 @@ export async function OrderPage({
   }
   return (
     <PageFrame settings={settings}>
-      <div className="max-w-3xl mx-auto py-6 flex flex-col gap-6">
-        <div className="flex flex-col gap-2">
-          <div className="w-fit flex items-center gap-2 p-[4px_10px] bg-[#f0f0f0] rounded-full">
-            <span className="w-2 h-2 rounded-full bg-[#82b440]" />
-            <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
-              FORMULIR PEMESANAN &amp; PENAWARAN RESMI
-            </span>
+      <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+        <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col gap-3">
+          <div className="flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+            <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+            <span>Pengajuan Penawaran &amp; Ruang Lingkup</span>
           </div>
-          <h1 className="text-[28px]/[36px] sm:text-[34px]/[42px] font-semibold text-[#18181a] tracking-[-0.7px] m-0">
+          <h1
+            className="text-[32px]/[1.14] sm:text-[42px]/[1.1] font-semibold text-[#18181a] tracking-[-0.03em] m-0 max-w-3xl"
+            data-heading="true"
+          >
             Ceritakan Kebutuhan Proyek Anda
           </h1>
-          <p className="text-sm text-[#52525b] leading-6 m-0">
+          <p className="text-[15px]/[1.65] text-[#52525b] m-0 max-w-2xl">
             {packageName
               ? `Paket dipilih: ${packageName}. `
               : "Pilih layanan dan sampaikan kebutuhan spesifik Anda. "}
             Rincian penawaran resmi, jadwal pengerjaan, dan estimasi biaya tertulis akan kami kirimkan.
           </p>
         </div>
+      </section>
 
-        <section className="p-6 sm:p-8 rounded-[16px] bg-[#ffffff] border border-neutral-200/80 shadow-[0px_1px_3px_#0000000d]">
-          <ContactForm
-            packageName={packageName}
-            packageId={packageId}
-            consentText={settings?.legal.consentText}
-            className="flex flex-col gap-5"
-          />
-        </section>
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+        <div className="max-w-3xl mx-auto py-2 flex flex-col gap-6">
+          <section className="p-6 sm:p-8 rounded-[16px] bg-[#ffffff] border border-neutral-200/80 shadow-[0px_1px_3px_#0000000d]">
+            <ContactForm
+              packageName={packageName}
+              packageId={packageId}
+              consentText={settings?.legal.consentText}
+              className="flex flex-col gap-5"
+            />
+          </section>
+        </div>
       </div>
     </PageFrame>
   );
@@ -123,23 +128,25 @@ export function PrivacyPage({
 
   return (
     <PageFrame settings={settings}>
-      <div className="flex flex-col gap-8 py-4">
-        {/* Header Banner */}
-        <div className="flex flex-col gap-2 max-w-3xl">
-          <div className="w-fit flex items-center gap-2 p-[4px_10px] bg-[#f0f0f0] rounded-full">
-            <span className="w-2 h-2 rounded-full bg-[#82b440]" />
-            <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
-              KEBIJAKAN &amp; PRIVASI DATA
-            </span>
+      <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+        <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col gap-3">
+          <div className="flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+            <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+            <span>Tata Kelola &amp; Privasi Data</span>
           </div>
-          <h1 className="text-[32px]/[40px] sm:text-[40px]/[48px] font-bold text-[#18181a] tracking-[-0.8px] m-0">
+          <h1
+            className="text-[32px]/[1.14] sm:text-[42px]/[1.1] font-semibold text-[#18181a] tracking-[-0.03em] m-0"
+            data-heading="true"
+          >
             Kebijakan Privasi
           </h1>
-          <p className="text-sm text-[#52525b] m-0 leading-6">
+          <p className="text-[15px]/[1.65] text-[#52525b] m-0 max-w-2xl">
             Komitmen OpenByte Labs terhadap perlindungan privasi, integritas informasi, dan kepatuhan pengolahan data klien.
           </p>
         </div>
+      </section>
 
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* 2-Column Stitch Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] sticky top-24">
@@ -167,7 +174,7 @@ export function PrivacyPage({
               </li>
             </ul>
             <div className="pt-3 border-t border-neutral-200/80 text-xs text-[#71717a]">
-              Kontak resmi: {email || "privacy@openbytelabs.com"}
+              Kontak resmi: {email || whatsapp || "Hubungi melalui formulir konsultasi"}
             </div>
           </aside>
 
@@ -179,34 +186,61 @@ export function PrivacyPage({
             ) : (
               <>
                 <div className="rounded-[12px] border border-neutral-200 bg-[#f0f0f0] p-4 text-xs sm:text-sm leading-6 text-[#52525b]">
-                  Ringkasan kebijakan privasi ini menjelaskan data yang kami kumpulkan melalui formulir publik dan cara kami menggunakannya. Rincian pengendali data, dasar hukum pemrosesan, penyedia pemroses, dan jadwal retensi diatur dalam perjanjian kerja sama.
+                  Ringkasan kebijakan privasi ini menjelaskan data yang kami kumpulkan melalui formulir publik dan cara kami menggunakannya sesuai kerangka pelindungan data pribadi yang berlaku di Indonesia (UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi).
                 </div>
 
                 <div className="p-6 sm:p-8 bg-white border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_2px_#0000000d] flex flex-col gap-6 text-sm leading-7 text-[#52525b]">
                   <section className="flex flex-col gap-2">
                     <h2 className="text-lg font-semibold text-[#18181a] m-0">
-                      1. Data yang Dikirim Melalui Formulir
+                      1. Identitas Pengendali Data
                     </h2>
                     <p className="m-0">
-                      Formulir konsultasi, kalkulator, dan penawaran meminta data minimum yang diperlukan untuk berkomunikasi: nama lengkap, nomor kontak WhatsApp, jenis layanan, dan ringkasan kebutuhan sistem. Kami tidak meminta kata sandi, informasi finansial sensitif, atau data rahasia instansi melalui formulir publik.
+                      Pengendali data untuk situs dan layanan ini adalah {settings?.general.brandName || "OpenByte Labs"} ({settings?.general.address || "Indonesia"}). Permintaan terkait pelindungan data pribadi dapat disampaikan melalui saluran kontak resmi ({email || whatsapp || "formulir konsultasi resmi"}).
                     </p>
                   </section>
 
                   <section className="flex flex-col gap-2">
                     <h2 className="text-lg font-semibold text-[#18181a] m-0">
-                      2. Tujuan Penggunaan &amp; Keamanan Data
+                      2. Kategori Data Pribadi yang Dikumpulkan
                     </h2>
                     <p className="m-0">
-                      Informasi yang terkumpul hanya digunakan secara eksklusif untuk menyusun penawaran tertulis, menjadwalkan sesi konsultasi, dan mengonfirmasi progres pengerjaan sistem Anda. Seluruh komunikasi disimpan di infrastruktur terisolasi dengan kontrol otentikasi ketat.
+                      Formulir konsultasi, pemesanan, dan kalkulator estimasi meminta data minimum yang diperlukan untuk komunikasi pra-kontrak: nama lengkap, nomor WhatsApp, alamat email, nama instansi/usaha, rincian kebutuhan proyek, serta metadata teknis keamanan (token verifikasi anti-bot dan cap waktu). Kami tidak mengumpulkan data keuangan sensitif atau kata sandi melalui formulir publik.
                     </p>
                   </section>
 
                   <section className="flex flex-col gap-2">
                     <h2 className="text-lg font-semibold text-[#18181a] m-0">
-                      3. Hak Pemilik Data
+                      3. Tujuan &amp; Dasar Pemrosesan Data
                     </h2>
                     <p className="m-0">
-                      Anda berhak mengajukan permohonan peninjauan, pembaruan, atau penghapusan menyeluruh terhadap informasi kontak yang telah disampaikan ke OpenByte Labs kapan saja melalui saluran komunikasi resmi kami.
+                      Data diproses berdasarkan persetujuan eksplisit pengirim dan kebutuhan pelaksanaan langkah pra-kontrak untuk: (a) menanggapi pertanyaan dan menjadwalkan sesi konsultasi, (b) menyusun estimasi biaya dan proposal teknis, (c) menyediakan pelacakan progres proyek bila fitur pelacakan diaktifkan, serta (d) melindungi layanan dari penyalahgunaan otomatis.
+                    </p>
+                  </section>
+
+                  <section className="flex flex-col gap-2">
+                    <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                      4. Pihak Ketiga / Sub-Pemroses Infrastruktur
+                    </h2>
+                    <p className="m-0">
+                      Kami tidak menjual atau menyewakan data pribadi kepada pihak ketiga. Dalam penyelenggaraan teknis, data disimpan dan diproses melalui penyedia infrastruktur terenkripsi: Vercel (hosting aplikasi), Neon PostgreSQL (penyimpanan basis data), Cloudflare Turnstile &amp; R2 (verifikasi keamanan anti-bot dan penyimpanan media), serta WhatsApp (saluran komunikasi tindak lanjut atas permintaan pengguna).
+                    </p>
+                  </section>
+
+                  <section className="flex flex-col gap-2">
+                    <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                      5. Masa Retensi &amp; Penghapusan Data
+                    </h2>
+                    <p className="m-0">
+                      Data pengajuan formulir dan sesi konsultasi disimpan selama masa komunikasi aktif dan ditinjau secara berkala (hingga 24 bulan sejak interaksi terakhir, kecuali diwajibkan lebih lama oleh perjanjian kerja sama atau ketentuan hukum), sebelum dihapus atau dianonimkan secara permanen.
+                    </p>
+                  </section>
+
+                  <section className="flex flex-col gap-2">
+                    <h2 className="text-lg font-semibold text-[#18181a] m-0">
+                      6. Hak Subjek Data Pribadi
+                    </h2>
+                    <p className="m-0">
+                      Anda berhak meminta akses, koreksi/pembaruan, pembatasan pemrosesan, penarikan persetujuan, maupun penghapusan data pribadi yang telah Anda kirimkan kapan saja dengan menghubungi saluran kontak resmi kami.
                     </p>
                   </section>
                 </div>
@@ -222,23 +256,25 @@ export function PrivacyPage({
 export function TermsPage({ settings }: { settings?: PublicSiteSettings }) {
   return (
     <PageFrame settings={settings}>
-      <div className="flex flex-col gap-8 py-4">
-        {/* Header Banner */}
-        <div className="flex flex-col gap-2 max-w-3xl">
-          <div className="w-fit flex items-center gap-2 p-[4px_10px] bg-[#f0f0f0] rounded-full">
-            <span className="w-2 h-2 rounded-full bg-[#82b440]" />
-            <span className="text-[11px] font-medium tracking-[0.55px] text-[#52525b]">
-              STANDAR KONTRAK &amp; KERJASAMA
-            </span>
+      <section className="w-full border-b border-[#eaeaea] arch-grid-bg hero-band">
+        <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 py-10 sm:py-14 flex flex-col gap-3">
+          <div className="flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#52525b]">
+            <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+            <span>Standar Kontrak &amp; Kerjasama</span>
           </div>
-          <h1 className="text-[32px]/[40px] sm:text-[40px]/[48px] font-bold text-[#18181a] tracking-[-0.8px] m-0">
+          <h1
+            className="text-[32px]/[1.14] sm:text-[42px]/[1.1] font-semibold text-[#18181a] tracking-[-0.03em] m-0"
+            data-heading="true"
+          >
             Ketentuan Layanan
           </h1>
-          <p className="text-sm text-[#52525b] m-0 leading-6">
+          <p className="text-[15px]/[1.65] text-[#52525b] m-0 max-w-2xl">
             Prinsip kerja, transparansi ruang lingkup, dan jaminan purna jual dalam setiap kesepakatan implementasi perangkat lunak OpenByte Labs.
           </p>
         </div>
+      </section>
 
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* 2-Column Stitch Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] sticky top-24">
@@ -310,23 +346,25 @@ export function TermsPage({ settings }: { settings?: PublicSiteSettings }) {
 export function AboutPage({ settings }: { settings?: PublicSiteSettings }) {
   return (
     <PageFrame settings={settings}>
-      <div className="flex flex-col gap-10 py-2">
-        {/* Dark Hero Section matching Stitch */}
-        <section className="w-full bg-[#18181a] text-white rounded-[20px] p-8 sm:p-12 flex flex-col gap-5 shadow-[0px_8px_24px_#0000001a]">
-          <div className="w-fit flex items-center gap-2 p-[4px_12px] bg-[#d2d88f26] rounded-full">
-            <span className="w-2 h-2 rounded-full bg-[#d2d88f]" />
-            <span className="text-[11px] font-bold tracking-[0.5px] text-[#d2d88f]">
-              PROFIL STUDIO &amp; PRINSIP REKAYASA
-            </span>
+      <section className="w-full bg-[#18181a] border-b border-[#2e2e32] arch-grid-dark hero-band text-white py-14 sm:py-20">
+        <div className="mx-auto w-full max-w-[1440px] 2xl:max-w-[1600px] px-4 sm:px-6 lg:px-8 flex flex-col gap-4">
+          <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#e2e89d]">
+            <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+            <span>Profil Studio &amp; Prinsip Rekayasa</span>
           </div>
-          <h1 className="text-[32px]/[40px] sm:text-[44px]/[52px] font-extrabold tracking-[-1px] text-white m-0 max-w-4xl">
+          <h1
+            className="text-[32px]/[1.14] sm:text-[44px]/[1.1] lg:text-[50px]/[1.08] font-semibold tracking-[-0.03em] text-white m-0 max-w-4xl"
+            data-heading="true"
+          >
             Rekayasa Perangkat Lunak Presisi Tinggi untuk Sektor Strategis
           </h1>
-          <p className="text-[15px]/[24px] text-[#a1a1aa] m-0 max-w-3xl">
+          <p className="text-[15px]/[1.65] sm:text-[16px]/[1.65] text-[#a8a8ad] m-0 max-w-3xl">
             OpenByte Labs adalah software engineering studio yang berfokus pada pembangunan sistem informasi instansi, aplikasi mobile Flutter, dan arsitektur data berperforma tinggi tanpa kompromi integritas.
           </p>
-        </section>
+        </div>
+      </section>
 
+      <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 flex flex-col gap-10">
         {/* 4 Engineering Principles Bento Grid */}
         <section className="flex flex-col gap-5">
           <div className="flex flex-col gap-1">

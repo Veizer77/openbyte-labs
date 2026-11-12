@@ -56,6 +56,13 @@ type Taxonomy = { categories: string[]; technologies: string[] };
 
 function publicUrl(baseUrl: string | undefined, key: string | undefined) {
   if (!baseUrl || !key) return null;
+  const encodedKey = key
+    .split("/")
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  if (baseUrl.includes(".r2.dev")) {
+    return `/api/media/${encodedKey}`;
+  }
   const base = new URL(baseUrl);
   if (
     base.username ||
@@ -66,10 +73,6 @@ function publicUrl(baseUrl: string | undefined, key: string | undefined) {
   ) {
     throw new Error("R2_PUBLIC_BASE_URL tidak aman untuk media publik.");
   }
-  const encodedKey = key
-    .split("/")
-    .map((segment) => encodeURIComponent(segment))
-    .join("/");
   return `${base.toString().replace(/\/+$/, "")}/${encodedKey}`;
 }
 

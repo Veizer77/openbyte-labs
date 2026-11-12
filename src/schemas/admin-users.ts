@@ -15,6 +15,8 @@ export const adminUserUpdateInputSchema = z
     email: z.email().trim().max(254).transform((value) => value.toLowerCase()),
     role: z.enum(["owner", "editor"]),
     isActive: z.boolean(),
+    password: z.string().min(12).max(128).optional(),
+    resetTwoFactor: z.boolean().optional(),
   })
   .strict();
 

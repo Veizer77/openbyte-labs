@@ -40,6 +40,7 @@ export interface ProjectTransaction {
 
 export interface ProjectStore {
   list(options: ProjectListOptions): Promise<unknown[]>;
+  read?(id: string): Promise<unknown | null>;
   listVersions(
     id: string,
     options: z.output<typeof contentVersionListOptionsSchema>,
@@ -120,6 +121,53 @@ export async function listAdminProjects(
   authorize(principal, "projects", "read");
   const options = projectListOptionsSchema.parse(input);
   return z.array(projectRecordSchema).parse(await store.list(options));
+}
+
+export async function readAdminProject(
+  store: ProjectStore,
+  principal: AdminPrincipal | null,
+  id: string,
+): Promise<ProjectRecord | null> {
+  authorize(principal, "projects", "read");
+  z.uuid().parse(id);
+  const raw = store.read
+    ? await store.read(id)
+    : await store.transaction((tx) => tx.readCurrent(id));
+  if (!raw) return null;
+  return projectRecordSchema.parse(raw);
+}
+
+export async function duplicateProject(
+  store: ProjectStore,
+  principal: AdminPrincipal | null,
+  id: string,
+): Promise<string> {
+  authorize(principal, "projects", "create");
+  z.uuid().parse(id);
+  return store.transaction(async (tx) => {
+    const current = await tx.readCurrent(id);
+    if (!current) throw new Error("Proyek tidak ditemukan.");
+    const existing = projectRecordSchema.parse(current);
+    const baseInput = projectInputFromRecord(existing);
+    const suffix = Date.now().toString(36).slice(-4);
+    const duplicated = normalizeProjectInput({
+      ...baseInput,
+      title: `${existing.title} (Salinan)`.slice(0, 160),
+      slug: `${existing.slug}-salinan-${suffix}`.slice(0, 120),
+      isFeatured: false,
+    });
+    const savedId = await tx.save(null, duplicated);
+    if (!savedId) throw new Error("Gagal menduplikasi proyek.");
+    const saved = projectRecordSchema.parse(await tx.readCurrent(savedId));
+    await tx.appendVersion(
+      savedId,
+      projectSnapshotFromRecord(saved),
+      "draft",
+      principal.id,
+    );
+    await tx.audit(principal.id, "create", savedId);
+    return savedId;
+  });
 }
 
 export async function saveProject(

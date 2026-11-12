@@ -40,6 +40,7 @@ export function createPublicBookingAvailabilityStore(
             date: blockedDates.date,
             startTime: blockedDates.startTime,
             endTime: blockedDates.endTime,
+            reason: blockedDates.reason,
           })
           .from(blockedDates)
           .where(eq(blockedDates.date, date)),
@@ -64,9 +65,13 @@ export function createPublicBookingAvailabilityStore(
         consultationModes: config.availableModes,
         rules,
         blocks: blocks.map((block) => ({
-          date: block.date,
+          date:
+            typeof block.date === "string"
+              ? block.date.slice(0, 10)
+              : new Date(block.date).toISOString().slice(0, 10),
           startTime: block.startTime ?? undefined,
           endTime: block.endTime ?? undefined,
+          reason: block.reason || undefined,
         })),
         bookings: bookings.map((booking) => ({
           slotStart: booking.slotStart.toISOString(),
@@ -98,6 +103,7 @@ export function createPublicBookingAvailabilityStore(
             date: blockedDates.date,
             startTime: blockedDates.startTime,
             endTime: blockedDates.endTime,
+            reason: blockedDates.reason,
           })
           .from(blockedDates)
           .where(
@@ -126,9 +132,13 @@ export function createPublicBookingAvailabilityStore(
         consultationModes: config.availableModes,
         rules,
         blocks: blocks.map((block) => ({
-          date: block.date,
+          date:
+            typeof block.date === "string"
+              ? block.date.slice(0, 10)
+              : new Date(block.date).toISOString().slice(0, 10),
           startTime: block.startTime ?? undefined,
           endTime: block.endTime ?? undefined,
+          reason: block.reason || undefined,
         })),
         bookings: bookings.map((booking) => ({
           slotStart: booking.slotStart.toISOString(),

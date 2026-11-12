@@ -7,6 +7,7 @@ import { createProjectStore } from "@/db/project-store";
 import type { ContentVersionRecord } from "@/schemas/content-versions";
 import type { ProjectRecord } from "@/schemas/projects";
 import {
+  duplicateProject,
   listAdminProjects,
   listProjectVersions,
   publishProject,
@@ -142,6 +143,49 @@ export async function restoreProjectVersionAction(
       version,
     );
     return ok({ id });
+  } catch (error) {
+    return toFailure(error);
+  }
+}
+
+export async function duplicateProjectAction(
+  input: unknown,
+): Promise<ActionResult<{ id: string }>> {
+  try {
+    const { id } = z.object({ id: idSchema }).strict().parse(input);
+    const principal = await requireAdmin();
+    const duplicatedId = await duplicateProject(
+      createProjectStore(getDb()),
+      principal,
+      id,
+    );
+    revalidatePath("/proyek");
+    revalidatePath("/");
+    return ok({ id: duplicatedId });
+  } catch (error) {
+    return toFailure(error);
+  }
+}
+
+export async function bulkSetProjectTrashAction(
+  input: unknown,
+): Promise<ActionResult<{ count: number }>> {
+  try {
+    const { ids, trashed } = z
+      .object({
+        ids: z.array(idSchema).min(1).max(50),
+        trashed: z.boolean(),
+      })
+      .strict()
+      .parse(input);
+    const principal = await requireAdmin();
+    const store = createProjectStore(getDb());
+    for (const id of ids) {
+      await setProjectTrash(store, principal, id, trashed);
+    }
+    revalidatePath("/proyek");
+    revalidatePath("/");
+    return ok({ count: ids.length });
   } catch (error) {
     return toFailure(error);
   }

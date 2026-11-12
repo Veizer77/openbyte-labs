@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Image from "next/image";
 import {
+  bulkSetProjectTrashAction,
+  duplicateProjectAction,
   listAdminProjectsAction,
   publishProjectAction,
   saveProjectAction,
@@ -109,6 +111,7 @@ export function AdminProjectsPage() {
   const editorForm = useRef<HTMLFormElement>(null);
   const [dragging, setDragging] = useState<number | null>(null);
   const [versions, setVersions] = useState<ContentVersionRecord[]>([]);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [advanced, setAdvanced] = useState({
     gallery: "[]",
     contentBlocks: "[]",
@@ -362,6 +365,55 @@ export function AdminProjectsPage() {
     }
   }
 
+  async function handleDuplicate(project: ProjectRecord) {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    setError("");
+    setStatus("");
+    try {
+      const result = await duplicateProjectAction({ id: project.id });
+      if (!result.ok) {
+        setError(result.message);
+        return;
+      }
+      setStatus(`Proyek "${project.title}" berhasil diduplikasi sebagai draft.`);
+      setReloadKey((current) => current + 1);
+    } catch {
+      setError("Proyek tidak dapat diduplikasi.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function handleBulkTrash(trashed: boolean) {
+    if (isSubmitting || selectedIds.length === 0) return;
+    const prompt = trashed
+      ? `Pindahkan ${selectedIds.length} proyek terpilih ke Trash?`
+      : `Pulihkan ${selectedIds.length} proyek terpilih dari Trash?`;
+    if (!window.confirm(prompt)) return;
+    setIsSubmitting(true);
+    setError("");
+    setStatus("");
+    try {
+      const result = await bulkSetProjectTrashAction({ ids: selectedIds, trashed });
+      if (!result.ok) {
+        setError(result.message);
+        return;
+      }
+      setSelectedIds([]);
+      setStatus(
+        trashed
+          ? `${result.data.count} proyek dipindahkan ke Trash.`
+          : `${result.data.count} proyek dipulihkan dari Trash.`,
+      );
+      setReloadKey((current) => current + 1);
+    } catch {
+      setError("Aksi massal gagal dijalankan.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   function toggleId(
     key: "categoryIds" | "technologyIds",
     id: string,
@@ -459,9 +511,44 @@ export function AdminProjectsPage() {
                 { id: "trash", label: "Trash" },
               ]}
               active={filter}
-              onChange={setFilter}
+              onChange={(next) => {
+                setFilter(next);
+                setSelectedIds([]);
+              }}
             />
           </div>
+
+          {selectedIds.length > 0 ? (
+            <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-[10px] bg-[#f0f0f0] px-3 py-2 text-xs text-[#18181a]">
+              <span className="font-semibold">{selectedIds.length} proyek dipilih</span>
+              <div className="flex items-center gap-1.5">
+                {filter === "trash" ? (
+                  <ToolbarButton
+                    variant="light"
+                    disabled={isSubmitting}
+                    onClick={() => void handleBulkTrash(false)}
+                  >
+                    Pulihkan Terpilih
+                  </ToolbarButton>
+                ) : (
+                  <ToolbarButton
+                    variant="danger"
+                    disabled={isSubmitting}
+                    onClick={() => void handleBulkTrash(true)}
+                  >
+                    Trash Terpilih
+                  </ToolbarButton>
+                )}
+                <ToolbarButton
+                  variant="light"
+                  disabled={isSubmitting}
+                  onClick={() => setSelectedIds([])}
+                >
+                  Batal Pilih
+                </ToolbarButton>
+              </div>
+            </div>
+          ) : null}
 
           {isLoading ? (
             <p className="text-center text-xs text-[#71717a] py-8">Memuat proyek...</p>
@@ -504,6 +591,19 @@ export function AdminProjectsPage() {
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="min-w-0 flex-1">
                         <div className="flex flex-wrap items-center gap-2">
+                          <input
+                            type="checkbox"
+                            aria-label={`Pilih proyek ${project.title}`}
+                            checked={selectedIds.includes(project.id)}
+                            onChange={(e) =>
+                              setSelectedIds((prev) =>
+                                e.target.checked
+                                  ? [...prev, project.id]
+                                  : prev.filter((id) => id !== project.id),
+                              )
+                            }
+                            className="h-3.5 w-3.5 rounded accent-[#18181a] cursor-pointer"
+                          />
                           <h3 className="m-0 text-sm font-semibold text-[#18181a]">
                             {project.title}
                           </h3>
@@ -579,6 +679,13 @@ export function AdminProjectsPage() {
                               onClick={() => editProject(project)}
                             >
                               Ubah
+                            </ToolbarButton>
+                            <ToolbarButton
+                              variant="light"
+                              disabled={isSubmitting}
+                              onClick={() => void handleDuplicate(project)}
+                            >
+                              Duplikat
                             </ToolbarButton>
                             {project.status === "published" ? (
                               <ToolbarButton

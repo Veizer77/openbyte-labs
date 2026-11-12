@@ -10,33 +10,30 @@ import type { PublicSiteSettings } from "@/schemas/public-site-settings";
  */
 export function PublicBlog({ settings }: { settings?: PublicSiteSettings }) {
   return (
-    <div className="screen public-screen relative flex min-h-screen w-full flex-col items-stretch overflow-x-hidden bg-[#ffffff]">
+    <div className="screen public-screen has-editorial-hero relative flex min-h-screen w-full flex-col items-stretch overflow-x-hidden bg-[#ffffff]">
       <PublicHeader settings={settings} />
       <main
         id="konten"
-        className="relative z-0 flex w-full flex-1 flex-col items-stretch pb-16 pt-[64px]"
+        className="relative z-0 flex w-full flex-1 flex-col items-stretch pb-16 pt-[104px] lg:pt-[68px]"
       >
         <section
           aria-labelledby="blog-heading"
-          className="flex w-full flex-col items-center justify-center bg-[#18181A] py-14"
+          className="flex w-full flex-col items-center justify-center bg-[#18181a] border-b border-[#2e2e32] arch-grid-dark py-14 sm:py-16 hero-band"
         >
-          <div className="mx-auto flex w-full max-w-[1440px] flex-col items-start gap-4 px-4 sm:px-6 lg:px-8 2xl:max-w-[1600px]">
-            <div className="flex w-fit items-center gap-1.5 rounded-full bg-[#D2D88F26] px-3 py-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#D2D88F]" />
-              <span className="text-[11px] font-bold tracking-[0.5px] text-[#D2D88F]">
-                KUMPULAN INSIGHT &amp; TECH RADAR
-              </span>
+          <div className="mx-auto flex w-full max-w-[1440px] 2xl:max-w-[1600px] flex-col items-start gap-4 px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.14em] uppercase text-[#e2e89d]">
+              <span className="h-2 w-2 rounded-full bg-[#82b440]" />
+              <span>Jurnal Rekayasa &amp; Arsitektur</span>
             </div>
             <h1
               id="blog-heading"
-              className="m-0 w-full text-[32px]/[38px] font-extrabold tracking-[-1px] text-[#FFFFFF] sm:text-[42px]/[48px]"
+              className="m-0 max-w-3xl text-[32px]/[1.14] font-semibold tracking-[-0.03em] text-[#ffffff] sm:text-[44px]/[1.1]"
+              data-heading="true"
             >
               Wawasan Rekayasa &amp; Catatan Arsitektur Sistem
             </h1>
-            <p className="m-0 w-full text-[15px]/[24px] text-[#A1A1AA]">
-              Catatan teknis dari tim engineer OpenByte Labs: keputusan
-              arsitektur, praktik keamanan, dan efisiensi infrastruktur pada
-              proyek yang benar-benar dikerjakan.
+            <p className="m-0 max-w-2xl text-[15px]/[1.65] text-[#a8a8ad]">
+              Catatan teknis dari tim engineer OpenByte Labs: keputusan arsitektur, praktik keamanan, dan efisiensi infrastruktur pada proyek yang benar-benar dikerjakan.
             </p>
           </div>
         </section>
