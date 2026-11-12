@@ -56,8 +56,7 @@ export function PublicHeader({
             >
               <ReferenceImage
                 src={
-                  settings?.general.logoUrl ??
-                  "/images/OpenByte%20Labs%20Tech%20Logo-1.png"
+                  settings?.general.logoUrl ?? "/images/openbyte_labs_logo.svg"
                 }
                 alt={brandName}
                 contain

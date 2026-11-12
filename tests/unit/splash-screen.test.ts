@@ -8,7 +8,7 @@ describe("SplashScreen", () => {
     const html = renderToStaticMarkup(createElement(SplashScreen));
 
     expect(html).toContain('id="splash-screen"');
-    expect(html).toContain("/images/OpenByte%20Labs%20Tech%20Logo-1.png");
+    expect(html).toContain("/images/openbyte_labs_logo.svg");
     expect(html).toContain("Memuat OpenByte Labs");
     expect(html).toContain("bg-white");
   });

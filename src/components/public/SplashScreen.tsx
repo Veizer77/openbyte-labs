@@ -61,7 +61,7 @@ export function SplashScreen() {
           {/* Logo OpenByte Labs */}
           <div className="relative mb-8 w-full flex justify-center">
             <Image
-              src="/images/OpenByte%20Labs%20Tech%20Logo-1.png"
+              src="/images/openbyte_labs_logo.svg"
               alt="OpenByte Labs"
               width={1589}
               height={413}
