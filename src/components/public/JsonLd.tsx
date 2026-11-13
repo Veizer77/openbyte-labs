@@ -119,8 +119,9 @@ export function ProjectJsonLd({
 
 /**
  * Data terstruktur `Product` untuk /store/[slug]. Harga memakai IDR tanpa
- * pecahan (schema.org mewajibkan string desimal) dan `availability` diambil
- * dari `hasPackage` supaya produk tanpa berkas unduhan tidak ditandai InStock.
+ * pecahan (schema.org mewajibkan string desimal), `availability` diambil
+ * dari `hasPackage`, dan `offers` menyertakan pengiriman digital gratis (0 hari)
+ * serta kebijakan non-retur produk digital untuk memenuhi validasi GSC Merchant Listings.
  */
 export function StoreProductJsonLd({
   product,
@@ -140,6 +141,39 @@ export function StoreProductJsonLd({
       ? "https://schema.org/InStock"
       : "https://schema.org/OutOfStock",
     seller: { "@type": "Organization", name: brandName, url: siteUrl },
+    shippingDetails: {
+      "@type": "OfferShippingDetails",
+      shippingRate: {
+        "@type": "MonetaryAmount",
+        value: "0",
+        currency: "IDR",
+      },
+      shippingDestination: {
+        "@type": "DefinedRegion",
+        addressCountry: "ID",
+      },
+      deliveryTime: {
+        "@type": "ShippingDeliveryTime",
+        handlingTime: {
+          "@type": "QuantitativeValue",
+          minValue: 0,
+          maxValue: 0,
+          unitCode: "DAY",
+        },
+        transitTime: {
+          "@type": "QuantitativeValue",
+          minValue: 0,
+          maxValue: 0,
+          unitCode: "DAY",
+        },
+      },
+    },
+    hasMerchantReturnPolicy: {
+      "@type": "MerchantReturnPolicy",
+      applicableCountry: "ID",
+      returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+      merchantReturnLink: `${siteUrl}/ketentuan-layanan`,
+    },
   };
   const payload = {
     "@context": "https://schema.org",
