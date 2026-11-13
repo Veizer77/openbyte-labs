@@ -5,6 +5,7 @@ import { NavigationProgress } from "@/components/public/NavigationProgress";
 import { SplashScreen } from "@/components/public/SplashScreen";
 import "./globals.css";
 import { publicIndexingEnabled, publicSiteOrigin } from "@/lib/indexing";
+import { PUBLIC_SITE_ICONS } from "@/lib/seo-icons";
 
 const inter = localFont({
   src: "../../public/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2",
@@ -22,15 +23,7 @@ export const metadata: Metadata = {
   description:
     "Website bisnis, aplikasi mobile Flutter, dan sistem informasi dari OpenByte Labs.",
   robots: { index: publicIndexingEnabled(), follow: publicIndexingEnabled() },
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/images/5f9e6a2ac345b8dc.png", type: "image/png" },
-      { url: "/brand/openbyte-labs-square-icon-1-1-logo-only.svg", type: "image/svg+xml" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: "/images/5f9e6a2ac345b8dc.png",
-  },
+  icons: PUBLIC_SITE_ICONS,
 };
 
 export default function RootLayout({

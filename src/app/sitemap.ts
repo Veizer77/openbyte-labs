@@ -19,22 +19,48 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Catatan: "/blog" sengaja tidak dimasukkan. Modul editorial belum ada,
   // jadi halaman itu hanya berisi keadaan kosong dan tidak layak diindeks.
   const store = createPublicProjectStore(getDb(), getEnv().R2_PUBLIC_BASE_URL);
-  for (let offset = 0; ; offset += 100) {
-    const batch = await listPublicProjects(store, { limit: 100, offset });
-    for (const project of batch) paths.add(`/proyek/${project.slug}`);
-    if (batch.length < 100) break;
-  }
-  for (const service of await getPublicServiceList()) {
+  const fetchProjectSlugs = async () => {
+    const slugs: string[] = [];
+    for (let offset = 0; ; offset += 100) {
+      const batch = await listPublicProjects(store, { limit: 100, offset });
+      for (const project of batch) slugs.push(`/proyek/${project.slug}`);
+      if (batch.length < 100) break;
+    }
+    return slugs;
+  };
+  const fetchCustomPages = async () => {
+    const rows = await getDb()
+      .select({ slug: pages.slug })
+      .from(pages)
+      .where(and(eq(pages.publicationEnabled, true), isNull(pages.deletedAt)));
+    const resolved = await Promise.all(rows.map((item) => getPublicPageView(item.slug)));
+    const excluded = new Set(["proyek", "paket", "kalkulator", "pesan", "konsultasi", "tracking", "admin", "api", "health"]);
+    const customPaths: string[] = [];
+    for (const page of resolved) {
+      if (page && !excluded.has(page.slug)) {
+        customPaths.push(page.slug === "home" ? "/" : page.slug === "tentang" ? "/tentang-kami" : `/${page.slug}`);
+      }
+    }
+    return customPaths;
+  };
+
+  const [projectPaths, services, storeSlugs, customPaths] = await Promise.all([
+    fetchProjectSlugs(),
+    getPublicServiceList(),
+    listStoreSitemapSlugs(),
+    fetchCustomPages(),
+  ]);
+
+  for (const projectPath of projectPaths) paths.add(projectPath);
+  for (const service of services) {
     const slug = serviceSlug(service.title);
     if (slug) paths.add(`/layanan/${slug}`);
   }
-  for (const slug of await listStoreSitemapSlugs()) {
+  for (const slug of storeSlugs) {
     paths.add(`/store/${slug}`);
   }
-  const customPages = await getDb().select({ slug: pages.slug }).from(pages).where(and(eq(pages.publicationEnabled, true), isNull(pages.deletedAt)));
-  for (const item of customPages) {
-    const page = await getPublicPageView(item.slug);
-    if (page && !["proyek", "paket", "kalkulator", "pesan", "konsultasi", "tracking", "admin", "api", "health"].includes(page.slug)) paths.add(page.slug === "home" ? "/" : page.slug === "tentang" ? "/tentang-kami" : `/${page.slug}`);
+  for (const customPath of customPaths) {
+    paths.add(customPath);
   }
   return [...paths].map((path) => ({ url: `${origin}${path}` }));
 }

@@ -48,6 +48,40 @@ export function OrganizationJsonLd({
   );
 }
 
+/**
+ * Skema `WebSite` di beranda agar Google Search mengenali Site Name resmi
+ * ("OpenByte Labs") alih-alih hanya menampilkan domain mentah.
+ */
+export function WebSiteJsonLd({
+  settings,
+}: {
+  settings?: PublicSiteSettings;
+}) {
+  const brandName = settings?.general.brandName || "OpenByte Labs";
+  const compactBrand = brandName.replace(/\s+/g, "");
+  const alternateName =
+    compactBrand && compactBrand.toLowerCase() !== brandName.toLowerCase()
+      ? [compactBrand]
+      : undefined;
+
+  const payload = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: brandName,
+    alternateName,
+    url: `${siteOrigin()}/`,
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(payload).replace(/</g, "\\u003c"),
+      }}
+    />
+  );
+}
+
 export function ProjectJsonLd({
   project,
   settings,

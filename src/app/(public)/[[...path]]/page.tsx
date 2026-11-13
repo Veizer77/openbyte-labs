@@ -18,8 +18,15 @@ import { PublicPageBuilder } from "@/components/public/PublicPageBuilder";
 import { PublicBlog } from "@/components/public/PublicBlog";
 import { PublicServiceDetail } from "@/components/public/PublicServiceDetail";
 import { findServiceBySlug } from "@/lib/service-slug";
+import { buildPublicPageIcons } from "@/lib/seo-icons";
+import { formatPublicPageTitle } from "@/lib/seo-title";
 import { publicIndexingEnabled } from "@/lib/indexing";
-import { OrganizationJsonLd, ProjectJsonLd, StoreProductJsonLd } from "@/components/public/JsonLd";
+import {
+  OrganizationJsonLd,
+  ProjectJsonLd,
+  StoreProductJsonLd,
+  WebSiteJsonLd,
+} from "@/components/public/JsonLd";
 import { PublicStoreCatalog } from "@/components/public/PublicStoreCatalog";
 import { PublicStoreDetail } from "@/components/public/PublicStoreDetail";
 import { PublicStoreAccess } from "@/components/public/PublicStoreAccess";
@@ -161,10 +168,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     knownRoute &&
     path !== "store/akses";
   return {
-    title: { absolute: title },
+    title: formatPublicPageTitle(title, settings?.general.brandName, {
+      isHome: path === "",
+    }),
     description,
     alternates: { canonical: `/${path}` },
-    icons: settings?.general.faviconUrl ? { icon: settings.general.faviconUrl } : undefined,
+    icons: buildPublicPageIcons(settings?.general.faviconUrl),
     openGraph: {
       title,
       description,
@@ -230,6 +239,7 @@ export default async function PublicPage({ params }: Props) {
     return (
       <>
         <OrganizationJsonLd settings={catalog.settings} />
+        <WebSiteJsonLd settings={catalog.settings} />
         <Home catalog={catalog} />
       </>
     );
