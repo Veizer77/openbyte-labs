@@ -104,13 +104,13 @@ export function PublicHomeServices({
       className="box-border w-full h-fit shrink-0 flex flex-col gap-[20px] justify-start items-start"
     >
       <div className="box-border w-full h-fit shrink-0 flex flex-col md:flex-row gap-[12px] justify-between items-start md:items-end">
-        <div className="flex flex-col gap-[4px] justify-start items-start">
-          <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+        <div className="flex flex-col gap-[4px] justify-start items-start min-w-0">
+          <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left">
             KATALOG REKAYASA &amp; EKSEKUSI
           </div>
           <h2
             id={headingId}
-            className="text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.56px] text-left [white-space:nowrap] m-0"
+            className="text-[24px]/[30px] sm:text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.56px] text-left m-0"
           >
             {title}
           </h2>
@@ -131,7 +131,7 @@ export function PublicHomeServices({
             return (
               <article
                 key={service.id}
-                className={`box-border ${colSpan} [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col justify-between p-[24px] bg-[#ffffff] rounded-[16px] min-h-[230px]`}
+                className={`box-border ${colSpan} [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col justify-between p-5 sm:p-[24px] bg-[#ffffff] rounded-[16px] min-h-[230px]`}
               >
                 <div className="box-border w-full flex flex-col gap-0 pb-[20px] justify-start items-start">
                   <div className="box-border w-[40px] h-[40px] shrink-0 flex flex-row gap-0 justify-center items-center bg-[#f0f0f0] rounded-[12px] text-[#18181a]">
@@ -151,8 +151,8 @@ export function PublicHomeServices({
                     {service.description}
                   </p>
                 </div>
-                <div className="box-border w-full flex flex-row gap-0 pt-[12px] justify-between items-center border-t border-neutral-100">
-                  <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+                <div className="box-border w-full flex flex-row flex-wrap gap-x-3 gap-y-2 pt-[12px] justify-between items-center border-t border-neutral-100">
+                  <div className="text-[11px]/[14px] box-border min-w-0 flex-1 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left">
                     {service.highlights[0] ?? "Sektor & ruang lingkup dibahas per proyek"}
                   </div>
                   <Link
@@ -206,14 +206,14 @@ export function PublicHomeProjects({
       aria-labelledby={headingId}
       className="box-border w-full h-fit shrink-0 flex flex-col gap-[20px] justify-start items-start"
     >
-      <div className="box-border w-full h-fit shrink-0 flex flex-row gap-[8px] justify-between items-end">
-        <div className="box-border w-fit shrink-0 flex flex-col gap-[4px] justify-start items-start">
-          <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+      <div className="box-border w-full h-fit shrink-0 flex flex-col sm:flex-row gap-2 sm:gap-[8px] justify-between items-start sm:items-end">
+        <div className="box-border min-w-0 flex flex-col gap-[4px] justify-start items-start">
+          <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left">
             PROYEK PILIHAN
           </div>
           <h2
             id={headingId}
-            className="text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.56px] text-left [white-space:nowrap] m-0"
+            className="text-[24px]/[30px] sm:text-[28px]/[36px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.56px] text-left m-0"
           >
             {title}
           </h2>
@@ -262,8 +262,8 @@ export function PublicHomeProjects({
                 )}
               </div>
               <div className="box-border w-full flex-1 flex flex-col p-[24px] justify-between items-start gap-4">
-                <div className="box-border w-full flex flex-col gap-[4px] justify-start items-start">
-                  <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+                <div className="box-border w-full flex flex-col gap-[4px] justify-start items-start min-w-0">
+                  <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left">
                     {project.categories[0] ?? "Kategori Belum Diverifikasi"}
                   </div>
                   <h3 className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left m-0">
@@ -273,8 +273,8 @@ export function PublicHomeProjects({
                     {project.tagline || project.summary}
                   </p>
                 </div>
-                <div className="box-border w-full flex flex-row gap-0 pt-[8px] justify-between items-center border-t border-neutral-100">
-                  <div className="text-[11px]/[14px] box-border text-[#82b440] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+                <div className="box-border w-full flex flex-row flex-wrap gap-2 pt-[8px] justify-between items-center border-t border-neutral-100">
+                  <div className="text-[11px]/[14px] box-border text-[#82b440] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left">
                     {project.isFeatured ? "Unggulan • Terverifikasi" : "Terdokumentasi"}
                   </div>
                   <Link
@@ -323,15 +323,15 @@ export function PublicHomeFaqs({
   return (
     <div
       aria-labelledby={headingId}
-      className="box-border w-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[12px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+      className="box-border w-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[12px] p-5 sm:p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
     >
-      <div className="box-border w-full flex flex-col gap-[4px] justify-start items-start">
-        <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]">
+      <div className="box-border w-full flex flex-col gap-[4px] justify-start items-start min-w-0">
+        <div className="text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left">
           PERTANYAAN UMUM
         </div>
         <h2
           id={headingId}
-          className="text-[20px]/[26px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left [white-space:nowrap] m-0"
+          className="text-[20px]/[26px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.3px] text-left m-0"
         >
           {title}
         </h2>
@@ -344,7 +344,7 @@ export function PublicHomeFaqs({
               key={faq.id}
               className="group box-border w-full flex flex-col gap-0 p-[12px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
             >
-              <summary className="box-border w-full flex flex-row gap-0 justify-between items-center cursor-pointer list-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016] [&::-webkit-details-marker]:hidden">
+              <summary className="box-border w-full flex flex-row gap-3 justify-between items-center cursor-pointer list-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#586016] [&::-webkit-details-marker]:hidden">
                 <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left">
                   {faq.question}
                 </span>
@@ -369,8 +369,8 @@ export function PublicHomeFaqs({
 
       {showContact ? (
         <div className="box-border w-full flex flex-col sm:flex-row gap-3 p-[12px] justify-between items-start sm:items-center bg-[#f0f0f0] rounded-[12px]">
-          <div className="flex flex-col gap-[4px] justify-start items-start">
-            <div className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]">
+          <div className="flex flex-col gap-[4px] justify-start items-start min-w-0">
+            <div className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left">
               Ada pertanyaan teknis spesifik?
             </div>
             <div className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left">
@@ -459,11 +459,11 @@ export function PublicTestimonials({
                       </span>
                     )}
                   </div>
-                  <div className="flex flex-col gap-[2px] justify-start items-start">
-                    <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]">
+                  <div className="flex flex-col gap-[2px] justify-start items-start min-w-0 flex-1">
+                    <span className="text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left">
                       {testimonial.authorName}
                     </span>
-                    <span className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+                    <span className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left">
                       {testimonial.authorRole ?? "Klien OpenByte Labs"}
                     </span>
                   </div>
@@ -502,14 +502,14 @@ export function PublicTestimonials({
           )}
         </div>
       </div>
-      <div className="box-border w-full flex flex-row gap-[8px] pt-[16px] justify-start items-center border-t border-neutral-100">
+      <div className="box-border w-full flex flex-row gap-[8px] pt-[16px] justify-start items-start sm:items-center border-t border-neutral-100">
         <span
           aria-hidden="true"
-          className="text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
+          className="text-[16px]/[24px] box-border shrink-0 text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal symbol"
         >
           verified
         </span>
-        <span className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]">
+        <span className="text-[11px]/[14px] box-border min-w-0 flex-1 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left">
           Dokumen serah terima dibahas dan disepakati per proyek
         </span>
       </div>

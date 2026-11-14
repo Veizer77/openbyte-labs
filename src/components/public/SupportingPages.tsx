@@ -149,7 +149,7 @@ export function PrivacyPage({
       <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* 2-Column Stitch Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] sticky top-24">
+          <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] lg:sticky lg:top-24">
             <span className="text-[11px] font-bold tracking-[0.55px] text-[#595962] uppercase">
               RINGKASAN KEBIJAKAN
             </span>
@@ -277,7 +277,7 @@ export function TermsPage({ settings }: { settings?: PublicSiteSettings }) {
       <div className="w-full max-w-[1440px] 2xl:max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         {/* 2-Column Stitch Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] sticky top-24">
+          <aside className="lg:col-span-4 flex flex-col gap-4 p-5 bg-[#f0f0f0] rounded-[16px] lg:sticky lg:top-24">
             <span className="text-[11px] font-bold tracking-[0.55px] text-[#595962] uppercase">
               PASAL POKOK
             </span>
@@ -437,12 +437,12 @@ export function AboutPage({ settings }: { settings?: PublicSiteSettings }) {
 
         {/* Founder / Engineering Profile Card */}
         <section className="p-6 sm:p-8 bg-[#ffffff] border border-neutral-200/80 rounded-[16px] shadow-[0px_1px_3px_#0000000d] flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
-          <div className="flex items-center gap-5">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 min-w-0">
             <div className="w-16 h-16 rounded-full bg-[#18181a] text-[#e2e89d] flex items-center justify-center font-bold text-xl shrink-0">
               MIF
             </div>
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xl font-bold text-[#18181a]">
                   Muhammad Izzat Farahidi
                 </span>

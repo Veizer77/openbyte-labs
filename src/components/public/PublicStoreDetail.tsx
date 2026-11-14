@@ -914,7 +914,7 @@ export function PublicStoreDetail({
 
             {/* Right: sticky checkout */}
             <div className="lg:col-span-5">
-              <div className="sticky top-24 flex flex-col gap-4 rounded-[16px] border border-[#eaeaea] bg-white p-6 shadow-[0px_2px_12px_#0000000a]">
+              <div className="lg:sticky lg:top-24 flex flex-col gap-4 rounded-[16px] border border-[#eaeaea] bg-white p-6 shadow-[0px_2px_12px_#0000000a]">
                 {result ? (
                   <div className="flex flex-col gap-3 rounded-[12px] border border-[#d6eed3] bg-[#eef8ed] p-4">
                     <div className="flex items-center gap-2 text-[13px] font-semibold text-[#457c1d]">

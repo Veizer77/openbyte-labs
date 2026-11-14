@@ -257,21 +257,21 @@ export function BookingCalendar(props: Props) {
   return (
     <div {...props}>
       <div
-        className="box-border w-full h-[44px] shrink-0 flex flex-row gap-0 justify-between items-center"
+        className="box-border w-full min-h-[44px] h-auto shrink-0 flex flex-row gap-2 justify-between items-center"
         data-pencil-name="div"
       >
         <div
-          className="box-border w-fit shrink-0 h-[38px] flex flex-col gap-0 justify-start items-start"
+          className="box-border min-w-0 flex-1 h-auto flex flex-col gap-0 justify-start items-start"
           data-pencil-name="div"
         >
           <div
-            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left"
             data-pencil-name="PILIH TANGGAL"
           >
             PILIH TANGGAL
           </div>
           <div
-            className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+            className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
             data-pencil-name={formattedTitle}
           >
             {formattedTitle}
@@ -422,11 +422,11 @@ export function BookingCalendar(props: Props) {
       ) : null}
 
       <div
-        className="box-border w-full h-fit shrink-0 [filter:drop-shadow(0px_-1px_0px_#eaeaea)] flex flex-row gap-0 p-[12px_0px_0px_0px] justify-between items-center"
+        className="box-border w-full h-fit shrink-0 [filter:drop-shadow(0px_-1px_0px_#eaeaea)] flex flex-row flex-wrap gap-x-4 gap-y-2 pt-[12px] justify-start sm:justify-between items-center"
         data-pencil-name="div"
       >
         <div
-          className="box-border w-fit shrink-0 h-[14px] flex flex-row gap-[4px] justify-start items-center"
+          className="box-border w-fit shrink-0 min-h-[14px] h-auto flex flex-row gap-[4px] justify-start items-center"
           data-pencil-name="span"
         >
           <div
@@ -434,14 +434,14 @@ export function BookingCalendar(props: Props) {
             data-pencil-name="span"
           />
           <div
-            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
             data-pencil-name="Terpilih"
           >
             Terpilih
           </div>
         </div>
         <div
-          className="box-border w-fit shrink-0 h-[14px] flex flex-row gap-[4px] justify-start items-center"
+          className="box-border w-fit shrink-0 min-h-[14px] h-auto flex flex-row gap-[4px] justify-start items-center"
           data-pencil-name="span"
         >
           <div
@@ -449,14 +449,14 @@ export function BookingCalendar(props: Props) {
             data-pencil-name="span"
           />
           <div
-            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
             data-pencil-name="Slot Tersedia"
           >
             Slot Tersedia
           </div>
         </div>
         <div
-          className="box-border w-fit shrink-0 h-[14px] flex flex-row gap-[4px] justify-start items-center"
+          className="box-border w-fit shrink-0 min-h-[14px] h-auto flex flex-row gap-[4px] justify-start items-center"
           data-pencil-name="span"
         >
           <div
@@ -464,14 +464,14 @@ export function BookingCalendar(props: Props) {
             data-pencil-name="span"
           />
           <div
-            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
             data-pencil-name="Hari Libur"
           >
             Hari Libur
           </div>
         </div>
         <div
-          className="box-border w-fit shrink-0 h-[14px] flex flex-row gap-[4px] justify-start items-center"
+          className="box-border w-fit shrink-0 min-h-[14px] h-auto flex flex-row gap-[4px] justify-start items-center"
           data-pencil-name="span"
         >
           <div
@@ -479,7 +479,7 @@ export function BookingCalendar(props: Props) {
             data-pencil-name="span"
           />
           <div
-            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
             data-pencil-name="Akhir Pekan"
           >
             Akhir Pekan
@@ -535,15 +535,15 @@ export function BookingSlots(props: Props) {
   return (
     <div {...props}>
       <div
-        className="box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+        className="box-border w-full h-fit shrink-0 flex flex-col sm:flex-row gap-2 justify-between items-start sm:items-center"
         data-pencil-name="div"
       >
         <div
-          className="box-border w-fit shrink-0 h-[38px] flex flex-col gap-0 justify-start items-start"
+          className="box-border min-w-0 flex-1 h-auto flex flex-col gap-0 justify-start items-start"
           data-pencil-name="div"
         >
           <div
-            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+            className="text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left"
             data-pencil-name="SLOT WAKTU SESI"
           >
             {`SLOT WAKTU SESI • ${
@@ -555,7 +555,7 @@ export function BookingSlots(props: Props) {
             }${isHoliday ? " (LIBUR)" : ""}`}
           </div>
           <div
-            className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+            className="text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
             data-pencil-name="Pilih Jam Pertemuan"
           >
             {isHoliday
@@ -652,7 +652,7 @@ export function BookingSlots(props: Props) {
           </p>
         </div>
       ) : allSlots.length ? (
-        <div className="grid grid-cols-2 gap-[8px] w-full" data-pencil-name="div">
+        <div className="grid grid-cols-1 min-[440px]:grid-cols-2 gap-[8px] w-full" data-pencil-name="div">
           {allSlots.map((option, index) => {
             const isSelected = slot === option.start;
             const period = getSessionPeriod(option.label, index);
@@ -698,7 +698,7 @@ export function BookingSlots(props: Props) {
                     setSlot(option.start);
                   }
                 }}
-                className={`box-border w-full h-[82px] flex flex-col gap-[2px] p-[12px] justify-start items-start rounded-[12px] text-left transition-colors ${
+                className={`box-border w-full min-h-[76px] min-[440px]:h-[82px] h-auto flex flex-col gap-[2px] p-[12px] justify-start items-start rounded-[12px] text-left transition-colors ${
                   !isAvailable
                     ? "bg-[#f4f4f5] opacity-60 cursor-not-allowed"
                     : isSelected
@@ -709,11 +709,11 @@ export function BookingSlots(props: Props) {
                 title={!isAvailable ? (isPast ? "Jam sesi ini sudah terlewat" : statusText) : undefined}
               >
                 <div
-                  className="box-border w-full h-[16px] shrink-0 flex flex-row gap-0 justify-between items-center"
+                  className="box-border w-full min-h-[16px] h-auto shrink-0 flex flex-row gap-2 justify-between items-center"
                   data-pencil-name="div"
                 >
                   <div
-                    className={`text-[11px]/[14px] box-border font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap] ${
+                    className={`text-[11px]/[14px] box-border font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left ${
                       !isAvailable
                         ? "text-[#71717a]"
                         : isSelected
@@ -730,7 +730,7 @@ export function BookingSlots(props: Props) {
                   />
                 </div>
                 <div
-                  className={`text-[18px]/[24px] box-border font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap] ${
+                  className={`text-[16px]/[22px] min-[480px]:text-[18px]/[24px] box-border font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left ${
                     !isAvailable
                       ? "text-[#71717a]"
                       : isSelected
@@ -742,7 +742,7 @@ export function BookingSlots(props: Props) {
                   {option.label}
                 </div>
                 <div
-                  className={`text-[11px]/[14px] box-border font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap] ${
+                  className={`text-[11px]/[14px] box-border font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left ${
                     !isAvailable
                       ? statusTextColor
                       : isSelected
@@ -785,7 +785,7 @@ export function BookingSlots(props: Props) {
           MODE KONSULTASI
         </div>
         <div
-          className="box-border w-full h-fit shrink-0 grid grid-cols-3 gap-[8px]"
+          className="box-border w-full h-fit shrink-0 grid grid-cols-1 min-[460px]:grid-cols-3 gap-[8px]"
           data-pencil-name="div"
         >
           {[
@@ -819,7 +819,7 @@ export function BookingSlots(props: Props) {
                 onClick={() => setMode(item.id)}
                 aria-label={item.title}
                 aria-pressed={isSelected}
-                className={`box-border w-full h-[90px] flex flex-col gap-0 p-[10px] justify-start items-center rounded-[12px] cursor-pointer transition-colors ${
+                className={`box-border w-full min-h-[60px] min-[460px]:min-h-[90px] h-auto flex flex-row min-[460px]:flex-col gap-3 min-[460px]:gap-0 p-3 min-[460px]:p-[10px] justify-start items-center rounded-[12px] cursor-pointer transition-colors ${
                   isSelected
                     ? "bg-[#18181a]"
                     : "bg-[#f0f0f0] hover:bg-[#e4e4e7]"
@@ -827,7 +827,7 @@ export function BookingSlots(props: Props) {
                 data-pencil-name={item.title}
               >
                 <div
-                  className={`text-[18px]/[28px] box-border font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap] symbol ${
+                  className={`text-[18px]/[28px] box-border shrink-0 font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap] symbol ${
                     isSelected ? "text-[#ffffff]" : item.inactiveIconColor
                   }`}
                   data-pencil-name={item.icon}
@@ -835,22 +835,24 @@ export function BookingSlots(props: Props) {
                 >
                   {item.icon}
                 </div>
-                <div className="box-border w-full h-[4px] shrink-0" data-pencil-name="spacer" />
-                <div
-                  className={`text-[13px]/[18px] box-border font-[var(--font-inter),system-ui,sans-serif] font-medium text-center [white-space:nowrap] ${
-                    isSelected ? "text-[#ffffff]" : "text-[#18181a]"
-                  }`}
-                  data-pencil-name={item.title}
-                >
-                  {item.title}
-                </div>
-                <div
-                  className={`text-[10px]/[20px] box-border font-[var(--font-inter),system-ui,sans-serif] font-normal text-center [white-space:nowrap] ${
-                    isSelected ? "opacity-[0.75] text-[#ffffff]" : "opacity-[0.75] text-[#18181a]"
-                  }`}
-                  data-pencil-name={item.subtitle}
-                >
-                  {item.subtitle}
+                <div className="hidden min-[460px]:block box-border w-full h-[4px] shrink-0" data-pencil-name="spacer" />
+                <div className="flex flex-col items-start min-[460px]:items-center min-w-0">
+                  <div
+                    className={`text-[13px]/[18px] box-border font-[var(--font-inter),system-ui,sans-serif] font-medium text-left min-[460px]:text-center ${
+                      isSelected ? "text-[#ffffff]" : "text-[#18181a]"
+                    }`}
+                    data-pencil-name={item.title}
+                  >
+                    {item.title}
+                  </div>
+                  <div
+                    className={`text-[11px]/[15px] min-[460px]:text-[10px]/[14px] box-border font-[var(--font-inter),system-ui,sans-serif] font-normal text-left min-[460px]:text-center mt-0.5 ${
+                      isSelected ? "opacity-[0.75] text-[#ffffff]" : "opacity-[0.75] text-[#18181a]"
+                    }`}
+                    data-pencil-name={item.subtitle}
+                  >
+                    {item.subtitle}
+                  </div>
                 </div>
               </button>
             );

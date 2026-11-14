@@ -275,8 +275,8 @@ export function ProjectDetail({
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#18181a] via-transparent to-transparent opacity-60" />
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-white">
-                  <span className="bg-[#18181acc] backdrop-blur px-3 py-1 rounded-[8px]">
+                <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center justify-between gap-2 text-xs text-white">
+                  <span className="bg-[#18181acc] backdrop-blur px-3 py-1 rounded-[8px] max-w-full">
                     {project.title} • Tangkapan Layar Resmi
                   </span>
                   {project.year ? (
@@ -354,13 +354,13 @@ export function ProjectDetail({
                       </div>
                       <div className="p-3 bg-[#242427] rounded-[12px] flex flex-col">
                         <span className="text-xs text-[#a8a8ad]">Kategori</span>
-                        <span className="text-xl font-bold text-white mt-1">
+                        <span className="text-base sm:text-xl font-bold text-white mt-1 break-words">
                           {project.categories.length > 0 ? project.categories.join(", ") : "—"}
                         </span>
                       </div>
                       <div className="p-3 bg-[#242427] rounded-[12px] flex flex-col">
                         <span className="text-xs text-[#a8a8ad]">Teknologi</span>
-                        <span className="text-xl font-bold text-[#e2e89d] mt-1">
+                        <span className="text-base sm:text-xl font-bold text-[#e2e89d] mt-1 break-words">
                           {project.technologies.length > 0 ? project.technologies.join(", ") : "—"}
                         </span>
                       </div>
@@ -395,7 +395,7 @@ export function ProjectDetail({
           {/* Related Projects Section */}
           {related.length ? (
             <section className="flex flex-col gap-5 pt-8 border-t border-neutral-200/80">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-2xl font-semibold text-[#18181a] tracking-[-0.3px] m-0">
                   Studi Kasus Lainnya
                 </h2>

@@ -484,13 +484,11 @@ details[open] > summary .symbol {
   }
 }
 @media (max-width: 1199px) {
-  .screen div,
-  .screen section,
-  .screen article {
+  :where(.screen div, .screen section, .screen article) {
     min-width: 0;
     max-width: 100%;
   }
-  .screen div.flex-row:not([data-table-scroll] *) {
+  :where(.screen div.flex-row:not([data-table-scroll] *)) {
     flex-wrap: wrap;
     height: auto;
   }
@@ -545,12 +543,13 @@ details[open] > summary .symbol {
   .screen [data-table-scroll] {
     overflow-x: auto !important;
     width: 100% !important;
+    max-width: 100%;
   }
-  .screen [data-table-scroll] > [data-pencil-name="table"] {
+  :where(.screen [data-table-scroll] [data-pencil-name="table"]) {
     min-width: 1000px;
     max-width: none;
   }
-  .screen [data-table-scroll] [data-pencil-name="table"] div {
+  :where(.screen [data-table-scroll] [data-pencil-name="table"] div) {
     max-width: none;
   }
   .screen [data-custom-table] {

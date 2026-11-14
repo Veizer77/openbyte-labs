@@ -175,20 +175,19 @@ export default async function SiteBookingKonsultasi() {
                     </div>
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row gap-[12px] p-[9px_0px_0px_0px] justify-start items-start [border-width:1px_0px_0px_0px] [border-style:solid] [border-color:#2e2e32] relative [z-index:2]"
+                        "box-border w-full h-fit shrink-0 grid grid-cols-1 min-[420px]:grid-cols-3 gap-[12px] pt-[9px] [border-width:1px_0px_0px_0px] [border-style:solid] [border-color:#2e2e32] relative [z-index:2]"
                       }
                       data-pencil-name={"div"}
-                      data-responsive="row"
                     >
                       <div
                         className={
-                          "box-border [flex:1_1_0] h-[35px] flex flex-col gap-0 justify-start items-start"
+                          "box-border min-w-0 h-auto flex flex-col gap-0 justify-start items-start"
                         }
                         data-pencil-name={"div"}
                       >
                         <div
                           className={
-                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                           }
                           data-pencil-name={"TANGGAL SESI"}
                           data-text="true"
@@ -198,7 +197,7 @@ export default async function SiteBookingKonsultasi() {
                         <BookingValue
                           kind={"date"}
                           className={
-                            "text-[16px]/[20px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            "text-[16px]/[20px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left"
                           }
                           data-pencil-name={"18 Mei 2026"}
                           data-text="true"
@@ -206,13 +205,13 @@ export default async function SiteBookingKonsultasi() {
                       </div>
                       <div
                         className={
-                          "box-border [flex:1_1_0] h-[35px] flex flex-col gap-0 justify-start items-start"
+                          "box-border min-w-0 h-auto flex flex-col gap-0 justify-start items-start"
                         }
                         data-pencil-name={"div"}
                       >
                         <div
                           className={
-                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                           }
                           data-pencil-name={"JAM WIB"}
                           data-text="true"
@@ -222,7 +221,7 @@ export default async function SiteBookingKonsultasi() {
                         <BookingValue
                           kind={"time"}
                           className={
-                            "text-[16px]/[20px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            "text-[16px]/[20px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left"
                           }
                           data-pencil-name={"09:00 - 11:00 WIB"}
                           data-text="true"
@@ -230,13 +229,13 @@ export default async function SiteBookingKonsultasi() {
                       </div>
                       <div
                         className={
-                          "box-border [flex:1_1_0] h-[35px] flex flex-col gap-0 justify-start items-start"
+                          "box-border min-w-0 h-auto flex flex-col gap-0 justify-start items-start"
                         }
                         data-pencil-name={"div"}
                       >
                         <div
                           className={
-                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                           }
                           data-pencil-name={"MEDIA"}
                           data-text="true"
@@ -246,7 +245,7 @@ export default async function SiteBookingKonsultasi() {
                         <BookingValue
                           kind={"mode"}
                           className={
-                            "text-[16px]/[20px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            "text-[16px]/[20px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left"
                           }
                           data-pencil-name={"Google Meet"}
                           data-text="true"

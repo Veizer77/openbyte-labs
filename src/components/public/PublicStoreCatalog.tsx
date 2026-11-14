@@ -337,7 +337,7 @@ export function PublicStoreCatalog({
                           </span>
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <Link
                           href={`/store/${product.slug}`}
                           className="inline-flex min-h-[38px] flex-1 items-center justify-center gap-1.5 rounded-[9px] bg-[#18181a] px-3 py-2 text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#242427]"

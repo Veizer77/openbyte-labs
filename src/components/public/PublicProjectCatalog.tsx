@@ -227,7 +227,7 @@ export function PublicProjectCatalog({
                     ) : null}
 
                     {/* Problem / Solution / Impact Micro-Grid */}
-                    <div className="grid grid-cols-3 gap-2 p-3 bg-[#f8f8f8] rounded-[12px] text-[11px] border border-neutral-100">
+                    <div className="grid grid-cols-1 min-[420px]:grid-cols-3 gap-2.5 min-[420px]:gap-2 p-3 bg-[#f8f8f8] rounded-[12px] text-[11px] border border-neutral-100">
                       <div className="flex flex-col gap-0.5">
                         <span className="text-[10px] uppercase font-bold tracking-[0.5px] text-[#71717a]">
                           PROBLEM

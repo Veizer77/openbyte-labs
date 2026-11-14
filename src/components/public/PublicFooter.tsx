@@ -83,13 +83,13 @@ export function PublicFooter({
               />
               <div
                 className={
-                  "box-border w-fit shrink-0 h-[34px] flex flex-col gap-[2px] justify-start items-start"
+                  "box-border min-w-0 flex-1 min-h-[34px] h-auto flex flex-col gap-[2px] justify-start items-start"
                 }
                 data-pencil-name={"div"}
               >
                 <div
                   className={
-                    "text-[18px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                    "text-[18px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                   }
                   data-pencil-name={brandName}
                   data-text="true"
@@ -98,7 +98,7 @@ export function PublicFooter({
                 </div>
                 <div
                   className={
-                    "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                    "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left"
                   }
                   data-pencil-name={"WEBSITE, APLIKASI & SISTEM INFORMASI"}
                   data-text="true"
@@ -126,7 +126,7 @@ export function PublicFooter({
             ></div>
             <div
               className={
-                "box-border w-fit h-fit shrink-0 flex flex-row gap-[8px] p-[4px_8px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
+                "box-border w-fit max-w-full h-fit flex flex-row gap-[8px] p-[4px_8px] justify-start items-center bg-[#f0f0f0] rounded-[8px]"
               }
               data-pencil-name={"div"}
             >
@@ -138,7 +138,7 @@ export function PublicFooter({
               ></div>
               <div
                 className={
-                  "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                  "text-[11px]/[14px] box-border min-w-0 text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                 }
                 data-pencil-name={"Layanan perangkat lunak & konsultasi proyek"}
                 data-text="true"
@@ -173,13 +173,13 @@ export function PublicFooter({
             >
               {contactEmail ? <div
                 className={
-                  "box-border w-full h-[24px] shrink-0 flex flex-row gap-[8px] justify-start items-center"
+                  "box-border w-full min-h-[24px] h-auto flex flex-row gap-[8px] justify-start items-center"
                 }
                 data-pencil-name={"li"}
               >
                 <div
                   className={
-                    "text-[16px]/[24px] box-border text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                    "text-[16px]/[24px] box-border shrink-0 text-[#52525b] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                   }
                   data-pencil-name={"mail"}
                   data-text="true"
@@ -189,20 +189,20 @@ export function PublicFooter({
                 </div>
                 <a
                   href={`mailto:${contactEmail}`}
-                  className="text-[13px]/[18px] font-[var(--font-inter),system-ui,sans-serif] font-medium text-[#52525b]"
+                  className="min-w-0 break-all text-[13px]/[18px] font-[var(--font-inter),system-ui,sans-serif] font-medium text-[#52525b]"
                 >
                   {contactEmail}
                 </a>
               </div> : null}
               {whatsappNumber ? <div
                 className={
-                  "box-border w-full h-[24px] shrink-0 flex flex-row gap-[8px] justify-start items-center"
+                  "box-border w-full min-h-[24px] h-auto flex flex-row gap-[8px] justify-start items-center"
                 }
                 data-pencil-name={"li"}
               >
                 <div
                   className={
-                    "text-[16px]/[24px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                    "text-[16px]/[24px] box-border shrink-0 text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                   }
                   data-pencil-name={"call"}
                   data-text="true"
@@ -213,7 +213,7 @@ export function PublicFooter({
                 {whatsappDigits ? (
                   <a
                     href={`https://wa.me/${whatsappDigits}`}
-                    className="text-[13px]/[18px] font-[var(--font-inter),system-ui,sans-serif] font-medium text-[#52525b]"
+                    className="min-w-0 text-[13px]/[18px] font-[var(--font-inter),system-ui,sans-serif] font-medium text-[#52525b]"
                   >
                     {whatsappNumber}
                   </a>
@@ -256,7 +256,7 @@ export function PublicFooter({
               data-pencil-name={"ul"}
             >
               {menuItems.map((item, index) => (
-                <div key={`${item.target}:${index}`} className="box-border flex h-[18px] w-full flex-col items-start justify-start">
+                <div key={`${item.target}:${index}`} className="box-border flex min-h-[18px] h-auto w-full flex-col items-start justify-start">
                   <NavLink
                     href={item.target}
                     className="text-[13px]/[18px] font-[var(--font-inter),system-ui,sans-serif] font-medium text-[#52525b]"
@@ -322,14 +322,13 @@ export function PublicFooter({
               <Link
                 href={"/konsultasi"}
                 className={
-                  "box-border w-[143.48px] h-[20px] shrink-0 flex flex-row gap-[4px] justify-start items-center hover:opacity-80 transition-opacity"
+                  "box-border w-fit max-w-full min-h-[20px] h-auto flex flex-row gap-[4px] justify-start items-center hover:opacity-80 transition-opacity"
                 }
                 data-pencil-name={"a"}
-                data-responsive="fixed"
               >
                 <div
                   className={
-                    "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                    "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left"
                   }
                   data-pencil-name={"Ajukan konsultasi"}
                   data-text="true"
@@ -360,7 +359,7 @@ export function PublicFooter({
         >
           <div
             className={
-              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-center sm:text-left"
             }
             data-pencil-name={footerText}
             data-text="true"
@@ -369,11 +368,9 @@ export function PublicFooter({
           </div>
           <div
             className={
-              "box-border w-fit shrink-0 h-fit flex flex-row gap-[20px] justify-start items-center"
+              "box-border w-full sm:w-fit shrink-0 h-fit flex flex-row flex-wrap gap-x-[20px] gap-y-2 justify-center sm:justify-end items-center"
             }
             data-pencil-name={"div"}
-            data-responsive="row"
-            data-section-padding="true"
           >
             <NavLink
               href={"/kebijakan-privasi"}

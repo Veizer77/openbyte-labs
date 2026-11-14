@@ -218,7 +218,7 @@ export function CalculatorRadioIndicator({ itemId }: { itemId: string }) {
   if (selected) {
     return (
       <div
-        className="box-border w-[16px] shrink-0 h-[16px] flex flex-row gap-0 justify-center items-center bg-[#18181a] rounded-[9999px]"
+        className="box-border w-[18px] h-[18px] shrink-0 inline-flex items-center justify-center bg-[#18181a] rounded-full"
         data-pencil-name="span"
       >
         <div
@@ -231,7 +231,7 @@ export function CalculatorRadioIndicator({ itemId }: { itemId: string }) {
 
   return (
     <div
-      className="box-border w-[16px] shrink-0 h-[16px] rounded-[50%] border-[1.5px] border-[#a1a1aa] bg-[#ffffff]"
+      className="box-border w-[18px] h-[18px] shrink-0 rounded-[50%] border-[1.5px] border-[#a1a1aa] bg-[#ffffff]"
       data-pencil-name="span"
     />
   );
@@ -371,11 +371,11 @@ export function CalculatorUnits(props: Props) {
   const maxUnits = item.maxUnits ?? 20;
   return (
     <div {...props}>
-      <div className="flex justify-between items-center gap-3 w-full">
-        <label htmlFor="extra-pages" className="text-[13px] text-[#52525b]">
+      <div className="flex flex-wrap justify-between items-center gap-3 w-full">
+        <label htmlFor="extra-pages" className="text-[13px] text-[#52525b] min-w-0">
           Jumlah Halaman Kustom
         </label>
-        <div className="flex items-center gap-3 bg-[#f0f0f0] rounded-lg p-1">
+        <div className="flex items-center gap-3 bg-[#f0f0f0] rounded-lg p-1 shrink-0">
           <button
             type="button"
             aria-label="Kurangi halaman"
@@ -407,10 +407,10 @@ export function CalculatorUnits(props: Props) {
         onChange={(event) => setUnits(Number(event.target.value))}
         className="w-full my-4 accent-[#18181a]"
       />
-      <div className="flex justify-between w-full text-[11px] text-[#52525b]">
+      <div className="flex justify-between gap-2 w-full text-[10px] sm:text-[11px] text-[#52525b]">
         <span>0 (Termasuk Paket)</span>
-        <span>10 Halaman</span>
-        <span>{maxUnits} Halaman (Maks)</span>
+        <span className="text-center">10 Halaman</span>
+        <span className="text-right">{maxUnits} Halaman (Maks)</span>
       </div>
     </div>
   );
@@ -460,11 +460,11 @@ export function CalculatorBreakdown(props: Props) {
   const payable = selection.filter((value) => value.itemId !== getItemId("web"));
   return (
     <div {...props}>
-      <div className="flex justify-between w-full text-[11px]">
+      <div className="flex flex-wrap justify-between gap-2 w-full text-[11px]">
         <span className="font-semibold tracking-[.55px] text-[#a8a8ad]">
           RINCIAN KOMPONEN TERPILIH
         </span>
-        <span className="text-[#e2e89d]">{payable.length} Komponen</span>
+        <span className="text-[#e2e89d] shrink-0">{payable.length} Komponen</span>
       </div>
       {payable.map((selected) => {
         const item = items.find(
@@ -475,13 +475,13 @@ export function CalculatorBreakdown(props: Props) {
         return (
           <div
             key={selected.itemId}
-            className="flex justify-between gap-4 w-full py-[7px] border-0 border-b border-solid border-[#2e2e324d] text-[11px]"
+            className="flex justify-between gap-3 w-full py-[7px] border-0 border-b border-solid border-[#2e2e324d] text-[11px]"
           >
-            <span className="text-white">
+            <span className="text-white min-w-0 break-words">
               {item.label}
               {selected.units ? ` ×${selected.units}` : ""}
             </span>
-            <span className="text-[#e2e89d] text-right">
+            <span className="text-[#e2e89d] text-right shrink-0">
               {showRange
                 ? `${rupiah(item.priceMin * k)} - ${formatNumber((item.priceMax ?? item.priceMin) * k)}`
                 : rupiah(item.priceMin * k)}
@@ -697,7 +697,7 @@ export function CalculatorSend({
 
   const buttonClass =
     className ||
-    "box-border w-full h-[56px] shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_12px] justify-center items-center bg-[#e2e89d] hover:bg-[#d4da8f] active:scale-[0.99] rounded-[12px] cursor-pointer transition-all disabled:opacity-60";
+    "box-border w-full min-h-[56px] h-auto shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_12px] justify-center items-center bg-[#e2e89d] hover:bg-[#d4da8f] active:scale-[0.99] rounded-[12px] cursor-pointer transition-all disabled:opacity-60";
 
   return (
     <div className="box-border w-full h-fit flex flex-col gap-[10px] items-stretch">

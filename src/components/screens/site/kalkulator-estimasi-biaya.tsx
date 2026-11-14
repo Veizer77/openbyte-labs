@@ -126,20 +126,20 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+                        "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-3 justify-between items-center"
                       }
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "box-border w-[232.34px] shrink-0 h-fit flex flex-col gap-[4px] justify-start items-start"
+                          "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
                         data-responsive="fixed"
                       >
                         <div
                           className={
-                            "box-border w-full h-[24px] shrink-0 flex flex-row gap-[8px] justify-start items-center"
+                            "box-border w-full min-h-[24px] h-auto shrink-0 flex flex-row gap-[8px] justify-start items-center"
                           }
                           data-pencil-name={"div"}
                         >
@@ -160,7 +160,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                             }
                             data-pencil-name={"Platform Utama"}
                             data-text="true"
@@ -175,7 +175,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left"
                             }
                             data-pencil-name={
                               "Pilih media target rilis aplikasi Anda"
@@ -204,7 +204,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     </div>
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row gap-[12px] p-[0px_0.02px_0px_0px] justify-start items-start"
+                        "box-border w-full h-fit shrink-0 grid grid-cols-1 sm:grid-cols-3 gap-[12px] items-stretch"
                       }
                       data-pencil-name={"div"}
                       data-responsive="row"
@@ -212,7 +212,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"web"}
                         className={
-                          "box-border [flex:1_1_0] h-[152.63px] flex flex-col gap-0 p-[20px] justify-start items-start bg-[#e2e2e2] rounded-[12px]"
+                          "box-border w-full min-h-[140px] h-full flex flex-col gap-0 p-[20px] justify-start items-start bg-[#e2e2e2] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="flow"
@@ -220,7 +220,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       >
                         <div
                           className={
-                            "box-border w-full h-[32px] shrink-0 flex flex-row gap-0 justify-between items-center"
+                            "box-border w-full min-h-[32px] h-auto shrink-0 flex flex-row gap-0 justify-between items-center"
                           }
                           data-pencil-name={"div"}
                         >
@@ -242,7 +242,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "text-[15px]/[21px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                            "text-[15px]/[21px] box-border w-full text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left"
                           }
                           data-pencil-name={"Web Saja"}
                           data-text="true"
@@ -255,7 +255,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            "text-[11px]/[14px] box-border w-full text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                           }
                           data-pencil-name={"Responsive Browser"}
                           data-text="true"
@@ -268,13 +268,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px_0px_0px_0px] justify-between items-center"
+                            "box-border w-full h-fit shrink-0 mt-auto flex flex-row flex-wrap gap-2 p-[4px_0px_0px_0px] justify-between items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left"
                             }
                             data-pencil-name={"Termasuk"}
                             data-text="true"
@@ -283,7 +283,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                             }
                             data-pencil-name={"Standar"}
                             data-text="true"
@@ -295,7 +295,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"android"}
                         className={
-                          "box-border [flex:1_1_0] h-[152.63px] flex flex-col gap-0 p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+                          "box-border w-full min-h-[140px] h-full flex flex-col gap-0 p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="flow"
@@ -303,7 +303,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       >
                         <div
                           className={
-                            "box-border w-full h-[32px] shrink-0 flex flex-row gap-0 justify-between items-center"
+                            "box-border w-full min-h-[32px] h-auto shrink-0 flex flex-row gap-0 justify-between items-center"
                           }
                           data-pencil-name={"div"}
                         >
@@ -325,7 +325,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "text-[15px]/[21px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                            "text-[15px]/[21px] box-border w-full text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left"
                           }
                           data-pencil-name={"Android Saja"}
                           data-text="true"
@@ -338,7 +338,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            "text-[11px]/[14px] box-border w-full text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                           }
                           data-pencil-name={"Native Flutter APK"}
                           data-text="true"
@@ -351,13 +351,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px_0px_0px_0px] justify-between items-center"
+                            "box-border w-full h-fit shrink-0 mt-auto flex flex-row flex-wrap gap-2 p-[4px_0px_0px_0px] justify-between items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left"
                             }
                             data-pencil-name={"Harga dari konfigurasi"}
                             data-text="true"
@@ -367,7 +367,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           <CalculatorItemDays
                             itemId={"android"}
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                             }
                             data-pencil-name={"+10-14 Hari"}
                             data-text="true"
@@ -377,7 +377,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"webandr"}
                         className={
-                          "box-border [flex:1_1_0] h-[152.63px] flex flex-col gap-0 p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+                          "box-border w-full min-h-[140px] h-full flex flex-col gap-0 p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="flow"
@@ -385,7 +385,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       >
                         <div
                           className={
-                            "box-border w-full h-[32px] shrink-0 flex flex-row gap-0 justify-between items-center"
+                            "box-border w-full min-h-[32px] h-auto shrink-0 flex flex-row gap-0 justify-between items-center"
                           }
                           data-pencil-name={"div"}
                         >
@@ -407,7 +407,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "text-[15px]/[21px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                            "text-[15px]/[21px] box-border w-full text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left"
                           }
                           data-pencil-name={"Web + Android"}
                           data-text="true"
@@ -420,7 +420,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            "text-[11px]/[14px] box-border w-full text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                           }
                           data-pencil-name={"Cross-platform Apps"}
                           data-text="true"
@@ -433,13 +433,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         ></div>
                         <div
                           className={
-                            "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[4px_0px_0px_0px] justify-between items-center"
+                            "box-border w-full h-fit shrink-0 mt-auto flex flex-row flex-wrap gap-2 p-[4px_0px_0px_0px] justify-between items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left"
                             }
                             data-pencil-name={"Harga dari konfigurasi"}
                             data-text="true"
@@ -449,7 +449,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           <CalculatorItemDays
                             itemId={"webandr"}
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                             }
                             data-pencil-name={"+14-21 Hari"}
                             data-text="true"
@@ -468,21 +468,21 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+                        "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-3 justify-between items-center"
                       }
                       data-pencil-name={"div"}
                       data-responsive="row"
                     >
                       <div
                         className={
-                          "box-border w-[350.23px] shrink-0 h-fit flex flex-col gap-[4px] justify-start items-start"
+                          "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
                         data-responsive="fixed"
                       >
                         <div
                           className={
-                            "box-border w-full h-[24px] shrink-0 flex flex-row gap-[8px] justify-start items-center"
+                            "box-border w-full min-h-[24px] h-auto shrink-0 flex flex-row gap-[8px] justify-start items-center"
                           }
                           data-pencil-name={"div"}
                         >
@@ -503,7 +503,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                             }
                             data-pencil-name={"Jenis Solusi Sistem"}
                             data-text="true"
@@ -518,7 +518,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left"
                             }
                             data-pencil-name={
                               "Pilih kategori arsitektur aplikasi sesua"
@@ -555,14 +555,14 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     >
                       <div
                         className={
-                          "box-border w-full h-[118px] shrink-0 flex flex-row gap-[12px] justify-start items-start mobile-auto-height"
+                          "box-border w-full h-auto shrink-0 grid grid-cols-1 sm:grid-cols-2 gap-[12px] items-stretch"
                         }
                         data-responsive="row"
                       >
                         <CalculatorOption
                           itemId={"landing"}
                           className={
-                            "box-border [flex:1_1_0] h-[118px] flex flex-col gap-[8px] p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+                            "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#f0f0f0] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
                           data-responsive="flow"
@@ -570,19 +570,19 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-start"
+                              "box-border w-full h-fit shrink-0 flex flex-row gap-3 justify-between items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "box-border w-fit shrink-0 h-[48px] flex flex-col gap-[8px] justify-start items-start"
+                                "box-border min-w-0 flex-1 h-auto flex flex-col gap-[6px] justify-start items-start"
                               }
                               data-pencil-name={"div"}
                             >
                               <div
                                 className={
-                                  "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                                  "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                                 }
                                 data-pencil-name={"Landing Page Profil"}
                                 data-text="true"
@@ -591,7 +591,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                               </div>
                               <div
                                 className={
-                                  "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                  "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                                 }
                                 data-pencil-name={
                                   "Profil korporat & portfolio showcase int"
@@ -607,13 +607,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[8px_0px_0px_0px] justify-between items-center"
+                              "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 p-[8px_0px_0px_0px] justify-between items-center"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"Harga dari konfigurasi"}
                               data-text="true"
@@ -623,7 +623,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             <CalculatorItemDays
                               itemId={"landing"}
                               className={
-                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"5 – 7 Hari"}
                               data-text="true"
@@ -633,7 +633,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         <CalculatorOption
                           itemId={"katalog"}
                           className={
-                            "box-border [flex:1_1_0] h-[118px] flex flex-col gap-[8px] p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+                            "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#f0f0f0] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
                           data-responsive="flow"
@@ -641,19 +641,19 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-start"
+                              "box-border w-full h-fit shrink-0 flex flex-row gap-3 justify-between items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "box-border w-fit shrink-0 h-[48px] flex flex-col gap-[8px] justify-start items-start"
+                                "box-border min-w-0 flex-1 h-auto flex flex-col gap-[6px] justify-start items-start"
                               }
                               data-pencil-name={"div"}
                             >
                               <div
                                 className={
-                                  "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                                  "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                                 }
                                 data-pencil-name={"Katalog & Toko WA"}
                                 data-text="true"
@@ -662,7 +662,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                               </div>
                               <div
                                 className={
-                                  "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                  "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                                 }
                                 data-pencil-name={
                                   "Etalase produk dan checkout otomatis ke "
@@ -678,13 +678,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[8px_0px_0px_0px] justify-between items-center"
+                              "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 p-[8px_0px_0px_0px] justify-between items-center"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"Harga dari konfigurasi"}
                               data-text="true"
@@ -694,7 +694,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             <CalculatorItemDays
                               itemId={"katalog"}
                               className={
-                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"10 – 14 Hari"}
                               data-text="true"
@@ -704,14 +704,14 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "box-border w-full h-[118px] shrink-0 flex flex-row gap-[12px] justify-start items-start mobile-auto-height"
+                          "box-border w-full h-auto shrink-0 grid grid-cols-1 sm:grid-cols-2 gap-[12px] items-stretch"
                         }
                         data-responsive="row"
                       >
                         <CalculatorOption
                           itemId={"sidb"}
                           className={
-                            "box-border [flex:1_1_0] h-[118px] flex flex-col gap-[14px] p-[20px] justify-start items-start bg-[#e2e2e2] rounded-[12px]"
+                            "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#e2e2e2] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
                           data-responsive="flow"
@@ -719,25 +719,25 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-start"
+                              "box-border w-full h-fit shrink-0 flex flex-row gap-3 justify-between items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "box-border w-fit shrink-0 h-fit flex flex-col gap-[4px] justify-start items-start"
+                                "box-border min-w-0 flex-1 h-auto flex flex-col gap-[6px] justify-start items-start"
                               }
                               data-pencil-name={"div"}
                             >
                               <div
                                 className={
-                                  "box-border w-fit h-fit shrink-0 flex flex-row gap-[6px] justify-start items-center"
+                                  "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-[6px] justify-start items-center"
                                 }
                                 data-pencil-name={"div"}
                               >
                                 <div
                                   className={
-                                    "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                                    "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                                   }
                                   data-pencil-name={
                                     "Sistem Informasi / Web App"
@@ -764,7 +764,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                               </div>
                               <div
                                 className={
-                                  "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                  "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                                 }
                                 data-pencil-name={
                                   "Dashboard analitik, manajemen data, dan "
@@ -780,13 +780,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[8px_0px_0px_0px] justify-between items-center"
+                              "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 p-[8px_0px_0px_0px] justify-between items-center"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"Harga dari konfigurasi"}
                               data-text="true"
@@ -796,7 +796,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             <CalculatorItemDays
                               itemId={"sidb"}
                               className={
-                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"14 – 21 Hari"}
                               data-text="true"
@@ -806,7 +806,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         <CalculatorOption
                           itemId={"undangan"}
                           className={
-                            "box-border [flex:1_1_0] h-[118px] flex flex-col gap-[8px] p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+                            "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#f0f0f0] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
                           data-responsive="flow"
@@ -814,19 +814,19 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-start"
+                              "box-border w-full h-fit shrink-0 flex flex-row gap-3 justify-between items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "box-border w-fit shrink-0 h-[48px] flex flex-col gap-[8px] justify-start items-start"
+                                "box-border min-w-0 flex-1 h-auto flex flex-col gap-[6px] justify-start items-start"
                               }
                               data-pencil-name={"div"}
                             >
                               <div
                                 className={
-                                  "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                                  "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                                 }
                                 data-pencil-name={"Undangan Digital"}
                                 data-text="true"
@@ -835,7 +835,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                               </div>
                               <div
                                 className={
-                                  "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                  "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                                 }
                                 data-pencil-name={
                                   "Reservasi tamu RSVP, galeri musik, dan g"
@@ -851,13 +851,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[8px_0px_0px_0px] justify-between items-center"
+                              "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 p-[8px_0px_0px_0px] justify-between items-center"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"Harga dari konfigurasi"}
                               data-text="true"
@@ -867,7 +867,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             <CalculatorItemDays
                               itemId={"undangan"}
                               className={
-                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={"3 – 5 Hari"}
                               data-text="true"
@@ -887,21 +887,21 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+                        "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-3 justify-between items-center"
                       }
                       data-pencil-name={"div"}
                       data-responsive="row"
                     >
                       <div
                         className={
-                          "box-border w-[233.47px] shrink-0 h-fit flex flex-col gap-[4px] justify-start items-start"
+                          "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
                         data-responsive="fixed"
                       >
                         <div
                           className={
-                            "box-border w-full h-[24px] shrink-0 flex flex-row gap-[8px] justify-start items-center"
+                            "box-border w-full min-h-[24px] h-auto shrink-0 flex flex-row gap-[8px] justify-start items-center"
                           }
                           data-pencil-name={"div"}
                         >
@@ -922,7 +922,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                             }
                             data-pencil-name={"Modul Tambahan"}
                             data-text="true"
@@ -937,7 +937,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left"
                             }
                             data-pencil-name={
                               "Pilih integrasi fitur lanjutan opsional"
@@ -973,20 +973,20 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"rbac"}
                         className={
-                          "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[12px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                          "box-border w-full h-auto shrink-0 flex flex-col sm:flex-row gap-2.5 sm:gap-3 p-[14px_16px] sm:p-[12px] justify-between items-start sm:items-center bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="row"
                       >
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] justify-start items-center"
+                            "box-border w-full sm:min-w-0 sm:flex-1 h-fit flex flex-row gap-[12px] justify-start items-start sm:items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "box-border w-[20px] shrink-0 h-[20px] flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
+                              "box-border w-[20px] shrink-0 h-[20px] mt-0.5 sm:mt-0 flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
                             }
                             data-pencil-name={"div"}
                           >
@@ -1003,13 +1003,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-fit shrink-0 h-[32px] flex flex-col gap-0 justify-start items-start"
+                              "box-border min-w-0 flex-1 h-auto flex flex-col gap-[2px] justify-start items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
                               }
                               data-pencil-name={"Multi-User RBAC & Autentikasi"}
                               data-text="true"
@@ -1018,7 +1018,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             </div>
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={
                                 "Hierarki hak akses Admin, Operator & Sta"
@@ -1031,13 +1031,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </div>
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] p-[0px_0px_0px_8px] justify-start items-center"
+                            "box-border w-full sm:w-auto shrink-0 h-fit flex flex-row flex-wrap gap-x-[12px] gap-y-1 pl-[32px] sm:pl-[8px] justify-between sm:justify-end items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left sm:text-right"
                             }
                             data-pencil-name={"Harga dari konfigurasi"}
                             data-text="true"
@@ -1047,7 +1047,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           <CalculatorItemDays
                             itemId={"rbac"}
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
                             }
                             data-pencil-name={"+3-4 Hari"}
                             data-text="true"
@@ -1057,20 +1057,20 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"gis"}
                         className={
-                          "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[12px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                          "box-border w-full h-auto shrink-0 flex flex-col sm:flex-row gap-2.5 sm:gap-3 p-[14px_16px] sm:p-[12px] justify-between items-start sm:items-center bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="row"
                       >
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] justify-start items-center"
+                            "box-border w-full sm:min-w-0 sm:flex-1 h-fit flex flex-row gap-[12px] justify-start items-start sm:items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "box-border w-[20px] shrink-0 h-[20px] flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
+                              "box-border w-[20px] shrink-0 h-[20px] mt-0.5 sm:mt-0 flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
                             }
                             data-pencil-name={"div"}
                           >
@@ -1087,13 +1087,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-fit shrink-0 h-[32px] flex flex-col gap-0 justify-start items-start"
+                              "box-border min-w-0 flex-1 h-auto flex flex-col gap-[2px] justify-start items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
                               }
                               data-pencil-name={"Peta & Geolocation GIS"}
                               data-text="true"
@@ -1102,7 +1102,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             </div>
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={
                                 "Visualisasi polygon, radius lokasi & mar"
@@ -1117,13 +1117,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </div>
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] p-[0px_0px_0px_8px] justify-start items-center"
+                            "box-border w-full sm:w-auto shrink-0 h-fit flex flex-row flex-wrap gap-x-[12px] gap-y-1 pl-[32px] sm:pl-[8px] justify-between sm:justify-end items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left sm:text-right"
                             }
                             data-pencil-name={"Harga dari konfigurasi"}
                             data-text="true"
@@ -1133,7 +1133,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           <CalculatorItemDays
                             itemId={"gis"}
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
                             }
                             data-pencil-name={"+5-7 Hari"}
                             data-text="true"
@@ -1143,20 +1143,20 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"laporan"}
                         className={
-                          "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[12px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                          "box-border w-full h-auto shrink-0 flex flex-col sm:flex-row gap-2.5 sm:gap-3 p-[14px_16px] sm:p-[12px] justify-between items-start sm:items-center bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="row"
                       >
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] justify-start items-center"
+                            "box-border w-full sm:min-w-0 sm:flex-1 h-fit flex flex-row gap-[12px] justify-start items-start sm:items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "box-border w-[20px] shrink-0 h-[20px] flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
+                              "box-border w-[20px] shrink-0 h-[20px] mt-0.5 sm:mt-0 flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
                             }
                             data-pencil-name={"div"}
                           >
@@ -1173,13 +1173,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-fit shrink-0 h-[32px] flex flex-col gap-0 justify-start items-start"
+                              "box-border min-w-0 flex-1 h-auto flex flex-col gap-[2px] justify-start items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
                               }
                               data-pencil-name={"Export Dokumen PDF & Excel"}
                               data-text="true"
@@ -1188,7 +1188,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             </div>
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={
                                 "Generator invoice, rekap laporan berkala"
@@ -1203,13 +1203,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </div>
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] p-[0px_0px_0px_8px] justify-start items-center"
+                            "box-border w-full sm:w-auto shrink-0 h-fit flex flex-row flex-wrap gap-x-[12px] gap-y-1 pl-[32px] sm:pl-[8px] justify-between sm:justify-end items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left sm:text-right"
                             }
                             data-pencil-name={"Harga dari konfigurasi"}
                             data-text="true"
@@ -1219,7 +1219,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           <CalculatorItemDays
                             itemId={"laporan"}
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
                             }
                             data-pencil-name={"+2-3 Hari"}
                             data-text="true"
@@ -1229,20 +1229,20 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"wa"}
                         className={
-                          "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[12px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                          "box-border w-full h-auto shrink-0 flex flex-col sm:flex-row gap-2.5 sm:gap-3 p-[14px_16px] sm:p-[12px] justify-between items-start sm:items-center bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="row"
                       >
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] justify-start items-center"
+                            "box-border w-full sm:min-w-0 sm:flex-1 h-fit flex flex-row gap-[12px] justify-start items-start sm:items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "box-border w-[20px] shrink-0 h-[20px] flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
+                              "box-border w-[20px] shrink-0 h-[20px] mt-0.5 sm:mt-0 flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
                             }
                             data-pencil-name={"div"}
                           >
@@ -1259,13 +1259,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-fit shrink-0 h-[32px] flex flex-col gap-0 justify-start items-start"
+                              "box-border min-w-0 flex-1 h-auto flex flex-col gap-[2px] justify-start items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
                               }
                               data-pencil-name={"Notifikasi Otomatis WhatsApp"}
                               data-text="true"
@@ -1274,7 +1274,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             </div>
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={
                                 "Trigger instant reminder & konfirmasi pe"
@@ -1289,13 +1289,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </div>
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] p-[0px_0px_0px_8px] justify-start items-center"
+                            "box-border w-full sm:w-auto shrink-0 h-fit flex flex-row flex-wrap gap-x-[12px] gap-y-1 pl-[32px] sm:pl-[8px] justify-between sm:justify-end items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left sm:text-right"
                             }
                             data-pencil-name={"Harga dari konfigurasi"}
                             data-text="true"
@@ -1305,7 +1305,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           <CalculatorItemDays
                             itemId={"wa"}
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
                             }
                             data-pencil-name={"+3-4 Hari"}
                             data-text="true"
@@ -1315,20 +1315,20 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorOption
                         itemId={"pay"}
                         className={
-                          "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[12px] justify-between items-center bg-[#f0f0f0] rounded-[12px]"
+                          "box-border w-full h-auto shrink-0 flex flex-col sm:flex-row gap-2.5 sm:gap-3 p-[14px_16px] sm:p-[12px] justify-between items-start sm:items-center bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
                         data-responsive="row"
                       >
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[12px] justify-start items-center"
+                            "box-border w-full sm:min-w-0 sm:flex-1 h-fit flex flex-row gap-[12px] justify-start items-start sm:items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "box-border w-[20px] shrink-0 h-[20px] flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
+                              "box-border w-[20px] shrink-0 h-[20px] mt-0.5 sm:mt-0 flex flex-row gap-0 justify-center items-center bg-[#ffffff] rounded-[4px]"
                             }
                             data-pencil-name={"div"}
                           >
@@ -1345,13 +1345,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "box-border w-fit shrink-0 h-[32px] flex flex-col gap-0 justify-start items-start"
+                              "box-border min-w-0 flex-1 h-auto flex flex-col gap-[2px] justify-start items-start"
                             }
                             data-pencil-name={"div"}
                           >
                             <div
                               className={
-                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                                "text-[13px]/[18px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
                               }
                               data-pencil-name={
                                 "Integrasi Payment Gateway QRIS"
@@ -1362,7 +1362,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             </div>
                             <div
                               className={
-                                "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                                "text-[11px]/[15px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                               }
                               data-pencil-name={
                                 "Integrasi Midtrans / Xendit dengan webho"
@@ -1377,13 +1377,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         </div>
                         <div
                           className={
-                            "box-border w-fit shrink-0 h-fit flex flex-row gap-[11.99px] p-[0px_0px_0px_8px] justify-start items-center"
+                            "box-border w-full sm:w-auto shrink-0 h-fit flex flex-row flex-wrap gap-x-[12px] gap-y-1 pl-[32px] sm:pl-[8px] justify-between sm:justify-end items-center"
                           }
                           data-pencil-name={"div"}
                         >
                           <div
                             className={
-                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-left sm:text-right"
                             }
                             data-pencil-name={"Harga dari konfigurasi"}
                             data-text="true"
@@ -1393,7 +1393,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           <CalculatorItemDays
                             itemId={"pay"}
                             className={
-                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right [white-space:nowrap]"
+                              "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
                             }
                             data-pencil-name={"+3-5 Hari"}
                             data-text="true"
@@ -1412,21 +1412,21 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+                        "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 justify-between items-center"
                       }
                       data-pencil-name={"div"}
                       data-responsive="row"
                     >
                       <div
                         className={
-                          "box-border w-[311.98px] shrink-0 h-fit flex flex-col gap-[4px] justify-start items-start"
+                          "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
                         data-responsive="fixed"
                       >
                         <div
                           className={
-                            "box-border w-full h-[24px] shrink-0 flex flex-row gap-[8px] justify-start items-center"
+                            "box-border w-full min-h-[24px] h-auto shrink-0 flex flex-row gap-[8px] justify-start items-center"
                           }
                           data-pencil-name={"div"}
                         >
@@ -1447,7 +1447,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           </div>
                           <div
                             className={
-                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                              "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                             }
                             data-pencil-name={"Ekspansi Halaman Tambahan"}
                             data-text="true"
@@ -1462,7 +1462,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         >
                           <div
                             className={
-                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left [white-space:nowrap]"
+                              "text-[12px]/[16px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[0.12px] text-left"
                             }
                             data-pencil-name={
                               "Penambahan view interface di luar paket "
@@ -1475,7 +1475,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          "text-[11px]/[14px] box-border shrink-0 pl-[28px] sm:pl-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                         }
                         data-pencil-name={"Tarif per halaman dari konfigurasi"}
                         data-text="true"
@@ -1501,13 +1501,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 >
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 [filter:drop-shadow(0px_1px_0px_#2e2e32)] flex flex-row gap-0 p-[0px_0px_8px_0px] justify-between items-center"
+                      "box-border w-full h-fit shrink-0 [filter:drop-shadow(0px_1px_0px_#2e2e32)] flex flex-row flex-wrap gap-2 p-[0px_0px_8px_0px] justify-between items-center"
                     }
                     data-pencil-name={"div"}
                   >
                     <div
                       className={
-                        "box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] justify-start items-center"
+                        "box-border min-w-0 flex-1 h-fit flex flex-row gap-[8px] justify-start items-center"
                       }
                       data-pencil-name={"div"}
                     >
@@ -1519,7 +1519,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       ></div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[1.1px] text-left [white-space:nowrap]"
+                          "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[1.1px] text-left"
                         }
                         data-pencil-name={"RINGKASAN ESTIMASI REAL-TIME"}
                         data-text="true"
@@ -1529,7 +1529,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     </div>
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#a8a8ad] font-[SFMono-Regular,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        "text-[11px]/[14px] box-border shrink-0 text-[#a8a8ad] font-[SFMono-Regular,system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
                       }
                       data-pencil-name={"v1.2"}
                       data-text="true"
@@ -1545,7 +1545,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left [white-space:nowrap]"
+                        "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.55px] text-left"
                       }
                       data-pencil-name={"ESTIMASI INVESTASI PROYEK"}
                       data-text="true"
@@ -1553,12 +1553,12 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       {"ESTIMASI INVESTASI PROYEK"}
                     </div>
                     <div
-                      className={"box-border w-full h-fit shrink-0 flex flex-row items-baseline gap-[6px]"}
+                      className={"box-border w-full h-fit shrink-0 flex flex-row flex-wrap items-baseline gap-[6px]"}
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "text-[18px]/[24px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                          "text-[16px]/[22px] sm:text-[18px]/[24px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
                         }
                         data-pencil-name={"Rp"}
                         data-text="true"
@@ -1568,7 +1568,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       <CalculatorValue
                         kind="price"
                         className={
-                          "text-[40px]/[44px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[-1px] text-left [white-space:nowrap]"
+                          "text-[26px]/[32px] min-[400px]:text-[30px]/[36px] sm:text-[36px]/[42px] lg:text-[34px]/[40px] xl:text-[40px]/[44px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-normal tracking-[-0.03em] text-left break-words"
                         }
                         data-pencil-name={"2.500.000 - 4.000.000"}
                         data-text="true"
@@ -1576,13 +1576,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     </div>
                     <div
                       className={
-                        "box-border w-full h-[20px] shrink-0 flex flex-row gap-[6px] justify-start items-center"
+                        "box-border w-full h-auto min-h-[20px] shrink-0 flex flex-row gap-[6px] pt-0.5 justify-start items-start sm:items-center"
                       }
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "text-[14px]/[20px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          "text-[14px]/[20px] box-border shrink-0 text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                         }
                         data-pencil-name={"check_circle"}
                         data-text="true"
@@ -1592,7 +1592,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                          "text-[11px]/[15px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                         }
                         data-pencil-name={
                           "Rincian penyerahan sesuai penawaran"
@@ -1605,14 +1605,14 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   </div>
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 flex flex-row gap-0 p-[12px] justify-between items-center bg-[#242427] rounded-[12px]"
+                      "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-3 p-[12px] justify-between items-center bg-[#242427] rounded-[12px]"
                     }
                     data-pencil-name={"div"}
                     data-responsive="row"
                   >
                     <div
                       className={
-                        "box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] justify-start items-center"
+                        "box-border min-w-0 flex-1 h-fit flex flex-row gap-[8px] justify-start items-center"
                       }
                       data-pencil-name={"div"}
                     >
@@ -1635,13 +1635,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "box-border w-fit shrink-0 h-fit flex flex-col gap-0 justify-start items-start"
+                          "box-border min-w-0 flex-1 h-fit flex flex-col gap-0 justify-start items-start"
                         }
                         data-pencil-name={"div"}
                       >
                         <div
                           className={
-                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                            "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                           }
                           data-pencil-name={"Estimasi Waktu Pengerjaan"}
                           data-text="true"
@@ -1651,7 +1651,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                         <CalculatorValue
                           kind="days"
                           className={
-                            "text-[16px]/[20px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left [white-space:nowrap]"
+                            "text-[16px]/[20px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.16px] text-left"
                           }
                           data-pencil-name={"14 - 21 Hari Kerja"}
                           data-text="true"
@@ -1660,13 +1660,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     </div>
                     <div
                       className={
-                        "box-border w-[64.34px] shrink-0 h-[34px] flex flex-col gap-[4px] justify-start items-start"
+                        "box-border w-auto shrink-0 h-auto min-h-[34px] flex flex-col gap-[4px] justify-start items-end"
                       }
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "text-[11px]/[14px] box-border w-full text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
+                          "text-[11px]/[14px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-right"
                         }
                         data-pencil-name={"Metodologi"}
                         data-text="true"
@@ -1675,7 +1675,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-right [white-space:nowrap]"
+                          "text-[11px]/[14px] box-border text-[#e2e89d] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[0.22px] text-right"
                         }
                         data-pencil-name={"Estimasi awal"}
                         data-text="true"
@@ -1704,14 +1704,14 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <CalculatorSend
                       className={
-                        "box-border w-full h-[56px] shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_12px] justify-center items-center bg-[#e2e89d] hover:bg-[#d4da8f] active:scale-[0.99] rounded-[12px] cursor-pointer transition-all"
+                        "box-border w-full min-h-[56px] h-auto shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_12px] justify-center items-center bg-[#e2e89d] hover:bg-[#d4da8f] active:scale-[0.99] rounded-[12px] cursor-pointer transition-all"
                       }
                       data-pencil-name={"button"}
                       data-responsive="flow"
                     >
                       <div
                         className={
-                          "text-[18px]/[28px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap] symbol"
+                          "text-[18px]/[28px] box-border shrink-0 text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-center [white-space:nowrap] symbol"
                         }
                         data-pencil-name={"send"}
                         data-text="true"
@@ -1721,7 +1721,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "text-[14px]/[20px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-center [white-space:nowrap]"
+                          "text-[13px]/[18px] sm:text-[14px]/[20px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-center"
                         }
                         data-pencil-name={"Kirim Rincian Estimasi ke WhatsApp"}
                         data-text="true"
@@ -1731,13 +1731,13 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     </CalculatorSend>
                     <div
                       className={
-                        "box-border w-full h-[20px] shrink-0 flex flex-row gap-[6px] justify-center items-center"
+                        "box-border w-full h-auto min-h-[20px] shrink-0 flex flex-row gap-[6px] justify-center items-center"
                       }
                       data-pencil-name={"div"}
                     >
                       <div
                         className={
-                          "text-[12px]/[16px] box-border text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          "text-[12px]/[16px] box-border shrink-0 text-[#82b440] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                         }
                         data-pencil-name={"lock"}
                         data-text="true"
@@ -1747,7 +1747,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "text-[11px]/[20px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left [white-space:nowrap]"
+                          "text-[11px]/[16px] box-border text-[#a8a8ad] font-[var(--font-inter),system-ui,sans-serif] font-normal text-center"
                         }
                         data-pencil-name={
                           "Konsultasi direct langsung via WhatsApp"
@@ -1769,7 +1769,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
               >
                 <div
                   className={
-                    "box-border w-full min-h-[178px] [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
+                    "box-border w-full min-h-[178px] h-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-4 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
                   data-responsive="flow"
@@ -1777,7 +1777,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 >
                   <div
                     className={
-                      "box-border w-full h-[108px] shrink-0 flex flex-col gap-0 justify-start items-start"
+                      "box-border w-full h-auto shrink-0 flex flex-col gap-0 justify-start items-start"
                     }
                     data-pencil-name={"div"}
                     data-responsive="flow"
@@ -1805,7 +1805,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     ></div>
                     <div
                       className={
-                        "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                        "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                       }
                       data-pencil-name={"Ruang lingkup teknis"}
                       data-text="true"
@@ -1818,7 +1818,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     ></div>
                     <div
                       className={
-                        "text-[14px]/[20px] box-border w-full h-[40px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
+                        "text-[14px]/[20px] box-border w-full h-auto shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
                       }
                       data-pencil-name={
                         "Ditenagai stack TypeScript murni, Tailwi"
@@ -1838,7 +1838,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                       }
                       data-text="true"
                     >
@@ -1848,7 +1848,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 </div>
                 <div
                   className={
-                    "box-border w-full min-h-[178px] [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
+                    "box-border w-full min-h-[178px] h-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-4 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
                   data-responsive="flow"
@@ -1856,7 +1856,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 >
                   <div
                     className={
-                      "box-border w-full h-[108px] shrink-0 flex flex-col gap-0 justify-start items-start"
+                      "box-border w-full h-auto shrink-0 flex flex-col gap-0 justify-start items-start"
                     }
                     data-pencil-name={"div"}
                     data-responsive="flow"
@@ -1884,7 +1884,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     ></div>
                     <div
                       className={
-                        "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                        "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                       }
                       data-pencil-name={"Standard Garansi Bug 60 Hari"}
                       data-text="true"
@@ -1897,7 +1897,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     ></div>
                     <div
                       className={
-                        "text-[14px]/[20px] box-border w-full h-[40px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
+                        "text-[14px]/[20px] box-border w-full h-auto shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
                       }
                       data-pencil-name={
                         "Setiap delivery disertai garansi hotfix "
@@ -1917,7 +1917,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                       }
                       data-text="true"
                     >
@@ -1927,7 +1927,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 </div>
                 <div
                   className={
-                    "box-border w-full min-h-[178px] [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-0 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
+                    "box-border w-full min-h-[178px] h-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-4 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
                   data-responsive="flow"
@@ -1935,7 +1935,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                 >
                   <div
                     className={
-                      "box-border w-full h-[108px] shrink-0 flex flex-col gap-0 justify-start items-start"
+                      "box-border w-full h-auto shrink-0 flex flex-col gap-0 justify-start items-start"
                     }
                     data-pencil-name={"div"}
                     data-responsive="flow"
@@ -1963,7 +1963,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     ></div>
                     <div
                       className={
-                        "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left [white-space:nowrap]"
+                        "text-[18px]/[24px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-semibold tracking-[-0.18px] text-left"
                       }
                       data-pencil-name={"Tahapan Pembayaran Termin"}
                       data-text="true"
@@ -1976,7 +1976,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     ></div>
                     <div
                       className={
-                        "text-[14px]/[20px] box-border w-full h-[40px] shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
+                        "text-[14px]/[20px] box-border w-full h-auto shrink-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-normal text-left"
                       }
                       data-pencil-name={
                         "Skema pembayaran fleksibel: DP 40% Kick-"
@@ -1996,7 +1996,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   >
                     <div
                       className={
-                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left [white-space:nowrap]"
+                        "text-[11px]/[14px] box-border text-[#595962] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
                       }
                       data-text="true"
                     >

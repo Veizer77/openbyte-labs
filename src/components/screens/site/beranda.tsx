@@ -193,7 +193,7 @@ export default function SiteBeranda({
                       </div>
 
                       <div className="flex flex-col divide-y divide-[#2e2e32] border-t border-b border-[#2e2e32]">
-                        <div className="flex items-center justify-between py-3 text-[13px]">
+                        <div className="flex flex-wrap items-center justify-between gap-2 py-3 text-[13px]">
                           <span className="inline-flex items-center gap-2 text-[#a8a8ad]">
                             <span className="symbol text-[15px]" aria-hidden="true">
                               database
@@ -204,7 +204,7 @@ export default function SiteBeranda({
                             Sesuai proyek
                           </span>
                         </div>
-                        <div className="flex items-center justify-between py-3 text-[13px]">
+                        <div className="flex flex-wrap items-center justify-between gap-2 py-3 text-[13px]">
                           <span className="inline-flex items-center gap-2 text-[#a8a8ad]">
                             <span className="symbol text-[15px]" aria-hidden="true">
                               lock
@@ -217,7 +217,7 @@ export default function SiteBeranda({
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] text-[#a8a8ad]">
+                      <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#a8a8ad]">
                         <span>Dokumen teknis &amp; cakupan tertulis</span>
                         <Link
                           href="/paket"
@@ -318,16 +318,15 @@ export default function SiteBeranda({
               </div>
               <div
                 className={
-                  "box-border w-fit shrink-0 h-fit flex flex-row gap-[8px] justify-start items-center relative [z-index:2]"
+                  "box-border w-full sm:w-fit shrink-0 h-fit flex flex-row flex-wrap gap-[8px] justify-start items-center relative [z-index:2]"
                 }
                 data-pencil-name={"div"}
               >
                 <div
                   className={
-                    "box-border w-[140.31px] shrink-0 h-fit [box-shadow:0px_1px_2px_#0000000d] [backdrop-filter:blur(4px)] flex flex-col gap-0 p-[8px_12px] justify-start items-start bg-[#ffffffe6] rounded-[12px]"
+                    "box-border w-full sm:w-auto shrink-0 h-fit [box-shadow:0px_1px_2px_#0000000d] [backdrop-filter:blur(4px)] flex flex-col gap-0 p-[8px_12px] justify-start items-center sm:items-start bg-[#ffffffe6] rounded-[12px]"
                   }
                   data-pencil-name={"div"}
-                  data-responsive="fixed"
                 >
                   <div
                     className={
@@ -340,7 +339,7 @@ export default function SiteBeranda({
                   </div>
                   <div
                     className={
-                      "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-0.16px] text-center [white-space:nowrap]"
+                      "text-[16px]/[20px] box-border text-[#18181a] font-[var(--font-inter),system-ui,sans-serif] font-bold tracking-[-0.16px] text-center"
                     }
                     data-pencil-name={"Simulasi mandiri"}
                     data-text="true"
@@ -352,14 +351,14 @@ export default function SiteBeranda({
                   href="/kalkulator"
                   aria-label="Mulai Simulasi Biaya"
                   className={
-                    "box-border w-fit shrink-0 h-[52px] [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_24px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                    "box-border w-full sm:w-fit shrink-0 min-h-[52px] [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_24px] justify-center items-center bg-[#18181a] rounded-[12px]"
                   }
                   data-pencil-name={"a"}
                   data-responsive="flow"
                 >
                   <div
                     className={
-                      "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-left [white-space:nowrap]"
+                      "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-semibold text-center sm:text-left"
                     }
                     data-pencil-name={"Mulai Simulasi Biaya"}
                     data-text="true"

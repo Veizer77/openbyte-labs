@@ -49,7 +49,7 @@ export default function Site404() {
           </div>
           <h1
             className={
-              "text-[26px]/[normal] box-border text-[#18181A] font-[var(--font-inter),system-ui,sans-serif] font-extrabold tracking-[-0.5px] text-left [white-space:nowrap] m-0"
+              "text-[22px]/[28px] sm:text-[26px]/[normal] box-border text-[#18181A] font-[var(--font-inter),system-ui,sans-serif] font-extrabold tracking-[-0.5px] text-center m-0"
             }
             data-text="true"
             data-heading="true"
@@ -58,10 +58,9 @@ export default function Site404() {
           </h1>
           <div
             className={
-              "text-[14px]/[21px] box-border w-[580px] text-[#52525B] font-[var(--font-inter),system-ui,sans-serif] font-normal text-center"
+              "text-[14px]/[21px] box-border w-full max-w-[580px] text-[#52525B] font-[var(--font-inter),system-ui,sans-serif] font-normal text-center"
             }
             data-text="true"
-            data-responsive="fixed"
           >
             {
               "URL modul yang Anda tuju mungkin telah diarsipkan, atau token tracking proyek klien Anda sudah tidak aktif demi perlindungan privasi data instansi."
@@ -69,7 +68,7 @@ export default function Site404() {
           </div>
           <div
             className={
-              "box-border w-fit h-fit shrink-0 flex flex-row gap-[12px] p-[12px_0px_0px_0px] justify-start items-center"
+              "box-border w-full sm:w-fit h-fit shrink-0 flex flex-row flex-wrap gap-[12px] p-[12px_0px_0px_0px] justify-center items-center"
             }
           >
             <div
@@ -121,18 +120,17 @@ export default function Site404() {
           </div>
           <div
             className={
-              "box-border w-full max-w-[580px] h-fit shrink-0 flex flex-row gap-0 p-[16px] justify-between items-center bg-[#F9F9FB] [outline:1px_solid_#E4E4E7] [outline-offset:-0.5px] rounded-[12px]"
+              "box-border w-full max-w-[580px] h-fit shrink-0 flex flex-col sm:flex-row gap-2 sm:gap-3 p-[16px] justify-between items-start sm:items-center bg-[#F9F9FB] [outline:1px_solid_#E4E4E7] [outline-offset:-0.5px] rounded-[12px]"
             }
-            data-responsive="fixed"
           >
             <div
               className={
-                "box-border w-fit shrink-0 h-fit flex flex-row gap-[10px] justify-start items-center"
+                "box-border min-w-0 flex-1 h-fit flex flex-row gap-[10px] justify-start items-start sm:items-center"
               }
             >
               <div
                 className={
-                  "text-[20px]/[normal] box-border text-[#71717A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                  "text-[20px]/[normal] box-border shrink-0 text-[#71717A] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                 }
                 data-text="true"
                 aria-hidden="true"
@@ -141,7 +139,7 @@ export default function Site404() {
               </div>
               <div
                 className={
-                  "text-[12px]/[normal] box-border text-[#52525B] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                  "text-[12px]/[18px] box-border flex-1 min-w-0 text-[#52525B] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left"
                 }
                 data-text="true"
               >
@@ -150,7 +148,7 @@ export default function Site404() {
             </div>
             <div
               className={
-                "text-[12px]/[normal] box-border text-[#82B440] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
+                "text-[12px]/[normal] box-border shrink-0 text-[#82B440] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
               }
               data-text="true"
             >

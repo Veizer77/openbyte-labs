@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { NavLink } from "@/components/preview/Controls";
+import { PublicHeaderNav } from "./PublicHeaderNav";
 import { ReferenceImage } from "./ReferenceImage";
 import type { PublicSiteSettings } from "@/schemas/public-site-settings";
 import { normalizeWhatsapp } from "@/lib/whatsapp";
@@ -47,8 +48,8 @@ export function PublicHeader({
     >
       <div className="flex w-full flex-col lg:grid lg:h-[68px] lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-4 xl:gap-8 px-4 sm:px-6 lg:px-6 xl:px-10">
         {/* Top Row on Mobile / Far-Left Brand on Desktop */}
-        <div className="flex h-[56px] lg:h-full items-center justify-between lg:justify-start lg:justify-self-start gap-4 shrink-0">
-          <div className="flex items-center gap-3.5">
+        <div className="flex h-[56px] lg:h-full items-center justify-between lg:justify-start lg:justify-self-start gap-2 sm:gap-4 shrink-0 min-w-0">
+          <div className="flex items-center gap-3.5 min-w-0">
             <Link
               href="/"
               aria-label={`${brandName}, beranda`}
@@ -61,7 +62,7 @@ export function PublicHeader({
                 alt={brandName}
                 contain
                 objectPosition="left center"
-                className="w-[156px] sm:w-[176px] h-[40px] bg-no-repeat bg-contain bg-left shrink-0"
+                className="w-[140px] min-[375px]:w-[156px] sm:w-[176px] h-[36px] sm:h-[40px] bg-no-repeat bg-contain bg-left shrink-0"
                 data-pencil-name="img"
               />
             </Link>
@@ -76,10 +77,10 @@ export function PublicHeader({
           </div>
 
           {/* Compact CTA for mobile/tablet top bar */}
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-2 lg:hidden shrink-0">
             <Link
               href={whatsappDigits ? `https://wa.me/${whatsappDigits}` : "/konsultasi"}
-              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-[8px] bg-[#18181a] px-3.5 py-1.5 text-[12px] font-semibold text-white no-underline transition-colors hover:bg-[#242427]"
+              className="inline-flex min-h-[38px] items-center gap-1.5 rounded-[8px] bg-[#18181a] px-3 sm:px-3.5 py-1.5 text-[12px] font-semibold text-white no-underline transition-colors hover:bg-[#242427] whitespace-nowrap"
             >
               <span>{whatsappDigits ? "WhatsApp" : "Konsultasi"}</span>
               <span className="symbol text-[14px] text-[#e2e89d]" aria-hidden="true">
@@ -91,30 +92,24 @@ export function PublicHeader({
 
         {/* Center Navigation: Balanced Wide Track on Desktop, Edge-to-Edge Strip on Mobile */}
         {menuItems.length ? (
-          <div className="border-t border-[#eaeaea] lg:border-t-0 py-1.5 lg:py-0 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:justify-self-center">
-            <nav
-              aria-label="Navigasi utama"
-              className="flex items-center gap-1 lg:gap-1 xl:gap-2 2xl:gap-3 overflow-x-auto no-scrollbar lg:rounded-[10px] lg:border lg:border-[#eaeaea] lg:bg-[#f0f0f0]/75 lg:px-1.5 lg:py-1"
-              data-pencil-name="nav"
-            >
-              {menuItems.map((item) => (
-                <NavLink
-                  key={`${item.target}:${item.label}`}
-                  href={item.target}
-                  className="shrink-0 min-h-[36px] lg:min-h-[34px] inline-flex items-center justify-center rounded-[7px] px-3.5 lg:px-3 xl:px-4 py-1.5 transition-colors"
+          <PublicHeaderNav>
+            {menuItems.map((item) => (
+              <NavLink
+                key={`${item.target}:${item.label}`}
+                href={item.target}
+                className="shrink-0 min-h-[34px] inline-flex items-center justify-center rounded-[7px] px-2.5 sm:px-3.5 lg:px-3 xl:px-4 py-1.5 transition-colors"
+                data-pencil-name={item.label}
+              >
+                <span
+                  className="text-[12px] sm:text-[13px] leading-none text-[#52525b] font-medium whitespace-nowrap"
                   data-pencil-name={item.label}
+                  data-text="true"
                 >
-                  <span
-                    className="text-[13px] leading-none text-[#52525b] font-medium whitespace-nowrap"
-                    data-pencil-name={item.label}
-                    data-text="true"
-                  >
-                    {item.label}
-                  </span>
-                </NavLink>
-              ))}
-            </nav>
-          </div>
+                  {item.label}
+                </span>
+              </NavLink>
+            ))}
+          </PublicHeaderNav>
         ) : null}
 
         {/* Far-Right Actions on Desktop */}

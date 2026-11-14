@@ -230,11 +230,11 @@ export function ContactForm({
 
         {/* Official Reference Number Box */}
         <div className="p-4 rounded-xl bg-[#f4f7ea] border border-[#d2d88f] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="text-[11px] font-semibold text-[#586016] uppercase tracking-wide">
               Nomor Referensi Tiket Server
             </div>
-            <div className="text-2xl font-mono font-bold text-[#18181a] tracking-wider mt-0.5">
+            <div className="text-lg sm:text-2xl font-mono font-bold text-[#18181a] tracking-wider mt-0.5 break-all">
               {success.reference}
             </div>
             <div className="text-xs text-[#52525b] mt-1">
@@ -503,13 +503,15 @@ export function ContactForm({
         )}
       </button>
 
-      <p className="flex items-center justify-center gap-2 text-[11px] leading-[14px] font-medium tracking-[0.22px] text-[#52525b] text-center w-full m-0">
-        <span className="symbol text-base text-[#82b440]" aria-hidden="true">
+      <p className="flex items-start sm:items-center justify-center gap-2 text-[11px] leading-[16px] font-medium tracking-[0.22px] text-[#52525b] text-left sm:text-center w-full m-0">
+        <span className="symbol text-base shrink-0 text-[#82b440]" aria-hidden="true">
           check_circle
         </span>
-        {kind === "booking"
-          ? "Setelah pengajuan, sistem menerbitkan nomor referensi unik dan tautan otomatis untuk ditambahkan ke Google Calendar."
-          : "Setelah pengajuan, sistem menerbitkan nomor referensi unik yang dapat Anda simpan sebagai bukti permintaan."}
+        <span>
+          {kind === "booking"
+            ? "Setelah pengajuan, sistem menerbitkan nomor referensi unik dan tautan otomatis untuk ditambahkan ke Google Calendar."
+            : "Setelah pengajuan, sistem menerbitkan nomor referensi unik yang dapat Anda simpan sebagai bukti permintaan."}
+        </span>
       </p>
     </form>
   );
