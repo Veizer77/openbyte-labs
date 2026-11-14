@@ -46,7 +46,7 @@ export function PublicHeader({
       data-pencil-name="header"
       data-layout="canvas-content"
     >
-      <div className="flex w-full flex-col lg:grid lg:h-[68px] lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:gap-4 xl:gap-8 px-4 sm:px-6 lg:px-6 xl:px-10">
+      <div className="flex w-full flex-col lg:grid lg:h-[68px] lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-3 xl:gap-6 px-4 sm:px-6 xl:px-10">
         {/* Top Row on Mobile / Far-Left Brand on Desktop */}
         <div className="flex h-[56px] lg:h-full items-center justify-between lg:justify-start lg:justify-self-start gap-2 sm:gap-4 shrink-0 min-w-0">
           <div className="flex items-center gap-3.5 min-w-0">
@@ -62,7 +62,7 @@ export function PublicHeader({
                 alt={brandName}
                 contain
                 objectPosition="left center"
-                className="w-[140px] min-[375px]:w-[156px] sm:w-[176px] h-[36px] sm:h-[40px] bg-no-repeat bg-contain bg-left shrink-0"
+                className="w-[140px] min-[375px]:w-[152px] xl:w-[176px] h-[36px] xl:h-[40px] bg-no-repeat bg-contain bg-left shrink-0"
                 data-pencil-name="img"
               />
             </Link>
@@ -97,11 +97,11 @@ export function PublicHeader({
               <NavLink
                 key={`${item.target}:${item.label}`}
                 href={item.target}
-                className="shrink-0 min-h-[34px] inline-flex items-center justify-center rounded-[7px] px-2.5 sm:px-3.5 lg:px-3 xl:px-4 py-1.5 transition-colors"
+                className="shrink-0 min-h-[34px] inline-flex items-center justify-center rounded-[7px] px-2.5 sm:px-3.5 lg:px-2 xl:px-3.5 2xl:px-4 py-1.5 transition-colors"
                 data-pencil-name={item.label}
               >
                 <span
-                  className="text-[12px] sm:text-[13px] leading-none text-[#52525b] font-medium whitespace-nowrap"
+                  className="text-[12px] sm:text-[13px] lg:text-[12px] xl:text-[13px] leading-none text-[#52525b] font-medium whitespace-nowrap"
                   data-pencil-name={item.label}
                   data-text="true"
                 >
@@ -114,13 +114,15 @@ export function PublicHeader({
 
         {/* Far-Right Actions on Desktop */}
         <div
-          className="hidden lg:flex lg:col-start-3 lg:justify-self-end items-center gap-2.5 xl:gap-3 shrink-0 header-actions"
+          className="hidden lg:flex lg:col-start-3 lg:justify-self-end items-center gap-2 xl:gap-3 shrink-0 header-actions"
           data-pencil-name="div"
         >
           {whatsappDigits ? (
             <Link
               href={`https://wa.me/${whatsappDigits}`}
-              className="inline-flex min-h-[38px] items-center gap-2 rounded-[9px] border border-[#eaeaea] bg-white px-3.5 xl:px-4 py-1.5 text-[13px] font-medium text-[#18181a] transition-colors hover:bg-[#f0f0f0]"
+              aria-label="Hubungi Kami"
+              title="Hubungi Kami"
+              className="inline-flex min-h-[38px] items-center gap-2 rounded-[9px] border border-[#eaeaea] bg-white px-2.5 xl:px-4 py-1.5 text-[13px] font-medium text-[#18181a] transition-colors hover:bg-[#f0f0f0]"
               data-pencil-name="a"
             >
               <span
@@ -129,7 +131,7 @@ export function PublicHeader({
               >
                 chat
               </span>
-              <span data-text="true" className="whitespace-nowrap">
+              <span className="hidden xl:inline whitespace-nowrap">
                 Hubungi Kami
               </span>
             </Link>
@@ -137,7 +139,7 @@ export function PublicHeader({
 
           <Link
             href="/kalkulator"
-            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-[9px] bg-[#18181a] px-4 xl:px-[18px] py-1.5 text-[13px] font-semibold text-white transition-colors hover:bg-[#242427] whitespace-nowrap"
+            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-[9px] bg-[#18181a] px-3 xl:px-[18px] py-1.5 text-[12px] xl:text-[13px] font-semibold text-white transition-colors hover:bg-[#242427] whitespace-nowrap"
           >
             <span>Simulasi Biaya</span>
             <span className="symbol text-[15px] text-[#e2e89d]" aria-hidden="true">

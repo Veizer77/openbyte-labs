@@ -232,11 +232,10 @@ export default function SitePaketLayananHarga({
                           "box-border w-fit shrink-0 h-auto flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
                         }
                         data-pencil-name={"span"}
-                        data-responsive="fixed"
                       >
                         <div
                           className={
-                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] shrink-0 symbol"
                           }
                           data-pencil-name={"star"}
                           data-text="true"
@@ -350,7 +349,6 @@ export default function SitePaketLayananHarga({
                         }
                         data-pencil-name={"Rp"}
                         data-text="true"
-                        data-section-padding="true"
                       >
                         {"Rp"}
                       </div>
@@ -474,23 +472,21 @@ export default function SitePaketLayananHarga({
                     `box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start ${isStarterPopular ? "relative [z-index:2]" : ""}`
                   }
                   data-pencil-name={"div"}
-                  data-section-padding="true"
                 >
                   <Link
                     href={`/pesan?paket=${encodeURIComponent(starter?.slug ?? "starter-umkm")}`}
                     className={
                       isStarterPopular
-                        ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
-                        : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                        ? "box-border w-full min-h-[52px] h-auto shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                        : "box-border w-full min-h-[48px] h-auto shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
                     data-pencil-name={"a"}
-                    {...(isStarterPopular ? { "data-responsive": "flow" } : {})}
                   >
                     <div
                       className={
                         isStarterPopular
-                          ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
-                          : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                          ? "text-[13px]/[18px] box-border min-w-0 text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-center"
+                          : "text-[13px]/[18px] box-border min-w-0 text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-center"
                       }
                       data-pencil-name={"Pilih Paket Starter"}
                       data-text="true"
@@ -500,11 +496,10 @@ export default function SitePaketLayananHarga({
                     <div
                       className={
                         isStarterPopular
-                          ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                          : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          ? "text-[16px]/[24px] box-border shrink-0 text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          : "text-[16px]/[24px] box-border shrink-0 text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                       }
                       data-pencil-name={isStarterPopular ? "bolt" : "arrow_forward"}
-                      data-text="true"
                       aria-hidden="true"
                     >
                       {isStarterPopular ? "bolt" : "arrow_forward"}
@@ -546,11 +541,10 @@ export default function SitePaketLayananHarga({
                           "box-border w-fit shrink-0 h-auto flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
                         }
                         data-pencil-name={"span"}
-                        data-responsive="fixed"
                       >
                         <div
                           className={
-                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] shrink-0 symbol"
                           }
                           data-pencil-name={"star"}
                           data-text="true"
@@ -664,7 +658,6 @@ export default function SitePaketLayananHarga({
                         }
                         data-pencil-name={"Rp"}
                         data-text="true"
-                        data-section-padding="true"
                       >
                         {"Rp"}
                       </div>
@@ -788,23 +781,21 @@ export default function SitePaketLayananHarga({
                     `box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start ${isMobilePopular ? "relative [z-index:2]" : ""}`
                   }
                   data-pencil-name={"div"}
-                  data-section-padding="true"
                 >
                   <Link
                     href={`/pesan?paket=${encodeURIComponent(mobile?.slug ?? "mobile-application")}`}
                     className={
                       isMobilePopular
-                        ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
-                        : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                        ? "box-border w-full min-h-[52px] h-auto shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                        : "box-border w-full min-h-[48px] h-auto shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
                     data-pencil-name={"a"}
-                    {...(isMobilePopular ? { "data-responsive": "flow" } : {})}
                   >
                     <div
                       className={
                         isMobilePopular
-                          ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
-                          : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                          ? "text-[13px]/[18px] box-border min-w-0 text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-center"
+                          : "text-[13px]/[18px] box-border min-w-0 text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-center"
                       }
                       data-pencil-name={"Pilih Paket Mobile App"}
                       data-text="true"
@@ -814,11 +805,10 @@ export default function SitePaketLayananHarga({
                     <div
                       className={
                         isMobilePopular
-                          ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                          : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          ? "text-[16px]/[24px] box-border shrink-0 text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          : "text-[16px]/[24px] box-border shrink-0 text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                       }
                       data-pencil-name={isMobilePopular ? "bolt" : "arrow_forward"}
-                      data-text="true"
                       aria-hidden="true"
                     >
                       {isMobilePopular ? "bolt" : "arrow_forward"}
@@ -850,7 +840,7 @@ export default function SitePaketLayananHarga({
                 >
                   <div
                     className={
-                      "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center"
+                      "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 justify-between items-center"
                     }
                     data-pencil-name={"div"}
                   >
@@ -860,11 +850,10 @@ export default function SitePaketLayananHarga({
                           "box-border w-fit shrink-0 h-auto flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
                         }
                         data-pencil-name={"span"}
-                        data-responsive="fixed"
                       >
                         <div
                           className={
-                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                            "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] shrink-0 symbol"
                           }
                           data-pencil-name={"star"}
                           data-text="true"
@@ -978,7 +967,6 @@ export default function SitePaketLayananHarga({
                         }
                         data-pencil-name={"Rp"}
                         data-text="true"
-                        data-section-padding="true"
                       >
                         {"Rp"}
                       </div>
@@ -1104,23 +1092,21 @@ export default function SitePaketLayananHarga({
                     `box-border w-full h-fit shrink-0 flex flex-col gap-0 p-[24px_0px_0px_0px] justify-start items-start ${isInformasiPopular ? "relative [z-index:2]" : ""}`
                   }
                   data-pencil-name={"div"}
-                  data-section-padding="true"
                 >
                   <Link
                     href={`/pesan?paket=${encodeURIComponent(informasi?.slug ?? "sistem-informasi")}`}
                     className={
                       isInformasiPopular
-                        ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
-                        : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                        ? "box-border w-full min-h-[52px] h-auto shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                        : "box-border w-full min-h-[48px] h-auto shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                     }
                     data-pencil-name={"a"}
-                    {...(isInformasiPopular ? { "data-responsive": "flow" } : {})}
                   >
                     <div
                       className={
                         isInformasiPopular
-                          ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
-                          : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                          ? "text-[13px]/[18px] box-border min-w-0 text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-center"
+                          : "text-[13px]/[18px] box-border min-w-0 text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-center"
                       }
                       data-pencil-name={"Pilih Paket Sistem Informasi"}
                       data-text="true"
@@ -1130,11 +1116,10 @@ export default function SitePaketLayananHarga({
                     <div
                       className={
                         isInformasiPopular
-                          ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                          : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          ? "text-[16px]/[24px] box-border shrink-0 text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                          : "text-[16px]/[24px] box-border shrink-0 text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                       }
                       data-pencil-name={isInformasiPopular ? "bolt" : "arrow_forward"}
-                      data-text="true"
                       aria-hidden="true"
                     >
                       {isInformasiPopular ? "bolt" : "arrow_forward"}
@@ -1173,11 +1158,10 @@ export default function SitePaketLayananHarga({
                               "box-border w-fit shrink-0 h-auto flex flex-row gap-[6px] p-[4px_12px] justify-start items-center bg-[#e2e89d] rounded-[9999px]"
                             }
                             data-pencil-name={"span"}
-                            data-responsive="fixed"
                           >
                             <div
                               className={
-                                "text-[12px]/[16px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                                "text-[12px]/[16px] box-border shrink-0 text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                               }
                               data-pencil-name={"star"}
                               data-text="true"
@@ -1345,15 +1329,15 @@ export default function SitePaketLayananHarga({
                         href={`/pesan?paket=${encodeURIComponent(pkg.slug)}`}
                         className={
                           isPkgPopular
-                            ? "box-border w-full h-[52px] shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[7.99px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
-                            : "box-border w-full h-[48px] shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
+                            ? "box-border w-full min-h-[52px] h-auto shrink-0 [box-shadow:0px_10px_12px_#0000001a,_0px_4px_2px_#0000001a] flex flex-row gap-[8px] p-[14px_16px] justify-center items-center bg-[#e2e89d] rounded-[12px]"
+                            : "box-border w-full min-h-[48px] h-auto shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-row gap-[8px] p-[12px_16px] justify-center items-center bg-[#18181a] rounded-[12px]"
                         }
                       >
                         <div
                           className={
                             isPkgPopular
-                              ? "text-[13px]/[18px] box-border text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-left [white-space:nowrap]"
-                              : "text-[13px]/[18px] box-border text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-left [white-space:nowrap]"
+                              ? "text-[13px]/[18px] box-border min-w-0 text-[#1b1d00] font-[var(--font-inter),system-ui,sans-serif] font-bold text-center"
+                              : "text-[13px]/[18px] box-border min-w-0 text-[#ffffff] font-[var(--font-inter),system-ui,sans-serif] font-medium text-center"
                           }
                         >
                           {labelCta(pkg, `Pilih ${pkg.name}`)}
@@ -1361,8 +1345,8 @@ export default function SitePaketLayananHarga({
                         <div
                           className={
                             isPkgPopular
-                              ? "text-[16px]/[24px] box-border text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
-                              : "text-[16px]/[24px] box-border text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                              ? "text-[16px]/[24px] box-border shrink-0 text-[#1b1d00] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
+                              : "text-[16px]/[24px] box-border shrink-0 text-[#ffffff] font-['Material_Symbols_Outlined',system-ui,sans-serif] font-normal text-left [white-space:nowrap] symbol"
                           }
                           aria-hidden="true"
                         >
@@ -1545,21 +1529,18 @@ export default function SitePaketLayananHarga({
                 "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-4 sm:p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
               }
               data-pencil-name={"section"}
-              data-section-padding="true"
             >
               <div
                 className={
-                  "box-border w-full h-fit shrink-0 flex flex-col sm:flex-row gap-3 sm:gap-6 justify-between items-start sm:items-end"
+                  "box-border w-full h-fit shrink-0 flex flex-col lg:flex-row gap-3 lg:gap-6 justify-between items-start lg:items-end"
                 }
                 data-pencil-name={"div"}
-                data-responsive="row"
               >
                 <div
                   className={
-                    "box-border w-full sm:w-fit sm:shrink-0 min-w-0 flex flex-col gap-[4px] justify-start items-start"
+                    "box-border w-full lg:w-auto lg:min-w-0 lg:flex-1 flex flex-col gap-[4px] justify-start items-start"
                   }
                   data-pencil-name={"div"}
-                  data-responsive="flow"
                 >
                   <div
                     className={
@@ -2238,7 +2219,6 @@ export default function SitePaketLayananHarga({
                 "box-border w-full h-fit shrink-0 flex flex-col gap-[20px] p-4 sm:p-[24px] justify-start items-center bg-[#f0f0f0] rounded-[12px]"
               }
               data-pencil-name={"section"}
-              data-section-padding="true"
             >
               <div
                 className={
@@ -2282,15 +2262,12 @@ export default function SitePaketLayananHarga({
                   "box-border w-full h-fit shrink-0 grid grid-cols-1 lg:grid-cols-2 gap-[20px] items-stretch"
                 }
                 data-pencil-name={"div"}
-                data-section-padding="true"
               >
                 <div
                   className={
                     "box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col justify-between gap-[12px] p-4 sm:p-[20px] items-start bg-[#ffffff] rounded-[12px]"
                   }
                   data-pencil-name={"div"}
-                  data-responsive="flow"
-                  data-section-padding="true"
                 >
                   <div className="box-border w-full flex flex-col gap-[12px] items-start">
                     <div
@@ -2452,8 +2429,6 @@ export default function SitePaketLayananHarga({
                     "box-border w-full h-auto [box-shadow:0px_1px_2px_#0000000d] flex flex-col justify-between gap-[12px] p-4 sm:p-[20px] items-start bg-[#ffffff] rounded-[12px]"
                   }
                   data-pencil-name={"div"}
-                  data-responsive="flow"
-                  data-section-padding="true"
                 >
                   <div className="box-border w-full flex flex-col gap-[12px] items-start">
                     <div
@@ -2617,7 +2592,6 @@ export default function SitePaketLayananHarga({
                 "box-border w-full h-fit shrink-0 flex flex-col lg:flex-row gap-[20px] p-5 sm:p-[24px] justify-between items-start lg:items-center bg-[#18181a] rounded-[12px]"
               }
               data-pencil-name={"section"}
-              data-section-padding="true"
             >
               <div
                 className={

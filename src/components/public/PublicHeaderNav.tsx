@@ -38,12 +38,12 @@ export function PublicHeaderNav({ children }: { children: ReactNode }) {
   }, [pathname, syncFades]);
 
   return (
-    <div className="relative border-t border-[#eaeaea] lg:border-t-0 py-1.5 lg:py-0 -mx-4 sm:-mx-6 lg:mx-0 lg:px-0 lg:justify-self-center">
+    <div className="relative border-t border-[#eaeaea] lg:border-t-0 py-1.5 lg:py-0 -mx-4 sm:-mx-6 lg:mx-0 lg:px-0 min-w-0 max-w-full lg:justify-self-center">
       <nav
         ref={navRef}
         aria-label="Navigasi utama"
         onScroll={syncFades}
-        className="flex items-center gap-1 lg:gap-1 xl:gap-2 2xl:gap-3 overflow-x-auto no-scrollbar px-4 sm:px-6 scroll-px-4 sm:scroll-px-6 lg:rounded-[10px] lg:border lg:border-[#eaeaea] lg:bg-[#f0f0f0]/75 lg:px-1.5 lg:py-1"
+        className="flex items-center gap-1 lg:gap-0.5 xl:gap-1.5 2xl:gap-2.5 overflow-x-auto no-scrollbar max-w-full px-4 sm:px-6 scroll-px-4 sm:scroll-px-6 lg:rounded-[10px] lg:border lg:border-[#eaeaea] lg:bg-[#f0f0f0]/75 lg:px-1.5 lg:py-1"
         data-pencil-name="nav"
       >
         {children}

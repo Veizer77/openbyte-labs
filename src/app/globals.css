@@ -528,7 +528,7 @@ details[open] > summary .symbol {
     width: 100% !important;
     max-width: 100%;
   }
-  .screen [data-text] {
+  .screen [data-text]:not(.symbol) {
     white-space: normal !important;
     overflow-wrap: break-word;
   }

@@ -94,21 +94,18 @@ export default async function SiteBookingKonsultasi() {
                     "box-border w-full lg:col-span-5 h-fit flex flex-col gap-[20px] justify-start items-start"
                   }
                   data-pencil-name={"div"}
-                  data-section-padding="true"
                 >
                   <BookingCalendar
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[8px] p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] flex flex-col gap-[8px] p-4 sm:p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
                     }
                     data-pencil-name={"div"}
-                    data-section-padding="true"
                   />
                   <BookingSlots
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-col gap-[12px] p-[20px] justify-start items-start bg-[#ffffff] rounded-[12px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_4px_5px_#0000001a,_0px_2px_2px_#0000001a] flex flex-col gap-[12px] p-4 sm:p-[20px] justify-start items-start bg-[#ffffff] rounded-[12px]"
                     }
                     data-pencil-name={"div"}
-                    data-section-padding="true"
                   />
                 </div>
                 <div
@@ -131,7 +128,7 @@ export default async function SiteBookingKonsultasi() {
                     ></div>
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row gap-0 justify-between items-center relative [z-index:1]"
+                        "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 justify-between items-center relative [z-index:1]"
                       }
                       data-pencil-name={"div"}
                     >

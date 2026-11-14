@@ -115,14 +115,12 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     "box-border w-full lg:col-span-7 flex flex-col gap-[24px] justify-start items-start"
                   }
                   data-pencil-name={"div"}
-                  data-section-padding="true"
                 >
                   <section
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-4 sm:p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
-                    data-section-padding="true"
                   >
                     <div
                       className={
@@ -135,7 +133,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
-                        data-responsive="fixed"
                       >
                         <div
                           className={
@@ -215,8 +212,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           "box-border w-full min-h-[140px] h-full flex flex-col gap-0 p-[20px] justify-start items-start bg-[#e2e2e2] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
-                        data-responsive="flow"
-                        data-section-padding="true"
                       >
                         <div
                           className={
@@ -298,8 +293,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           "box-border w-full min-h-[140px] h-full flex flex-col gap-0 p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
-                        data-responsive="flow"
-                        data-section-padding="true"
                       >
                         <div
                           className={
@@ -380,8 +373,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                           "box-border w-full min-h-[140px] h-full flex flex-col gap-0 p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
                         }
                         data-pencil-name={"label"}
-                        data-responsive="flow"
-                        data-section-padding="true"
                       >
                         <div
                           className={
@@ -464,21 +455,18 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
-                    data-section-padding="true"
                   >
                     <div
                       className={
                         "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-3 justify-between items-center"
                       }
                       data-pencil-name={"div"}
-                      data-responsive="row"
                     >
                       <div
                         className={
                           "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
-                        data-responsive="fixed"
                       >
                         <div
                           className={
@@ -565,8 +553,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#f0f0f0] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
-                          data-responsive="flow"
-                          data-section-padding="true"
                         >
                           <div
                             className={
@@ -636,8 +622,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#f0f0f0] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
-                          data-responsive="flow"
-                          data-section-padding="true"
                         >
                           <div
                             className={
@@ -714,8 +698,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#e2e2e2] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
-                          data-responsive="flow"
-                          data-section-padding="true"
                         >
                           <div
                             className={
@@ -809,8 +791,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                             "box-border w-full min-h-[118px] h-full flex flex-col gap-[10px] p-[20px] justify-between items-start bg-[#f0f0f0] rounded-[12px]"
                           }
                           data-pencil-name={"label"}
-                          data-responsive="flow"
-                          data-section-padding="true"
                         >
                           <div
                             className={
@@ -883,21 +863,18 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
-                    data-section-padding="true"
                   >
                     <div
                       className={
                         "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-3 justify-between items-center"
                       }
                       data-pencil-name={"div"}
-                      data-responsive="row"
                     >
                       <div
                         className={
                           "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
-                        data-responsive="fixed"
                       >
                         <div
                           className={
@@ -1405,24 +1382,21 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                   </section>
                   <section
                     className={
-                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[12px] p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
+                      "box-border w-full h-fit shrink-0 [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-[12px] p-4 sm:p-[24px] justify-start items-start bg-[#ffffff] rounded-[16px]"
                     }
                     data-pencil-name={"section"}
-                    data-section-padding="true"
                   >
                     <div
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-row flex-wrap gap-2 justify-between items-center"
+                        "box-border w-full h-fit shrink-0 flex flex-col sm:flex-row gap-2 sm:gap-4 justify-between items-start sm:items-center"
                       }
                       data-pencil-name={"div"}
-                      data-responsive="row"
                     >
                       <div
                         className={
-                          "box-border min-w-0 flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
+                          "box-border w-full sm:min-w-0 sm:flex-1 h-fit flex flex-col gap-[4px] justify-start items-start"
                         }
                         data-pencil-name={"div"}
-                        data-responsive="fixed"
                       >
                         <div
                           className={
@@ -1475,7 +1449,7 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                       </div>
                       <div
                         className={
-                          "text-[11px]/[14px] box-border shrink-0 pl-[28px] sm:pl-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left"
+                          "text-[11px]/[14px] box-border shrink-0 pl-[28px] sm:pl-0 text-[#52525b] font-[var(--font-inter),system-ui,sans-serif] font-medium tracking-[0.22px] text-left sm:text-right"
                         }
                         data-pencil-name={"Tarif per halaman dari konfigurasi"}
                         data-text="true"
@@ -1485,19 +1459,17 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     </div>
                     <CalculatorUnits
                       className={
-                        "box-border w-full h-fit shrink-0 flex flex-col gap-[12px] p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
+                        "box-border w-full h-fit shrink-0 flex flex-col gap-[12px] p-4 sm:p-[20px] justify-start items-start bg-[#f0f0f0] rounded-[12px]"
                       }
                       data-pencil-name={"div"}
-                      data-section-padding="true"
                     />
                   </section>
                 </div>
                 <div
                   className={
-                    "box-border w-full lg:col-span-5 self-start lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-104px)] lg:overflow-y-auto no-scrollbar overscroll-contain flex flex-col gap-[20px] p-[24px] justify-start items-start bg-[#18181a] rounded-[22px] [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] z-10"
+                    "box-border w-full lg:col-span-5 self-start lg:sticky lg:top-[88px] lg:max-h-[calc(100vh-104px)] lg:overflow-y-auto no-scrollbar overscroll-contain flex flex-col gap-[20px] p-4 sm:p-[24px] justify-start items-start bg-[#18181a] rounded-[22px] [box-shadow:0px_20px_20px_#0000001a,_0px_8px_4px_#0000001a] z-10"
                   }
                   data-pencil-name={"div"}
-                  data-section-padding="true"
                 >
                   <div
                     className={
@@ -1772,8 +1744,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     "box-border w-full min-h-[178px] h-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-4 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
-                  data-responsive="flow"
-                  data-section-padding="true"
                 >
                   <div
                     className={
@@ -1851,8 +1821,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     "box-border w-full min-h-[178px] h-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-4 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
-                  data-responsive="flow"
-                  data-section-padding="true"
                 >
                   <div
                     className={
@@ -1930,8 +1898,6 @@ export default async function SiteKalkulatorEstimasiBiaya() {
                     "box-border w-full min-h-[178px] h-full [box-shadow:0px_1px_2px_#0000000d] border border-neutral-200/80 flex flex-col gap-4 p-[20px] justify-between items-start bg-[#ffffff] rounded-[16px]"
                   }
                   data-pencil-name={"div"}
-                  data-responsive="flow"
-                  data-section-padding="true"
                 >
                   <div
                     className={
