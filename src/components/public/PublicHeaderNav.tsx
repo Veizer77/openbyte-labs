@@ -43,7 +43,7 @@ export function PublicHeaderNav({ children }: { children: ReactNode }) {
         ref={navRef}
         aria-label="Navigasi utama"
         onScroll={syncFades}
-        className="flex items-center gap-1 lg:gap-0.5 xl:gap-1.5 2xl:gap-2.5 overflow-x-auto no-scrollbar max-w-full px-4 sm:px-6 scroll-px-4 sm:scroll-px-6 lg:rounded-[10px] lg:border lg:border-[#eaeaea] lg:bg-[#f0f0f0]/75 lg:px-1.5 lg:py-1"
+        className="flex items-center gap-1 lg:gap-0.5 xl:gap-1 min-[1420px]:gap-1.5 min-[1660px]:gap-2.5 overflow-x-auto no-scrollbar max-w-full px-4 sm:px-6 scroll-px-4 sm:scroll-px-6 lg:rounded-[10px] lg:border lg:border-[#eaeaea] lg:bg-[#f0f0f0]/75 lg:px-1.5 lg:py-1"
         data-pencil-name="nav"
       >
         {children}

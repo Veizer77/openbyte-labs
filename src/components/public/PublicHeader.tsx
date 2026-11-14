@@ -46,10 +46,10 @@ export function PublicHeader({
       data-pencil-name="header"
       data-layout="canvas-content"
     >
-      <div className="flex w-full flex-col lg:grid lg:h-[68px] lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-3 xl:gap-6 px-4 sm:px-6 xl:px-10">
+      <div className="flex w-full flex-col lg:grid lg:h-[68px] lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center lg:gap-3 min-[1420px]:gap-5 min-[1660px]:gap-6 px-4 sm:px-6 min-[1420px]:px-8 min-[1660px]:px-10">
         {/* Top Row on Mobile / Far-Left Brand on Desktop */}
         <div className="flex h-[56px] lg:h-full items-center justify-between lg:justify-start lg:justify-self-start gap-2 sm:gap-4 shrink-0 min-w-0">
-          <div className="flex items-center gap-3.5 min-w-0">
+          <div className="flex items-center gap-2.5 min-[1420px]:gap-3.5 min-w-0">
             <Link
               href="/"
               aria-label={`${brandName}, beranda`}
@@ -62,15 +62,15 @@ export function PublicHeader({
                 alt={brandName}
                 contain
                 objectPosition="left center"
-                className="w-[140px] min-[375px]:w-[152px] xl:w-[176px] h-[36px] xl:h-[40px] bg-no-repeat bg-contain bg-left shrink-0"
+                className="w-[140px] min-[375px]:w-[152px] min-[1420px]:w-[168px] min-[1660px]:w-[176px] h-[36px] min-[1420px]:h-[38px] min-[1660px]:h-[40px] bg-no-repeat bg-contain bg-left shrink-0"
                 data-pencil-name="img"
               />
             </Link>
             <span
-              className="hidden 2xl:inline-block h-4 w-px bg-[#eaeaea]"
+              className="hidden xl:inline-block h-4 w-px bg-[#eaeaea]"
               aria-hidden="true"
             />
-            <span className="hidden 2xl:inline-flex items-center gap-1.5 text-[11px] font-medium tracking-[0.08em] uppercase text-[#52525b]">
+            <span className="hidden xl:inline-flex items-center gap-1.5 text-[11px] font-medium tracking-[0.08em] uppercase text-[#52525b] whitespace-nowrap">
               <span className="h-1.5 w-1.5 rounded-full bg-[#82b440]" />
               Engineering Studio
             </span>
@@ -97,7 +97,7 @@ export function PublicHeader({
               <NavLink
                 key={`${item.target}:${item.label}`}
                 href={item.target}
-                className="shrink-0 min-h-[34px] inline-flex items-center justify-center rounded-[7px] px-2.5 sm:px-3.5 lg:px-2 xl:px-3.5 2xl:px-4 py-1.5 transition-colors"
+                className="shrink-0 min-h-[34px] inline-flex items-center justify-center rounded-[7px] px-2.5 sm:px-3.5 lg:px-2 xl:px-2.5 min-[1420px]:px-3.5 min-[1660px]:px-4 py-1.5 transition-colors"
                 data-pencil-name={item.label}
               >
                 <span
@@ -114,36 +114,17 @@ export function PublicHeader({
 
         {/* Far-Right Actions on Desktop */}
         <div
-          className="hidden lg:flex lg:col-start-3 lg:justify-self-end items-center gap-2 xl:gap-3 shrink-0 header-actions"
+          className="hidden lg:flex lg:col-start-3 lg:justify-self-end items-center shrink-0 header-actions"
           data-pencil-name="div"
         >
-          {whatsappDigits ? (
-            <Link
-              href={`https://wa.me/${whatsappDigits}`}
-              aria-label="Hubungi Kami"
-              title="Hubungi Kami"
-              className="inline-flex min-h-[38px] items-center gap-2 rounded-[9px] border border-[#eaeaea] bg-white px-2.5 xl:px-4 py-1.5 text-[13px] font-medium text-[#18181a] transition-colors hover:bg-[#f0f0f0]"
-              data-pencil-name="a"
-            >
-              <span
-                className="symbol text-[16px] text-[#82b440]"
-                aria-hidden="true"
-              >
-                chat
-              </span>
-              <span className="hidden xl:inline whitespace-nowrap">
-                Hubungi Kami
-              </span>
-            </Link>
-          ) : null}
-
           <Link
-            href="/kalkulator"
-            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-[9px] bg-[#18181a] px-3 xl:px-[18px] py-1.5 text-[12px] xl:text-[13px] font-semibold text-white transition-colors hover:bg-[#242427] whitespace-nowrap"
+            href={whatsappDigits ? `https://wa.me/${whatsappDigits}` : "/konsultasi"}
+            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-[9px] bg-[#18181a] px-3.5 xl:px-[18px] py-1.5 text-[12px] xl:text-[13px] font-semibold text-white no-underline transition-colors hover:bg-[#242427] whitespace-nowrap"
+            data-pencil-name="a"
           >
-            <span>Simulasi Biaya</span>
+            <span>Hubungi Kami</span>
             <span className="symbol text-[15px] text-[#e2e89d]" aria-hidden="true">
-              arrow_forward
+              {whatsappDigits ? "arrow_outward" : "arrow_forward"}
             </span>
           </Link>
         </div>
