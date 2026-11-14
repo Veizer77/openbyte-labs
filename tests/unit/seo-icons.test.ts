@@ -27,14 +27,14 @@ describe("Google Search favicon compliance", () => {
     );
   });
 
-  it("does not override root icons when CMS favicon is null or .webp", () => {
-    expect(buildPublicPageIcons(null)).toBeUndefined();
-    expect(buildPublicPageIcons(undefined)).toBeUndefined();
+  it("returns PUBLIC_SITE_ICONS when CMS favicon is null or .webp so child generateMetadata does not wipe root icons", () => {
+    expect(buildPublicPageIcons(null)).toEqual(PUBLIC_SITE_ICONS);
+    expect(buildPublicPageIcons(undefined)).toEqual(PUBLIC_SITE_ICONS);
     expect(
       buildPublicPageIcons(
         "https://media.openbyte-labs.web.id/media/e53bfa51/c97507ab/thumb.webp",
       ),
-    ).toBeUndefined();
+    ).toEqual(PUBLIC_SITE_ICONS);
   });
 
   it("preserves default ICO/PNG/SVG fallback icons when CMS provides a supported URL", () => {

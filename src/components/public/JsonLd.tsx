@@ -23,6 +23,7 @@ export function OrganizationJsonLd({
     "@type": "ProfessionalService",
     name: brandName,
     url: siteOrigin(),
+    logo: `${siteOrigin()}/icons/icon-192x192.png`,
     description:
       settings?.seo.defaultDescription ||
       "Pengembangan website, aplikasi mobile, dan sistem informasi kustom.",

@@ -41,13 +41,15 @@ export function isGoogleSearchSupportedFaviconUrl(url: string): boolean {
 
 /**
  * Resolves page-level `icons` metadata without letting a `.webp` CMS favicon
- * override the compliant root ICO/PNG/SVG icon declarations.
+ * override the compliant root ICO/PNG/SVG icon declarations, and never returns
+ * `undefined` (since `{ icons: undefined }` in child `generateMetadata`
+ * overwrites parent `RootLayout` icons in Next.js App Router shallow merge).
  */
 export function buildPublicPageIcons(
   cmsFaviconUrl: string | null | undefined,
-): IconsObject | undefined {
+): IconsObject {
   if (!cmsFaviconUrl || !isGoogleSearchSupportedFaviconUrl(cmsFaviconUrl)) {
-    return undefined;
+    return PUBLIC_SITE_ICONS;
   }
 
   return {
